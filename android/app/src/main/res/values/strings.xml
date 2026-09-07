@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EARTH</string>
+    <string name="title_activity_main">EARTH</string>
+    <string name="package_name">com.earthgame.idle</string>
+    <string name="custom_url_scheme">com.earthgame.idle</string>
+</resources>
