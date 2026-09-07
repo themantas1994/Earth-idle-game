@@ -16,10 +16,20 @@ mobile-first.
 ```bash
 npm install
 npm run dev        # dev server at http://localhost:5173
-npm test           # vitest — 152 unit tests over the whole simulation engine
+npm test           # vitest — 183 unit tests over the whole simulation engine
 npm run test:e2e   # drives the packaged bundle in headless Chromium (see below)
 npm run build      # production build to dist/
 npm run lint       # tsc --noEmit
+```
+
+There is also a headless pacing harness, used to tune the balance curves:
+
+```bash
+npx vite-node scripts/balanceSim.ts               # play a whole run, report when everything happens
+ACTIVE_HOURS=16 SPEND_INTERVAL=3600 TRACE=14400 \
+  npx vite-node scripts/balanceSim.ts             # model a realistic play pattern, with a climate trace
+BALANCE='{"complexityCostGrowth":1.1}' \
+  npx vite-node scripts/balanceSim.ts             # try a change to constants.ts > BALANCE without editing it
 ```
 
 No backend, no network calls — the whole game runs client-side and saves to device storage.
@@ -82,7 +92,7 @@ native and only active on-device (all no-ops in the browser build, behind
   the app goes inactive and re-ticks (collecting offline progress) when it returns.
 - **Hardware back navigates, it doesn't quit.** Back unwinds the screen history and
   only exits from Home. Previously a mis-swipe on any screen closed the app.
-- **Haptics on tap**, wired to the existing (previously inert) `vibrationEnabled` setting.
+- **Haptics on purchase**, wired to the existing (previously inert) `vibrationEnabled` setting.
 - **Status bar** colour/style follows the in-app light/dark theme.
 - **Splash screen** is held until React paints, then dismissed, rather than on a timer.
 - Portrait-locked, `targetSdk 34`, `minSdk 22`, Auto Backup restricted to the save.
@@ -119,14 +129,15 @@ src/
     climate.ts         Carbon-cycle integration, radiative forcing, temperature anomaly
     habitability.ts    Composite habitability score from 5 independent factors
     resources.ts       Spendable currencies (Energy, Research, Coal, Oil, Steel, Concrete)
-    technologies/      93 technologies across 11 branches (data files, one per branch)
+    technologies/      94 technologies across 11 branches (data files, one per branch)
     simulation.ts      The tick function: production, multipliers, gas/resource integration
-    economy.ts         Purchase logic, manual tap, cost-affordability math
+    economy.ts         Purchase logic, complexity cost drag, cost-affordability math
     prestige.ts        Earth Points formula + permanent upgrade tree
     offline.ts         Offline/backgrounded catch-up (closed-form, not stepped — see below)
-    achievements.ts    30 achievements, pure check functions
+    achievements.ts    31 achievements, pure check functions
     challenges.ts      8 challenges with live restrictions + goals + permanent rewards
     events.ts          10 random events (temporary multipliers + instant gas bursts)
+    milestones.ts      39 once-per-run news headlines, threshold-triggered, no mechanical effect
     save.ts            Versioned JSON (de)serialization, corruption-safe, backup slot
     gameState.ts       The GameState shape + factories (createNewGame / startNewRun)
   store/
@@ -182,10 +193,10 @@ effectively unbounded for this game.
 
 ### The technology tree
 
-93 technologies across the 11 requested branches (Primitive, Agriculture, Industry,
+94 technologies (64 buildable generators, 30 research nodes) across the 11 requested branches (Primitive, Agriculture, Industry,
 Electricity, Fossil Fuels, Transportation, Construction, Chemistry, Globalization, Digital,
 Endgame), defined as data (`technologies/*.ts`) rather than hardcoded logic — adding
-technology #94 means adding one object to a branch file. Every tech has a `kind`:
+technology #95 means adding one object to a branch file. Every tech has a `kind`:
 
 - `unlock` — one-time tree node, gates later tech, no production of its own
 - `generator` — repeatably purchasable, produces gas and/or resources per owned unit
@@ -194,21 +205,71 @@ technology #94 means adding one object to a branch file. Every tech has a `kind`
   "Energy Strategy" branching decision from the spec is implemented this way)
 
 Cost and production numbers come from `technologies/scaling.ts`'s tier-based curves rather than
-93 hand-picked constants, keyed off each tech's overall-progression `tier` (not per-branch), so
-branches that unlock in parallel stay balanced against each other.
+94 hand-picked constants, keyed off each tech's overall-progression `tier` (not per-branch), so
+branches that unlock in parallel stay balanced against each other. Those curves read every one
+of their numbers from `constants.ts > BALANCE` — see "Pacing" below.
+
+**The two shopping screens are disjoint.** The Technology screen is the research tree and sells
+only `unlock`, `multiplier` and `choice` nodes; every `generator` — anything you buy repeatedly
+to raise output — is sold on the Production screen and nowhere else. Neither screen ever shows
+the same card as the other.
 
 A full graph-integrity test (`technologies/index.test.ts`) checks there are no dangling
-`requires` references and no dependency cycles across all 93 nodes.
+`requires` references and no dependency cycles across all 94 nodes, and `balance.test.ts`
+checks every node is actually reachable from the one technology a run starts with.
+
+### Pacing
+
+A first run is meant to take about a week of real time. Getting there is not a matter of one
+multiplier, because the tech tree is not a uniform ladder — through the middle of a run ten
+branches produce in parallel and compound into each other, while the endgame narrows to a
+single chain. Three knobs in `constants.ts > BALANCE` do the work, and they solve three
+different problems:
+
+- **`generatorCostGrowthPerTier` vs `productionGrowthPerTier`.** Their ratio sets how much
+  longer each tier takes than the last. Below 1 the game runs away and finishes itself in an
+  evening; the shipped value puts it slightly above 1.
+- **`complexityCostGrowth`.** Every *distinct* technology owned makes the next purchase dearer.
+  This is what stops the broad middle of the tree from evaporating in an afternoon, and it
+  barely touches the thin endgame, where the owned count hardly moves. Extra units of something
+  already owned never count, so it taxes expansion rather than investment — and the Home and
+  Production screens both show the current surcharge rather than hiding it.
+- **`lateTierCompression`.** Above `flattenLadderFromTier` the cost *and* output ladders are
+  compressed together. Without it, a late tier still doubles in price while adding one
+  generator to a large static base, and the last third of the tree becomes an unclimbable wall
+  that no run ever sees.
+
+Two further relationships matter. `gasProductionGrowthPerTier` sits *below* the resource curve,
+so emissions lag the economy and the tree can be finished before the planet dies; and the
+`massPerUnit` figures in `gases.ts` are scaled so CO₂ leads the warming for most of a run
+rather than being a rounding error next to the synthetic gases.
+
+`scripts/balanceSim.ts` is the tool all of this was measured with: it plays a full run under a
+configurable play pattern and reports when each technology is bought, when each news milestone
+fires, and how the atmosphere evolves. `balance.test.ts` locks in the *relationships* above
+(not the specific numbers, which are meant to be retuned).
+
+### World news
+
+`milestones.ts` holds 39 deterministic, once-per-run headlines that fire the first time a run
+crosses a threshold. They have no mechanical effect: they exist so a week-long run reads as a
+story rather than a rising number. Early ones are keyed to *technology* and report local
+consequences (a river below the mills, smog, an ozone hole), because a handful of campfires
+genuinely cannot move a planet's atmosphere and the rest of the simulation doesn't pretend
+otherwise; climate-keyed ones take over in the back half and escalate from treaty thresholds to
+obituaries. They surface as a breaking-news banner and accumulate in a feed on the Home screen
+(latest four) and the Atmosphere screen (all of them).
 
 ### Prestige
 
 Earth Points (name is one constant, `PRESTIGE_CURRENCY_NAME` in `constants.ts` — change it
 there to rebrand). The formula (`prestige.ts`) scores total greenhouse-gas mass produced (with
 diminishing returns via a sub-1 exponent), then scales that by peak radiative forcing,
-civilization level, and run duration — all four weights live in `constants.ts.PRESTIGE`. Nine
-permanent upgrades are implemented (production multipliers, starting tech, tap power, offline
-cap, tech cost discount, etc.); challenge completions grant permanent rewards through the same
-effect shape, folded in alongside prestige upgrades in `computePrestigeMultipliers`.
+civilization level, and run duration — all four weights live in `constants.ts.PRESTIGE`. Ten
+permanent upgrades are implemented (production multipliers, starting technologies, starting
+generators, offline cap, tech cost discount, complexity reduction, etc.); challenge completions
+grant permanent rewards through the same effect shape, folded in alongside prestige upgrades in
+`computePrestigeMultipliers`.
 
 The architecture has one prestige layer (`Earth Points`) implemented; `gameState.ts`'s
 `runNumber`/`startNewRun` split from lifetime-persistent fields is deliberately structured so
@@ -232,14 +293,16 @@ from `Capacitor.isNativePlatform()`, so no engine code knows which platform it i
 Built as a genuinely playable, complete vertical slice (Phase 1–3 of the brief's own phasing,
 plus pieces of Phase 4), not a design document:
 
-**Implemented:** the full tap → buy → automate loop; all 6 gas types with individually-tuned
-forcing/lifetime/removal; 93 technologies across all 11 branches including a branching
-strategic choice; carbon-cycle sinks that weaken with warming; 5-factor habitability collapse;
-Earth-N reset/prestige with 9 permanent upgrades; offline progress (capped, upgradeable);
-30 achievements; 8 challenges with live restrictions and permanent rewards; 10 random events;
-4 number-format modes; save/load with corruption protection; a 10-step interactive tutorial;
-light/dark/system theming; temperature-driven visual era progression; buy 1/10/100/max on every
-generator.
+**Implemented:** the full research → build → compound loop, driven from the first tick by a
+Natural Fire every run owns (there is no tap button — Energy comes from a source of energy);
+all 6 gas types with individually-tuned forcing/lifetime/removal; 94 technologies across all 11
+branches including a branching strategic choice; carbon-cycle sinks that weaken with warming;
+5-factor habitability collapse; Earth-N reset/prestige with 10 permanent upgrades; offline
+progress (capped, upgradeable); 31 achievements; 8 challenges with live restrictions and
+permanent rewards; 10 random events; 39 milestone news headlines with a per-run feed;
+4 number-format modes; save/load with corruption protection and a versioned migration chain; a
+10-step interactive tutorial; light/dark/system theming; temperature-driven visual era
+progression; buy 1/10/100/max on every generator.
 
 **Deliberately deferred** (flagged rather than half-built): additional prestige layers beyond
 Earth Points (architecture supports adding them — see "Prestige" above); individually-simulated
@@ -253,16 +316,19 @@ progression is currently conveyed through color/theme, not custom artwork).
 ## What's been verified
 
 - **`npm run lint`** — `tsc --noEmit`, clean.
-- **`npm test`** — 152 unit tests covering the Decimal system, climate/forcing/habitability
+- **`npm test`** — 183 unit tests covering the Decimal system, climate/forcing/habitability
   formulas, the full technology graph, production math, prestige, offline catch-up, save
-  round-tripping (including large-Decimal precision), achievements, challenges, and the
+  round-tripping (including large-Decimal precision) and the v1→v2 migration, achievements,
+  challenges, milestone news, the pacing invariants described under "Pacing", and the
   purchase-affordability boundary cases added by the audit below.
 - **`npm run test:e2e`** (`scripts/playtest.mjs`) — serves the *exact bundle packaged into the
   APK* (`android/app/src/main/assets/public`) and drives it in headless Chromium at both
-  390×844 and 360×740 with a mobile user agent and touch enabled: 23 assertions covering
+  390×844 and 360×740 with a mobile user agent and touch enabled: 27 assertions covering
   layout (no document overflow, bottom nav on-screen, 48dp touch targets), the golden path
-  (tap → earn → buy Controlled Fire → CO₂ flowing), every one of the nine screens rendering
-  live data, save-to-storage, and survival across a reload — with zero uncaught page errors.
+  (Energy accruing with no input → the Technology and Production screens selling disjoint
+  lists → buying Controlled Fire on Production → CO₂ flowing → the first news headline), every
+  one of the nine screens rendering live data, save-to-storage, and survival across a reload —
+  with zero uncaught page errors.
 - **`./gradlew assembleDebug assembleRelease bundleRelease`** — all three Android variants
   build, with Android Lint's release-blocking checks reporting **no issues**. The debug APK is
   4.7 MB, the release AAB 3.6 MB. The five Capacitor plugin classes are confirmed present in
@@ -308,8 +374,8 @@ technology references. The audit found the following, all fixed in this change:
 6. **Hardware back quit the game from any screen.** Now unwinds screen history, exiting only
    from Home.
 7. **`vibrationEnabled` was a dead setting** — present in the settings UI and the save format,
-   wired to nothing. Now drives Capacitor Haptics on tap.
-8. **Long-press raised a text-selection callout** on the tap button, and repeated taps could be
+   wired to nothing. Now drives Capacitor Haptics on a technology purchase.
+8. **Long-press raised a text-selection callout** on buttons, and repeated presses could be
    read as double-tap gestures. `user-select`/`touch-callout`/`touch-action` now set for a
    chrome-like surface rather than a document.
 9. **White flash on launch.** The generated theme left `windowBackground` null, showing the

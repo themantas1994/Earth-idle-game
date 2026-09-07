@@ -14,6 +14,7 @@ import OfflineModal from './ui/components/OfflineModal';
 import UninhabitableModal from './ui/components/UninhabitableModal';
 import CollapseModal from './ui/components/CollapseModal';
 import EventToast from './ui/components/EventToast';
+import MilestoneToast from './ui/components/MilestoneToast';
 import AchievementToast from './ui/components/AchievementToast';
 import TutorialOverlay from './ui/components/TutorialOverlay';
 import { RUN_LABEL } from './engine/constants';
@@ -143,6 +144,7 @@ export default function App() {
       <UninhabitableModal />
       <CollapseModal />
       <EventToast />
+      <MilestoneToast />
       <AchievementToast />
     </div>
   );

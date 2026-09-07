@@ -10,7 +10,7 @@ import { useGameStore } from '../../store/useGameStore';
 import { useNumberFormat } from '../hooks';
 import { RESOURCES } from '../../engine/resources';
 import { GASES } from '../../engine/gases';
-import { Decimal } from '../../engine/bignum';
+import { complexityCostMultiplier, effectiveCostAmount, nominalizeWallet } from '../../engine/economy';
 
 export type BuyQuantity = 1 | 10 | 100 | 'max';
 
@@ -47,7 +47,11 @@ export default function TechCard({ tech, quantity }: { tech: Technology; quantit
   const disabledTechIds = useGameStore((s) => s.derived.disabledTechIds);
   const buyTechnology = useGameStore((s) => s.buyTechnology);
 
+  const prestige = useGameStore((s) => s.derived.prestigeMultipliers);
+
   const owned = techOwned[tech.id] ?? 0;
+  const complexity = complexityCostMultiplier(techOwned, prestige.complexityReduction);
+  const discount = prestige.techCostDiscount;
   const reqsMet = requirementsMet(tech, techOwned);
   const isDisabledByChallenge = disabledTechIds.has(tech.id);
   const isMaxedOneTime = tech.maxOwned === 1 && owned > 0;
@@ -60,12 +64,19 @@ export default function TechCard({ tech, quantity }: { tech: Technology; quantit
   const roomLeft = tech.maxOwned === Infinity ? Infinity : tech.maxOwned - owned;
   const cappedQty = Math.min(qtyNumber, roomLeft === Infinity ? Number.MAX_SAFE_INTEGER : roomLeft);
 
+  // Costs are curve-nominal; complexity drag and the prestige discount apply on
+  // top. Asking the engine's own helper to restate the wallet keeps this check
+  // identical to the one `purchaseTechnology` performs, so the button never
+  // promises a purchase the engine then refuses.
+  const nominalWallet = nominalizeWallet(resources, tech.cost, complexity, discount);
+
   const affordableQty = reqsMet && !locked && !isMaxedOneTime && !rivalTaken
-    ? maxAffordableQuantity(tech, owned, resources as unknown as Record<string, Decimal>, cappedQty)
+    ? maxAffordableQuantity(tech, owned, nominalWallet, cappedQty)
     : 0;
 
   const displayQty = tech.maxOwned === 1 ? 1 : Math.max(1, quantity === 'max' ? Math.max(affordableQty, 1) : cappedQty);
-  const cost = tech.maxOwned === 1 ? nextPurchaseCost(tech, owned) : bulkPurchaseCost(tech, owned, displayQty);
+  const nominalCost = tech.maxOwned === 1 ? nextPurchaseCost(tech, owned) : bulkPurchaseCost(tech, owned, displayQty);
+  const cost = nominalCost.map((c) => ({ ...c, amount: effectiveCostAmount(c.amount, complexity, discount) }));
 
   const buyLabel = tech.maxOwned === 1 ? 'Unlock' : quantity === 'max' ? `Buy Max${affordableQty > 0 ? ` (${affordableQty})` : ''}` : `Buy ${displayQty}`;
   const canBuy = !locked && !isMaxedOneTime && !rivalTaken && affordableQty > 0;

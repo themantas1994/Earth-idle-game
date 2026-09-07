@@ -20,7 +20,7 @@ export default function StatisticsScreen() {
         <div className="row"><span className="row__label">Total Play Time</span><span className="row__value">{formatDuration(lifetime.totalPlayTimeSeconds)}</span></div>
         <div className="row"><span className="row__label">Longest Run</span><span className="row__value">{formatDuration(lifetime.longestRunSeconds)}</span></div>
         <div className="row"><span className="row__label">Fastest Reset</span><span className="row__value">{lifetime.fastestResetSeconds !== null ? formatDuration(lifetime.fastestResetSeconds) : '—'}</span></div>
-        <div className="row"><span className="row__label">Total Taps</span><span className="row__value">{format(lifetime.totalTaps)}</span></div>
+        <div className="row"><span className="row__label">Technologies Purchased</span><span className="row__value">{format(lifetime.totalTechnologiesPurchased)}</span></div>
         <div className="row"><span className="row__label">Total Earth Points Earned</span><span className="row__value">{format(lifetime.totalEarthPointsEarned)}</span></div>
       </div>
 

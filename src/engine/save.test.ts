@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { D } from './bignum';
-import { createNewGame } from './gameState';
+import { createNewGame, GameState, SAVE_VERSION } from './gameState';
 import {
   serializeGameState,
   deserializeGameState,
@@ -94,5 +94,43 @@ describe('saveGame / loadGame', () => {
     const loaded = await loadGame(adapter);
     expect(loaded).not.toBeNull();
     expect(loaded!.createdAt).toBe(1);
+  });
+});
+
+describe('v1 -> v2 migration', () => {
+  it('grants Natural Fire, refunds Tap Conditioning, and seeds the news feed', () => {
+    const current = createNewGame(0);
+    const v1 = {
+      ...current,
+      saveVersion: 1,
+      techOwned: {},
+      prestige: { earthPoints: D(1000), upgradesOwned: { tap_conditioning: 3, atmospheric_momentum: 2 } },
+    } as unknown as GameState;
+    // A v1 save has none of the fields v2 added.
+    const asRecord = v1 as unknown as Record<string, unknown>;
+    delete asRecord.milestonesTriggered;
+    delete asRecord.newsFeed;
+
+    const migrated = deserializeGameState(serializeGameState(v1));
+    expect(migrated).not.toBeNull();
+    const state = migrated as GameState;
+
+    expect(state.saveVersion).toBe(SAVE_VERSION);
+    // Energy now comes from a generator, so a save without one would be a dead run.
+    expect(state.techOwned.natural_fire).toBeGreaterThanOrEqual(1);
+    // The removed upgrade is gone, and what was spent on it comes back.
+    expect(state.prestige.upgradesOwned.tap_conditioning).toBeUndefined();
+    expect(state.prestige.upgradesOwned.atmospheric_momentum).toBe(2);
+    expect(state.prestige.earthPoints.gt(D(1000))).toBe(true);
+    // New per-run state is present and empty.
+    expect(state.milestonesTriggered).toEqual({});
+    expect(state.newsFeed).toEqual([]);
+  });
+
+  it('leaves a save already at the current version alone', () => {
+    const current = createNewGame(0);
+    const migrated = deserializeGameState(serializeGameState(current)) as GameState;
+    expect(migrated.saveVersion).toBe(SAVE_VERSION);
+    expect(migrated.prestige.earthPoints.toNumber()).toBe(0);
   });
 });

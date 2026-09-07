@@ -68,11 +68,16 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'civilization_speedrun',
     name: 'Civilization Speedrun',
-    description: 'Reach the reset condition in under 10 minutes.',
+    description: 'Reach the reset condition in under 12 hours.',
     icon: '⚡',
-    check: (c) => c.justReset && c.lastRunDurationSeconds !== null && c.lastRunDurationSeconds <= 600,
+    // A first run is a week's work; twelve hours is what a deep prestige stack
+    // and a well-drilled route can do to that, not a target for a fresh Earth.
+    check: (c) => c.justReset && c.lastRunDurationSeconds !== null && c.lastRunDurationSeconds <= 12 * 3600,
   },
-  { id: 'industrial_monster', name: 'Industrial Monster', description: 'Own 1,000 of any single generator.', icon: '🏗️', check: (c) => maxGeneratorOwned(c.state) >= 1000 },
+  // 250 rather than a rounder 1,000: per-unit costs grow 16% a unit, so the
+  // thousandth copy of anything costs some 10^64 times the first and no run will
+  // ever buy it.
+  { id: 'industrial_monster', name: 'Industrial Monster', description: 'Own 250 of any single generator.', icon: '🏗️', check: (c) => maxGeneratorOwned(c.state) >= 250 },
   {
     id: 'bigger_than_earth',
     name: 'Bigger Than Earth',
@@ -99,7 +104,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'acid_ocean', name: 'Acid Ocean', description: 'Drop ocean pH to 7.0 or below.', icon: '🧪', check: (c) => c.state.oceanPh <= 7.0 },
   { id: 'new_beginning', name: 'New Beginning', description: 'Earn your first Earth Points.', icon: '✨', check: (c) => c.state.prestige.earthPoints.gt(0) },
   { id: 'wealthy_civilization', name: 'Wealthy Civilization', description: 'Accumulate 1,000,000 Earth Points.', icon: '💰', check: (c) => c.state.prestige.earthPoints.gte(1_000_000) },
-  { id: 'tap_happy', name: 'Tap Happy', description: 'Tap to produce 1,000 times.', icon: '👆', check: (c) => c.state.lifetimeStats.totalTaps >= 1000 },
+  { id: 'hearth_keeper', name: 'Hearth Keeper', description: 'Keep 50 Natural Fires burning at once.', icon: '🔥', check: (c) => (c.state.techOwned.natural_fire ?? 0) >= 50 },
+  { id: 'front_page', name: 'Front Page', description: 'Make the world news 10 times in a single run.', icon: '📰', check: (c) => c.state.newsFeed.length >= 10 },
   { id: 'road_not_taken', name: 'The Road Not Taken', description: 'Commit to a strategic technology choice.', icon: '🔀', check: (c) => ownsAnyChoiceTech(c.state) },
   { id: 'digital_age', name: 'Digital Age', description: 'Build your first Computer.', icon: '💻', check: (c) => (c.state.techOwned.computers ?? 0) > 0 },
   { id: 'into_the_absurd', name: 'Into the Absurd', description: 'Harness Stellar Energy.', icon: '🌟', check: (c) => (c.state.techOwned.stellar_energy ?? 0) > 0 },

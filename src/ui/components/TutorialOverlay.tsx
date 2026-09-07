@@ -19,67 +19,61 @@ const STEPS: TutorialStep[] = [
     cta: "Let's begin",
   },
   {
-    title: 'Step 1 — Tap to Produce',
-    body: 'Tap the glowing button on the Home screen to gather Energy by hand. Every civilization starts with a single spark.',
+    title: 'Step 1 — Your First Fire',
+    body: 'A lightning strike left a tree burning, and you have kept it alight. That Natural Fire is already producing Energy for you — nothing to tap, nothing to hold. Watch the Economy card fill up.',
+    navigateTo: 'home',
     autoAdvanceWhen: (s) => s.resources.energy.gt(0),
-    cta: 'I tapped it',
+    cta: 'Continue',
   },
   {
-    title: 'Step 2 — Discover Fire',
-    body: 'Open the Technology tab and unlock Controlled Fire. This is humanity\'s first deliberate act of combustion — and its first greenhouse gas emission.',
-    navigateTo: 'technology',
+    title: 'Step 2 — Build More Fires',
+    body: 'The Production tab is where you buy buildings. Spend your Energy on a second Natural Fire, then a Controlled Fire — every fire you light makes the next one affordable sooner.',
+    navigateTo: 'production',
     autoAdvanceWhen: (s) => (s.techOwned.controlled_fire ?? 0) > 0,
     cta: 'Continue',
   },
   {
     title: 'First Emissions',
-    body: 'Controlled Fire is now producing CO₂ around the clock. Check the Atmosphere tab any time to see exactly how much heating each gas is responsible for.',
+    body: 'Your fires are now producing CO₂ around the clock. Check the Atmosphere tab any time to see exactly how much heating each gas is responsible for.',
     cta: 'Got it',
   },
   {
-    title: 'Step 3 — Agriculture',
-    body: 'Unlock Early Agriculture, then Farming. Agriculture introduces two more greenhouse gases: methane (CH₄) from livestock and rice paddies, and nitrous oxide (N₂O) from fertilizer.',
+    title: 'Step 3 — Research',
+    body: 'The Technology tab is the research tree: one-time unlocks and permanent multipliers, paid for with Research. It never sells buildings — those always live on Production. Unlock Cooking to begin.',
+    navigateTo: 'technology',
+    autoAdvanceWhen: (s) => (s.techOwned.cooking ?? 0) > 0,
+    cta: 'Continue',
+  },
+  {
+    title: 'Step 4 — Two Tabs, One Loop',
+    body: 'That is the whole game: research an unlock on Technology, then build what it unlocked on Production. Work toward Early Agriculture — farms bring methane from livestock and nitrous oxide from fertilizer.',
     navigateTo: 'technology',
     autoAdvanceWhen: (s) => (s.techOwned.early_agriculture ?? 0) > 0,
     cta: 'Continue',
   },
   {
-    title: 'Step 4 — Industrial Revolution',
-    body: 'Unlock the Steam Engine to enter the Industrial era, opening up Coal Mining, Factories, and much faster production.',
+    title: 'Step 5 — Industrial Revolution',
+    body: 'Research the Steam Engine to enter the Industrial era, opening up Coal Mining, Factories, and far dirtier production than fire ever managed.',
     navigateTo: 'technology',
     autoAdvanceWhen: (s) => (s.techOwned.steam_engine ?? 0) > 0,
     cta: 'Continue',
   },
   {
-    title: 'Step 5 — Build a Factory',
-    body: 'Unlock Factories. From here on, most of your production comes from buildings, not taps.',
-    navigateTo: 'technology',
-    autoAdvanceWhen: (s) => (s.techOwned.factories ?? 0) > 0,
-    cta: 'Continue',
-  },
-  {
-    title: 'Step 6 — Electricity',
-    body: 'Unlock the Generator and a Coal Power Plant to electrify your civilization — and burn through coal even faster.',
-    navigateTo: 'technology',
-    autoAdvanceWhen: (s) => (s.techOwned.coal_power_plant ?? 0) > 0,
-    cta: 'Continue',
-  },
-  {
-    title: 'Step 7 — Fossil Fuels',
-    body: 'Start Oil Drilling. Oil unlocks an entire branch of increasingly powerful (and increasingly dirty) technology.',
-    navigateTo: 'technology',
+    title: 'Step 6 — Fossil Fuels',
+    body: 'Build Oil Drilling on the Production tab. Oil unlocks an entire branch of increasingly powerful — and increasingly dirty — technology.',
+    navigateTo: 'production',
     autoAdvanceWhen: (s) => (s.techOwned.oil_drilling ?? 0) > 0,
     cta: 'Continue',
   },
   {
-    title: 'Step 8 — Watch the Temperature',
-    body: 'Check the Home screen: your Radiative Forcing and Habitability are changing. Every technology you unlock pushes them further.',
+    title: 'Step 7 — Watch the World React',
+    body: 'Your Radiative Forcing and Habitability are already moving. As they do, the World News feed on the Home screen will start reporting what your emissions are doing to the planet.',
     navigateTo: 'home',
     cta: 'Continue',
   },
   {
-    title: 'Step 9 — The Reset',
-    body: 'Keep growing your civilization. Eventually Earth\'s habitability will reach zero and you\'ll be able to RESET EARTH — earning Earth Points that make your next civilization faster. How fast can you destroy this one?',
+    title: 'Step 8 — The Long Game',
+    body: 'This Earth will take a long time to kill — days of real time, not minutes. It keeps running while you are away, so check in, spend what has piled up, and let it burn. When habitability reaches zero you can RESET EARTH and bank Earth Points that make every future civilization faster.',
     cta: 'Start playing',
   },
 ];
@@ -110,9 +104,9 @@ export default function TutorialOverlay({ onNavigate }: { onNavigate: (id: Scree
   const isLast = state.tutorial.step >= STEPS.length - 1;
   const waitingOnAction = !!step.autoAdvanceWhen && !step.autoAdvanceWhen(state);
 
-  // A non-blocking banner (not a modal overlay): several steps require the player to tap
-  // something in the game underneath (the tap button, a Technology card), so the tutorial
-  // must never capture clicks meant for the game itself.
+  // A non-blocking banner (not a modal overlay): several steps require the player to
+  // press something in the game underneath (a Production or Technology card), so the
+  // tutorial must never capture clicks meant for the game itself.
   return (
     <div className="tutorial-banner">
       <div className="section-label" style={{ margin: '0 0 4px' }}>

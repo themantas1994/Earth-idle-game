@@ -17,12 +17,19 @@ export interface PrestigeUpgradeEffect {
   allGasProductionMultiplier?: number;
   /** Fractional discount applied to every technology's cost (0.1 = 10% cheaper), stacking additively across levels, capped at 0.9. */
   techCostDiscount?: number;
+  /**
+   * Fraction of the civilization-complexity surcharge that no longer applies,
+   * stacking additively across levels and capped at 0.75. Complexity is the
+   * dominant cost term by the late game, so this is the upgrade that most
+   * changes how a run feels — see `BALANCE.complexityCostGrowth`.
+   */
+  complexityReduction?: number;
   /** Multiplies the base offline-progress cap, stacking per level. */
   offlineCapMultiplier?: number;
-  /** Multiplies the amount of resources earned per manual tap, stacking per level. */
-  tapPowerMultiplier?: number;
   /** Technologies auto-granted (owned = 1) at the start of every future run. */
   grantsStartingTechIds?: string[];
+  /** Extra owned units of a generator granted at the start of every future run, per level. */
+  startingGenerators?: Record<string, number>;
   /** Flat resources granted at the start of every future run. */
   startingResources?: Partial<Record<ResourceId, number>>;
   /** Unlocks the "Buy Max" auto-affordability helper from run start (otherwise a mid-run milestone). */
@@ -72,6 +79,16 @@ export const PRESTIGE_UPGRADES: PrestigeUpgrade[] = [
     effect: { researchMultiplier: 1.5 },
   },
   {
+    id: 'institutional_memory',
+    name: 'Institutional Memory',
+    description: 'Civilizations that have done this before waste less of themselves on being large. Cancels 15% of the complexity surcharge per level.',
+    icon: '🏛️',
+    baseCost: 250_000,
+    costGrowth: 6,
+    maxLevel: 5,
+    effect: { complexityReduction: 0.15 },
+  },
+  {
     id: 'civilizational_acceleration',
     name: 'Civilizational Acceleration',
     description: 'Blueprints from past civilizations make every technology 20% cheaper per level.',
@@ -92,14 +109,14 @@ export const PRESTIGE_UPGRADES: PrestigeUpgrade[] = [
     effect: { allGasProductionMultiplier: 10 },
   },
   {
-    id: 'tap_conditioning',
-    name: 'Tap Conditioning',
-    description: 'Muscle memory from a thousand collapsed civilizations. +50% manual tap output per level.',
-    icon: '👆',
+    id: 'eternal_flame',
+    name: 'Eternal Flame',
+    description: 'An ember carried between worlds. Every future Earth starts with its fires already burning: +2 Natural Fire per level.',
+    icon: '🔥',
     baseCost: 50,
     costGrowth: 1.8,
-    maxLevel: Infinity,
-    effect: { tapPowerMultiplier: 1.5 },
+    maxLevel: 10,
+    effect: { startingGenerators: { natural_fire: 2 } },
   },
   {
     id: 'extended_endurance',
@@ -147,9 +164,10 @@ export interface PrestigeMultipliers {
   allGas: number;
   perGas: Partial<Record<GasId, number>>;
   techCostDiscount: number;
+  complexityReduction: number;
   offlineCapMultiplier: number;
-  tapPowerMultiplier: number;
   startingTechIds: string[];
+  startingGenerators: Record<string, number>;
   startingResources: Partial<Record<ResourceId, number>>;
   unlocksAutoBuyMax: boolean;
 }
@@ -163,9 +181,14 @@ function applyEffect(result: PrestigeMultipliers, e: PrestigeUpgradeEffect, leve
     result.perGas[gas] = (result.perGas[gas] ?? 1) * Math.pow(multiplier, level);
   }
   if (e.techCostDiscount) result.techCostDiscount = Math.min(0.9, result.techCostDiscount + e.techCostDiscount * level);
+  if (e.complexityReduction) result.complexityReduction = Math.min(0.75, result.complexityReduction + e.complexityReduction * level);
   if (e.offlineCapMultiplier) result.offlineCapMultiplier *= Math.pow(e.offlineCapMultiplier, level);
-  if (e.tapPowerMultiplier) result.tapPowerMultiplier *= Math.pow(e.tapPowerMultiplier, level);
   if (e.grantsStartingTechIds) result.startingTechIds.push(...e.grantsStartingTechIds);
+  if (e.startingGenerators) {
+    for (const [techId, count] of Object.entries(e.startingGenerators)) {
+      result.startingGenerators[techId] = (result.startingGenerators[techId] ?? 0) + count * level;
+    }
+  }
   if (e.startingResources) {
     for (const [res, amount] of Object.entries(e.startingResources)) {
       result.startingResources[res as ResourceId] = (result.startingResources[res as ResourceId] ?? 0) + (amount ?? 0);
@@ -191,9 +214,10 @@ export function computePrestigeMultipliers(
     allGas: 1,
     perGas: {},
     techCostDiscount: 0,
+    complexityReduction: 0,
     offlineCapMultiplier: 1,
-    tapPowerMultiplier: 1,
     startingTechIds: [],
+    startingGenerators: {},
     startingResources: {},
     unlocksAutoBuyMax: false,
   };

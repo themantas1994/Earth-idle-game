@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { Decimal, D } from '../engine/bignum';
-import { GameState, createNewGame, startNewRun, RunStats } from '../engine/gameState';
+import { GameState, createNewGame, startNewRun, NEWS_FEED_LIMIT } from '../engine/gameState';
 import { simulateStep, computeCivLevel, computeEffectiveMultipliers, EffectiveMultipliers, ProductionRates, computeProductionRates } from '../engine/simulation';
 import { computePrestigeMultipliers, PrestigeMultipliers, calculatePrestigeGain, PRESTIGE_UPGRADE_BY_ID, prestigeUpgradeCost } from '../engine/prestige';
 import { computeOfflineProgress, OfflineProgressResult } from '../engine/offline';
-import { applyManualTap, purchaseTechnology, grantTechnology } from '../engine/economy';
+import { purchaseTechnology, grantTechnology } from '../engine/economy';
 import { checkAchievements } from '../engine/achievements';
 import {
   CHALLENGE_BY_ID,
@@ -13,7 +13,8 @@ import {
   isChallengeGoalMet,
   computeChallengeRewardEffects,
 } from '../engine/challenges';
-import { rollRandomEvent, computeActiveEventMultipliers, removeExpiredEvents, applyInstantGasBurst, RANDOM_EVENT_BY_ID } from '../engine/events';
+import { rollRandomEvent, computeActiveEventMultipliers, removeExpiredEvents, applyInstantGasBurst } from '../engine/events';
+import { checkMilestones } from '../engine/milestones';
 import { saveGame, loadGame, StorageAdapter, localStorageAdapter } from '../engine/save';
 import { isNativePlatform, preferencesAdapter, onAppStateChange, hapticTap } from '../platform/native';
 import { SIMULATION } from '../engine/constants';
@@ -49,10 +50,11 @@ export interface GameStore {
   collapseSummary: EarthCollapseSummary | null;
   newlyUnlockedAchievements: string[];
   activeEventToast: string | null;
+  /** Milestone headline currently being surfaced as a toast, if any. */
+  activeMilestoneToast: string | null;
 
   init: () => Promise<void>;
   tick: (nowMs: number) => void;
-  tap: () => void;
   buyTechnology: (techId: string, quantity: number | 'max') => void;
   buyPrestigeUpgrade: (id: string) => void;
   confirmResetEarth: () => void;
@@ -61,6 +63,7 @@ export interface GameStore {
   dismissCollapseSummary: () => void;
   clearNewAchievements: () => void;
   dismissEventToast: () => void;
+  dismissMilestoneToast: () => void;
   startChallenge: (id: string) => void;
   abandonChallenge: () => void;
   updateSettings: (partial: Partial<Settings>) => void;
@@ -102,6 +105,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   collapseSummary: null,
   newlyUnlockedAchievements: [],
   activeEventToast: null,
+  activeMilestoneToast: null,
 
   init: async () => {
     const loadedState = await loadGame(storage);
@@ -200,19 +204,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
     applyPostStepBookkeeping(set, get, state, nextState, dtSeconds);
   },
 
-  tap: () => {
-    const { state, derived } = get();
-    if (state.settings.vibrationEnabled) hapticTap();
-    const nextState = applyManualTap(state, derived.prestigeMultipliers);
-    finalizeStateUpdate(set, get, state, nextState);
-  },
-
   buyTechnology: (techId, quantity) => {
     const { state, derived } = get();
     const q = quantity === 'max' ? Number.MAX_SAFE_INTEGER : quantity;
     const result = purchaseTechnology(state, techId, q, derived.prestigeMultipliers, derived.disabledTechIds);
     if (!result.success) return;
-    finalizeStateUpdate(set, get, state, result.state);
+    if (state.settings.vibrationEnabled) hapticTap();
+    const counted: GameState = {
+      ...result.state,
+      lifetimeStats: {
+        ...result.state.lifetimeStats,
+        totalTechnologiesPurchased: result.state.lifetimeStats.totalTechnologiesPurchased + result.purchasedQuantity,
+      },
+    };
+    finalizeStateUpdate(set, get, state, counted);
     get().saveNow();
   },
 
@@ -283,6 +288,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // Apply "starting tech" / "starting resources" prestige bonuses for the new run.
     const prestigeMultipliers = computePrestigeMultipliers(fresh.prestige.upgradesOwned, computeChallengeRewardEffects(fresh.challenges.completed));
     for (const techId of prestigeMultipliers.startingTechIds) fresh = grantTechnology(fresh, techId);
+    for (const [techId, extraUnits] of Object.entries(prestigeMultipliers.startingGenerators)) {
+      fresh = { ...fresh, techOwned: { ...fresh.techOwned, [techId]: (fresh.techOwned[techId] ?? 0) + extraUnits } };
+    }
     for (const [resId, amount] of Object.entries(prestigeMultipliers.startingResources)) {
       fresh = { ...fresh, resources: { ...fresh.resources, [resId]: fresh.resources[resId as keyof typeof fresh.resources].add(amount ?? 0) } };
     }
@@ -308,6 +316,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   dismissCollapseSummary: () => set({ collapseSummary: null }),
   clearNewAchievements: () => set({ newlyUnlockedAchievements: [] }),
   dismissEventToast: () => set({ activeEventToast: null }),
+  dismissMilestoneToast: () => set({ activeMilestoneToast: null }),
 
   startChallenge: (id) => {
     const { state } = get();
@@ -385,6 +394,27 @@ function applyPostStepBookkeeping(
     }
   }
 
+  // Milestone headlines: deterministic, once-per-run, no mechanical effect.
+  // Checked here rather than inside `simulateStep` so the pure simulation
+  // stays free of UI concerns and offline catch-up reports the same
+  // headlines a live session would have shown.
+  const firedMilestones = checkMilestones(nextState);
+  if (firedMilestones.length > 0) {
+    const at = Date.now();
+    const runSeconds = Math.max(0, (at - nextState.runStartedAt) / 1000);
+    nextState = {
+      ...nextState,
+      milestonesTriggered: {
+        ...nextState.milestonesTriggered,
+        ...Object.fromEntries(firedMilestones.map((m) => [m.id, true])),
+      },
+      newsFeed: [
+        ...firedMilestones.map((m) => ({ milestoneId: m.id, at, runSeconds })).reverse(),
+        ...nextState.newsFeed,
+      ].slice(0, NEWS_FEED_LIMIT),
+    };
+  }
+
   const civLevel = computeCivLevel(nextState.techOwned);
   const wasCollapsed = previous.collapsed;
   const justCollapsed = !wasCollapsed && nextState.collapsed;
@@ -403,5 +433,9 @@ function applyPostStepBookkeeping(
     state: nextState,
     derived: computeDerived(nextState),
     ...(achievementIds.length > 0 ? { newlyUnlockedAchievements: [...get().newlyUnlockedAchievements, ...achievementIds] } : {}),
+    // Several milestones can trip on one (especially offline) step; the most
+    // recent is the one worth interrupting the player for, and the rest are
+    // still waiting in the news feed.
+    ...(firedMilestones.length > 0 ? { activeMilestoneToast: firedMilestones[firedMilestones.length - 1].id } : {}),
   });
 }

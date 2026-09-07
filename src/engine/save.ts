@@ -1,4 +1,4 @@
-import { Decimal } from './bignum';
+import { Decimal, D } from './bignum';
 import { GameState, SAVE_VERSION } from './gameState';
 
 export const SAVE_KEY = 'earth-idle-save';
@@ -79,11 +79,53 @@ function isPlausibleGameState(value: unknown): value is GameState {
   );
 }
 
-/** Upgrades an older save's shape to the current SAVE_VERSION. No-op today; a real migration chain slots in here later. */
+/**
+ * Upgrades an older save's shape to the current SAVE_VERSION. Each step
+ * migrates one version forward and they run in order, so a save from any
+ * released version reaches the current shape by falling through the chain.
+ */
 function migrate(state: GameState): GameState {
-  if (state.saveVersion === SAVE_VERSION) return state;
-  // Future migrations: `if (state.saveVersion < 2) { ...patch fields...; state.saveVersion = 2; }`
-  return { ...state, saveVersion: SAVE_VERSION };
+  let migrated = state;
+
+  if (migrated.saveVersion < 2) {
+    // v2 removed manual tapping: Energy now comes from Natural Fire, which
+    // every run owns from the start. Saves from v1 can be missing that
+    // generator entirely (it used to be a zero-output unlock, and a run
+    // begun before it was granted has nothing at all), which would leave the
+    // player with no income and no way to earn any — so ensure it is owned.
+    //
+    // The "Tap Conditioning" prestige upgrade went with it. Refunding what
+    // was spent on it (a geometric series at its old 1.8 growth from a base
+    // of 50) is the only fair option: the player bought something the game
+    // no longer contains.
+    const upgradesOwned = { ...migrated.prestige.upgradesOwned };
+    const tapLevels = upgradesOwned.tap_conditioning ?? 0;
+    delete upgradesOwned.tap_conditioning;
+    const refund = tapLevels > 0 ? D(50).mul(D(1.8).pow(tapLevels).sub(1)).div(0.8) : Decimal.ZERO;
+
+    migrated = {
+      ...migrated,
+      techOwned: {
+        ...migrated.techOwned,
+        natural_fire: Math.max(1, migrated.techOwned.natural_fire ?? 0),
+      },
+      prestige: {
+        ...migrated.prestige,
+        earthPoints: migrated.prestige.earthPoints.add(refund),
+        upgradesOwned,
+      },
+      lifetimeStats: {
+        ...migrated.lifetimeStats,
+        totalTechnologiesPurchased: migrated.lifetimeStats.totalTechnologiesPurchased ?? 0,
+      },
+      // v2 also added the milestone news feed.
+      milestonesTriggered: migrated.milestonesTriggered ?? {},
+      newsFeed: migrated.newsFeed ?? [],
+      saveVersion: 2,
+    };
+  }
+
+  return migrated.saveVersion === SAVE_VERSION ? migrated : { ...migrated, saveVersion: SAVE_VERSION };
 }
 
 export function deserializeGameState(json: string): GameState | null {

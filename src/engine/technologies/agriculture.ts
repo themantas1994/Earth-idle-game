@@ -16,7 +16,7 @@ export const AGRICULTURE_TECHS: Technology[] = [
     maxOwned: Infinity,
     effect: {
       gasProductionPerUnit: { co2: gasProduction(7) },
-      resourceProductionPerUnit: { research: resourceProduction(6) },
+      resourceProductionPerUnit: { energy: resourceProduction(6), research: resourceProduction(6) },
     },
   },
   {
@@ -33,7 +33,7 @@ export const AGRICULTURE_TECHS: Technology[] = [
     maxOwned: Infinity,
     effect: {
       gasProductionPerUnit: { ch4: gasProduction(8), n2o: gasProduction(6) * 0.2 },
-      resourceProductionPerUnit: { research: resourceProduction(6) },
+      resourceProductionPerUnit: { energy: resourceProduction(7), research: resourceProduction(6) },
     },
   },
   {
