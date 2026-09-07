@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-ssr/
+android/app/build/
+android/.gradle/
+*.local
+.DS_Store
+*.log
+coverage/
+.vite/
+*.tsbuildinfo
