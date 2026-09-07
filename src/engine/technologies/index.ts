@@ -134,5 +134,24 @@ export function maxAffordableQuantity(
     }
     limit = Math.min(limit, Math.max(0, affordableForThisResource));
   }
-  return Math.max(0, Math.min(limit, maxQuantity));
+
+  limit = Math.max(0, Math.min(limit, maxQuantity));
+
+  // The logarithm above is evaluated in floating point, so on a boundary
+  // (balance exactly equal to the cost of n units) it can land one unit either
+  // side of the true answer. Over-counting is the dangerous direction: the
+  // caller would charge more than the player has and the subtraction clamps at
+  // zero, handing out a free purchase. Settle the last unit against the exact
+  // geometric-series cost instead of trusting the float.
+  const affordable = (n: number): boolean =>
+    n <= 0 ||
+    bulkPurchaseCost(tech, owned, n).every((c) => (available[c.resource] ?? Decimal.ZERO).gte(c.amount));
+
+  // The float error is bounded to a unit or two, so cap the correction rather
+  // than risk a long loop if a pathological cost curve is ever added.
+  const MAX_CORRECTION = 4;
+  for (let i = 0; i < MAX_CORRECTION && limit > 0 && !affordable(limit); i++) limit--;
+  for (let i = 0; i < MAX_CORRECTION && limit < maxQuantity && affordable(limit + 1); i++) limit++;
+
+  return affordable(limit) ? limit : 0;
 }

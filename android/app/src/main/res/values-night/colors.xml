@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The game is dark-first, so the night palette is the same deep ground;
+         declared explicitly so DayNight resolution is never left to a default. -->
+    <color name="earthBackground">#0B1622</color>
+</resources>

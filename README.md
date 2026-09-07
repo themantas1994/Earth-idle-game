@@ -16,26 +16,96 @@ mobile-first.
 ```bash
 npm install
 npm run dev        # dev server at http://localhost:5173
-npm test           # vitest — 145 unit tests over the whole simulation engine
+npm test           # vitest — 152 unit tests over the whole simulation engine
+npm run test:e2e   # drives the packaged bundle in headless Chromium (see below)
 npm run build      # production build to dist/
 npm run lint       # tsc --noEmit
 ```
 
-No backend, no network calls — the whole game runs client-side and saves to local storage.
+No backend, no network calls — the whole game runs client-side and saves to device storage.
+
+## Building the Android app
+
+```bash
+npm run android:build     # web build -> cap sync -> assembleDebug
+npm run android:release   # ...plus assembleRelease and bundleRelease (AAB)
+```
+
+Outputs land in `android/app/build/outputs/`:
+
+| Artifact | Path | Notes |
+| --- | --- | --- |
+| Debug APK | `apk/debug/app-debug.apk` | Signed with the standard Android debug key — `adb install` it and play. |
+| Release APK | `apk/release/app-release-unsigned.apk` | Unsigned until you supply a keystore (below). |
+| Play bundle | `bundle/release/app-release.aab` | Upload format for Google Play. |
+
+### Prerequisites
+
+- **JDK 17** — Capacitor 6's Android toolchain (AGP 8.2.1 / Gradle 8.2.1) does not
+  run on JDK 21. `JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64` (or your JDK 17 path).
+- **Android SDK** with `platforms;android-34`, `build-tools;34.0.0` and `platform-tools`.
+  Point `ANDROID_HOME` at it, or write `sdk.dir=/path/to/sdk` into `android/local.properties`
+  (git-ignored).
+
+The `android/` directory is committed, so a clean checkout builds without needing
+`npx cap add android` first. Re-running `cap sync` is safe — the customisations
+below live in files Capacitor does not regenerate.
+
+### Signing a release
+
+No keystore is committed. Create one and pass it through Gradle properties or
+environment variables:
+
+```bash
+keytool -genkeypair -v -keystore earth-release.jks \
+  -keyalg RSA -keysize 2048 -validity 10000 -alias earth
+
+EARTH_KEYSTORE=/abs/path/earth-release.jks \
+EARTH_KEYSTORE_PASSWORD=... EARTH_KEY_ALIAS=earth EARTH_KEY_PASSWORD=... \
+  npm run android:release
+```
+
+When none is configured the release target still assembles (unsigned), so a fresh
+clone is never blocked on secrets.
+
+### What the native shell adds
+
+The Android build is not just the web bundle in a WebView — these pieces are
+native and only active on-device (all no-ops in the browser build, behind
+`src/platform/native.ts`):
+
+- **Saves go to `SharedPreferences`** via Capacitor Preferences, not `localStorage`.
+  A WebView's local storage lives in the app's cache-ish data directory and can be
+  cleared by the system or by "clear cache"; SharedPreferences survives that.
+- **`appStateChange` is the authoritative save point.** `beforeunload` is not
+  guaranteed to fire when Android kills a backgrounded app, so the game saves when
+  the app goes inactive and re-ticks (collecting offline progress) when it returns.
+- **Hardware back navigates, it doesn't quit.** Back unwinds the screen history and
+  only exits from Home. Previously a mis-swipe on any screen closed the app.
+- **Haptics on tap**, wired to the existing (previously inert) `vibrationEnabled` setting.
+- **Status bar** colour/style follows the in-app light/dark theme.
+- **Splash screen** is held until React paints, then dismissed, rather than on a timer.
+- Portrait-locked, `targetSdk 34`, `minSdk 22`, Auto Backup restricted to the save.
 
 ## Technology choice: web app + Capacitor, not native Kotlin
 
-The brief asks for an Android app. Rather than a native Kotlin/Compose project (which needs an
-Android SDK, an emulator, and a Gradle toolchain — none available in a plain dev container, and
-none of which let me actually run and screenshot the app while building it), this is built as a
-TypeScript/React web app designed mobile-first, wrapped for Android via
-[Capacitor](https://capacitorjs.com/) (`capacitor.config.ts` is already in place). That gets you:
+The brief asks for an Android app. Rather than a native Kotlin/Compose project, this is a
+TypeScript/React game engine designed mobile-first and shipped as a real Android app via
+[Capacitor](https://capacitorjs.com/). That gets you:
 
-- A real, installable Android app (`npx cap add android && npx cap sync android` once you have
-  the Android SDK available — Capacitor wraps the built `dist/` in a WebView shell).
-- A dev loop where the game can actually be run, played, and screenshotted in a browser during
-  development (which is how this build was verified — see "What's been verified" below).
-- The same codebase also works as an installable PWA if you never want to touch Gradle at all.
+- **An installable Android app.** `android/` is a full Gradle project and
+  `npm run android:build` produces a signed-for-debug APK, an unsigned release APK, and a Play
+  AAB (see "Building the Android app" above).
+- **A dev loop where the game can be run, played and screenshotted** during development —
+  the same bundle that ships in the APK is exercised end-to-end by `npm run test:e2e`.
+- **The same codebase as an installable PWA** (`public/manifest.webmanifest`) if you never want
+  to touch Gradle at all.
+
+The trade-off is honest: the simulation and UI are web code running in a WebView, so this
+inherits WebView performance rather than Compose's. For an idle game whose hot loop is a 250 ms
+tick over a few hundred objects, that is not the bottleneck; the parts where the platform
+genuinely matters (storage durability, app lifecycle, back navigation, haptics) are handled
+natively rather than papered over.
 
 ## Architecture
 
@@ -154,7 +224,8 @@ auto-invokes that before a replacer ever sees the value, which would silently un
 defeat the tagging). Every save keeps the previous save as a backup slot; a corrupted primary
 save falls back to it automatically. Storage is behind a tiny `StorageAdapter` interface so the
 same logic works against `localStorage` in the browser build and Capacitor's `Preferences`
-plugin in the packaged Android app.
+plugin in the packaged Android app; `store/useGameStore.ts` picks the adapter once at startup
+from `Capacitor.isNativePlatform()`, so no engine code knows which platform it is on.
 
 ## What's implemented vs. deferred
 
@@ -181,14 +252,93 @@ progression is currently conveyed through color/theme, not custom artwork).
 
 ## What's been verified
 
-- `npm test` — 145 unit tests covering the Decimal system, climate/forcing/habitability
+- **`npm run lint`** — `tsc --noEmit`, clean.
+- **`npm test`** — 152 unit tests covering the Decimal system, climate/forcing/habitability
   formulas, the full technology graph, production math, prestige, offline catch-up, save
-  round-tripping (including large-Decimal precision), achievements, and challenges.
-- The full golden path (tap → unlock Controlled Fire → CO₂ flowing → buy loop → every screen
-  renders live data) was driven end-to-end in a real headless-Chromium browser at a 390×844
-  mobile viewport, catching and fixing two real bugs in the process: `natural_fire` originally
-  cost Research with no way to ever earn Research before owning it (a hard dead-end at turn
-  one — fixed by making it a starting condition rather than a purchase), and the Home screen's
-  "next objective" hint could get stuck forever suggesting an already-owned generator.
-- The collapse → reset → prestige-summary → new-run → offline-catch-up modal sequence was
-  verified by injecting a crafted collapsed save state and confirming each screen in order.
+  round-tripping (including large-Decimal precision), achievements, challenges, and the
+  purchase-affordability boundary cases added by the audit below.
+- **`npm run test:e2e`** (`scripts/playtest.mjs`) — serves the *exact bundle packaged into the
+  APK* (`android/app/src/main/assets/public`) and drives it in headless Chromium at both
+  390×844 and 360×740 with a mobile user agent and touch enabled: 23 assertions covering
+  layout (no document overflow, bottom nav on-screen, 48dp touch targets), the golden path
+  (tap → earn → buy Controlled Fire → CO₂ flowing), every one of the nine screens rendering
+  live data, save-to-storage, and survival across a reload — with zero uncaught page errors.
+- **`./gradlew assembleDebug assembleRelease bundleRelease`** — all three Android variants
+  build, with Android Lint's release-blocking checks reporting **no issues**. The debug APK is
+  4.7 MB, the release AAB 3.6 MB. The five Capacitor plugin classes are confirmed present in
+  the packaged `classes.dex`.
+
+**Not verified on real hardware.** This build environment has no KVM/VT-x, so an Android
+emulator cannot boot and no physical device is attached. Everything above the native bridge is
+exercised in a Chromium of the same engine family as the Android WebView; what remains unproven
+by execution is the behaviour of the five native plugins themselves (Preferences, App, Haptics,
+StatusBar, SplashScreen) — they are verified structurally (registered, compiled into the APK)
+rather than by running. Install `app-debug.apk` on a device to close that gap.
+
+## Code audit
+
+The existing engine was in good shape — 145 tests passing, typecheck clean, no dangling
+technology references. The audit found the following, all fixed in this change:
+
+### Correctness
+
+1. **Buy-max left an affordable unit on the table.** `maxAffordableQuantity` inverts a
+   geometric series through `log10`, and on an exact boundary the float landed one unit low —
+   a wallet holding exactly the cost of 4 units bought 3. The same error in the other direction
+   would have been worse: the caller charges the over-counted quantity and the subtraction
+   clamps at zero, i.e. a free unit. The quantity is now settled against the exact
+   geometric-series cost rather than the logarithm, with the correction bounded.
+   Regression test: `engine/economy.affordability.test.ts` (fails on the pre-fix code).
+
+### Android / mobile
+
+2. **The layout overflowed the viewport.** `body` had no `margin` reset, so the UA's default
+   8 px margin sat around a `100dvh` app shell — the document scrolled by 16 px and the bottom
+   nav's last row of pixels fell off-screen. Now reset, and asserted in the e2e run.
+3. **Three navigation destinations were unreachable.** Nine tabs at `min-width: 58px` need
+   522 px; phones are 360–430 dp. Achievements, Statistics and Settings sat past the right
+   edge behind a horizontal scroll with no visual affordance. Columns now flex to fit, with
+   labels shortened to stay legible at 360 dp and 52 px touch targets.
+4. **The save could be wiped by the system.** The README described Capacitor `Preferences` as
+   the Android storage backend, but nothing imported it — the packaged app would have used
+   `localStorage`, which Android may clear. Now wired for real.
+5. **Saves could be lost on app kill.** The only save-on-exit hook was `beforeunload`, which
+   Android does not guarantee to run for a backgrounded app. `appStateChange` is now the
+   authoritative save point.
+6. **Hardware back quit the game from any screen.** Now unwinds screen history, exiting only
+   from Home.
+7. **`vibrationEnabled` was a dead setting** — present in the settings UI and the save format,
+   wired to nothing. Now drives Capacitor Haptics on tap.
+8. **Long-press raised a text-selection callout** on the tap button, and repeated taps could be
+   read as double-tap gestures. `user-select`/`touch-callout`/`touch-action` now set for a
+   chrome-like surface rather than a document.
+9. **White flash on launch.** The generated theme left `windowBackground` null, showing the
+   system default white between splash teardown and first WebView paint, in a dark game.
+
+### Packaging
+
+10. **Default Capacitor branding.** Replaced with generated EARTH launcher icons (legacy,
+    round, and adaptive-foreground at all five densities) and splash screens at all densities
+    in both orientations — see `scripts/gen_icons.py`.
+11. **`@capacitor/core` and `@capacitor/preferences` were devDependencies.** They are bundled
+    into the shipped app, so they are runtime dependencies; moved.
+12. **Source maps were being packaged into the APK** (~750 KB of developer-only weight).
+    Excluded via `aaptOptions.ignoreAssetsPattern`.
+13. **Portrait lock was missing** from the manifest despite the UI being a fixed one-handed
+    column.
+14. **Auto Backup was unrestricted.** Now scoped to the save in SharedPreferences, so a restore
+    does not drag a stale WebView state onto a fresh install.
+15. **`init()` stacked event listeners** on every call (React StrictMode double-invokes effects
+    in development). Listeners are now disposed and re-registered.
+
+### Known and accepted
+
+- **`npm audit` reports 7 advisories, all in devDependencies** (`@capacitor/cli` → `tar`,
+  `vite`, `vitest`). None ship in the APK. `vite`/`vitest` are at the latest patch of their
+  major; clearing the rest requires major upgrades (Vite 7, Vitest 4, Capacitor CLI 8) that
+  would be a separate, breaking change.
+- **`minifyEnabled false` for release.** R8 plus Capacitor's reflection-based plugin loading
+  wants device verification before being turned on; enabling it blind is how you ship a release
+  build that crashes where the debug build did not.
+- **`android.permission.INTERNET` is still requested.** Capacitor's WebView bridge requires it
+  even though the game makes no network requests; `usesCleartextTraffic="false"` is set.

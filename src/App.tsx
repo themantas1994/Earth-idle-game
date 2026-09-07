@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useGameStore } from './store/useGameStore';
 import BottomNav, { ScreenId } from './ui/components/BottomNav';
 import HomeScreen from './ui/screens/HomeScreen';
@@ -18,6 +18,7 @@ import AchievementToast from './ui/components/AchievementToast';
 import TutorialOverlay from './ui/components/TutorialOverlay';
 import { RUN_LABEL } from './engine/constants';
 import { formatTemperature, formatPercent } from './engine/format';
+import { onHardwareBack, exitApp, applyStatusBarTheme, hideSplash } from './platform/native';
 
 export default function App() {
   const loaded = useGameStore((s) => s.loaded);
@@ -29,13 +30,58 @@ export default function App() {
   const collapsed = useGameStore((s) => s.state.collapsed);
   const [screen, setScreen] = useState<ScreenId>('home');
 
+  // Screens the player navigated away from, most recent last. Android's back
+  // gesture unwinds this before it is allowed to leave the app.
+  const historyRef = useRef<ScreenId[]>([]);
+
+  const navigate = useCallback((next: ScreenId) => {
+    setScreen((current) => {
+      if (next === current) return current;
+      historyRef.current.push(current);
+      return next;
+    });
+  }, []);
+
   useEffect(() => {
     init();
   }, [init]);
 
   useEffect(() => {
+    hideSplash();
+  }, []);
+
+  // Without this, Android's back button closes the app from any screen — the
+  // player loses their place on a mis-swipe. Back now walks the screen history
+  // and only exits from Home.
+  useEffect(() => {
+    let disposed = false;
+    let dispose: (() => void) | undefined;
+
+    void onHardwareBack(() => {
+      const previous = historyRef.current.pop();
+      if (previous) setScreen(previous);
+      else exitApp();
+    }).then((d) => {
+      if (disposed) d();
+      else dispose = d;
+    });
+
+    return () => {
+      disposed = true;
+      dispose?.();
+    };
+  }, []);
+
+  useEffect(() => {
     if (darkMode === 'system') delete document.documentElement.dataset.theme;
     else document.documentElement.dataset.theme = darkMode;
+
+    const isDark =
+      darkMode === 'dark' ||
+      (darkMode === 'system' &&
+        typeof window !== 'undefined' &&
+        window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+    void applyStatusBarTheme(Boolean(isDark));
   }, [darkMode]);
 
   // Visual progression: the planet's palette shifts from pristine green through
@@ -77,10 +123,10 @@ export default function App() {
         </div>
       </header>
 
-      <TutorialOverlay onNavigate={setScreen} />
+      <TutorialOverlay onNavigate={navigate} />
 
       <main className="app-main">
-        {screen === 'home' && <HomeScreen onNavigate={setScreen} />}
+        {screen === 'home' && <HomeScreen onNavigate={navigate} />}
         {screen === 'atmosphere' && <AtmosphereScreen />}
         {screen === 'technology' && <TechnologyScreen />}
         {screen === 'production' && <ProductionScreen />}
@@ -91,7 +137,7 @@ export default function App() {
         {screen === 'settings' && <SettingsScreen />}
       </main>
 
-      <BottomNav active={screen} onChange={setScreen} />
+      <BottomNav active={screen} onChange={navigate} />
 
       <OfflineModal />
       <UninhabitableModal />

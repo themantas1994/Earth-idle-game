@@ -14,7 +14,8 @@ import {
   computeChallengeRewardEffects,
 } from '../engine/challenges';
 import { rollRandomEvent, computeActiveEventMultipliers, removeExpiredEvents, applyInstantGasBurst, RANDOM_EVENT_BY_ID } from '../engine/events';
-import { saveGame, loadGame } from '../engine/save';
+import { saveGame, loadGame, StorageAdapter, localStorageAdapter } from '../engine/save';
+import { isNativePlatform, preferencesAdapter, onAppStateChange, hapticTap } from '../platform/native';
 import { SIMULATION } from '../engine/constants';
 import { Settings } from '../engine/gameState';
 
@@ -83,6 +84,15 @@ function computeDerived(state: GameState): DerivedState {
 
 let tickHandle: ReturnType<typeof setInterval> | null = null;
 let autosaveHandle: ReturnType<typeof setInterval> | null = null;
+let nativeListenerDisposers: Array<() => void> = [];
+
+/**
+ * The packaged Android app persists to Capacitor `Preferences`
+ * (SharedPreferences), which survives a WebView data clear; the browser build
+ * keeps using `localStorage`. Chosen once, here, so no engine code needs to
+ * know which platform it is running on.
+ */
+const storage: StorageAdapter = isNativePlatform() ? preferencesAdapter : localStorageAdapter;
 
 export const useGameStore = create<GameStore>((set, get) => ({
   state: createNewGame(),
@@ -94,7 +104,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   activeEventToast: null,
 
   init: async () => {
-    const loadedState = await loadGame();
+    const loadedState = await loadGame(storage);
     const now = Date.now();
     const baseState = loadedState ?? createNewGame(now);
 
@@ -121,15 +131,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (autosaveHandle) clearInterval(autosaveHandle);
     autosaveHandle = setInterval(() => get().saveNow(), AUTOSAVE_INTERVAL_MS);
 
+    // `init` is idempotent (React StrictMode double-invokes effects in dev):
+    // drop any listeners a previous call registered before adding new ones,
+    // otherwise every remount would stack another copy of each handler.
+    for (const dispose of nativeListenerDisposers) dispose();
+    nativeListenerDisposers = [];
+
     if (typeof document !== 'undefined') {
-      document.addEventListener('visibilitychange', () => {
+      const onVisibility = () => {
         if (document.visibilityState === 'hidden') get().saveNow();
         else get().tick(Date.now());
-      });
+      };
+      document.addEventListener('visibilitychange', onVisibility);
+      nativeListenerDisposers.push(() => document.removeEventListener('visibilitychange', onVisibility));
     }
     if (typeof window !== 'undefined') {
-      window.addEventListener('beforeunload', () => get().saveNow());
+      const onUnload = () => get().saveNow();
+      window.addEventListener('beforeunload', onUnload);
+      nativeListenerDisposers.push(() => window.removeEventListener('beforeunload', onUnload));
     }
+
+    // On Android `beforeunload` is not guaranteed to run when the OS kills a
+    // backgrounded app, so the authoritative save point is the app going
+    // inactive; coming back foreground re-ticks immediately to collect offline
+    // progress rather than waiting for the next interval.
+    void onAppStateChange((isActive) => {
+      if (isActive) get().tick(Date.now());
+      else get().saveNow();
+    }).then((dispose) => nativeListenerDisposers.push(dispose));
   },
 
   tick: (nowMs) => {
@@ -173,6 +202,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   tap: () => {
     const { state, derived } = get();
+    if (state.settings.vibrationEnabled) hapticTap();
     const nextState = applyManualTap(state, derived.prestigeMultipliers);
     finalizeStateUpdate(set, get, state, nextState);
   },
@@ -315,7 +345,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   saveNow: () => {
-    void saveGame(get().state);
+    void saveGame(get().state, storage);
   },
 }));
 
