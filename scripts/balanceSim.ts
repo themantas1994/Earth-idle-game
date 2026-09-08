@@ -21,7 +21,7 @@ if (process.env.BALANCE) Object.assign(BALANCE, JSON.parse(process.env.BALANCE))
 const { createNewGame } = await import('../src/engine/gameState');
 const { simulateStep, computeCivLevel } = await import('../src/engine/simulation');
 const { computePrestigeMultipliers } = await import('../src/engine/prestige');
-const { purchaseTechnology } = await import('../src/engine/economy');
+const { purchaseTechnology, grantTechnology } = await import('../src/engine/economy');
 const { ALL_TECHNOLOGIES, isTechAvailable } = await import('../src/engine/technologies');
 const { checkMilestones } = await import('../src/engine/milestones');
 const { gasDisplayConcentration } = await import('../src/engine/climate');
@@ -32,22 +32,56 @@ const prestigeUpgrades = process.env.PRESTIGE ? JSON.parse(process.env.PRESTIGE)
 const prestige = computePrestigeMultipliers(prestigeUpgrades);
 
 /**
- * Spend-down policy: repeatedly buy the highest-tier affordable technology
- * until nothing is affordable. Buying the most advanced thing you can pay for
- * is what an engaged player does, and because a generator's price climbs with
- * every unit owned, the policy naturally falls back to cheaper tiers once the
- * top one outruns the wallet.
+ * Spend-down policy, modelled on what an engaged player actually does rather
+ * than on what is locally optimal.
+ *
+ * Real players chase *new things* first — an unbought technology is a new
+ * card, a new headline, a new branch — and only then pour whatever is left
+ * into deepening what they already run. A policy that instead always buys the
+ * highest tier it can afford tunnels down a single branch, leaves a third of
+ * the tree unbought, and reports pacing nobody will experience.
+ *
+ * POLICY=greedy restores the old highest-tier-first behaviour, which is still
+ * useful as an upper bound on how fast the tree *can* be rushed.
  */
+const POLICY = process.env.POLICY ?? 'explorer';
+
+let purchaseEvents = 0;
+
 function spend(state: GameState): GameState {
   let s = state;
-  for (let guard = 0; guard < 2000; guard++) {
-    const candidates = ALL_TECHNOLOGIES.filter((t) => isTechAvailable(t, s.techOwned)).sort((a, b) => b.tier - a.tier);
+  for (let guard = 0; guard < 4000; guard++) {
+    const available = ALL_TECHNOLOGIES.filter((t) => isTechAvailable(t, s.techOwned));
+
+    // Pass one: anything never bought before, cheapest first, so breadth
+    // opens up before depth soaks up the wallet.
+    const frontier =
+      POLICY === 'greedy'
+        ? []
+        : available.filter((t) => (s.techOwned[t.id] ?? 0) === 0).sort((a, b) => a.tier - b.tier);
+
     let bought = false;
-    for (const tech of candidates) {
+    for (const tech of frontier) {
       const r = purchaseTechnology(s, tech.id, 1, prestige);
       if (r.success) {
         s = r.state;
         bought = true;
+        purchaseEvents++;
+        break;
+      }
+    }
+    if (bought) continue;
+
+    // Pass two: deepen. Buying the most advanced building affordable is what
+    // a player does with the change, and because a generator's price climbs
+    // with every unit owned the policy naturally falls back down the tiers
+    // once the top one outruns the wallet.
+    for (const tech of [...available].sort((a, b) => b.tier - a.tier)) {
+      const r = purchaseTechnology(s, tech.id, 1, prestige);
+      if (r.success) {
+        s = r.state;
+        bought = true;
+        purchaseEvents++;
         break;
       }
     }
@@ -69,7 +103,26 @@ const ACTIVE_HOURS_PER_DAY = Number(process.env.ACTIVE_HOURS ?? 24);
  */
 const SPEND_INTERVAL = Number(process.env.SPEND_INTERVAL ?? DT);
 
-let state = createNewGame(0);
+/**
+ * A fresh Earth as the *game* would hand it over, not as `createNewGame`
+ * leaves it: post-reset the store grants every starting technology, generator
+ * and resource the player's prestige upgrades have earned. Skipping that step
+ * made every PRESTIGE=... run report a second Earth that started from
+ * nothing, which is the one thing a second Earth never does.
+ */
+function freshRun() {
+  let s = createNewGame(0);
+  for (const techId of prestige.startingTechIds) s = grantTechnology(s, techId);
+  for (const [techId, extraUnits] of Object.entries(prestige.startingGenerators)) {
+    s = { ...s, techOwned: { ...s.techOwned, [techId]: (s.techOwned[techId] ?? 0) + extraUnits } };
+  }
+  for (const [resId, amount] of Object.entries(prestige.startingResources)) {
+    s = { ...s, resources: { ...s.resources, [resId]: s.resources[resId as keyof typeof s.resources].add(amount ?? 0) } };
+  }
+  return s;
+}
+
+let state = freshRun();
 const firstBuy: Record<string, number> = {};
 const milestoneAt: Record<string, number> = {};
 let t = 0;
@@ -121,6 +174,20 @@ for (; t < MAX_SECONDS; t += DT) {
 
 const hrs = (s: number) => (s >= 3600 * 48 ? `${(s / 86400).toFixed(2)}d` : `${(s / 3600).toFixed(2)}h`);
 
+/**
+ * The pacing question this game actually lives or dies on is not "how long is
+ * a run" but "how long am I ever left with nothing to do". A dead zone is a
+ * stretch where nothing new became purchasable, and a run with a six-hour one
+ * in the middle is a run people put down.
+ */
+const unlockOrder = Object.entries(firstBuy).sort((a, b) => a[1] - b[1]);
+const gaps = unlockOrder
+  .slice(1)
+  .map(([id, at], i) => ({ gapSeconds: at - unlockOrder[i][1], from: unlockOrder[i][0], to: id, at: unlockOrder[i][1] }))
+  .sort((a, b) => b.gapSeconds - a.gapSeconds);
+const worstGap = gaps[0]?.gapSeconds ?? 0;
+const worstGapAt = gaps[0]?.at ?? 0;
+
 console.log('=== technologies (time of first purchase) ===');
 for (const tech of ALL_TECHNOLOGIES) {
   const at = firstBuy[tech.id];
@@ -144,3 +211,31 @@ console.log('habitability:  ', (state.habitability.fraction * 100).toFixed(3), '
 console.log('forcing:       ', state.forcing.total.toFixed(2), 'W/m²');
 console.log('civ level:     ', computeCivLevel(state.techOwned));
 console.log('milestones hit:', Object.keys(milestoneAt).length, '/', (await import('../src/engine/milestones')).MILESTONES.length);
+console.log('purchases made:', purchaseEvents, `(one every ${hrs((collapsedAt ?? t) / Math.max(1, purchaseEvents))})`);
+console.log('longest dead zone:', hrs(worstGap), 'starting at', hrs(worstGapAt));
+console.log('worst content gaps:');
+for (const g of gaps.slice(0, 5)) {
+  console.log(`  ${hrs(g.gapSeconds).padStart(8)} waiting at ${hrs(g.at).padStart(8)} — after ${g.from}, next was ${g.to}`);
+}
+const deepest = ALL_TECHNOLOGIES.map((tech) => [tech.id, state.techOwned[tech.id] ?? 0] as const)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 5);
+console.log('deepest stacks: ', deepest.map(([id, n]) => `${id}×${n}`).join(', '));
+console.log('final energy:  ', state.resources.energy.toString());
+console.log('news feed len: ', state.newsFeed.length);
+
+const { calculatePrestigeGain } = await import('../src/engine/prestige');
+const { PRESTIGE_UPGRADES } = await import('../src/engine/prestige');
+const earned = calculatePrestigeGain({
+  totalGasProducedKg: state.runStats.totalGasProducedKg,
+  peakForcingWm2: state.runStats.peakForcingWm2,
+  civLevel: computeCivLevel(state.techOwned),
+  runDurationSeconds: collapsedAt ?? t,
+});
+const { sumGasTotals } = await import('../src/engine/simulation');
+console.log('total gas kg:  ', sumGasTotals(state.runStats.totalGasProducedKg).toString());
+console.log('peak forcing:  ', state.runStats.peakForcingWm2.toFixed(2));
+console.log('peak gas rate: ', state.runStats.peakGasProductionRateKgPerS.toString(), 'kg/s');
+console.log('earth points:  ', earned.toString());
+const affordable = PRESTIGE_UPGRADES.filter((u) => earned.gte(u.baseCost)).map((u) => u.id);
+console.log('  affords now: ', affordable.join(', ') || '(nothing)');

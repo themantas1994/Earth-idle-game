@@ -28,8 +28,11 @@ There is also a headless pacing harness, used to tune the balance curves:
 npx vite-node scripts/balanceSim.ts               # play a whole run, report when everything happens
 ACTIVE_HOURS=16 SPEND_INTERVAL=3600 TRACE=14400 \
   npx vite-node scripts/balanceSim.ts             # model a realistic play pattern, with a climate trace
-BALANCE='{"complexityCostGrowth":1.1}' \
+BALANCE='{"generatorCostGrowthPerTier":3.2}' \
   npx vite-node scripts/balanceSim.ts             # try a change to constants.ts > BALANCE without editing it
+PRESTIGE='{"atmospheric_momentum":5}' \
+  npx vite-node scripts/balanceSim.ts             # model a second/third Earth with upgrades already bought
+POLICY=greedy npx vite-node scripts/balanceSim.ts # upper bound: always buy the highest tier affordable
 ```
 
 No backend, no network calls — the whole game runs client-side and saves to device storage.
@@ -129,14 +132,15 @@ src/
     climate.ts         Carbon-cycle integration, radiative forcing, temperature anomaly
     habitability.ts    Composite habitability score from 5 independent factors
     resources.ts       Spendable currencies (Energy, Research, Coal, Oil, Steel, Concrete)
-    technologies/      94 technologies across 11 branches (data files, one per branch)
+    technologies/      99 technologies across 11 branches (data files, one per branch)
     simulation.ts      The tick function: production, multipliers, gas/resource integration
-    economy.ts         Purchase logic, complexity cost drag, cost-affordability math
+    economy.ts         Purchase logic + the price-stability invariant everything else rests on
+    ownership.ts       Per-generator "every 10th copy doubles its output" bonuses
     prestige.ts        Earth Points formula + permanent upgrade tree
     offline.ts         Offline/backgrounded catch-up (closed-form, not stepped — see below)
-    achievements.ts    31 achievements, pure check functions
+    achievements.ts    32 achievements, pure check functions
     challenges.ts      8 challenges with live restrictions + goals + permanent rewards
-    events.ts          10 random events (temporary multipliers + instant gas bursts)
+    events.ts          12 random events (temporary multipliers + instant gas bursts)
     milestones.ts      39 once-per-run news headlines, threshold-triggered, no mechanical effect
     save.ts            Versioned JSON (de)serialization, corruption-safe, backup slot
     gameState.ts       The GameState shape + factories (createNewGame / startNewRun)
@@ -193,10 +197,10 @@ effectively unbounded for this game.
 
 ### The technology tree
 
-94 technologies (64 buildable generators, 30 research nodes) across the 11 requested branches (Primitive, Agriculture, Industry,
+99 technologies (68 buildable generators, 31 research nodes) across the 11 requested branches (Primitive, Agriculture, Industry,
 Electricity, Fossil Fuels, Transportation, Construction, Chemistry, Globalization, Digital,
 Endgame), defined as data (`technologies/*.ts`) rather than hardcoded logic — adding
-technology #95 means adding one object to a branch file. Every tech has a `kind`:
+technology #100 means adding one object to a branch file. Every tech has a `kind`:
 
 - `unlock` — one-time tree node, gates later tech, no production of its own
 - `generator` — repeatably purchasable, produces gas and/or resources per owned unit
@@ -215,44 +219,87 @@ to raise output — is sold on the Production screen and nowhere else. Neither s
 the same card as the other.
 
 A full graph-integrity test (`technologies/index.test.ts`) checks there are no dangling
-`requires` references and no dependency cycles across all 94 nodes, and `balance.test.ts`
+`requires` references and no dependency cycles across all 99 nodes, and `balance.test.ts`
 checks every node is actually reachable from the one technology a run starts with.
+
+### Prices never rise
+
+The one rule the whole economy is built around: **a price you have been quoted is the price you
+pay.** Nothing in the game ever revises a number upward behind the player's back.
+
+Concretely, the amount charged for a technology is a pure function of the technology and how
+many of *that* technology you already own, scaled down (never up) by the prestige discount. A
+one-time unlock, multiplier or choice is quoted once and costs exactly that forever. A
+generator's first unit always costs its listed base price, and only the units you have
+personally bought of it make the next one dearer.
+
+There used to be a civilization-complexity surcharge that multiplied every price by the number
+of distinct technologies owned. It paced the middle of the game effectively, but it did so by
+re-pricing things the player had already been shown: every new frontier made every *other*
+frontier more expensive, so the reward for expanding was a bigger bill. It is gone, along with
+the prestige upgrade that existed to cancel it. `balance.test.ts` locks the invariant in by
+running the live purchase path against an empty world and a world that owns forty of
+everything, and asserting the charge is identical.
+
+### Ownership bonuses
+
+Every generator carries its own progress track: **every tenth copy you own doubles that
+building's entire output**, permanently, for the rest of the run (`ownership.ts`, spacing in
+`constants.ts > OWNERSHIP_BONUS`). The card shows the bar filling and a toast fires when one
+lands.
+
+This exists because a price that climbs per unit makes the eleventh copy of something strictly
+worse than the first copy of something newer — correct pacing, but feedback that goes nowhere.
+The spacing is what keeps it honest: across one ten-unit span a generator's unit price grows by
+`unitCostGrowth^10` (about ×4) against a single ×2 from the bonus, so the value of each further
+copy still falls and broadening into new technology still wins in the long run. Tightening
+`everyUnits` far enough to invert that would make the tech tree decoration; `balance.test.ts`
+guards the relationship directly.
 
 ### Pacing
 
-A first run is meant to take about a week of real time. Getting there is not a matter of one
-multiplier, because the tech tree is not a uniform ladder — through the middle of a run ten
-branches produce in parallel and compound into each other, while the endgame narrows to a
-single chain. Three knobs in `constants.ts > BALANCE` do the work, and they solve three
-different problems:
+A first run takes a few days of real time — roughly 2½ days of near-continuous play, 3–5 days
+at a realistic check-in-a-few-times-a-day pace — and every reset after that is faster. Getting
+there is not a matter of one multiplier, because the tech tree is not a uniform ladder: through
+the middle of a run ten branches produce in parallel and compound into each other, while the
+endgame narrows to a single chain. Three knobs in `constants.ts > BALANCE` do the work, and
+they solve three different problems:
 
 - **`generatorCostGrowthPerTier` vs `productionGrowthPerTier`.** Their ratio sets how much
   longer each tier takes than the last. Below 1 the game runs away and finishes itself in an
-  evening; the shipped value puts it slightly above 1.
-- **`complexityCostGrowth`.** Every *distinct* technology owned makes the next purchase dearer.
-  This is what stops the broad middle of the tree from evaporating in an afternoon, and it
-  barely touches the thin endgame, where the owned count hardly moves. Extra units of something
-  already owned never count, so it taxes expansion rather than investment — and the Home and
-  Production screens both show the current surcharge rather than hiding it.
+  evening; the shipped values put it around 1.5. With the complexity surcharge gone this ratio
+  carries the pacing that used to be split between the two, which is why it is much steeper
+  than it looks like it should be.
+- **`unitCostGrowth`.** Per unit owned of the same generator — the only thing in the game that
+  ever raises a price, and only in response to the player's own purchases. It is also what the
+  ownership bonuses are balanced against.
 - **`lateTierCompression`.** Above `flattenLadderFromTier` the cost *and* output ladders are
-  compressed together. Without it, a late tier still doubles in price while adding one
-  generator to a large static base, and the last third of the tree becomes an unclimbable wall
-  that no run ever sees.
+  compressed together, so late technologies stay priced against what a late economy can
+  actually earn.
 
 Two further relationships matter. `gasProductionGrowthPerTier` sits *below* the resource curve,
-so emissions lag the economy and the tree can be finished before the planet dies; and the
-`massPerUnit` figures in `gases.ts` are scaled so CO₂ leads the warming for most of a run
-rather than being a rounding error next to the synthetic gases.
+so emissions lag the economy and the tree can be finished before the planet dies — this is the
+binding constraint on run length, since a run ends when the planet dies rather than when the
+tree runs out, and pushing the cost curve up without pulling this down simply makes the last
+technologies unreachable. And the `massPerUnit` figures in `gases.ts` are scaled so CO₂ leads
+the warming for most of a run rather than being a rounding error next to the synthetic gases.
+
+The endgame chain is deliberately **dense** — a node at every tier from 28 to 38, alternating
+generators (something to keep buying, and to farm ownership doublings on) with multipliers (a
+single loud payoff). Widening those tier gaps is the fastest way to reintroduce the hours of
+dead air the last third of the game used to have.
 
 `scripts/balanceSim.ts` is the tool all of this was measured with: it plays a full run under a
-configurable play pattern and reports when each technology is bought, when each news milestone
-fires, and how the atmosphere evolves. `balance.test.ts` locks in the *relationships* above
-(not the specific numbers, which are meant to be retuned).
+configurable play pattern and reports when each technology is bought, the worst gaps between
+new unlocks, the climate trace, and what the run would pay out in Earth Points.
+`balance.test.ts` locks in the *relationships* above (not the specific numbers, which are meant
+to be retuned), and `pacing.test.ts` plays a compressed run in CI so a retune cannot silently
+ship a half-hour game or an endgame priced out of reach.
 
 ### World news
 
 `milestones.ts` holds 39 deterministic, once-per-run headlines that fire the first time a run
-crosses a threshold. They have no mechanical effect: they exist so a week-long run reads as a
+crosses a threshold. They have no mechanical effect: they exist so a multi-day run reads as a
 story rather than a rising number. Early ones are keyed to *technology* and report local
 consequences (a river below the mills, smog, an ozone hole), because a handful of campfires
 genuinely cannot move a planet's atmosphere and the rest of the simulation doesn't pretend
@@ -264,10 +311,20 @@ obituaries. They surface as a breaking-news banner and accumulate in a feed on t
 
 Earth Points (name is one constant, `PRESTIGE_CURRENCY_NAME` in `constants.ts` — change it
 there to rebrand). The formula (`prestige.ts`) scores total greenhouse-gas mass produced (with
-diminishing returns via a sub-1 exponent), then scales that by peak radiative forcing,
-civilization level, and run duration — all four weights live in `constants.ts.PRESTIGE`. Ten
-permanent upgrades are implemented (production multipliers, starting technologies, starting
-generators, offline cap, tech cost discount, complexity reduction, etc.); challenge completions
+diminishing returns via a sub-1 exponent), scales that by damped peak-radiative-forcing and
+civilization-level terms, then multiplies by **speed** — how much faster the run was than
+`PRESTIGE.referenceRunSeconds`, squared and bounded.
+
+That last term is what makes prestige a loop rather than a decoration, and it is worth
+understanding before retuning it. Every run in this game ends in the same place — habitability
+zero, tech tree finished — so an outcome-only score pays a *stronger* civilization *less*: a
+stronger civilization kills the planet sooner and therefore emits less in total before it does.
+Measured before the speed term was added, a second Earth built on a full first prestige spend
+finished 32% faster and earned 8% **fewer** points than the first. Scoring speed instead makes
+each Earth roughly double the last, which is the shape the upgrade ladder's costs assume.
+
+Eleven permanent upgrades are implemented (production multipliers, starting technologies,
+starting generators, starting resources, offline cap, tech cost discount); challenge completions
 grant permanent rewards through the same effect shape, folded in alongside prestige upgrades in
 `computePrestigeMultipliers`.
 
@@ -295,14 +352,15 @@ plus pieces of Phase 4), not a design document:
 
 **Implemented:** the full research → build → compound loop, driven from the first tick by a
 Natural Fire every run owns (there is no tap button — Energy comes from a source of energy);
-all 6 gas types with individually-tuned forcing/lifetime/removal; 94 technologies across all 11
-branches including a branching strategic choice; carbon-cycle sinks that weaken with warming;
-5-factor habitability collapse; Earth-N reset/prestige with 10 permanent upgrades; offline
-progress (capped, upgradeable); 31 achievements; 8 challenges with live restrictions and
-permanent rewards; 10 random events; 39 milestone news headlines with a per-run feed;
-4 number-format modes; save/load with corruption protection and a versioned migration chain; a
-10-step interactive tutorial; light/dark/system theming; temperature-driven visual era
-progression; buy 1/10/100/max on every generator.
+all 6 gas types with individually-tuned forcing/lifetime/removal; 99 technologies across all 11
+branches including a branching strategic choice; per-generator ownership bonuses that double a
+building's output every tenth copy; carbon-cycle sinks that weaken with warming; 5-factor
+habitability collapse; Earth-N reset/prestige with 11 permanent upgrades and a speed-scored
+payout; offline progress (12h base, upgradeable); 32 achievements; 8 challenges with live
+restrictions and permanent rewards; 12 random events; 39 milestone news headlines with a per-run
+feed; 4 number-format modes; save/load with corruption protection and a versioned migration
+chain; a 12-step interactive tutorial; light/dark/system theming; temperature-driven visual era
+progression; buy 1/10/100/max on every generator, defaulting to max.
 
 **Deliberately deferred** (flagged rather than half-built): additional prestige layers beyond
 Earth Points (architecture supports adding them — see "Prestige" above); individually-simulated

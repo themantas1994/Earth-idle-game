@@ -125,6 +125,41 @@ function migrate(state: GameState): GameState {
     };
   }
 
+  if (migrated.saveVersion < 3) {
+    // v3 rebuilt the economy. Two things in a v2 save are no longer worth what
+    // they were, and both are about Earth Points rather than the run itself:
+    // a run in progress only ever gets *cheaper* (the complexity surcharge is
+    // gone and no price in the game rises any more), so it needs no fixing up.
+    //
+    // 1. The prestige payout was rescaled by roughly 10^5 — the old formula
+    //    multiplied by raw civilization level, which runs into the thousands,
+    //    and a single completed run paid out enough to buy the entire upgrade
+    //    tree at once. Banked points are divided by the ratio between what a
+    //    completed run used to pay and what one pays now, so a returning
+    //    player's balance buys about what it bought before. It is a single
+    //    ratio against two differently-shaped formulas, so it is an
+    //    approximation — deliberately a generous one, since erring toward
+    //    giving a player too much is the kinder failure.
+    //
+    // 2. "Institutional Memory" used to cancel the complexity surcharge, which
+    //    no longer exists. Rather than delete it, it now grants +40%
+    //    production per level, so levels already bought keep paying — and it
+    //    is cheaper than it was, so nobody overpaid.
+    const PRESTIGE_RESCALE = 250_000;
+    migrated = {
+      ...migrated,
+      prestige: {
+        ...migrated.prestige,
+        earthPoints: migrated.prestige.earthPoints.div(PRESTIGE_RESCALE),
+      },
+      lifetimeStats: {
+        ...migrated.lifetimeStats,
+        totalEarthPointsEarned: migrated.lifetimeStats.totalEarthPointsEarned.div(PRESTIGE_RESCALE),
+      },
+      saveVersion: 3,
+    };
+  }
+
   return migrated.saveVersion === SAVE_VERSION ? migrated : { ...migrated, saveVersion: SAVE_VERSION };
 }
 

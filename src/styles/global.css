@@ -345,10 +345,62 @@ button {
   gap: 8px;
   margin-bottom: 8px;
 }
+.tech-card__bonus {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--good);
+  background: rgba(72, 199, 116, 0.16);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.tech-card__bonus + .tech-card__owned { margin-left: 6px; }
+
+/* --- Per-generator ownership track: the "next doubling" progress bar --- */
+.bonus-track { margin: 0 0 8px; }
+.bonus-track__bar {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
+.bonus-track__fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--good);
+  transition: width 0.3s ease;
+}
+.bonus-track__label {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  margin-top: 4px;
+}
+.bonus-track__count { color: var(--text-dim); }
+
+.tech-card__eta {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.screen-note {
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  line-height: 1.45;
+  margin: -2px 0 10px;
+  padding-left: 2px;
+}
+
+.toast--bonus {
+  border-color: var(--good);
+  color: var(--good);
+}
+
 .tech-card__buy-row {
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .buy-btn {
   flex: 1;

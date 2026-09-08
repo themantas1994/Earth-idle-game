@@ -1,6 +1,7 @@
 import { GameState } from './gameState';
 import { ALL_TECHNOLOGIES, BRANCH_META, TechBranch } from './technologies';
 import { D } from './bignum';
+import { ownershipMultiplier } from './ownership';
 
 export interface AchievementContext {
   state: GameState;
@@ -70,20 +71,30 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'Civilization Speedrun',
     description: 'Reach the reset condition in under 12 hours.',
     icon: '⚡',
-    // A first run is a week's work; twelve hours is what a deep prestige stack
-    // and a well-drilled route can do to that, not a target for a fresh Earth.
+    // A first run runs to several days; twelve hours is what a deep prestige
+    // stack and a well-drilled route can do to that, not a target for a fresh
+    // Earth.
     check: (c) => c.justReset && c.lastRunDurationSeconds !== null && c.lastRunDurationSeconds <= 12 * 3600,
   },
-  // 250 rather than a rounder 1,000: per-unit costs grow 16% a unit, so the
-  // thousandth copy of anything costs some 10^64 times the first and no run will
-  // ever buy it.
-  { id: 'industrial_monster', name: 'Industrial Monster', description: 'Own 250 of any single generator.', icon: '🏗️', check: (c) => maxGeneratorOwned(c.state) >= 250 },
+  // 100 rather than a rounder 1,000: per-unit costs grow ~15% a unit, so the
+  // thousandth copy of anything costs some 10^60 times the first and no run
+  // will ever buy it. A completed run tops out somewhere under 100 of its
+  // favourite building, which makes this a real target rather than a
+  // decoration — and it lands on the tenth ownership doubling.
+  { id: 'industrial_monster', name: 'Industrial Monster', description: 'Own 100 of any single generator.', icon: '🏗️', check: (c) => maxGeneratorOwned(c.state) >= 100 },
+  {
+    id: 'economies_of_scale',
+    name: 'Economies of Scale',
+    description: 'Push a single building to a ×32 ownership bonus.',
+    icon: '⚡',
+    check: (c) => ownershipMultiplier(maxGeneratorOwned(c.state)) >= 32,
+  },
   {
     id: 'bigger_than_earth',
     name: 'Bigger Than Earth',
-    description: 'Accumulate 1 septillion (1e24) of any resource.',
+    description: 'Accumulate 1 quintillion (1e18) of any resource.',
     icon: '🌌',
-    check: (c) => Object.values(c.state.resources).some((amount) => amount.gte(D('1e24'))),
+    check: (c) => Object.values(c.state.resources).some((amount) => amount.gte(D('1e18'))),
   },
   {
     id: 'methane_world',

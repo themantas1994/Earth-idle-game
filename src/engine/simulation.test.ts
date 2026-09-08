@@ -10,6 +10,7 @@ import {
 } from './simulation';
 import { TECH_BY_ID } from './technologies';
 import { computePrestigeMultipliers } from './prestige';
+import { OWNERSHIP_BONUS } from './constants';
 
 const noPrestige = computePrestigeMultipliers({});
 
@@ -45,11 +46,28 @@ describe('computeProductionRates', () => {
     expect(rates.resourcePerS.energy.isZero()).toBe(true);
   });
 
-  it('scales linearly with owned count for a single generator', () => {
+  it('scales linearly with owned count below the first ownership threshold', () => {
     const multipliers = computeEffectiveMultipliers({ controlled_fire: 1 }, noPrestige);
     const rates1 = computeProductionRates({ controlled_fire: 1 }, multipliers);
-    const rates10 = computeProductionRates({ controlled_fire: 10 }, multipliers);
-    expect(rates10.gasGrossKgPerS.co2.div(rates1.gasGrossKgPerS.co2).toNumber()).toBeCloseTo(10, 5);
+    const rates9 = computeProductionRates({ controlled_fire: OWNERSHIP_BONUS.everyUnits - 1 }, multipliers);
+    expect(rates9.gasGrossKgPerS.co2.div(rates1.gasGrossKgPerS.co2).toNumber()).toBeCloseTo(OWNERSHIP_BONUS.everyUnits - 1, 5);
+  });
+
+  it('layers the ownership bonus on top of that linear scaling once a threshold lands', () => {
+    const multipliers = computeEffectiveMultipliers({ controlled_fire: 1 }, noPrestige);
+    const rates1 = computeProductionRates({ controlled_fire: 1 }, multipliers);
+    const atThreshold = computeProductionRates({ controlled_fire: OWNERSHIP_BONUS.everyUnits }, multipliers);
+    // Units alone would give everyUnits×; the threshold doubling makes it more.
+    expect(atThreshold.gasGrossKgPerS.co2.div(rates1.gasGrossKgPerS.co2).toNumber()).toBeCloseTo(
+      OWNERSHIP_BONUS.everyUnits * OWNERSHIP_BONUS.multiplier,
+      5,
+    );
+    // ...and it applies to resources and gases alike, so the emissions-per-Energy
+    // ratio a technology was authored with is never quietly changed by depth.
+    expect(atThreshold.resourcePerS.energy.div(rates1.resourcePerS.energy).toNumber()).toBeCloseTo(
+      OWNERSHIP_BONUS.everyUnits * OWNERSHIP_BONUS.multiplier,
+      5,
+    );
   });
 
   it('applies a choice-group gas multiplier only to the targeted gas', () => {

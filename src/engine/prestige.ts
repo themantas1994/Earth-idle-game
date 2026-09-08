@@ -17,13 +17,6 @@ export interface PrestigeUpgradeEffect {
   allGasProductionMultiplier?: number;
   /** Fractional discount applied to every technology's cost (0.1 = 10% cheaper), stacking additively across levels, capped at 0.9. */
   techCostDiscount?: number;
-  /**
-   * Fraction of the civilization-complexity surcharge that no longer applies,
-   * stacking additively across levels and capped at 0.75. Complexity is the
-   * dominant cost term by the late game, so this is the upgrade that most
-   * changes how a run feels — see `BALANCE.complexityCostGrowth`.
-   */
-  complexityReduction?: number;
   /** Multiplies the base offline-progress cap, stacking per level. */
   offlineCapMultiplier?: number;
   /** Technologies auto-granted (owned = 1) at the start of every future run. */
@@ -32,8 +25,6 @@ export interface PrestigeUpgradeEffect {
   startingGenerators?: Record<string, number>;
   /** Flat resources granted at the start of every future run. */
   startingResources?: Partial<Record<ResourceId, number>>;
-  /** Unlocks the "Buy Max" auto-affordability helper from run start (otherwise a mid-run milestone). */
-  unlocksAutoBuyMax?: boolean;
 }
 
 export interface PrestigeUpgrade {
@@ -81,12 +72,12 @@ export const PRESTIGE_UPGRADES: PrestigeUpgrade[] = [
   {
     id: 'institutional_memory',
     name: 'Institutional Memory',
-    description: 'Civilizations that have done this before waste less of themselves on being large. Cancels 15% of the complexity surcharge per level.',
+    description: 'Every civilization inherits the last one\'s blueprints. Every building you own produces +40% more, per level.',
     icon: '🏛️',
-    baseCost: 250_000,
-    costGrowth: 6,
-    maxLevel: 5,
-    effect: { complexityReduction: 0.15 },
+    baseCost: 150_000,
+    costGrowth: 4,
+    maxLevel: 6,
+    effect: { globalProductionMultiplier: 1.4 },
   },
   {
     id: 'civilizational_acceleration',
@@ -103,7 +94,7 @@ export const PRESTIGE_UPGRADES: PrestigeUpgrade[] = [
     name: 'Anthropocene Mastery',
     description: 'You\'ve done this before. ×10 all greenhouse-gas production.',
     icon: '🌋',
-    baseCost: 1_000_000_000,
+    baseCost: 25_000_000,
     costGrowth: 1,
     maxLevel: 1,
     effect: { allGasProductionMultiplier: 10 },
@@ -141,12 +132,22 @@ export const PRESTIGE_UPGRADES: PrestigeUpgrade[] = [
   {
     id: 'automated_industry',
     name: 'Automated Industry',
-    description: 'Unlock the Buy Max helper from the very start of the run.',
+    description: 'Robots keep the lines running while you sleep. +100% offline progress cap, and every future Earth starts with 25 Natural Fires already lit.',
     icon: '🤖',
-    baseCost: 250_000,
+    baseCost: 200_000,
     costGrowth: 1,
     maxLevel: 1,
-    effect: { unlocksAutoBuyMax: true },
+    effect: { offlineCapMultiplier: 2, startingGenerators: { natural_fire: 25 } },
+  },
+  {
+    id: 'deep_foundations',
+    name: 'Deep Foundations',
+    description: 'Start every future Earth with a Research head start, so the tree opens immediately instead of after the first hour.',
+    icon: '🧱',
+    baseCost: 40_000,
+    costGrowth: 1,
+    maxLevel: 1,
+    effect: { startingResources: { research: 5_000, energy: 25_000 } },
   },
 ];
 
@@ -164,12 +165,10 @@ export interface PrestigeMultipliers {
   allGas: number;
   perGas: Partial<Record<GasId, number>>;
   techCostDiscount: number;
-  complexityReduction: number;
   offlineCapMultiplier: number;
   startingTechIds: string[];
   startingGenerators: Record<string, number>;
   startingResources: Partial<Record<ResourceId, number>>;
-  unlocksAutoBuyMax: boolean;
 }
 
 function applyEffect(result: PrestigeMultipliers, e: PrestigeUpgradeEffect, level: number): void {
@@ -181,7 +180,6 @@ function applyEffect(result: PrestigeMultipliers, e: PrestigeUpgradeEffect, leve
     result.perGas[gas] = (result.perGas[gas] ?? 1) * Math.pow(multiplier, level);
   }
   if (e.techCostDiscount) result.techCostDiscount = Math.min(0.9, result.techCostDiscount + e.techCostDiscount * level);
-  if (e.complexityReduction) result.complexityReduction = Math.min(0.75, result.complexityReduction + e.complexityReduction * level);
   if (e.offlineCapMultiplier) result.offlineCapMultiplier *= Math.pow(e.offlineCapMultiplier, level);
   if (e.grantsStartingTechIds) result.startingTechIds.push(...e.grantsStartingTechIds);
   if (e.startingGenerators) {
@@ -194,7 +192,6 @@ function applyEffect(result: PrestigeMultipliers, e: PrestigeUpgradeEffect, leve
       result.startingResources[res as ResourceId] = (result.startingResources[res as ResourceId] ?? 0) + (amount ?? 0);
     }
   }
-  if (e.unlocksAutoBuyMax) result.unlocksAutoBuyMax = true;
 }
 
 /**
@@ -214,12 +211,10 @@ export function computePrestigeMultipliers(
     allGas: 1,
     perGas: {},
     techCostDiscount: 0,
-    complexityReduction: 0,
     offlineCapMultiplier: 1,
     startingTechIds: [],
     startingGenerators: {},
     startingResources: {},
-    unlocksAutoBuyMax: false,
   };
 
   for (const upgrade of PRESTIGE_UPGRADES) {
@@ -247,28 +242,37 @@ function sumAllGasKg(totals: GasTotals): Decimal {
 }
 
 /**
- * Converts one run's outcome into Earth Points. Diminishing returns come
- * from the sub-1 exponent on total emitted mass; the forcing, civilization
- * level, and duration terms then scale that base up, so late-run
- * "buttoning up" a strong civilization matters more than raw mass alone.
- * See constants.ts `PRESTIGE` for every tunable in this formula.
+ * How much faster than the reference pace this run was, as a multiplier on
+ * the payout. This is the term that makes each Earth worth more than the
+ * last: prestige upgrades buy speed, and speed is what is scored.
+ *
+ * A run of zero (or nonsensical) length is treated as the reference pace
+ * rather than as infinitely fast, so a corrupted clock cannot mint points.
+ */
+export function speedMultiplier(runDurationSeconds: number): number {
+  if (!Number.isFinite(runDurationSeconds) || runDurationSeconds <= 0) return 1;
+  const ratio = PRESTIGE.referenceRunSeconds / runDurationSeconds;
+  const scaled = Math.pow(ratio, PRESTIGE.speedExponent);
+  return Math.min(PRESTIGE.maxSpeedMultiplier, Math.max(PRESTIGE.minSpeedMultiplier, scaled));
+}
+
+/**
+ * Converts one run's outcome into Earth Points: how much gas the civilization
+ * produced, scaled by how hard it pushed the atmosphere, how far up the tech
+ * tree it got, and how quickly it managed all three. Every tunable lives in
+ * `constants.ts > PRESTIGE`, which also explains why each term is shaped the
+ * way it is.
  */
 export function calculatePrestigeGain(params: PrestigeGainParams): Decimal {
   const totalGasKg = sumAllGasKg(params.totalGasProducedKg);
   const gasScore = totalGasKg.div(PRESTIGE.baseDivisor).clampMin(0);
-  const gasComponent = gasScore.pow(PRESTIGE.exponent);
+  const gasComponent = gasScore.pow(PRESTIGE.exponent).mul(PRESTIGE.gasWeight);
 
-  const forcingMultiplier = 1 + PRESTIGE.forcingWeight * Math.max(0, params.peakForcingWm2);
-  const civMultiplier = 1 + PRESTIGE.civLevelWeight * Math.max(0, params.civLevel);
-  const durationFactor = clamp(
-    0.5 + 0.5 * Math.sqrt(Math.max(0, params.runDurationSeconds) / PRESTIGE.durationBonusHalfLifeSeconds),
-    0.5,
-    1.5,
-  );
+  const forcingMultiplier = 1 + PRESTIGE.forcingWeight * Math.sqrt(Math.max(0, params.peakForcingWm2));
+  const civMultiplier = 1 + PRESTIGE.civLevelWeight * Math.sqrt(Math.max(0, params.civLevel));
 
-  return gasComponent.mul(forcingMultiplier).mul(civMultiplier).mul(durationFactor);
-}
-
-function clamp(x: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, x));
+  return gasComponent
+    .mul(forcingMultiplier)
+    .mul(civMultiplier)
+    .mul(speedMultiplier(params.runDurationSeconds));
 }

@@ -137,7 +137,7 @@ export interface GameState {
   collapsed: boolean;
 }
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 /**
  * Technologies every run starts with already "owned". Natural Fire predates

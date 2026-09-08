@@ -91,10 +91,8 @@ describe('purchaseTechnology never overdraws a resource', () => {
     startingGenerators: {},
     offlineCapMultiplier: 1,
     techCostDiscount: 0,
-    complexityReduction: 0,
     startingTechIds: [],
     startingResources: {},
-    unlocksAutoBuyMax: false,
   };
 
   it('buy-max against a real registry generator spends at most the wallet', () => {

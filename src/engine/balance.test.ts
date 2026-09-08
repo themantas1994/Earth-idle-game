@@ -2,13 +2,65 @@ import { describe, it, expect } from 'vitest';
 import { BALANCE } from './constants';
 import { createNewGame } from './gameState';
 import { computePrestigeMultipliers } from './prestige';
-import { complexityCostMultiplier, purchaseTechnology } from './economy';
-import { ALL_TECHNOLOGIES, TECH_BY_ID, nextPurchaseCost } from './technologies';
+import { purchaseTechnology, effectiveCostAmount } from './economy';
+import { ownershipMultiplier, nextOwnershipMilestone, ownershipMilestonesCrossed } from './ownership';
+import { OWNERSHIP_BONUS } from './constants';
+import { ALL_TECHNOLOGIES, TECH_BY_ID, Technology, nextPurchaseCost } from './technologies';
 import { ladderTier, generatorBaseCost, gasProduction, resourceProduction } from './technologies/scaling';
 import { simulateStep } from './simulation';
 import { D } from './bignum';
 
 const noPrestige = computePrestigeMultipliers({});
+
+/**
+ * What `purchaseTechnology` actually deducts for one unit of `tech`, played
+ * out for real against a wallet stocked from a whole world of other owned
+ * technologies. Going through the live purchase path (rather than re-deriving
+ * the price) is the point: a regression that reintroduced a world-dependent
+ * surcharge would show up here as a different number, not just as a different
+ * formula.
+ */
+function priceCharged(tech: Technology, ownedOfThis: number, world: Record<string, number>): number[] {
+  const funded = { ...createNewGame(0) };
+  funded.techOwned = { ...world, ...requirementsOf(tech), [tech.id]: ownedOfThis };
+  funded.resources = { ...funded.resources };
+  // Stock the wallet far beyond any plausible price so the purchase is never
+  // the thing under test — only the amount it takes.
+  for (const c of tech.cost) funded.resources[c.resource] = D(c.baseAmount).mul('1e6');
+
+  const result = purchaseTechnology(funded, tech.id, 1, noPrestige);
+  expect(result.success).toBe(true);
+  return tech.cost.map((c) => funded.resources[c.resource].sub(result.state.resources[c.resource]).toNumber());
+}
+
+/**
+ * Prices span 1 to 1e9 across the tree and round-trip through `Decimal`'s
+ * limited mantissa, so an exact-digits comparison would be testing float
+ * formatting rather than pricing. A part-per-billion relative tolerance is
+ * many orders of magnitude tighter than any surcharge could hide in.
+ */
+function expectSamePrice(actual: number, expected: number): void {
+  expect(Math.abs(actual - expected) / Math.max(1, Math.abs(expected))).toBeLessThan(1e-9);
+}
+
+/**
+ * `world` minus anything that would make `tech` unpurchasable for a reason
+ * other than price — namely a rival in its mutually-exclusive choice group.
+ */
+function withoutRivalsOf(tech: Technology, world: Record<string, number>): Record<string, number> {
+  const trimmed = { ...world, [tech.id]: 0 };
+  if (tech.choiceGroup) {
+    for (const other of ALL_TECHNOLOGIES) {
+      if (other.choiceGroup === tech.choiceGroup) trimmed[other.id] = 0;
+    }
+  }
+  return trimmed;
+}
+
+/** Every prerequisite of `tech`, owned, so availability never masks a pricing difference. */
+function requirementsOf(tech: Technology): Record<string, number> {
+  return Object.fromEntries(tech.requires.map((id) => [id, 1]));
+}
 
 /**
  * These are guardrails on the pacing model rather than on any one number:
@@ -50,43 +102,119 @@ describe('ladderTier', () => {
   });
 });
 
-describe('complexityCostMultiplier', () => {
-  it('is exactly 1 on a fresh Earth, which owns only its free starting fire', () => {
-    expect(complexityCostMultiplier(createNewGame(0).techOwned)).toBeCloseTo(1, 10);
+/**
+ * The promise the whole economy is built on: a price you have been quoted is
+ * the price you pay, whenever you come back for it. Nothing about the rest of
+ * the civilization — how broad the tree has grown, what else is owned, how
+ * long the run has gone on — may ever revise a number upward.
+ */
+describe('prices never rise except from your own purchases', () => {
+  it('charges the same for every technology from an empty world and a fully-built one', () => {
+    const empty: Record<string, number> = {};
+    // A civilization that owns forty of everything — the state under which the
+    // old complexity surcharge inflated every price by several orders of
+    // magnitude.
+    const sprawling = Object.fromEntries(ALL_TECHNOLOGIES.map((t) => [t.id, 40]));
+
+    for (const tech of ALL_TECHNOLOGIES) {
+      // Held fixed at zero owned *of this technology* in both worlds, so the
+      // only difference between them is everything else the player owns.
+      const fromEmpty = priceCharged(tech, 0, empty);
+      const fromSprawling = priceCharged(tech, 0, withoutRivalsOf(tech, sprawling));
+      for (const [i, charged] of fromSprawling.entries()) expectSamePrice(charged, fromEmpty[i]);
+      // And it is exactly the base amount the technology was authored with.
+      for (const [i, charged] of fromEmpty.entries()) expectSamePrice(charged, tech.cost[i].baseAmount);
+    }
   });
 
-  it('charges for breadth — each new distinct technology raises it', () => {
-    const one = complexityCostMultiplier({ natural_fire: 1 });
-    const three = complexityCostMultiplier({ natural_fire: 1, controlled_fire: 1, cooking: 1 });
-    expect(three).toBeGreaterThan(one);
-    expect(three).toBeCloseTo(Math.pow(BALANCE.complexityCostGrowth, 2), 10);
+  it('re-quotes a one-time node at its original price for the whole run', () => {
+    for (const tech of ALL_TECHNOLOGIES) {
+      if (tech.maxOwned !== 1) continue;
+      // maxOwned === 1 nodes carry no per-unit growth at all: the price is
+      // frozen the moment the node is authored.
+      expect(tech.costGrowth).toBe(1);
+      const charged = priceCharged(tech, 0, {});
+      for (const [i, amount] of charged.entries()) expectSamePrice(amount, tech.cost[i].baseAmount);
+    }
   });
 
-  it('never charges for depth — extra units of what you already own are free of it', () => {
-    expect(complexityCostMultiplier({ natural_fire: 500 })).toBeCloseTo(1, 10);
+  it("charges a generator's first unit exactly its listed base price", () => {
+    for (const tech of ALL_TECHNOLOGIES) {
+      if (tech.kind !== 'generator') continue;
+      for (const [i, c] of nextPurchaseCost(tech, 0).entries()) {
+        expectSamePrice(c.amount.toNumber(), tech.cost[i].baseAmount);
+      }
+    }
   });
 
-  it('is reduced, and floored, by the prestige reduction', () => {
-    const owned = { natural_fire: 1, controlled_fire: 1, cooking: 1, charcoal: 1, pottery: 1 };
-    expect(complexityCostMultiplier(owned, 0.5)).toBeLessThan(complexityCostMultiplier(owned));
-    // Capped at 0.75 — a full cancellation is never on offer.
-    expect(complexityCostMultiplier(owned, 5)).toBeCloseTo(complexityCostMultiplier(owned, 0.75), 10);
-  });
-
-  it('is actually charged: the same technology costs more once the tree is broad', () => {
+  it('makes the same purchase cost the same from a narrow tree and a broad one', () => {
     const tech = TECH_BY_ID['controlled_fire'];
-    const nominal = nextPurchaseCost(tech, 0)[0].amount;
+    const sticker = nextPurchaseCost(tech, 0)[0].amount;
 
+    const narrow = { ...createNewGame(0), resources: { ...createNewGame(0).resources, energy: sticker } };
+    expect(purchaseTechnology(narrow, 'controlled_fire', 1, noPrestige).success).toBe(true);
+
+    // Exactly the sticker price, from a civilization that owns twenty other
+    // technologies. This used to fail: breadth was charged as a surcharge.
     const broad = {
       ...createNewGame(0),
-      techOwned: Object.fromEntries(ALL_TECHNOLOGIES.slice(0, 20).map((t) => [t.id, 1])),
-      resources: { ...createNewGame(0).resources, energy: nominal },
+      techOwned: { ...Object.fromEntries(ALL_TECHNOLOGIES.slice(0, 20).map((t) => [t.id, 1])), controlled_fire: 0 },
+      resources: { ...createNewGame(0).resources, energy: sticker },
     };
-    // Enough for the sticker price, but not for the sticker price plus drag.
-    expect(purchaseTechnology(broad, 'controlled_fire', 1, noPrestige).success).toBe(false);
+    expect(purchaseTechnology(broad, 'controlled_fire', 1, noPrestige).success).toBe(true);
+  });
 
-    const narrow = { ...createNewGame(0), resources: { ...createNewGame(0).resources, energy: nominal } };
-    expect(purchaseTechnology(narrow, 'controlled_fire', 1, noPrestige).success).toBe(true);
+  it('only ever lets the prestige discount move a price, and only downward', () => {
+    const nominal = D(1000);
+    expect(effectiveCostAmount(nominal, 0).toNumber()).toBe(1000);
+    expect(effectiveCostAmount(nominal, 0.25).toNumber()).toBeCloseTo(750, 6);
+    // Even an absurd discount is floored rather than inverted.
+    expect(effectiveCostAmount(nominal, 5).toNumber()).toBeGreaterThan(0);
+    expect(effectiveCostAmount(nominal, 5).lte(nominal)).toBe(true);
+  });
+});
+
+describe('ownership bonuses', () => {
+  it('grants nothing until the first threshold', () => {
+    for (let owned = 0; owned < OWNERSHIP_BONUS.everyUnits; owned++) {
+      expect(ownershipMultiplier(owned)).toBe(1);
+    }
+    expect(ownershipMultiplier(OWNERSHIP_BONUS.everyUnits)).toBe(OWNERSHIP_BONUS.multiplier);
+  });
+
+  it('doubles again on every subsequent threshold', () => {
+    const step = OWNERSHIP_BONUS.everyUnits;
+    for (const n of [2, 3, 7, 12]) {
+      expect(ownershipMultiplier(n * step)).toBe(Math.pow(OWNERSHIP_BONUS.multiplier, n));
+      // ...and holds flat until the next one actually lands.
+      expect(ownershipMultiplier(n * step + step - 1)).toBe(Math.pow(OWNERSHIP_BONUS.multiplier, n));
+    }
+  });
+
+  it('never lets the bonus outrun the price it is paid for', () => {
+    // Over one threshold span, a generator's unit price grows by
+    // unitCostGrowth^everyUnits. If a single doubling ever exceeded that,
+    // buying depth would strictly dominate and the tech tree would be
+    // decoration.
+    const priceGrowthPerSpan = Math.pow(BALANCE.unitCostGrowth, OWNERSHIP_BONUS.everyUnits);
+    expect(OWNERSHIP_BONUS.multiplier).toBeLessThan(priceGrowthPerSpan);
+  });
+
+  it('always names a threshold ahead of where you are', () => {
+    for (const owned of [0, 9, 10, 24, 25, 26, 99, 100, 4321]) {
+      expect(nextOwnershipMilestone(owned)).toBeGreaterThan(owned);
+    }
+  });
+
+  it('reports every threshold a single bulk purchase crossed', () => {
+    const step = OWNERSHIP_BONUS.everyUnits;
+    expect(ownershipMilestonesCrossed(0, step - 1)).toEqual([]);
+    expect(ownershipMilestonesCrossed(0, step)).toEqual([step]);
+    expect(ownershipMilestonesCrossed(0, 3 * step)).toEqual([step, 2 * step, 3 * step]);
+    expect(ownershipMilestonesCrossed(step, 2 * step)).toEqual([2 * step]);
+    expect(ownershipMilestonesCrossed(50, 50)).toEqual([]);
+    // A "buy max" that lands thousands of units still terminates promptly.
+    expect(ownershipMilestonesCrossed(0, 10_000).length).toBe(10_000 / step);
   });
 });
 
@@ -97,11 +225,11 @@ describe('the opening of a run', () => {
     expect(after.resources.energy.gt(0)).toBe(true);
   });
 
-  it('reaches its first purchase in minutes, not hours', () => {
+  it('reaches its first purchase within a minute — the opening hook cannot be a wait', () => {
     let state = createNewGame(0);
     let purchased = false;
-    for (let t = 0; t < 30 * 60 && !purchased; t += 10) {
-      state = simulateStep(state, 10, noPrestige).state;
+    for (let t = 0; t < 60 && !purchased; t += 1) {
+      state = simulateStep(state, 1, noPrestige).state;
       const result = purchaseTechnology(state, 'natural_fire', 1, noPrestige);
       if (result.success) {
         state = result.state;
@@ -154,7 +282,7 @@ describe('a fresh run can afford its own first steps', () => {
     const state = createNewGame(0);
     const perSecond = simulateStep(state, 1, noPrestige).productionRates.resourcePerS.energy;
     const firstCost = nextPurchaseCost(TECH_BY_ID['natural_fire'], 1)[0].amount;
-    // Under ten minutes of the opening income.
-    expect(firstCost.div(perSecond).lte(D(600))).toBe(true);
+    // Under a minute of the opening income.
+    expect(firstCost.div(perSecond).lte(D(60))).toBe(true);
   });
 });

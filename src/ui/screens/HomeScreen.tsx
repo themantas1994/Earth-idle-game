@@ -1,11 +1,11 @@
 import { useGameStore } from '../../store/useGameStore';
 import { useNumberFormat } from '../hooks';
-import { ALL_TECHNOLOGIES, isTechAvailable } from '../../engine/technologies';
+import { ALL_TECHNOLOGIES, TECH_BY_ID, isTechAvailable } from '../../engine/technologies';
 import { GAS_LIST } from '../../engine/gases';
 import { visibleResources } from '../resourceVisibility';
 import { ScreenId } from '../components/BottomNav';
 import { formatPercent } from '../../engine/format';
-import { complexityCostMultiplier } from '../../engine/economy';
+import { RANDOM_EVENT_BY_ID } from '../../engine/events';
 import NewsFeed from '../components/NewsFeed';
 
 function useObjective(): string {
@@ -48,8 +48,12 @@ export default function HomeScreen({ onNavigate }: { onNavigate: (id: ScreenId) 
   const techOwned = useGameStore((s) => s.state.techOwned);
   const objective = useObjective();
   const objectiveScreen = useObjectiveScreen();
-  const complexityReduction = useGameStore((s) => s.derived.prestigeMultipliers.complexityReduction);
-  const complexity = complexityCostMultiplier(techOwned, complexityReduction);
+  const multipliers = useGameStore((s) => s.derived.effectiveMultipliers);
+  const activeEvents = useGameStore((s) => s.state.activeEvents);
+  const ownedBuildings = Object.entries(techOwned).reduce(
+    (sum, [id, count]) => sum + (TECH_BY_ID[id]?.kind === 'generator' ? count : 0),
+    0,
+  );
 
   const habitabilityColor = habitability.fraction > 0.5 ? 'var(--good)' : habitability.fraction > 0.15 ? 'var(--warning)' : 'var(--danger)';
 
@@ -80,14 +84,31 @@ export default function HomeScreen({ onNavigate }: { onNavigate: (id: ScreenId) 
       </div>
 
       <div className="card">
-        <div className="card__title">🏛️ Civilization Complexity</div>
+        <div className="card__title">🚀 Momentum</div>
         <div className="row">
-          <span className="row__label">Cost of anything new</span>
-          <span className="row__value">×{complexity < 100 ? complexity.toFixed(2) : format(complexity)}</span>
+          <span className="row__label">Production multiplier</span>
+          <span className="row__value" style={{ color: 'var(--accent)' }}>×{format(multipliers.global)}</span>
         </div>
+        <div className="row">
+          <span className="row__label">Buildings standing</span>
+          <span className="row__value">{format(ownedBuildings)}</span>
+        </div>
+        {activeEvents.map((active) => {
+          const def = RANDOM_EVENT_BY_ID[active.eventDefId];
+          if (!def) return null;
+          return (
+            <div className="row" key={active.id}>
+              <span className="row__label">{def.icon} {def.name}</span>
+              <span className="row__value" style={{ color: def.isNegative ? 'var(--danger)' : 'var(--good)' }}>
+                active
+              </span>
+            </div>
+          );
+        })}
         <div className="tech-card__desc">
-          The broader your civilization gets, the more every further step costs. Only{' '}
-          <em>new</em> technologies count — building more of what you already run is never affected.
+          Every multiplier you own compounds into this number, and nothing ever
+          takes it away. Prices never move either — what a technology costs the
+          first time you see it is what it costs whenever you come back for it.
         </div>
       </div>
 
