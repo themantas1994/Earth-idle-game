@@ -309,7 +309,6 @@ class GameViewModel(
 
     override fun onCleared() {
         audio.release()
-        super.onCleared()
     }
 
     class Factory(

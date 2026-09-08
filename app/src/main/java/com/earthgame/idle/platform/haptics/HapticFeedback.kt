@@ -45,12 +45,14 @@ class AndroidHaptics(context: Context) : Haptics {
     private fun vibrate(durationMs: Long, amplitude: Int) {
         val device = vibrator ?: return
         runCatching {
-            val effect = VibrationEffect.createOneShot(durationMs, amplitude)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                device.vibrate(effect)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Amplitude control arrived with VibrationEffect in API 26.
+                device.vibrate(VibrationEffect.createOneShot(durationMs, amplitude))
             } else {
+                // On 24 and 25 the only control is duration, which is enough
+                // for a tap the player barely registers as a distinct pulse.
                 @Suppress("DEPRECATION")
-                device.vibrate(effect)
+                device.vibrate(durationMs)
             }
         }
     }
