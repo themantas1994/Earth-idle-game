@@ -1,0 +1,6555 @@
+{
+  "upgrades": [
+    {
+      "id": "atmospheric_momentum",
+      "name": "Atmospheric Momentum",
+      "description": "Each civilization remembers a little more than the last. +10% production per level.",
+      "icon": "🌬️",
+      "baseCost": 100,
+      "costGrowth": 2.2,
+      "maxLevel": null,
+      "effect": {
+        "globalProductionMultiplier": 1.1
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 1,
+          "e": 2,
+          "str": "1.0000000000e+2"
+        },
+        {
+          "s": 1,
+          "m": 2.2,
+          "e": 2,
+          "str": "2.2000000000e+2"
+        },
+        {
+          "s": 1,
+          "m": 4.840000000000001,
+          "e": 2,
+          "str": "4.8400000000e+2"
+        },
+        {
+          "s": 1,
+          "m": 1.0648000000000006,
+          "e": 3,
+          "str": "1.0648000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 2.342560000000001,
+          "e": 3,
+          "str": "2.3425600000e+3"
+        },
+        {
+          "s": 1,
+          "m": 5.153632000000002,
+          "e": 3,
+          "str": "5.1536320000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1.1337990400000013,
+          "e": 4,
+          "str": "1.1337990400e+4"
+        },
+        {
+          "s": 1,
+          "m": 2.4943578880000024,
+          "e": 4,
+          "str": "2.4943578880e+4"
+        }
+      ]
+    },
+    {
+      "id": "industrial_memory",
+      "name": "Industrial Memory",
+      "description": "Start every future Earth already knowing the Steam Engine.",
+      "icon": "⚙️",
+      "baseCost": 1000,
+      "costGrowth": 1,
+      "maxLevel": 1,
+      "effect": {
+        "grantsStartingTechIds": [
+          "steam_engine"
+        ]
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1,
+          "e": 3,
+          "str": "1.0000000000e+3"
+        }
+      ]
+    },
+    {
+      "id": "rapid_research",
+      "name": "Rapid Research",
+      "description": "Institutional knowledge survives the reset. +50% Research per level.",
+      "icon": "📚",
+      "baseCost": 10000,
+      "costGrowth": 3,
+      "maxLevel": 5,
+      "effect": {
+        "researchMultiplier": 1.5
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 1,
+          "e": 4,
+          "str": "1.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 3,
+          "e": 4,
+          "str": "3.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 9,
+          "e": 4,
+          "str": "9.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2.7,
+          "e": 5,
+          "str": "2.7000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 8.1,
+          "e": 5,
+          "str": "8.1000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2.4299999999999997,
+          "e": 6,
+          "str": "2.4300000000e+6"
+        },
+        {
+          "s": 1,
+          "m": 7.290000000000002,
+          "e": 6,
+          "str": "7.2900000000e+6"
+        },
+        {
+          "s": 1,
+          "m": 2.186999999999999,
+          "e": 7,
+          "str": "2.1870000000e+7"
+        }
+      ]
+    },
+    {
+      "id": "institutional_memory",
+      "name": "Institutional Memory",
+      "description": "Every civilization inherits the last one's blueprints. Every building you own produces +40% more, per level.",
+      "icon": "🏛️",
+      "baseCost": 150000,
+      "costGrowth": 4,
+      "maxLevel": 6,
+      "effect": {
+        "globalProductionMultiplier": 1.4
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 1.5,
+          "e": 5,
+          "str": "1.5000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 6,
+          "e": 5,
+          "str": "6.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2.4000000000000004,
+          "e": 6,
+          "str": "2.4000000000e+6"
+        },
+        {
+          "s": 1,
+          "m": 9.599999999999998,
+          "e": 6,
+          "str": "9.6000000000e+6"
+        },
+        {
+          "s": 1,
+          "m": 3.84,
+          "e": 7,
+          "str": "3.8400000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 1.5360000000000005,
+          "e": 8,
+          "str": "1.5360000000e+8"
+        },
+        {
+          "s": 1,
+          "m": 6.1439999999999975,
+          "e": 8,
+          "str": "6.1440000000e+8"
+        },
+        {
+          "s": 1,
+          "m": 2.4576,
+          "e": 9,
+          "str": "2.4576000000e+9"
+        }
+      ]
+    },
+    {
+      "id": "civilizational_acceleration",
+      "name": "Civilizational Acceleration",
+      "description": "Blueprints from past civilizations make every technology 20% cheaper per level.",
+      "icon": "📐",
+      "baseCost": 1000000,
+      "costGrowth": 4,
+      "maxLevel": 4,
+      "effect": {
+        "techCostDiscount": 0.2
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 1,
+          "e": 6,
+          "str": "1.0000000000e+6"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 6,
+          "str": "4.0000000000e+6"
+        },
+        {
+          "s": 1,
+          "m": 1.6,
+          "e": 7,
+          "str": "1.6000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 6.399999999999999,
+          "e": 7,
+          "str": "6.4000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.56,
+          "e": 8,
+          "str": "2.5600000000e+8"
+        },
+        {
+          "s": 1,
+          "m": 1.0240000000000002,
+          "e": 9,
+          "str": "1.0240000000e+9"
+        },
+        {
+          "s": 1,
+          "m": 4.095999999999998,
+          "e": 9,
+          "str": "4.0960000000e+9"
+        },
+        {
+          "s": 1,
+          "m": 1.6383999999999999,
+          "e": 10,
+          "str": "1.6384000000e+10"
+        }
+      ]
+    },
+    {
+      "id": "anthropocene_mastery",
+      "name": "Anthropocene Mastery",
+      "description": "You've done this before. ×10 all greenhouse-gas production.",
+      "icon": "🌋",
+      "baseCost": 25000000,
+      "costGrowth": 1,
+      "maxLevel": 1,
+      "effect": {
+        "allGasProductionMultiplier": 10
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        },
+        {
+          "s": 1,
+          "m": 2.5,
+          "e": 7,
+          "str": "2.5000000000e+7"
+        }
+      ]
+    },
+    {
+      "id": "eternal_flame",
+      "name": "Eternal Flame",
+      "description": "An ember carried between worlds. Every future Earth starts with its fires already burning: +2 Natural Fire per level.",
+      "icon": "🔥",
+      "baseCost": 50,
+      "costGrowth": 1.8,
+      "maxLevel": 10,
+      "effect": {
+        "startingGenerators": {
+          "natural_fire": 2
+        }
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 5,
+          "e": 1,
+          "str": "5.0000000000e+1"
+        },
+        {
+          "s": 1,
+          "m": 9,
+          "e": 1,
+          "str": "9.0000000000e+1"
+        },
+        {
+          "s": 1,
+          "m": 1.6200000000000003,
+          "e": 2,
+          "str": "1.6200000000e+2"
+        },
+        {
+          "s": 1,
+          "m": 2.9160000000000004,
+          "e": 2,
+          "str": "2.9160000000e+2"
+        },
+        {
+          "s": 1,
+          "m": 5.2488,
+          "e": 2,
+          "str": "5.2488000000e+2"
+        },
+        {
+          "s": 1,
+          "m": 9.44784,
+          "e": 2,
+          "str": "9.4478400000e+2"
+        },
+        {
+          "s": 1,
+          "m": 1.7006112000000004,
+          "e": 3,
+          "str": "1.7006112000e+3"
+        },
+        {
+          "s": 1,
+          "m": 3.0611001600000005,
+          "e": 3,
+          "str": "3.0611001600e+3"
+        }
+      ]
+    },
+    {
+      "id": "extended_endurance",
+      "name": "Extended Endurance",
+      "description": "Your civilizations keep running longer without you watching. +100% offline progress cap per level.",
+      "icon": "⏳",
+      "baseCost": 5000,
+      "costGrowth": 3.5,
+      "maxLevel": 3,
+      "effect": {
+        "offlineCapMultiplier": 2
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 5,
+          "e": 3,
+          "str": "5.0000000000e+3"
+        },
+        {
+          "s": 1,
+          "m": 1.7500000000000004,
+          "e": 4,
+          "str": "1.7500000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 6.125,
+          "e": 4,
+          "str": "6.1250000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2.1437500000000007,
+          "e": 5,
+          "str": "2.1437500000e+5"
+        },
+        {
+          "s": 1,
+          "m": 7.5031250000000025,
+          "e": 5,
+          "str": "7.5031250000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2.6260937500000012,
+          "e": 6,
+          "str": "2.6260937500e+6"
+        },
+        {
+          "s": 1,
+          "m": 9.191328125000005,
+          "e": 6,
+          "str": "9.1913281250e+6"
+        },
+        {
+          "s": 1,
+          "m": 3.2169648437500014,
+          "e": 7,
+          "str": "3.2169648438e+7"
+        }
+      ]
+    },
+    {
+      "id": "head_start",
+      "name": "Head Start",
+      "description": "Begin each Earth with a stockpile of Energy, skipping the slowest opening minutes.",
+      "icon": "🚩",
+      "baseCost": 20000,
+      "costGrowth": 1,
+      "maxLevel": 1,
+      "effect": {
+        "startingResources": {
+          "energy": 1000
+        }
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 4,
+          "str": "2.0000000000e+4"
+        }
+      ]
+    },
+    {
+      "id": "automated_industry",
+      "name": "Automated Industry",
+      "description": "Robots keep the lines running while you sleep. +100% offline progress cap, and every future Earth starts with 25 Natural Fires already lit.",
+      "icon": "🤖",
+      "baseCost": 200000,
+      "costGrowth": 1,
+      "maxLevel": 1,
+      "effect": {
+        "offlineCapMultiplier": 2,
+        "startingGenerators": {
+          "natural_fire": 25
+        }
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        },
+        {
+          "s": 1,
+          "m": 2,
+          "e": 5,
+          "str": "2.0000000000e+5"
+        }
+      ]
+    },
+    {
+      "id": "deep_foundations",
+      "name": "Deep Foundations",
+      "description": "Start every future Earth with a Research head start, so the tree opens immediately instead of after the first hour.",
+      "icon": "🧱",
+      "baseCost": 40000,
+      "costGrowth": 1,
+      "maxLevel": 1,
+      "effect": {
+        "startingResources": {
+          "research": 5000,
+          "energy": 25000
+        }
+      },
+      "costs": [
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        },
+        {
+          "s": 1,
+          "m": 4,
+          "e": 4,
+          "str": "4.0000000000e+4"
+        }
+      ]
+    }
+  ],
+  "bundles": [
+    {
+      "upgradesOwned": {},
+      "completedChallenges": [],
+      "global": 1,
+      "research": 1,
+      "allGas": 1,
+      "perGas": {},
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {},
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {},
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 1.1,
+      "research": 1.25,
+      "allGas": 1,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 500
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "atmospheric_momentum": 1
+      },
+      "completedChallenges": [],
+      "global": 1.1,
+      "research": 1,
+      "allGas": 1,
+      "perGas": {},
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {},
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "atmospheric_momentum": 1
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 1.2100000000000002,
+      "research": 1.25,
+      "allGas": 1,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 500
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "atmospheric_momentum": 7
+      },
+      "completedChallenges": [],
+      "global": 1.9487171000000012,
+      "research": 1,
+      "allGas": 1,
+      "perGas": {},
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {},
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "atmospheric_momentum": 7
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 2.1435888100000016,
+      "research": 1.25,
+      "allGas": 1,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 500
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "rapid_research": 5,
+        "institutional_memory": 6
+      },
+      "completedChallenges": [],
+      "global": 7.529535999999997,
+      "research": 7.59375,
+      "allGas": 1,
+      "perGas": {},
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {},
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "rapid_research": 5,
+        "institutional_memory": 6
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 8.282489599999996,
+      "research": 9.4921875,
+      "allGas": 1,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 500
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "civilizational_acceleration": 4
+      },
+      "completedChallenges": [],
+      "global": 1,
+      "research": 1,
+      "allGas": 1,
+      "perGas": {},
+      "techCostDiscount": 0.8,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {},
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "civilizational_acceleration": 4
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 1.1,
+      "research": 1.25,
+      "allGas": 1,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0.8,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 500
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "civilizational_acceleration": 4,
+        "anthropocene_mastery": 1
+      },
+      "completedChallenges": [],
+      "global": 1,
+      "research": 1,
+      "allGas": 10,
+      "perGas": {},
+      "techCostDiscount": 0.8,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {},
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "civilizational_acceleration": 4,
+        "anthropocene_mastery": 1
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 1.1,
+      "research": 1.25,
+      "allGas": 10,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0.8,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 500
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "eternal_flame": 10,
+        "automated_industry": 1,
+        "extended_endurance": 3
+      },
+      "completedChallenges": [],
+      "global": 1,
+      "research": 1,
+      "allGas": 1,
+      "perGas": {},
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 16,
+      "startingTechIds": [],
+      "startingGenerators": {
+        "natural_fire": 45
+      },
+      "startingResources": {},
+      "offlineCapSeconds": 691200
+    },
+    {
+      "upgradesOwned": {
+        "eternal_flame": 10,
+        "automated_industry": 1,
+        "extended_endurance": 3
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 1.1,
+      "research": 1.25,
+      "allGas": 1,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 16,
+      "startingTechIds": [],
+      "startingGenerators": {
+        "natural_fire": 45
+      },
+      "startingResources": {
+        "energy": 500
+      },
+      "offlineCapSeconds": 691200
+    },
+    {
+      "upgradesOwned": {
+        "head_start": 1,
+        "deep_foundations": 1,
+        "industrial_memory": 1
+      },
+      "completedChallenges": [],
+      "global": 1,
+      "research": 1,
+      "allGas": 1,
+      "perGas": {},
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [
+        "steam_engine"
+      ],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 26000,
+        "research": 5000
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "head_start": 1,
+        "deep_foundations": 1,
+        "industrial_memory": 1
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 1.1,
+      "research": 1.25,
+      "allGas": 1,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0,
+      "offlineCapMultiplier": 1,
+      "startingTechIds": [
+        "steam_engine"
+      ],
+      "startingGenerators": {},
+      "startingResources": {
+        "energy": 26500,
+        "research": 5000
+      },
+      "offlineCapSeconds": 43200
+    },
+    {
+      "upgradesOwned": {
+        "atmospheric_momentum": 25,
+        "industrial_memory": 1,
+        "rapid_research": 5,
+        "institutional_memory": 6,
+        "civilizational_acceleration": 4,
+        "anthropocene_mastery": 1,
+        "eternal_flame": 10,
+        "extended_endurance": 3,
+        "head_start": 1,
+        "automated_industry": 1,
+        "deep_foundations": 1
+      },
+      "completedChallenges": [],
+      "global": 81.58030845015683,
+      "research": 7.59375,
+      "allGas": 10,
+      "perGas": {},
+      "techCostDiscount": 0.8,
+      "offlineCapMultiplier": 16,
+      "startingTechIds": [
+        "steam_engine"
+      ],
+      "startingGenerators": {
+        "natural_fire": 45
+      },
+      "startingResources": {
+        "energy": 26000,
+        "research": 5000
+      },
+      "offlineCapSeconds": 691200
+    },
+    {
+      "upgradesOwned": {
+        "atmospheric_momentum": 25,
+        "industrial_memory": 1,
+        "rapid_research": 5,
+        "institutional_memory": 6,
+        "civilizational_acceleration": 4,
+        "anthropocene_mastery": 1,
+        "eternal_flame": 10,
+        "extended_endurance": 3,
+        "head_start": 1,
+        "automated_industry": 1,
+        "deep_foundations": 1
+      },
+      "completedChallenges": [
+        "ice_age",
+        "low_carbon",
+        "single_gas",
+        "methane_world_challenge",
+        "primitive"
+      ],
+      "global": 89.73833929517252,
+      "research": 9.4921875,
+      "allGas": 10,
+      "perGas": {
+        "co2": 1.3,
+        "ch4": 1.5
+      },
+      "techCostDiscount": 0.8,
+      "offlineCapMultiplier": 16,
+      "startingTechIds": [
+        "steam_engine"
+      ],
+      "startingGenerators": {
+        "natural_fire": 45
+      },
+      "startingResources": {
+        "energy": 26500,
+        "research": 5000
+      },
+      "offlineCapSeconds": 691200
+    }
+  ],
+  "speeds": [
+    {
+      "runSeconds": -1,
+      "multiplier": 1
+    },
+    {
+      "runSeconds": 0,
+      "multiplier": 1
+    },
+    {
+      "runSeconds": 1,
+      "multiplier": 64
+    },
+    {
+      "runSeconds": 60,
+      "multiplier": 64
+    },
+    {
+      "runSeconds": 3600,
+      "multiplier": 64
+    },
+    {
+      "runSeconds": 43200,
+      "multiplier": 36
+    },
+    {
+      "runSeconds": 259200,
+      "multiplier": 1
+    },
+    {
+      "runSeconds": 1000000,
+      "multiplier": 0.25
+    },
+    {
+      "runSeconds": 1000000000,
+      "multiplier": 0.25
+    }
+  ],
+  "gains": [
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "0",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 0,
+        "m": 0,
+        "e": 0,
+        "str": "0.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 2.023857702507763,
+        "e": 0,
+        "str": "2.0238577025e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.1384199576606167,
+        "e": 0,
+        "str": "1.1384199577e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 3.1622776601683795,
+        "e": -2,
+        "str": "3.1622776602e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 7.905694150420949,
+        "e": -3,
+        "str": "7.9056941504e-3"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.583857702507764,
+        "e": 0,
+        "str": "4.5838577025e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.578419957660617,
+        "e": 0,
+        "str": "2.5784199577e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 7.162277660168381,
+        "e": -2,
+        "str": "7.1622776602e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.7905694150420952,
+        "e": -2,
+        "str": "1.7905694150e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.8214719322569866,
+        "e": 1,
+        "str": "1.8214719323e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.024577961894555,
+        "e": 1,
+        "str": "1.0245779619e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.8460498941515415,
+        "e": -1,
+        "str": "2.8460498942e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 7.115124735378854,
+        "e": -2,
+        "str": "7.1151247354e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.250101175266303,
+        "e": 1,
+        "str": "4.2501011753e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.3906819110872948,
+        "e": 1,
+        "str": "2.3906819111e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.640783086353597,
+        "e": -1,
+        "str": "6.6407830864e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.660195771588399,
+        "e": -1,
+        "str": "1.6601957716e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.739147742264106,
+        "e": 0,
+        "str": "4.7391477423e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.6657706050235594,
+        "e": 0,
+        "str": "2.6657706050e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 7.404918347287666,
+        "e": -2,
+        "str": "7.4049183473e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.8512295868219162,
+        "e": -2,
+        "str": "1.8512295868e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.0733748155703786,
+        "e": 1,
+        "str": "1.0733748156e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 6.03773333758338,
+        "e": 0,
+        "str": "6.0377333376e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.6771481493287166,
+        "e": -1,
+        "str": "1.6771481493e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.192870373321791,
+        "e": -2,
+        "str": "4.1928703733e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.2652329680376955,
+        "e": 1,
+        "str": "4.2652329680e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.3991935445212036,
+        "e": 1,
+        "str": "2.3991935445e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.664426512558899,
+        "e": -1,
+        "str": "6.6644265126e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.6661066281397248,
+        "e": -1,
+        "str": "1.6661066281e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 9.952210258754624,
+        "e": 1,
+        "str": "9.9522102588e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 5.598118270549476,
+        "e": 1,
+        "str": "5.5981182705e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.5550328529304098,
+        "e": 0,
+        "str": "1.5550328529e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.8875821323260245,
+        "e": -1,
+        "str": "3.8875821323e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.9196859769706147,
+        "e": 1,
+        "str": "1.9196859770e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.0798233620459707,
+        "e": 1,
+        "str": "1.0798233620e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.9995093390165857,
+        "e": -1,
+        "str": "2.9995093390e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 7.498773347541464,
+        "e": -2,
+        "str": "7.4987733475e-2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.34791800877569,
+        "e": 1,
+        "str": "4.3479180088e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.4457038799363255,
+        "e": 1,
+        "str": "2.4457038799e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.793621888712015,
+        "e": -1,
+        "str": "6.7936218887e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.6984054721780038,
+        "e": -1,
+        "str": "1.6984054722e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.7277173792735536,
+        "e": 2,
+        "str": "1.7277173793e+2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 9.718410258413737,
+        "e": 1,
+        "str": "9.7184102584e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.699558405114927,
+        "e": 0,
+        "str": "2.6995584051e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 6.748896012787318,
+        "e": -1,
+        "str": "6.7488960128e-1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.031340551638292,
+        "e": 2,
+        "str": "4.0313405516e+2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.267629060296539,
+        "e": 2,
+        "str": "2.2676290603e+2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.29896961193483,
+        "e": 0,
+        "str": "6.2989696119e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.5747424029837076,
+        "e": 0,
+        "str": "1.5747424030e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.2163384792071654,
+        "e": 3,
+        "str": "1.2163384792e+3"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 6.841903945540305,
+        "e": 2,
+        "str": "6.8419039455e+2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.9005288737611958,
+        "e": 1,
+        "str": "1.9005288738e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.75132218440299,
+        "e": 0,
+        "str": "4.7513221844e+0"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 2.754898479207166,
+        "e": 3,
+        "str": "2.7548984792e+3"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.5496303945540306,
+        "e": 3,
+        "str": "1.5496303946e+3"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 4.304528873761196,
+        "e": 1,
+        "str": "4.3045288738e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.076132218440299,
+        "e": 1,
+        "str": "1.0761322184e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.0947046312864488,
+        "e": 4,
+        "str": "1.0947046313e+4"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 6.157713550986275,
+        "e": 3,
+        "str": "6.1577135510e+3"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.7104759863850763,
+        "e": 2,
+        "str": "1.7104759864e+2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.276189965962691,
+        "e": 1,
+        "str": "4.2761899660e+1"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 2.5543108063350473,
+        "e": 4,
+        "str": "2.5543108063e+4"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.4367998285634642,
+        "e": 4,
+        "str": "1.4367998286e+4"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 3.9911106348985115,
+        "e": 2,
+        "str": "3.9911106349e+2"
+      }
+    },
+    {
+      "gasKg": "1e9",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 9.977776587246279,
+        "e": 1,
+        "str": "9.9777765872e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.4,
+        "e": 1,
+        "str": "6.4000000000e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.6,
+        "e": 1,
+        "str": "3.6000000000e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1,
+        "e": 0,
+        "str": "1.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.5,
+        "e": -1,
+        "str": "2.5000000000e-1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4495430810031054,
+        "e": 2,
+        "str": "1.4495430810e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.153679830642467,
+        "e": 1,
+        "str": "8.1536798306e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.264911064067352,
+        "e": 0,
+        "str": "2.2649110641e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.66227766016838,
+        "e": -1,
+        "str": "5.6622776602e-1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.76,
+        "e": 2,
+        "str": "5.7600000000e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.2399999999999998,
+        "e": 2,
+        "str": "3.2400000000e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9,
+        "e": 0,
+        "str": "9.0000000000e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.25,
+        "e": 0,
+        "str": "2.2500000000e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.344,
+        "e": 3,
+        "str": "1.3440000000e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.5600000000000005,
+        "e": 2,
+        "str": "7.5600000000e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1,
+        "e": 1,
+        "str": "2.1000000000e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.25,
+        "e": 0,
+        "str": "5.2500000000e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4986501033599195,
+        "e": 2,
+        "str": "1.4986501034e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.429906831399547,
+        "e": 1,
+        "str": "8.4299068314e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.341640786499874,
+        "e": 0,
+        "str": "2.3416407865e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.854101966249685,
+        "e": -1,
+        "str": "5.8541019662e-1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.3943092002655617,
+        "e": 2,
+        "str": "3.3943092003e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.9092989251493786,
+        "e": 2,
+        "str": "1.9092989251e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.30360812541494,
+        "e": 0,
+        "str": "5.3036081254e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.325902031353735,
+        "e": 0,
+        "str": "1.3259020314e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3487850930239274,
+        "e": 3,
+        "str": "1.3487850930e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.586916148259591,
+        "e": 2,
+        "str": "7.5869161483e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1074767078498864,
+        "e": 1,
+        "str": "2.1074767078e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.268691769624716,
+        "e": 0,
+        "str": "5.2686917696e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.1471652170558313,
+        "e": 3,
+        "str": "3.1471652171e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.770280434593905,
+        "e": 3,
+        "str": "1.7702804346e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 4.917445651649736,
+        "e": 1,
+        "str": "4.9174456516e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.229361412912434,
+        "e": 1,
+        "str": "1.2293614129e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.070580079512685,
+        "e": 2,
+        "str": "6.0705800795e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.414701294725885,
+        "e": 2,
+        "str": "3.4147012947e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9.48528137423857,
+        "e": 0,
+        "str": "9.4852813742e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.3713203435596424,
+        "e": 0,
+        "str": "2.3713203436e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3749323987395143,
+        "e": 3,
+        "str": "1.3749323987e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.733994742909768,
+        "e": 2,
+        "str": "7.7339947429e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1483318730304912,
+        "e": 1,
+        "str": "2.1483318730e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.370829682576228,
+        "e": 0,
+        "str": "5.3708296826e+0"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.463522071561417,
+        "e": 3,
+        "str": "5.4635220716e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.0732311652532966,
+        "e": 3,
+        "str": "3.0732311653e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 8.536753236814713,
+        "e": 1,
+        "str": "8.5367532368e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.134188309203678,
+        "e": 1,
+        "str": "2.1341883092e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.274821816697664,
+        "e": 4,
+        "str": "1.2748218167e+4"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.170872718924358,
+        "e": 3,
+        "str": "7.1708727189e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.9919090885900996,
+        "e": 2,
+        "str": "1.9919090886e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.979772721475249,
+        "e": 1,
+        "str": "4.9797727215e+1"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.8464,
+        "e": 4,
+        "str": "3.8464000000e+4"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.1635999999999997,
+        "e": 4,
+        "str": "2.1636000000e+4"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.01,
+        "e": 2,
+        "str": "6.0100000000e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.5025,
+        "e": 2,
+        "str": "1.5025000000e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.711753916828663,
+        "e": 4,
+        "str": "8.7117539168e+4"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.900361578216123,
+        "e": 4,
+        "str": "4.9003615782e+4"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.3612115495044785,
+        "e": 3,
+        "str": "1.3612115495e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.4030288737611962,
+        "e": 2,
+        "str": "3.4030288738e+2"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.4617600000000004,
+        "e": 5,
+        "str": "3.4617600000e+5"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.94724,
+        "e": 5,
+        "str": "1.9472400000e+5"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.409,
+        "e": 3,
+        "str": "5.4090000000e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.35225,
+        "e": 3,
+        "str": "1.3522500000e+3"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.077440000000001,
+        "e": 5,
+        "str": "8.0774400000e+5"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.54356,
+        "e": 5,
+        "str": "4.5435600000e+5"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.2621,
+        "e": 4,
+        "str": "1.2621000000e+4"
+      }
+    },
+    {
+      "gasKg": "1e12",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.15525,
+        "e": 3,
+        "str": "3.1552500000e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 2.023857702507763,
+        "e": 3,
+        "str": "2.0238577025e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.1384199576606167,
+        "e": 3,
+        "str": "1.1384199577e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 3.1622776601683795,
+        "e": 1,
+        "str": "3.1622776602e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 7.905694150420949,
+        "e": 0,
+        "str": "7.9056941504e+0"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.583857702507764,
+        "e": 3,
+        "str": "4.5838577025e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.578419957660617,
+        "e": 3,
+        "str": "2.5784199577e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 7.162277660168381,
+        "e": 1,
+        "str": "7.1622776602e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.7905694150420952,
+        "e": 1,
+        "str": "1.7905694150e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.8214719322569866,
+        "e": 4,
+        "str": "1.8214719323e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.024577961894555,
+        "e": 4,
+        "str": "1.0245779619e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.8460498941515415,
+        "e": 2,
+        "str": "2.8460498942e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 7.115124735378854,
+        "e": 1,
+        "str": "7.1151247354e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.250101175266303,
+        "e": 4,
+        "str": "4.2501011753e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.3906819110872948,
+        "e": 4,
+        "str": "2.3906819111e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.640783086353597,
+        "e": 2,
+        "str": "6.6407830864e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.660195771588399,
+        "e": 2,
+        "str": "1.6601957716e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.739147742264106,
+        "e": 3,
+        "str": "4.7391477423e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.6657706050235594,
+        "e": 3,
+        "str": "2.6657706050e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 7.404918347287666,
+        "e": 1,
+        "str": "7.4049183473e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.8512295868219162,
+        "e": 1,
+        "str": "1.8512295868e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.0733748155703786,
+        "e": 4,
+        "str": "1.0733748156e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 6.03773333758338,
+        "e": 3,
+        "str": "6.0377333376e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.6771481493287166,
+        "e": 2,
+        "str": "1.6771481493e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.192870373321791,
+        "e": 1,
+        "str": "4.1928703733e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.2652329680376955,
+        "e": 4,
+        "str": "4.2652329680e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.3991935445212036,
+        "e": 4,
+        "str": "2.3991935445e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.664426512558899,
+        "e": 2,
+        "str": "6.6644265126e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.6661066281397248,
+        "e": 2,
+        "str": "1.6661066281e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 9.952210258754624,
+        "e": 4,
+        "str": "9.9522102588e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 5.598118270549476,
+        "e": 4,
+        "str": "5.5981182705e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.5550328529304098,
+        "e": 3,
+        "str": "1.5550328529e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.8875821323260245,
+        "e": 2,
+        "str": "3.8875821323e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.9196859769706147,
+        "e": 4,
+        "str": "1.9196859770e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.0798233620459707,
+        "e": 4,
+        "str": "1.0798233620e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.9995093390165857,
+        "e": 2,
+        "str": "2.9995093390e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 7.498773347541464,
+        "e": 1,
+        "str": "7.4987733475e+1"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.34791800877569,
+        "e": 4,
+        "str": "4.3479180088e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.4457038799363255,
+        "e": 4,
+        "str": "2.4457038799e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.793621888712015,
+        "e": 2,
+        "str": "6.7936218887e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.6984054721780038,
+        "e": 2,
+        "str": "1.6984054722e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.7277173792735536,
+        "e": 5,
+        "str": "1.7277173793e+5"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 9.718410258413737,
+        "e": 4,
+        "str": "9.7184102584e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.699558405114927,
+        "e": 3,
+        "str": "2.6995584051e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 6.748896012787318,
+        "e": 2,
+        "str": "6.7488960128e+2"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 4.031340551638292,
+        "e": 5,
+        "str": "4.0313405516e+5"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.267629060296539,
+        "e": 5,
+        "str": "2.2676290603e+5"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.29896961193483,
+        "e": 3,
+        "str": "6.2989696119e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.5747424029837076,
+        "e": 3,
+        "str": "1.5747424030e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.2163384792071654,
+        "e": 6,
+        "str": "1.2163384792e+6"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 6.841903945540305,
+        "e": 5,
+        "str": "6.8419039455e+5"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.9005288737611958,
+        "e": 4,
+        "str": "1.9005288738e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.75132218440299,
+        "e": 3,
+        "str": "4.7513221844e+3"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 2.754898479207166,
+        "e": 6,
+        "str": "2.7548984792e+6"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.5496303945540306,
+        "e": 6,
+        "str": "1.5496303946e+6"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 4.304528873761196,
+        "e": 4,
+        "str": "4.3045288738e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.076132218440299,
+        "e": 4,
+        "str": "1.0761322184e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.0947046312864488,
+        "e": 7,
+        "str": "1.0947046313e+7"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 6.157713550986275,
+        "e": 6,
+        "str": "6.1577135510e+6"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.7104759863850763,
+        "e": 5,
+        "str": "1.7104759864e+5"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.276189965962691,
+        "e": 4,
+        "str": "4.2761899660e+4"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 2.5543108063350473,
+        "e": 7,
+        "str": "2.5543108063e+7"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.4367998285634642,
+        "e": 7,
+        "str": "1.4367998286e+7"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 3.9911106348985115,
+        "e": 5,
+        "str": "3.9911106349e+5"
+      }
+    },
+    {
+      "gasKg": "1e15",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 9.977776587246279,
+        "e": 4,
+        "str": "9.9777765872e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.4,
+        "e": 5,
+        "str": "6.4000000000e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.6,
+        "e": 5,
+        "str": "3.6000000000e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1,
+        "e": 4,
+        "str": "1.0000000000e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.5,
+        "e": 3,
+        "str": "2.5000000000e+3"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4495430810031054,
+        "e": 6,
+        "str": "1.4495430810e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.153679830642467,
+        "e": 5,
+        "str": "8.1536798306e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.264911064067352,
+        "e": 4,
+        "str": "2.2649110641e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.66227766016838,
+        "e": 3,
+        "str": "5.6622776602e+3"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.76,
+        "e": 6,
+        "str": "5.7600000000e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.2399999999999998,
+        "e": 6,
+        "str": "3.2400000000e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9,
+        "e": 4,
+        "str": "9.0000000000e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.25,
+        "e": 4,
+        "str": "2.2500000000e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.344,
+        "e": 7,
+        "str": "1.3440000000e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.5600000000000005,
+        "e": 6,
+        "str": "7.5600000000e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1,
+        "e": 5,
+        "str": "2.1000000000e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.25,
+        "e": 4,
+        "str": "5.2500000000e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4986501033599195,
+        "e": 6,
+        "str": "1.4986501034e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.429906831399547,
+        "e": 5,
+        "str": "8.4299068314e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.341640786499874,
+        "e": 4,
+        "str": "2.3416407865e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.854101966249685,
+        "e": 3,
+        "str": "5.8541019662e+3"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.3943092002655617,
+        "e": 6,
+        "str": "3.3943092003e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.9092989251493786,
+        "e": 6,
+        "str": "1.9092989251e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.30360812541494,
+        "e": 4,
+        "str": "5.3036081254e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.325902031353735,
+        "e": 4,
+        "str": "1.3259020314e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3487850930239274,
+        "e": 7,
+        "str": "1.3487850930e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.586916148259591,
+        "e": 6,
+        "str": "7.5869161483e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1074767078498864,
+        "e": 5,
+        "str": "2.1074767078e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.268691769624716,
+        "e": 4,
+        "str": "5.2686917696e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.1471652170558313,
+        "e": 7,
+        "str": "3.1471652171e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.770280434593905,
+        "e": 7,
+        "str": "1.7702804346e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 4.917445651649736,
+        "e": 5,
+        "str": "4.9174456516e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.229361412912434,
+        "e": 5,
+        "str": "1.2293614129e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.070580079512685,
+        "e": 6,
+        "str": "6.0705800795e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.414701294725885,
+        "e": 6,
+        "str": "3.4147012947e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9.48528137423857,
+        "e": 4,
+        "str": "9.4852813742e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.3713203435596424,
+        "e": 4,
+        "str": "2.3713203436e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3749323987395143,
+        "e": 7,
+        "str": "1.3749323987e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.733994742909768,
+        "e": 6,
+        "str": "7.7339947429e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1483318730304912,
+        "e": 5,
+        "str": "2.1483318730e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.370829682576228,
+        "e": 4,
+        "str": "5.3708296826e+4"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.463522071561417,
+        "e": 7,
+        "str": "5.4635220716e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.0732311652532966,
+        "e": 7,
+        "str": "3.0732311653e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 8.536753236814713,
+        "e": 5,
+        "str": "8.5367532368e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.134188309203678,
+        "e": 5,
+        "str": "2.1341883092e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.274821816697664,
+        "e": 8,
+        "str": "1.2748218167e+8"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.170872718924358,
+        "e": 7,
+        "str": "7.1708727189e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.9919090885900996,
+        "e": 6,
+        "str": "1.9919090886e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.979772721475249,
+        "e": 5,
+        "str": "4.9797727215e+5"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.8464,
+        "e": 8,
+        "str": "3.8464000000e+8"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.1635999999999997,
+        "e": 8,
+        "str": "2.1636000000e+8"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.01,
+        "e": 6,
+        "str": "6.0100000000e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.5025,
+        "e": 6,
+        "str": "1.5025000000e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.711753916828663,
+        "e": 8,
+        "str": "8.7117539168e+8"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.900361578216123,
+        "e": 8,
+        "str": "4.9003615782e+8"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.3612115495044785,
+        "e": 7,
+        "str": "1.3612115495e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.4030288737611962,
+        "e": 6,
+        "str": "3.4030288738e+6"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.4617600000000004,
+        "e": 9,
+        "str": "3.4617600000e+9"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.94724,
+        "e": 9,
+        "str": "1.9472400000e+9"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.409,
+        "e": 7,
+        "str": "5.4090000000e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.35225,
+        "e": 7,
+        "str": "1.3522500000e+7"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.077440000000001,
+        "e": 9,
+        "str": "8.0774400000e+9"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.54356,
+        "e": 9,
+        "str": "4.5435600000e+9"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.2621,
+        "e": 8,
+        "str": "1.2621000000e+8"
+      }
+    },
+    {
+      "gasKg": "1e20",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.15525,
+        "e": 7,
+        "str": "3.1552500000e+7"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.4,
+        "e": 15,
+        "str": "6.4000000000e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.6,
+        "e": 15,
+        "str": "3.6000000000e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1,
+        "e": 14,
+        "str": "1.0000000000e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.5,
+        "e": 13,
+        "str": "2.5000000000e+13"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4495430810031054,
+        "e": 16,
+        "str": "1.4495430810e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.153679830642467,
+        "e": 15,
+        "str": "8.1536798306e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.264911064067352,
+        "e": 14,
+        "str": "2.2649110641e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.66227766016838,
+        "e": 13,
+        "str": "5.6622776602e+13"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.76,
+        "e": 16,
+        "str": "5.7600000000e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.2399999999999998,
+        "e": 16,
+        "str": "3.2400000000e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9,
+        "e": 14,
+        "str": "9.0000000000e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.25,
+        "e": 14,
+        "str": "2.2500000000e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.344,
+        "e": 17,
+        "str": "1.3440000000e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.5600000000000005,
+        "e": 16,
+        "str": "7.5600000000e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1,
+        "e": 15,
+        "str": "2.1000000000e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.25,
+        "e": 14,
+        "str": "5.2500000000e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4986501033599195,
+        "e": 16,
+        "str": "1.4986501034e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.429906831399547,
+        "e": 15,
+        "str": "8.4299068314e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.341640786499874,
+        "e": 14,
+        "str": "2.3416407865e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.854101966249685,
+        "e": 13,
+        "str": "5.8541019662e+13"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.3943092002655617,
+        "e": 16,
+        "str": "3.3943092003e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.9092989251493786,
+        "e": 16,
+        "str": "1.9092989251e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.30360812541494,
+        "e": 14,
+        "str": "5.3036081254e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.325902031353735,
+        "e": 14,
+        "str": "1.3259020314e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3487850930239274,
+        "e": 17,
+        "str": "1.3487850930e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.586916148259591,
+        "e": 16,
+        "str": "7.5869161483e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1074767078498864,
+        "e": 15,
+        "str": "2.1074767078e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.268691769624716,
+        "e": 14,
+        "str": "5.2686917696e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.1471652170558313,
+        "e": 17,
+        "str": "3.1471652171e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.770280434593905,
+        "e": 17,
+        "str": "1.7702804346e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 4.917445651649736,
+        "e": 15,
+        "str": "4.9174456516e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.229361412912434,
+        "e": 15,
+        "str": "1.2293614129e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.070580079512685,
+        "e": 16,
+        "str": "6.0705800795e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.414701294725885,
+        "e": 16,
+        "str": "3.4147012947e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9.48528137423857,
+        "e": 14,
+        "str": "9.4852813742e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.3713203435596424,
+        "e": 14,
+        "str": "2.3713203436e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3749323987395143,
+        "e": 17,
+        "str": "1.3749323987e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.733994742909768,
+        "e": 16,
+        "str": "7.7339947429e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1483318730304912,
+        "e": 15,
+        "str": "2.1483318730e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.370829682576228,
+        "e": 14,
+        "str": "5.3708296826e+14"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.463522071561417,
+        "e": 17,
+        "str": "5.4635220716e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.0732311652532966,
+        "e": 17,
+        "str": "3.0732311653e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 8.536753236814713,
+        "e": 15,
+        "str": "8.5367532368e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.134188309203678,
+        "e": 15,
+        "str": "2.1341883092e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.274821816697664,
+        "e": 18,
+        "str": "1.2748218167e+18"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.170872718924358,
+        "e": 17,
+        "str": "7.1708727189e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.9919090885900996,
+        "e": 16,
+        "str": "1.9919090886e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.979772721475249,
+        "e": 15,
+        "str": "4.9797727215e+15"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.8464,
+        "e": 18,
+        "str": "3.8464000000e+18"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.1635999999999997,
+        "e": 18,
+        "str": "2.1636000000e+18"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.01,
+        "e": 16,
+        "str": "6.0100000000e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.5025,
+        "e": 16,
+        "str": "1.5025000000e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.711753916828663,
+        "e": 18,
+        "str": "8.7117539168e+18"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.900361578216123,
+        "e": 18,
+        "str": "4.9003615782e+18"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.3612115495044785,
+        "e": 17,
+        "str": "1.3612115495e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.4030288737611962,
+        "e": 16,
+        "str": "3.4030288738e+16"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.4617600000000004,
+        "e": 19,
+        "str": "3.4617600000e+19"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.94724,
+        "e": 19,
+        "str": "1.9472400000e+19"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.409,
+        "e": 17,
+        "str": "5.4090000000e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.35225,
+        "e": 17,
+        "str": "1.3522500000e+17"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.077440000000001,
+        "e": 19,
+        "str": "8.0774400000e+19"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.54356,
+        "e": 19,
+        "str": "4.5435600000e+19"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.2621,
+        "e": 18,
+        "str": "1.2621000000e+18"
+      }
+    },
+    {
+      "gasKg": "1e40",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.15525,
+        "e": 17,
+        "str": "3.1552500000e+17"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.4,
+        "e": 55,
+        "str": "6.4000000000e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.6,
+        "e": 55,
+        "str": "3.6000000000e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1,
+        "e": 54,
+        "str": "1.0000000000e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.5,
+        "e": 53,
+        "str": "2.5000000000e+53"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4495430810031054,
+        "e": 56,
+        "str": "1.4495430810e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.153679830642467,
+        "e": 55,
+        "str": "8.1536798306e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.264911064067352,
+        "e": 54,
+        "str": "2.2649110641e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.66227766016838,
+        "e": 53,
+        "str": "5.6622776602e+53"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.76,
+        "e": 56,
+        "str": "5.7600000000e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.2399999999999998,
+        "e": 56,
+        "str": "3.2400000000e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9,
+        "e": 54,
+        "str": "9.0000000000e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.25,
+        "e": 54,
+        "str": "2.2500000000e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.344,
+        "e": 57,
+        "str": "1.3440000000e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.5600000000000005,
+        "e": 56,
+        "str": "7.5600000000e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1,
+        "e": 55,
+        "str": "2.1000000000e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 0,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.25,
+        "e": 54,
+        "str": "5.2500000000e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.4986501033599195,
+        "e": 56,
+        "str": "1.4986501034e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 8.429906831399547,
+        "e": 55,
+        "str": "8.4299068314e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.341640786499874,
+        "e": 54,
+        "str": "2.3416407865e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.854101966249685,
+        "e": 53,
+        "str": "5.8541019662e+53"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.3943092002655617,
+        "e": 56,
+        "str": "3.3943092003e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.9092989251493786,
+        "e": 56,
+        "str": "1.9092989251e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.30360812541494,
+        "e": 54,
+        "str": "5.3036081254e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.325902031353735,
+        "e": 54,
+        "str": "1.3259020314e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3487850930239274,
+        "e": 57,
+        "str": "1.3487850930e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.586916148259591,
+        "e": 56,
+        "str": "7.5869161483e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1074767078498864,
+        "e": 55,
+        "str": "2.1074767078e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.268691769624716,
+        "e": 54,
+        "str": "5.2686917696e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.1471652170558313,
+        "e": 57,
+        "str": "3.1471652171e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.770280434593905,
+        "e": 57,
+        "str": "1.7702804346e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 4.917445651649736,
+        "e": 55,
+        "str": "4.9174456516e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 5,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.229361412912434,
+        "e": 55,
+        "str": "1.2293614129e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 6.070580079512685,
+        "e": 56,
+        "str": "6.0705800795e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.414701294725885,
+        "e": 56,
+        "str": "3.4147012947e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 9.48528137423857,
+        "e": 54,
+        "str": "9.4852813742e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.3713203435596424,
+        "e": 54,
+        "str": "2.3713203436e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.3749323987395143,
+        "e": 57,
+        "str": "1.3749323987e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.733994742909768,
+        "e": 56,
+        "str": "7.7339947429e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 2.1483318730304912,
+        "e": 55,
+        "str": "2.1483318730e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 5.370829682576228,
+        "e": 54,
+        "str": "5.3708296826e+54"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 5.463522071561417,
+        "e": 57,
+        "str": "5.4635220716e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 3.0732311652532966,
+        "e": 57,
+        "str": "3.0732311653e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 8.536753236814713,
+        "e": 55,
+        "str": "8.5367532368e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 2.134188309203678,
+        "e": 55,
+        "str": "2.1341883092e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 1.274821816697664,
+        "e": 58,
+        "str": "1.2748218167e+58"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 7.170872718924358,
+        "e": 57,
+        "str": "7.1708727189e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.9919090885900996,
+        "e": 56,
+        "str": "1.9919090886e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 200,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 4.979772721475249,
+        "e": 55,
+        "str": "4.9797727215e+55"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.8464,
+        "e": 58,
+        "str": "3.8464000000e+58"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 2.1635999999999997,
+        "e": 58,
+        "str": "2.1636000000e+58"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 6.01,
+        "e": 56,
+        "str": "6.0100000000e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 0,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.5025,
+        "e": 56,
+        "str": "1.5025000000e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.711753916828663,
+        "e": 58,
+        "str": "8.7117539168e+58"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.900361578216123,
+        "e": 58,
+        "str": "4.9003615782e+58"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.3612115495044785,
+        "e": 57,
+        "str": "1.3612115495e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 10,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.4030288737611962,
+        "e": 56,
+        "str": "3.4030288738e+56"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 3.4617600000000004,
+        "e": 59,
+        "str": "3.4617600000e+59"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 1.94724,
+        "e": 59,
+        "str": "1.9472400000e+59"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 5.409,
+        "e": 57,
+        "str": "5.4090000000e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 400,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 1.35225,
+        "e": 57,
+        "str": "1.3522500000e+57"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 900,
+      "gain": {
+        "s": 1,
+        "m": 8.077440000000001,
+        "e": 59,
+        "str": "8.0774400000e+59"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 43200,
+      "gain": {
+        "s": 1,
+        "m": 4.54356,
+        "e": 59,
+        "str": "4.5435600000e+59"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 259200,
+      "gain": {
+        "s": 1,
+        "m": 1.2621,
+        "e": 58,
+        "str": "1.2621000000e+58"
+      }
+    },
+    {
+      "gasKg": "1e120",
+      "peakForcing": 1000000,
+      "civLevel": 2500,
+      "runSeconds": 1000000,
+      "gain": {
+        "s": 1,
+        "m": 3.15525,
+        "e": 57,
+        "str": "3.1552500000e+57"
+      }
+    }
+  ]
+}

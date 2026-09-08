@@ -1,0 +1,3982 @@
+{
+  "count": 99,
+  "order": [
+    "natural_fire",
+    "controlled_fire",
+    "cooking",
+    "charcoal",
+    "pottery",
+    "metalworking",
+    "bronze",
+    "iron",
+    "the_wheel",
+    "early_agriculture",
+    "farming",
+    "animal_domestication",
+    "steam_engine",
+    "horse_and_cart",
+    "irrigation",
+    "coal_mining",
+    "generator_dynamo",
+    "oil_drilling",
+    "rice_cultivation",
+    "steam_locomotive",
+    "oil_refinery",
+    "steam_vehicle",
+    "livestock",
+    "factories",
+    "coal_power_plant",
+    "concrete",
+    "industrial_chemistry",
+    "fertilizer",
+    "steel_production",
+    "cement_production",
+    "grid_electricity",
+    "petrochemicals",
+    "natural_gas",
+    "automobile",
+    "ammonia",
+    "synthetic_fertilizer",
+    "industrial_furnaces",
+    "hydroelectricity",
+    "gas_turbine",
+    "mass_production_cars",
+    "diesel_engine",
+    "steel_buildings",
+    "industrial_agriculture",
+    "mass_manufacturing",
+    "coal_industrialization",
+    "nuclear_industrialization",
+    "fracking",
+    "trucks",
+    "highways",
+    "refrigeration",
+    "mega_farms",
+    "chemical_industry",
+    "nuclear_power",
+    "offshore_drilling",
+    "jet_aircraft",
+    "skyscrapers",
+    "factory_farming",
+    "supercritical_coal",
+    "combined_cycle_gas",
+    "oil_sands",
+    "commercial_aviation",
+    "container_ships",
+    "airports",
+    "cfcs",
+    "mass_electrification",
+    "coal_mega_mining",
+    "global_logistics",
+    "megacities",
+    "international_trade",
+    "mega_infrastructure",
+    "hfcs",
+    "containerization",
+    "supersonic_aviation",
+    "global_urbanization",
+    "global_supply_chains",
+    "industrial_fluorinated_gases",
+    "consumer_economy",
+    "computers",
+    "advanced_chemical_manufacturing",
+    "global_aviation_networks",
+    "247_manufacturing",
+    "internet",
+    "megacorporations",
+    "data_centers",
+    "cloud_computing",
+    "ai",
+    "mass_ai_infrastructure",
+    "hyperscale_data_centers",
+    "advanced_manufacturing",
+    "fusion_power",
+    "orbital_industry",
+    "space_elevator",
+    "moon_mining",
+    "asteroid_capture",
+    "planetary_industry",
+    "terraforming_engines",
+    "dyson_swarm_prototype",
+    "matrioshka_brain",
+    "stellar_energy"
+  ],
+  "technologies": [
+    {
+      "id": "natural_fire",
+      "name": "Natural Fire",
+      "branch": "primitive",
+      "kind": "generator",
+      "tier": 0,
+      "icon": "🔥",
+      "description": "A lightning-struck tree, still smouldering. You keep the embers alive, and they keep giving off heat — your very first source of Energy.",
+      "requires": [],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 10
+        }
+      ],
+      "costGrowth": 1.15,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 2
+        },
+        "resourceProductionPerUnit": {
+          "energy": 0.5
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "controlled_fire",
+      "name": "Controlled Fire",
+      "branch": "primitive",
+      "kind": "generator",
+      "tier": 1,
+      "icon": "🪔",
+      "description": "A hearth you can light at will, rather than one you happen to find. Warmth, light, and the first fuel you burn on purpose.",
+      "requires": [
+        "natural_fire"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 30.5
+        }
+      ],
+      "costGrowth": 1.1515,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 3.4
+        },
+        "resourceProductionPerUnit": {
+          "energy": 1,
+          "research": 0.25
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "cooking",
+      "name": "Cooking",
+      "branch": "primitive",
+      "kind": "unlock",
+      "tier": 2,
+      "icon": "🍖",
+      "description": "Cooked food yields more calories, freeing time for tool-making and ideas.",
+      "requires": [
+        "controlled_fire"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 40.612500000000004
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.15
+      }
+    },
+    {
+      "id": "charcoal",
+      "name": "Charcoal Kiln",
+      "branch": "primitive",
+      "kind": "generator",
+      "tier": 3,
+      "icon": "🪵",
+      "description": "Slow-burned wood yields a hotter, more portable fuel — civilization's first fuel stockpile.",
+      "requires": [
+        "cooking"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 283.72624999999994
+        }
+      ],
+      "costGrowth": 1.1544999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 9.825999999999999
+        },
+        "resourceProductionPerUnit": {
+          "energy": 2,
+          "coal": 2
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "pottery",
+      "name": "Pottery",
+      "branch": "primitive",
+      "kind": "unlock",
+      "tier": 3,
+      "icon": "🏺",
+      "description": "Fired clay vessels let surplus food be stored — the seed of permanent settlement.",
+      "requires": [
+        "cooking"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 115.745625
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.15
+      }
+    },
+    {
+      "id": "metalworking",
+      "name": "Metalworking",
+      "branch": "primitive",
+      "kind": "unlock",
+      "tier": 4,
+      "icon": "⚒️",
+      "description": "Hot enough fires can shape metal. A new material age begins.",
+      "requires": [
+        "charcoal"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 329.87503125
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "bronze",
+      "name": "Bronze Smelting",
+      "branch": "primitive",
+      "kind": "generator",
+      "tier": 5,
+      "icon": "🔔",
+      "description": "Alloying copper and tin produces tools and weapons far tougher than stone.",
+      "requires": [
+        "metalworking"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 2639.3634406249994
+        },
+        {
+          "resource": "coal",
+          "baseAmount": 283.72624999999994
+        }
+      ],
+      "costGrowth": 1.1575,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 28.397139999999997
+        },
+        "resourceProductionPerUnit": {
+          "energy": 8,
+          "steel": 4
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "iron",
+      "name": "Iron Smelting",
+      "branch": "primitive",
+      "kind": "generator",
+      "tier": 6,
+      "icon": "⛓️",
+      "description": "Hotter furnaces smelt iron — stronger, cheaper, and everywhere underfoot.",
+      "requires": [
+        "bronze"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 8050.058493906246
+        },
+        {
+          "resource": "coal",
+          "baseAmount": 865.3650624999998
+        }
+      ],
+      "costGrowth": 1.1589999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 48.27513799999999
+        },
+        "resourceProductionPerUnit": {
+          "energy": 16,
+          "steel": 8
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "the_wheel",
+      "name": "The Wheel",
+      "branch": "primitive",
+      "kind": "multiplier",
+      "tier": 6,
+      "icon": "☸️",
+      "description": "Everything you already do, done with less effort. +25% to all production.",
+      "requires": [
+        "pottery",
+        "metalworking"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 7245.052644515622
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.25,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "early_agriculture",
+      "name": "Early Agriculture",
+      "branch": "primitive",
+      "kind": "unlock",
+      "tier": 7,
+      "icon": "🌱",
+      "description": "Deliberately planting and storing grain ends the nomadic era for good.",
+      "requires": [
+        "pottery"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 7636.318332785158
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.2
+      }
+    },
+    {
+      "id": "farming",
+      "name": "Farming",
+      "branch": "agriculture",
+      "kind": "generator",
+      "tier": 7,
+      "icon": "🌾",
+      "description": "Cleared and tilled fields feed more mouths than foraging ever could.",
+      "requires": [
+        "early_agriculture"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 24552.678406414052
+        }
+      ],
+      "costGrowth": 1.1604999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 82.0677346
+        },
+        "resourceProductionPerUnit": {
+          "energy": 32,
+          "research": 32
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "animal_domestication",
+      "name": "Animal Domestication",
+      "branch": "agriculture",
+      "kind": "generator",
+      "tier": 8,
+      "icon": "🐄",
+      "description": "Herded livestock provide labor, meat, and milk — plus a lot of digestive methane.",
+      "requires": [
+        "farming"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 74885.66913956284
+        }
+      ],
+      "costGrowth": 1.162,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "ch4": 139.51514881999998,
+          "n2o": 9.655027599999999
+        },
+        "resourceProductionPerUnit": {
+          "energy": 64,
+          "research": 32
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "steam_engine",
+      "name": "Steam Engine",
+      "branch": "industry",
+      "kind": "unlock",
+      "tier": 8,
+      "icon": "⚙️",
+      "description": "Boiling water under pressure yields mechanical power on demand. The industrial age begins.",
+      "requires": [
+        "iron"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 21763.5072484377
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "horse_and_cart",
+      "name": "Horse & Cart",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 8,
+      "icon": "🐴",
+      "description": "Domesticated draft animals move goods faster than any human back.",
+      "requires": [
+        "early_agriculture"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 74885.66913956284
+        }
+      ],
+      "costGrowth": 1.162,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "ch4": 14.482541399999997
+        },
+        "resourceProductionPerUnit": {
+          "research": 64
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "irrigation",
+      "name": "Irrigation",
+      "branch": "agriculture",
+      "kind": "unlock",
+      "tier": 9,
+      "icon": "💧",
+      "description": "Channeling water to fields turns marginal land productive year-round.",
+      "requires": [
+        "farming"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 62025.99565804745
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.08
+      }
+    },
+    {
+      "id": "coal_mining",
+      "name": "Coal Mining",
+      "branch": "industry",
+      "kind": "generator",
+      "tier": 9,
+      "icon": "⛏️",
+      "description": "Deep shafts pull ancient buried carbon out of the ground by the wagonload.",
+      "requires": [
+        "steam_engine"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 228401.29087566666
+        }
+      ],
+      "costGrowth": 1.1635,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 139.51514881999998
+        },
+        "resourceProductionPerUnit": {
+          "coal": 256
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "generator_dynamo",
+      "name": "Generator",
+      "branch": "electricity",
+      "kind": "generator",
+      "tier": 9,
+      "icon": "🔌",
+      "description": "Spinning a coil in a magnetic field conjures current from motion.",
+      "requires": [
+        "steam_engine"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 228401.29087566666
+        }
+      ],
+      "costGrowth": 1.1635,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 82.0677346
+        },
+        "resourceProductionPerUnit": {
+          "energy": 256
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "oil_drilling",
+      "name": "Oil Drilling",
+      "branch": "fossilFuels",
+      "kind": "generator",
+      "tier": 9,
+      "icon": "🛢️",
+      "description": "Derricks tap ancient buried hydrocarbons — denser energy than coal, easier to move.",
+      "requires": [
+        "steam_engine"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 228401.29087566666
+        }
+      ],
+      "costGrowth": 1.1635,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 82.0677346
+        },
+        "resourceProductionPerUnit": {
+          "oil": 256
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "rice_cultivation",
+      "name": "Rice Cultivation",
+      "branch": "agriculture",
+      "kind": "generator",
+      "tier": 10,
+      "icon": "🌾",
+      "description": "Flooded paddies feed empires — and their waterlogged soil breeds methanogenic bacteria by the trillion.",
+      "requires": [
+        "irrigation"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 696623.9371707833
+        }
+      ],
+      "costGrowth": 1.1649999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "ch4": 403.1987800897999,
+          "n2o": 41.854544645999994
+        },
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "steam_locomotive",
+      "name": "Steam Locomotive",
+      "branch": "industry",
+      "kind": "generator",
+      "tier": 10,
+      "icon": "🚂",
+      "description": "Rail networks haul coal and freight faster than any road ever could.",
+      "requires": [
+        "coal_mining"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 696623.9371707833
+        },
+        {
+          "resource": "coal",
+          "baseAmount": 74885.66913956284
+        }
+      ],
+      "costGrowth": 1.1649999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 403.1987800897999
+        },
+        "resourceProductionPerUnit": {
+          "energy": 256
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "oil_refinery",
+      "name": "Oil Refinery",
+      "branch": "fossilFuels",
+      "kind": "generator",
+      "tier": 10,
+      "icon": "🏭",
+      "description": "Cracking crude into fuel and feedstock unlocks everything downstream of petroleum.",
+      "requires": [
+        "oil_drilling"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 696623.9371707833
+        },
+        {
+          "resource": "oil",
+          "baseAmount": 228401.29087566666
+        }
+      ],
+      "costGrowth": 1.1649999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 403.1987800897999
+        },
+        "resourceProductionPerUnit": {
+          "energy": 512
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "steam_vehicle",
+      "name": "Steam Vehicle",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 10,
+      "icon": "🚃",
+      "description": "Self-propelled steam carriages replace the horse on the open road.",
+      "requires": [
+        "steam_engine"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 696623.9371707833
+        }
+      ],
+      "costGrowth": 1.1649999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 237.17575299399994
+        },
+        "resourceProductionPerUnit": {
+          "energy": 256
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "livestock",
+      "name": "Livestock",
+      "branch": "agriculture",
+      "kind": "generator",
+      "tier": 11,
+      "icon": "🐑",
+      "description": "Industrial-scale herding scales up meat production — and methane output — together.",
+      "requires": [
+        "animal_domestication"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 2124703.0083708894
+        }
+      ],
+      "costGrowth": 1.1664999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "ch4": 685.4379261526599,
+          "n2o": 71.15272589819998
+        },
+        "resourceProductionPerUnit": {
+          "energy": 256
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "factories",
+      "name": "Factories",
+      "branch": "industry",
+      "kind": "generator",
+      "tier": 11,
+      "icon": "🏭",
+      "description": "Coal-fired machinery under one roof outproduces a hundred workshops.",
+      "requires": [
+        "steam_engine"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 2124703.0083708894
+        }
+      ],
+      "costGrowth": 1.1664999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 685.4379261526599
+        },
+        "resourceProductionPerUnit": {
+          "energy": 1024
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "coal_power_plant",
+      "name": "Coal Power Plant",
+      "branch": "electricity",
+      "kind": "generator",
+      "tier": 11,
+      "icon": "🏭",
+      "description": "Burning coal to boil water to spin turbines: the workhorse of the industrial grid.",
+      "requires": [
+        "generator_dynamo",
+        "coal_mining"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 2124703.0083708894
+        },
+        {
+          "resource": "coal",
+          "baseAmount": 696623.9371707833
+        }
+      ],
+      "costGrowth": 1.1664999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 685.4379261526599
+        },
+        "resourceProductionPerUnit": {
+          "energy": 2048
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "concrete",
+      "name": "Concrete",
+      "branch": "construction",
+      "kind": "generator",
+      "tier": 11,
+      "icon": "🧱",
+      "description": "The most-used material on Earth, and one of the most carbon-intensive to produce.",
+      "requires": [
+        "cement_production"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 2124703.0083708894
+        }
+      ],
+      "costGrowth": 1.1664999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 685.4379261526599
+        },
+        "resourceProductionPerUnit": {
+          "concrete": 1024
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "industrial_chemistry",
+      "name": "Industrial Chemistry",
+      "branch": "chemistry",
+      "kind": "unlock",
+      "tier": 11,
+      "icon": "⚗️",
+      "description": "Systematic chemistry turns raw materials into whatever industry needs next.",
+      "requires": [
+        "chemical_industry"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 503806.1497324904
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.1
+      }
+    },
+    {
+      "id": "fertilizer",
+      "name": "Fertilizer",
+      "branch": "agriculture",
+      "kind": "unlock",
+      "tier": 12,
+      "icon": "💩",
+      "description": "Manure and mineral amendments boost yields beyond what soil alone can sustain.",
+      "requires": [
+        "rice_cultivation",
+        "livestock"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 1435847.5267375978
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.1
+      }
+    },
+    {
+      "id": "steel_production",
+      "name": "Steel Production",
+      "branch": "industry",
+      "kind": "generator",
+      "tier": 12,
+      "icon": "🔩",
+      "description": "Bessemer converters turn iron into steel at unprecedented volume.",
+      "requires": [
+        "coal_mining",
+        "iron"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 6480344.175531212
+        },
+        {
+          "resource": "coal",
+          "baseAmount": 696623.9371707833
+        }
+      ],
+      "costGrowth": 1.168,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1165.2444744595216
+        },
+        "resourceProductionPerUnit": {
+          "steel": 1024
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "cement_production",
+      "name": "Cement Production",
+      "branch": "industry",
+      "kind": "generator",
+      "tier": 12,
+      "icon": "🧱",
+      "description": "Roasting limestone into clinker is one of the most carbon-intensive processes in industry.",
+      "requires": [
+        "factories"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 6480344.175531212
+        }
+      ],
+      "costGrowth": 1.168,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1631.3422642433302
+        },
+        "resourceProductionPerUnit": {
+          "concrete": 1024
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "grid_electricity",
+      "name": "Grid Electricity",
+      "branch": "electricity",
+      "kind": "multiplier",
+      "tier": 12,
+      "icon": "🗲",
+      "description": "A unified transmission grid lets every factory and home run on demand.",
+      "requires": [
+        "coal_power_plant"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 5832309.757978091
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.2,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "petrochemicals",
+      "name": "Petrochemicals",
+      "branch": "fossilFuels",
+      "kind": "unlock",
+      "tier": 12,
+      "icon": "⚗️",
+      "description": "Oil becomes plastic, solvent, and synthetic fiber. Petroleum touches everything now.",
+      "requires": [
+        "oil_refinery"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 2592137.670212485
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.1
+      }
+    },
+    {
+      "id": "natural_gas",
+      "name": "Natural Gas",
+      "branch": "fossilFuels",
+      "kind": "generator",
+      "tier": 12,
+      "icon": "🔥",
+      "description": "Gas burns cleaner than coal, per unit of energy — though it still adds up fast at scale.",
+      "requires": [
+        "oil_drilling"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 6480344.175531212
+        }
+      ],
+      "costGrowth": 1.168,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 685.4379261526599
+        },
+        "resourceProductionPerUnit": {
+          "energy": 2048
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "automobile",
+      "name": "Automobile",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 12,
+      "icon": "🚗",
+      "description": "The internal combustion engine puts a private vehicle within reach of ordinary people.",
+      "requires": [
+        "oil_refinery"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 6480344.175531212
+        }
+      ],
+      "costGrowth": 1.168,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 685.4379261526599
+        },
+        "resourceProductionPerUnit": {
+          "energy": 1024
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "ammonia",
+      "name": "Ammonia",
+      "branch": "chemistry",
+      "kind": "generator",
+      "tier": 12,
+      "icon": "🧪",
+      "description": "The Haber-Bosch process fixes nitrogen from thin air at industrial scale, feeding fertilizer plants worldwide.",
+      "requires": [
+        "industrial_chemistry"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 6480344.175531212
+        }
+      ],
+      "costGrowth": 1.168,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "n2o": 161.27951203592
+        },
+        "resourceProductionPerUnit": {
+          "energy": 2048
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "synthetic_fertilizer",
+      "name": "Synthetic Fertilizer",
+      "branch": "agriculture",
+      "kind": "generator",
+      "tier": 13,
+      "icon": "🧪",
+      "description": "Haber-Bosch ammonia turns air into fertilizer, feeding billions — and flooding soils with nitrous oxide.",
+      "requires": [
+        "fertilizer",
+        "ammonia"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1695,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "n2o": 1980.9156065811867
+        },
+        "resourceProductionPerUnit": {
+          "research": 1024
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "industrial_furnaces",
+      "name": "Industrial Furnaces",
+      "branch": "industry",
+      "kind": "generator",
+      "tier": 13,
+      "icon": "🔥",
+      "description": "Ever-hotter furnaces process ore, scrap, and fuel around the clock.",
+      "requires": [
+        "steel_production"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1695,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1980.9156065811867
+        },
+        "resourceProductionPerUnit": {
+          "steel": 2048
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "hydroelectricity",
+      "name": "Hydroelectricity",
+      "branch": "electricity",
+      "kind": "generator",
+      "tier": 13,
+      "icon": "🌊",
+      "description": "Dammed rivers spin turbines with no combustion at all — clean, steady, huge.",
+      "requires": [
+        "grid_electricity"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1695,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 48.27513799999999
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4096
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "gas_turbine",
+      "name": "Gas Turbine",
+      "branch": "electricity",
+      "kind": "generator",
+      "tier": 13,
+      "icon": "🔥",
+      "description": "Burning natural gas spins a turbine directly — quicker to build, dirtier than hydro.",
+      "requires": [
+        "grid_electricity"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1695,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1165.2444744595216
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4096
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "mass_production_cars",
+      "name": "Mass Production Cars",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 13,
+      "icon": "🚙",
+      "description": "Assembly lines put a car in every driveway, and exhaust over every street.",
+      "requires": [
+        "automobile",
+        "factories"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1695,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1980.9156065811867
+        },
+        "resourceProductionPerUnit": {
+          "energy": 2048
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "diesel_engine",
+      "name": "Diesel Engine",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 13,
+      "icon": "⛽",
+      "description": "More torque, more efficiency, more soot — diesel becomes the standard for heavy hauling.",
+      "requires": [
+        "oil_refinery"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1695,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1165.2444744595216
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4096
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "steel_buildings",
+      "name": "Steel Buildings",
+      "branch": "construction",
+      "kind": "generator",
+      "tier": 13,
+      "icon": "🏢",
+      "description": "Steel frames let buildings rise higher and faster than stone or wood ever allowed.",
+      "requires": [
+        "steel_production",
+        "concrete"
+      ],
+      "cost": [
+        {
+          "resource": "steel",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1695,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1980.9156065811867
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4096
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "industrial_agriculture",
+      "name": "Industrial Agriculture",
+      "branch": "agriculture",
+      "kind": "unlock",
+      "tier": 14,
+      "icon": "🚜",
+      "description": "Mechanized planting, harvesting, and processing turn farming into heavy industry.",
+      "requires": [
+        "synthetic_fertilizer"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 11662671.53592614
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": {
+          "branch": "agriculture",
+          "multiplier": 1.3
+        },
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "mass_manufacturing",
+      "name": "Mass Manufacturing",
+      "branch": "industry",
+      "kind": "multiplier",
+      "tier": 14,
+      "icon": "📦",
+      "description": "Standardized parts and assembly lines multiply every factory's output at once.",
+      "requires": [
+        "factories",
+        "cement_production"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 54255061.523591176
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.25,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "coal_industrialization",
+      "name": "Coal Industrialization",
+      "branch": "electricity",
+      "kind": "choice",
+      "tier": 14,
+      "icon": "⚫",
+      "description": "Double down on cheap, abundant coal. Energy is plentiful; emissions skyrocket.",
+      "requires": [
+        "coal_power_plant"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 54255061.523591176
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": "energy_strategy",
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": {
+          "gas": "co2",
+          "multiplier": 10
+        },
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "nuclear_industrialization",
+      "name": "Nuclear Industrialization",
+      "branch": "electricity",
+      "kind": "choice",
+      "tier": 14,
+      "icon": "☢️",
+      "description": "Invest in expensive, complex nuclear infrastructure for enormous clean output.",
+      "requires": [
+        "coal_power_plant"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 81382592.28538677
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": "energy_strategy",
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": {
+          "resource": "energy",
+          "multiplier": 5
+        },
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "fracking",
+      "name": "Fracking",
+      "branch": "fossilFuels",
+      "kind": "generator",
+      "tier": 14,
+      "icon": "💥",
+      "description": "Shattering deep shale releases trapped gas — and lets a fair amount of methane leak straight to the air.",
+      "requires": [
+        "natural_gas"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 60283401.69287909
+        }
+      ],
+      "costGrowth": 1.1709999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1980.9156065811867,
+          "ch4": 274.17517046106394
+        },
+        "resourceProductionPerUnit": {
+          "oil": 4096
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "trucks",
+      "name": "Trucks",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 14,
+      "icon": "🚚",
+      "description": "Diesel freight trucks connect factories to shelves without needing a railway.",
+      "requires": [
+        "diesel_engine"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 60283401.69287909
+        }
+      ],
+      "costGrowth": 1.1709999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 3367.5565311880173
+        },
+        "resourceProductionPerUnit": {
+          "energy": 8192
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "highways",
+      "name": "Highways",
+      "branch": "transportation",
+      "kind": "multiplier",
+      "tier": 14,
+      "icon": "🛣️",
+      "description": "Paved, limited-access roads let vehicles move faster, farther, and in far greater numbers.",
+      "requires": [
+        "mass_production_cars"
+      ],
+      "cost": [
+        {
+          "resource": "concrete",
+          "baseAmount": 54255061.523591176
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": {
+          "branch": "transportation",
+          "multiplier": 1.25
+        },
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "refrigeration",
+      "name": "Refrigeration",
+      "branch": "chemistry",
+      "kind": "generator",
+      "tier": 14,
+      "icon": "🧊",
+      "description": "Mechanical cooling preserves food and comfort alike — using the first synthetic refrigerant gases.",
+      "requires": [
+        "ammonia"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 60283401.69287909
+        }
+      ],
+      "costGrowth": 1.1709999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "fluorinated": 11.858787649699998
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4096
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "mega_farms",
+      "name": "Mega Farms",
+      "branch": "agriculture",
+      "kind": "generator",
+      "tier": 15,
+      "icon": "🌽",
+      "description": "Horizon-spanning monocultures, fed and fertilized entirely by machine.",
+      "requires": [
+        "industrial_agriculture"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 183864375.16328123
+        }
+      ],
+      "costGrowth": 1.1724999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 3367.5565311880173,
+          "ch4": 3367.5565311880173,
+          "n2o": 3367.5565311880173
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4096
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "chemical_industry",
+      "name": "Chemical Industry",
+      "branch": "industry",
+      "kind": "unlock",
+      "tier": 15,
+      "icon": "⚗️",
+      "description": "Industrial-scale chemistry opens doors nature never built.",
+      "requires": [
+        "mass_manufacturing"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 33238613.877389498
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "nuclear_power",
+      "name": "Nuclear Power",
+      "branch": "electricity",
+      "kind": "generator",
+      "tier": 15,
+      "icon": "☢️",
+      "description": "Splitting atoms releases enormous energy with almost no direct emissions.",
+      "requires": [
+        "grid_electricity"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 183864375.16328123
+        },
+        {
+          "resource": "steel",
+          "baseAmount": 19765049.735370196
+        }
+      ],
+      "costGrowth": 1.1724999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 16.704199999999997
+        },
+        "resourceProductionPerUnit": {
+          "energy": 16384
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "offshore_drilling",
+      "name": "Offshore Drilling",
+      "branch": "fossilFuels",
+      "kind": "generator",
+      "tier": 15,
+      "icon": "🌊",
+      "description": "Platforms far out to sea reach reserves no derrick on land ever could.",
+      "requires": [
+        "oil_refinery"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 183864375.16328123
+        }
+      ],
+      "costGrowth": 1.1724999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 3367.5565311880173
+        },
+        "resourceProductionPerUnit": {
+          "oil": 16384
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "jet_aircraft",
+      "name": "Jet Aircraft",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 15,
+      "icon": "✈️",
+      "description": "Turbojets cross continents in hours, burning fuel at high altitude where it matters more.",
+      "requires": [
+        "diesel_engine",
+        "petrochemicals"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 183864375.16328123
+        }
+      ],
+      "costGrowth": 1.1724999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 5724.8461030196295,
+          "n2o": 102.81568892289899
+        },
+        "resourceProductionPerUnit": {
+          "energy": 16384
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "skyscrapers",
+      "name": "Skyscrapers",
+      "branch": "construction",
+      "kind": "generator",
+      "tier": 15,
+      "icon": "🏙️",
+      "description": "Kilometer-scale towers pack a city's worth of energy demand onto one city block.",
+      "requires": [
+        "steel_buildings"
+      ],
+      "cost": [
+        {
+          "resource": "steel",
+          "baseAmount": 183864375.16328123
+        }
+      ],
+      "costGrowth": 1.1724999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 5724.8461030196295
+        },
+        "resourceProductionPerUnit": {
+          "energy": 16384
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "factory_farming",
+      "name": "Factory Farming",
+      "branch": "agriculture",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🏚️",
+      "description": "Livestock raised at industrial density, on an industrial timetable.",
+      "requires": [
+        "mega_farms"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "ch4": 9732.23837513337,
+          "n2o": 5724.8461030196295
+        },
+        "resourceProductionPerUnit": {
+          "energy": 8192
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "supercritical_coal",
+      "name": "Supercritical Coal",
+      "branch": "electricity",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🏭",
+      "description": "Higher pressures and temperatures wring more power from every lump of coal — and more CO₂.",
+      "requires": [
+        "coal_power_plant"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 9732.23837513337
+        },
+        "resourceProductionPerUnit": {
+          "energy": 32768
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "combined_cycle_gas",
+      "name": "Combined Cycle Gas",
+      "branch": "electricity",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🔧",
+      "description": "Pairing a gas turbine with a steam turbine squeezes far more energy from the same fuel.",
+      "requires": [
+        "gas_turbine"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 5724.8461030196295
+        },
+        "resourceProductionPerUnit": {
+          "energy": 47975.16008474628
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "oil_sands",
+      "name": "Oil Sands",
+      "branch": "fossilFuels",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🏜️",
+      "description": "Extracting oil from tar-thick sand takes enormous heat and water — and emits accordingly.",
+      "requires": [
+        "offshore_drilling"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 12651.90988767338
+        },
+        "resourceProductionPerUnit": {
+          "oil": 32768
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "commercial_aviation",
+      "name": "Commercial Aviation",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🛫",
+      "description": "Air travel becomes routine, not remarkable. The skies fill with contrails.",
+      "requires": [
+        "jet_aircraft"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 9732.23837513337,
+          "o3": 80.63975601796
+        },
+        "resourceProductionPerUnit": {
+          "energy": 32768
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "container_ships",
+      "name": "Container Ships",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🚢",
+      "description": "Standardized steel boxes on diesel-burning giants move the world's goods across oceans.",
+      "requires": [
+        "oil_refinery"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 5724.8461030196295
+        },
+        "resourceProductionPerUnit": {
+          "energy": 47975.16008474628
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "airports",
+      "name": "Airports",
+      "branch": "construction",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🛬",
+      "description": "Runways and terminals sprawl outward to keep pace with air travel demand.",
+      "requires": [
+        "concrete",
+        "commercial_aviation"
+      ],
+      "cost": [
+        {
+          "resource": "concrete",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 5724.8461030196295
+        },
+        "resourceProductionPerUnit": {
+          "energy": 32768
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "cfcs",
+      "name": "CFCs",
+      "branch": "chemistry",
+      "kind": "generator",
+      "tier": 16,
+      "icon": "🌀",
+      "description": "Chlorofluorocarbons are cheap, stable, and everywhere — stable enough to drift into the stratosphere and eat ozone.",
+      "requires": [
+        "refrigeration"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 560786344.2480077
+        }
+      ],
+      "costGrowth": 1.174,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "fluorinated": 54.835034092212794
+        },
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": {
+          "o3": 11.858787649699998
+        },
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "mass_electrification",
+      "name": "Mass Electrification",
+      "branch": "electricity",
+      "kind": "multiplier",
+      "tier": 17,
+      "icon": "⚡",
+      "description": "Every corner of civilization now runs on the grid. Output compounds everywhere.",
+      "requires": [
+        "nuclear_power",
+        "combined_cycle_gas"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 931976261.7367638
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.3,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "coal_mega_mining",
+      "name": "Coal Mega-Mining",
+      "branch": "fossilFuels",
+      "kind": "generator",
+      "tier": 17,
+      "icon": "⛏️",
+      "description": "Whole mountains are leveled for the coal seams beneath them.",
+      "requires": [
+        "coal_mining",
+        "oil_sands"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 1035529179.7075154
+        }
+      ],
+      "costGrowth": 1.174825,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 13030.456911736144
+        },
+        "resourceProductionPerUnit": {
+          "coal": 47975.16008474628
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "global_logistics",
+      "name": "Global Logistics",
+      "branch": "transportation",
+      "kind": "multiplier",
+      "tier": 17,
+      "icon": "🌐",
+      "description": "Trucks, trains, ships, and planes now form one coordinated worldwide supply machine.",
+      "requires": [
+        "container_ships",
+        "trucks"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 931976261.7367638
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.2,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "megacities",
+      "name": "Megacities",
+      "branch": "construction",
+      "kind": "generator",
+      "tier": 17,
+      "icon": "🌆",
+      "description": "Tens of millions of people, one continuous urban sprawl, running nonstop.",
+      "requires": [
+        "skyscrapers"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 1035529179.7075154
+        }
+      ],
+      "costGrowth": 1.174825,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 13030.456911736144,
+          "ch4": 3367.5565311880173
+        },
+        "resourceProductionPerUnit": {
+          "energy": 47975.16008474628
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "international_trade",
+      "name": "International Trade",
+      "branch": "globalization",
+      "kind": "unlock",
+      "tier": 17,
+      "icon": "🌐",
+      "description": "Nations specialize and trade at scale, wiring the world's economies together.",
+      "requires": [
+        "container_ships"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 168520382.99622104
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.15
+      }
+    },
+    {
+      "id": "mega_infrastructure",
+      "name": "Mega Infrastructure",
+      "branch": "construction",
+      "kind": "multiplier",
+      "tier": 18,
+      "icon": "🏗️",
+      "description": "Nationwide grids, ports, and transit systems bind cities into a single machine.",
+      "requires": [
+        "megacities",
+        "airports"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 1720955982.1170278
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.3,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "hfcs",
+      "name": "HFCs",
+      "branch": "chemistry",
+      "kind": "generator",
+      "tier": 18,
+      "icon": "🌀",
+      "description": "Hydrofluorocarbons replace ozone-eating CFCs — leaving the ozone layer alone, and warming the planet directly instead.",
+      "requires": [
+        "cfcs"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 1912173313.4633641
+        }
+      ],
+      "costGrowth": 1.1756499999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "fluorinated": 198.09156065811868
+        },
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "containerization",
+      "name": "Containerization",
+      "branch": "globalization",
+      "kind": "generator",
+      "tier": 18,
+      "icon": "📦",
+      "description": "Standardized shipping containers make loading and moving goods almost frictionless — so the world moves a lot more of them.",
+      "requires": [
+        "international_trade"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 1912173313.4633641
+        }
+      ],
+      "costGrowth": 1.1756499999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 13030.456911736144
+        },
+        "resourceProductionPerUnit": {
+          "energy": 70239.74564077858
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "supersonic_aviation",
+      "name": "Supersonic Aviation",
+      "branch": "transportation",
+      "kind": "generator",
+      "tier": 19,
+      "icon": "🚀",
+      "description": "Breaking the sound barrier for a business flight, at an enormous fuel and emissions premium.",
+      "requires": [
+        "commercial_aviation"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 3530954851.2714987
+        }
+      ],
+      "costGrowth": 1.176475,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 23358.957580107697,
+          "n2o": 673.5113062376035
+        },
+        "resourceProductionPerUnit": {
+          "energy": 70239.74564077858
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "global_urbanization",
+      "name": "Global Urbanization",
+      "branch": "construction",
+      "kind": "multiplier",
+      "tier": 19,
+      "icon": "🌍",
+      "description": "More than half the human race now lives in cities built this way. There is no going back.",
+      "requires": [
+        "mega_infrastructure"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 3177859366.144349
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.3,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.2
+      }
+    },
+    {
+      "id": "global_supply_chains",
+      "name": "Global Supply Chains",
+      "branch": "globalization",
+      "kind": "multiplier",
+      "tier": 19,
+      "icon": "🔗",
+      "description": "Parts cross a dozen borders before a product is finished. Efficiency has no geography left.",
+      "requires": [
+        "containerization",
+        "global_logistics"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 3177859366.144349
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.25,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "industrial_fluorinated_gases",
+      "name": "Industrial Fluorinated Gases",
+      "branch": "chemistry",
+      "kind": "generator",
+      "tier": 20,
+      "icon": "☣️",
+      "description": "PFCs and SF₆: some of the most potent, most persistent greenhouse gases ever synthesized.",
+      "requires": [
+        "hfcs"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 6520142329.115635
+        }
+      ],
+      "costGrowth": 1.1773,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "fluorinated": 686.9815323623556
+        },
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "consumer_economy",
+      "name": "Consumer Economy",
+      "branch": "globalization",
+      "kind": "generator",
+      "tier": 20,
+      "icon": "🛍️",
+      "description": "Mass production meets mass marketing: an economy built on buying more, replacing sooner, discarding faster.",
+      "requires": [
+        "global_supply_chains"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 6520142329.115635
+        }
+      ],
+      "costGrowth": 1.1773,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 31275.219381018767,
+          "ch4": 9732.23837513337
+        },
+        "resourceProductionPerUnit": {
+          "energy": 150562.1907861713
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "computers",
+      "name": "Computers",
+      "branch": "digital",
+      "kind": "unlock",
+      "tier": 20,
+      "icon": "💻",
+      "description": "Electronic computation replaces rooms full of clerks with a single humming cabinet.",
+      "requires": [
+        "mass_electrification"
+      ],
+      "cost": [
+        {
+          "resource": "research",
+          "baseAmount": 948738351.0022876
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.3
+      }
+    },
+    {
+      "id": "advanced_chemical_manufacturing",
+      "name": "Advanced Chemical Manufacturing",
+      "branch": "chemistry",
+      "kind": "multiplier",
+      "tier": 21,
+      "icon": "🏭",
+      "description": "Automated, continuous chemical plants run every reaction in this branch simultaneously, everywhere.",
+      "requires": [
+        "industrial_fluorinated_gases"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 10835887742.647034
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.35,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "global_aviation_networks",
+      "name": "Global Aviation Networks",
+      "branch": "globalization",
+      "kind": "generator",
+      "tier": 21,
+      "icon": "🛩️",
+      "description": "Hub airports link every major city on the planet with a same-day flight.",
+      "requires": [
+        "commercial_aviation"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 12039875269.607815
+        }
+      ],
+      "costGrowth": 1.1781249999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 41874.27217059667,
+          "o3": 396.18312131623736
+        },
+        "resourceProductionPerUnit": {
+          "energy": 220435.94988026976
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "247_manufacturing",
+      "name": "24/7 Manufacturing",
+      "branch": "globalization",
+      "kind": "generator",
+      "tier": 22,
+      "icon": "🏭",
+      "description": "Factories across every time zone mean production never actually stops, anywhere, ever.",
+      "requires": [
+        "consumer_economy"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 22232428249.365444
+        }
+      ],
+      "costGrowth": 1.17895,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 56065.303602039494
+        },
+        "resourceProductionPerUnit": {
+          "energy": 322737.1210918899
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "internet",
+      "name": "Internet",
+      "branch": "digital",
+      "kind": "multiplier",
+      "tier": 22,
+      "icon": "🌐",
+      "description": "A global network lets every computer, factory, and market talk to every other, instantly.",
+      "requires": [
+        "computers",
+        "global_supply_chains"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 20009185424.4289
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.1,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.4
+      }
+    },
+    {
+      "id": "megacorporations",
+      "name": "Megacorporations",
+      "branch": "globalization",
+      "kind": "multiplier",
+      "tier": 23,
+      "icon": "🏢",
+      "description": "A handful of firms now operate at the scale of nations, and answer to no single one.",
+      "requires": [
+        "247_manufacturing",
+        "global_aviation_networks"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 36948288027.518326
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.5,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.3
+      }
+    },
+    {
+      "id": "data_centers",
+      "name": "Data Centers",
+      "branch": "digital",
+      "kind": "generator",
+      "tier": 23,
+      "icon": "🖥️",
+      "description": "Warehouses of servers run around the clock, drawing enormous power to keep the internet online.",
+      "requires": [
+        "internet"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 41053653363.90925
+        }
+      ],
+      "costGrowth": 1.179775,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 75065.6215631144
+        },
+        "resourceProductionPerUnit": {
+          "research": 220435.94988026976
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "cloud_computing",
+      "name": "Cloud Computing",
+      "branch": "digital",
+      "kind": "generator",
+      "tier": 24,
+      "icon": "☁️",
+      "description": "Computation-as-a-service means every phone and laptop can now offload work to a distant, power-hungry server farm.",
+      "requires": [
+        "data_centers"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 75808293885.85187
+        }
+      ],
+      "costGrowth": 1.1805999999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 100505.07495069937
+        },
+        "resourceProductionPerUnit": {
+          "research": 472514.8025413074
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "ai",
+      "name": "AI",
+      "branch": "digital",
+      "kind": "generator",
+      "tier": 25,
+      "icon": "🤖",
+      "description": "Machine learning models train on oceans of data, accelerating research — and power demand — together.",
+      "requires": [
+        "cloud_computing"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 139985042766.88495
+        }
+      ],
+      "costGrowth": 1.181425,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 134565.8622483086
+        },
+        "resourceProductionPerUnit": {
+          "research": 691802.1635232985
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "mass_ai_infrastructure",
+      "name": "Mass AI Infrastructure",
+      "branch": "digital",
+      "kind": "generator",
+      "tier": 26,
+      "icon": "🧠",
+      "description": "Entire power grids are now built specifically to feed AI training clusters.",
+      "requires": [
+        "ai"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 258491666201.49713
+        }
+      ],
+      "costGrowth": 1.1822499999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 180169.72069831548
+        },
+        "resourceProductionPerUnit": {
+          "research": 1012857.6520386983,
+          "energy": 691802.1635232985
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "hyperscale_data_centers",
+      "name": "Hyperscale Data Centers",
+      "branch": "digital",
+      "kind": "multiplier",
+      "tier": 27,
+      "icon": "🏢",
+      "description": "Campuses of data centers the size of small cities, humming continuously, forever.",
+      "requires": [
+        "mass_ai_infrastructure"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 429589805863.8124
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.6,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": 1.5
+      }
+    },
+    {
+      "id": "advanced_manufacturing",
+      "name": "Advanced Manufacturing",
+      "branch": "endgame",
+      "kind": "multiplier",
+      "tier": 28,
+      "icon": "🦾",
+      "description": "Robotic, self-replicating factories need no rest, no wages, and no limits.",
+      "requires": [
+        "hyperscale_data_centers"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 793266069760.3013
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 1.75,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "fusion_power",
+      "name": "Fusion Power",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 29,
+      "icon": "⚛️",
+      "description": "Thirty years away for a century, and then suddenly not. Limitless clean power arrives — and gets spent, immediately and entirely, on running everything else harder.",
+      "requires": [
+        "advanced_manufacturing"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 1627576013840.6255
+        }
+      ],
+      "costGrowth": 1.1847249999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 180169.72069831548
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4653871.674972046,
+          "research": 2171107.9055637936
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "orbital_industry",
+      "name": "Orbital Industry",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 30,
+      "icon": "🛰️",
+      "description": "Factories in orbit promise a cleaner future — powered by an awful lot of rocket fuel to get there.",
+      "requires": [
+        "fusion_power"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 3005427061145.8545
+        }
+      ],
+      "costGrowth": 1.1855499999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 578987.8261771909
+        },
+        "resourceProductionPerUnit": {
+          "energy": 4653871.674972046
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "space_elevator",
+      "name": "Space Elevator",
+      "branch": "endgame",
+      "kind": "multiplier",
+      "tier": 31,
+      "icon": "🛗",
+      "description": "A ribbon of carbon from the equator to geostationary orbit. Lifting a tonne off Earth stops being an event and starts being a Tuesday.",
+      "requires": [
+        "orbital_industry"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 4994748367357.667
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": {
+          "branch": "endgame",
+          "multiplier": 2.5
+        },
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "moon_mining",
+      "name": "Moon Mining",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 32,
+      "icon": "🌕",
+      "description": "Helium-3 and rare earths from the Moon feed an industry that never once slows down to ask why.",
+      "requires": [
+        "space_elevator"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 10247926827801.184
+        }
+      ],
+      "costGrowth": 1.1871999999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 775204.5963751129
+        },
+        "resourceProductionPerUnit": {
+          "steel": 9975792.318568746,
+          "concrete": 9975792.318568746
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "asteroid_capture",
+      "name": "Asteroid Capture",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 33,
+      "icon": "☄️",
+      "description": "Whole metallic asteroids are nudged into Earth orbit and taken apart. The commodity markets have never been calmer, or the sky busier.",
+      "requires": [
+        "moon_mining"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 18923476597715.496
+        }
+      ],
+      "costGrowth": 1.1880249999999999,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1037918.4830342064
+        },
+        "resourceProductionPerUnit": {
+          "steel": 21383578.949630782,
+          "energy": 9975792.318568746
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "planetary_industry",
+      "name": "Planetary Industry",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 34,
+      "icon": "🌍",
+      "description": "Every remaining hectare of the planet's surface is now industrial infrastructure of some kind.",
+      "requires": [
+        "asteroid_capture"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 34943454667612.89
+        }
+      ],
+      "costGrowth": 1.18885,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 1860617.3199474905,
+          "ch4": 1037918.4830342064,
+          "n2o": 1037918.4830342064,
+          "fluorinated": 43243.66811405942
+        },
+        "resourceProductionPerUnit": {
+          "energy": 21383578.949630782
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "terraforming_engines",
+      "name": "Terraforming Engines",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 35,
+      "icon": "🏗️",
+      "description": "Continent-scale machines built to put the climate back where it was. They run on the same industry that broke it, and they are losing.",
+      "requires": [
+        "planetary_industry"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 64525406724414.234
+        }
+      ],
+      "costGrowth": 1.1896749999999998,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 2491173.4466711064,
+          "ch4": 1389665.1057816318
+        },
+        "resourceProductionPerUnit": {
+          "energy": 31307392.06827835
+        },
+        "gasRemovalPerUnit": {
+          "co2": 1116370.3919684943
+        },
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "dyson_swarm_prototype",
+      "name": "Dyson Swarm Prototype",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 36,
+      "icon": "☀️",
+      "description": "The first panels of a solar-collecting swarm go up. Harvesting a star, warming a planet — a footnote by comparison.",
+      "requires": [
+        "terraforming_engines"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 119150443267705.5
+        }
+      ],
+      "costGrowth": 1.1905,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 3335422.6443373743
+        },
+        "resourceProductionPerUnit": {
+          "energy": 67108864
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "matrioshka_brain",
+      "name": "Matrioshka Brain",
+      "branch": "endgame",
+      "kind": "generator",
+      "tier": 37,
+      "icon": "🧠",
+      "description": "Nested shells of computation wrapped around the sun, thinking thoughts nobody on the surface can follow. The waste heat alone is a weather system.",
+      "requires": [
+        "dyson_swarm_prototype"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 220019196338039.7
+        }
+      ],
+      "costGrowth": 1.191325,
+      "maxOwned": null,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": {
+          "co2": 4465784.681201007,
+          "fluorinated": 207583.6966068413
+        },
+        "resourceProductionPerUnit": {
+          "energy": 98253127.85356039,
+          "research": 67108864
+        },
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": null,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    },
+    {
+      "id": "stellar_energy",
+      "name": "Stellar Energy",
+      "branch": "endgame",
+      "kind": "multiplier",
+      "tier": 38,
+      "icon": "🌟",
+      "description": "Your civilization now answers its energy needs with a literal star. Ambition has entirely outrun restraint.",
+      "requires": [
+        "matrioshka_brain"
+      ],
+      "cost": [
+        {
+          "resource": "energy",
+          "baseAmount": 365652035247792.75
+        }
+      ],
+      "costGrowth": 1,
+      "maxOwned": 1,
+      "choiceGroup": null,
+      "effect": {
+        "gasProductionPerUnit": null,
+        "resourceProductionPerUnit": null,
+        "gasRemovalPerUnit": null,
+        "globalProductionMultiplier": 3,
+        "branchProductionMultiplier": null,
+        "gasProductionMultiplier": null,
+        "resourceProductionMultiplier": null,
+        "researchMultiplier": null
+      }
+    }
+  ],
+  "scaling": [
+    {
+      "tier": 0,
+      "ladderTier": 0,
+      "unlockCost": 9,
+      "researchCost": 5,
+      "generatorBaseCost": 10,
+      "gasProduction": 2,
+      "resourceProduction": 0.5,
+      "generatorCostGrowth": 1.15
+    },
+    {
+      "tier": 1,
+      "ladderTier": 1,
+      "unlockCost": 27.45,
+      "researchCost": 14.25,
+      "generatorBaseCost": 30.5,
+      "gasProduction": 3.4,
+      "resourceProduction": 1,
+      "generatorCostGrowth": 1.1515
+    },
+    {
+      "tier": 2,
+      "ladderTier": 2,
+      "unlockCost": 83.72249999999998,
+      "researchCost": 40.612500000000004,
+      "generatorBaseCost": 93.02499999999998,
+      "gasProduction": 5.779999999999999,
+      "resourceProduction": 2,
+      "generatorCostGrowth": 1.1529999999999998
+    },
+    {
+      "tier": 3,
+      "ladderTier": 3,
+      "unlockCost": 255.35362499999997,
+      "researchCost": 115.745625,
+      "generatorBaseCost": 283.72624999999994,
+      "gasProduction": 9.825999999999999,
+      "resourceProduction": 4,
+      "generatorCostGrowth": 1.1544999999999999
+    },
+    {
+      "tier": 4,
+      "ladderTier": 4,
+      "unlockCost": 778.8285562499998,
+      "researchCost": 329.87503125,
+      "generatorBaseCost": 865.3650624999998,
+      "gasProduction": 16.704199999999997,
+      "resourceProduction": 8,
+      "generatorCostGrowth": 1.156
+    },
+    {
+      "tier": 5,
+      "ladderTier": 5,
+      "unlockCost": 2375.427096562499,
+      "researchCost": 940.1438390625002,
+      "generatorBaseCost": 2639.3634406249994,
+      "gasProduction": 28.397139999999997,
+      "resourceProduction": 16,
+      "generatorCostGrowth": 1.1575
+    },
+    {
+      "tier": 6,
+      "ladderTier": 6,
+      "unlockCost": 7245.052644515622,
+      "researchCost": 2679.4099413281256,
+      "generatorBaseCost": 8050.058493906246,
+      "gasProduction": 48.27513799999999,
+      "resourceProduction": 32,
+      "generatorCostGrowth": 1.1589999999999998
+    },
+    {
+      "tier": 7,
+      "ladderTier": 7,
+      "unlockCost": 22097.410565772647,
+      "researchCost": 7636.318332785158,
+      "generatorBaseCost": 24552.678406414052,
+      "gasProduction": 82.0677346,
+      "resourceProduction": 64,
+      "generatorCostGrowth": 1.1604999999999999
+    },
+    {
+      "tier": 8,
+      "ladderTier": 8,
+      "unlockCost": 67397.10222560656,
+      "researchCost": 21763.5072484377,
+      "generatorBaseCost": 74885.66913956284,
+      "gasProduction": 139.51514881999998,
+      "resourceProduction": 128,
+      "generatorCostGrowth": 1.162
+    },
+    {
+      "tier": 9,
+      "ladderTier": 9,
+      "unlockCost": 205561.1617881,
+      "researchCost": 62025.99565804745,
+      "generatorBaseCost": 228401.29087566666,
+      "gasProduction": 237.17575299399994,
+      "resourceProduction": 256,
+      "generatorCostGrowth": 1.1635
+    },
+    {
+      "tier": 10,
+      "ladderTier": 10,
+      "unlockCost": 626961.543453705,
+      "researchCost": 176774.08762543523,
+      "generatorBaseCost": 696623.9371707833,
+      "gasProduction": 403.1987800897999,
+      "resourceProduction": 512,
+      "generatorCostGrowth": 1.1649999999999998
+    },
+    {
+      "tier": 11,
+      "ladderTier": 11,
+      "unlockCost": 1912232.7075338003,
+      "researchCost": 503806.1497324904,
+      "generatorBaseCost": 2124703.0083708894,
+      "gasProduction": 685.4379261526599,
+      "resourceProduction": 1024,
+      "generatorCostGrowth": 1.1664999999999999
+    },
+    {
+      "tier": 12,
+      "ladderTier": 12,
+      "unlockCost": 5832309.757978091,
+      "researchCost": 1435847.5267375978,
+      "generatorBaseCost": 6480344.175531212,
+      "gasProduction": 1165.2444744595216,
+      "resourceProduction": 2048,
+      "generatorCostGrowth": 1.168
+    },
+    {
+      "tier": 13,
+      "ladderTier": 13,
+      "unlockCost": 17788544.761833176,
+      "researchCost": 4092165.451202154,
+      "generatorBaseCost": 19765049.735370196,
+      "gasProduction": 1980.9156065811867,
+      "resourceProduction": 4096,
+      "generatorCostGrowth": 1.1695
+    },
+    {
+      "tier": 14,
+      "ladderTier": 14,
+      "unlockCost": 54255061.523591176,
+      "researchCost": 11662671.53592614,
+      "generatorBaseCost": 60283401.69287909,
+      "gasProduction": 3367.5565311880173,
+      "resourceProduction": 8192,
+      "generatorCostGrowth": 1.1709999999999998
+    },
+    {
+      "tier": 15,
+      "ladderTier": 15,
+      "unlockCost": 165477937.6469531,
+      "researchCost": 33238613.877389498,
+      "generatorBaseCost": 183864375.16328123,
+      "gasProduction": 5724.8461030196295,
+      "resourceProduction": 16384,
+      "generatorCostGrowth": 1.1724999999999999
+    },
+    {
+      "tier": 16,
+      "ladderTier": 16,
+      "unlockCost": 504707709.8232069,
+      "researchCost": 94730049.55056006,
+      "generatorBaseCost": 560786344.2480077,
+      "gasProduction": 9732.23837513337,
+      "resourceProduction": 32768,
+      "generatorCostGrowth": 1.174
+    },
+    {
+      "tier": 17,
+      "ladderTier": 16.55,
+      "unlockCost": 931976261.7367638,
+      "researchCost": 168520382.99622104,
+      "generatorBaseCost": 1035529179.7075154,
+      "gasProduction": 13030.456911736144,
+      "resourceProduction": 47975.16008474628,
+      "generatorCostGrowth": 1.174825
+    },
+    {
+      "tier": 18,
+      "ladderTier": 17.1,
+      "unlockCost": 1720955982.1170278,
+      "researchCost": 299789978.1529791,
+      "generatorBaseCost": 1912173313.4633641,
+      "gasProduction": 17446.429154720066,
+      "resourceProduction": 70239.74564077858,
+      "generatorCostGrowth": 1.1756499999999999
+    },
+    {
+      "tier": 19,
+      "ladderTier": 17.65,
+      "unlockCost": 3177859366.144349,
+      "researchCost": 533312525.18562526,
+      "generatorBaseCost": 3530954851.2714987,
+      "gasProduction": 23358.957580107697,
+      "resourceProduction": 102837.00687952281,
+      "generatorCostGrowth": 1.176475
+    },
+    {
+      "tier": 20,
+      "ladderTier": 18.2,
+      "unlockCost": 5868128096.204072,
+      "researchCost": 948738351.0022876,
+      "generatorBaseCost": 6520142329.115635,
+      "gasProduction": 31275.219381018767,
+      "resourceProduction": 150562.1907861713,
+      "generatorCostGrowth": 1.1773
+    },
+    {
+      "tier": 21,
+      "ladderTier": 18.75,
+      "unlockCost": 10835887742.647034,
+      "researchCost": 1687761708.4827485,
+      "generatorBaseCost": 12039875269.607815,
+      "gasProduction": 41874.27217059667,
+      "resourceProduction": 220435.94988026976,
+      "generatorCostGrowth": 1.1781249999999999
+    },
+    {
+      "tier": 22,
+      "ladderTier": 19.3,
+      "unlockCost": 20009185424.4289,
+      "researchCost": 3002450129.280943,
+      "generatorBaseCost": 22232428249.365444,
+      "gasProduction": 56065.303602039494,
+      "resourceProduction": 322737.1210918899,
+      "generatorCostGrowth": 1.17895
+    },
+    {
+      "tier": 23,
+      "ladderTier": 19.85,
+      "unlockCost": 36948288027.518326,
+      "researchCost": 5341220110.345508,
+      "generatorBaseCost": 41053653363.90925,
+      "gasProduction": 75065.6215631144,
+      "resourceProduction": 472514.8025413074,
+      "generatorCostGrowth": 1.179775
+    },
+    {
+      "tier": 24,
+      "ladderTier": 20.4,
+      "unlockCost": 68227464497.26668,
+      "researchCost": 9501783889.41018,
+      "generatorBaseCost": 75808293885.85187,
+      "gasProduction": 100505.07495069937,
+      "resourceProduction": 691802.1635232985,
+      "generatorCostGrowth": 1.1805999999999999
+    },
+    {
+      "tier": 25,
+      "ladderTier": 20.95,
+      "unlockCost": 125986538490.19646,
+      "researchCost": 16903234694.66885,
+      "generatorBaseCost": 139985042766.88495,
+      "gasProduction": 134565.8622483086,
+      "resourceProduction": 1012857.6520386983,
+      "generatorCostGrowth": 1.181425
+    },
+    {
+      "tier": 26,
+      "ladderTier": 21.5,
+      "unlockCost": 232642499581.3474,
+      "researchCost": 30070073837.55523,
+      "generatorBaseCost": 258491666201.49713,
+      "gasProduction": 180169.72069831548,
+      "resourceProduction": 1482910.4003789304,
+      "generatorCostGrowth": 1.1822499999999998
+    },
+    {
+      "tier": 27,
+      "ladderTier": 22.05,
+      "unlockCost": 429589805863.8124,
+      "researchCost": 53493272555.76732,
+      "generatorBaseCost": 477322006515.34705,
+      "gasProduction": 241228.55317205106,
+      "resourceProduction": 2171107.9055637936,
+      "generatorCostGrowth": 1.1830749999999999
+    },
+    {
+      "tier": 28,
+      "ladderTier": 22.6,
+      "unlockCost": 793266069760.3013,
+      "researchCost": 95162061263.44048,
+      "generatorBaseCost": 881406744178.1125,
+      "gasProduction": 322979.9915320906,
+      "resourceProduction": 3178688.0288904174,
+      "generatorCostGrowth": 1.1839
+    },
+    {
+      "tier": 29,
+      "ladderTier": 23.15,
+      "unlockCost": 1464818412456.563,
+      "researchCost": 169288911880.7599,
+      "generatorBaseCost": 1627576013840.6255,
+      "gasProduction": 432436.6811405942,
+      "resourceProduction": 4653871.674972046,
+      "generatorCostGrowth": 1.1847249999999998
+    },
+    {
+      "tier": 30,
+      "ladderTier": 23.700000000000003,
+      "unlockCost": 2704884355031.269,
+      "researchCost": 301157155543.68787,
+      "generatorBaseCost": 3005427061145.8545,
+      "gasProduction": 578987.8261771909,
+      "resourceProduction": 6813666.950093102,
+      "generatorCostGrowth": 1.1855499999999999
+    },
+    {
+      "tier": 31,
+      "ladderTier": 24.25,
+      "unlockCost": 4994748367357.667,
+      "researchCost": 535744670619.93164,
+      "generatorBaseCost": 5549720408175.186,
+      "gasProduction": 775204.5963751129,
+      "resourceProduction": 9975792.318568746,
+      "generatorCostGrowth": 1.186375
+    },
+    {
+      "tier": 32,
+      "ladderTier": 24.8,
+      "unlockCost": 9223134145021.064,
+      "researchCost": 953065025400.078,
+      "generatorBaseCost": 10247926827801.184,
+      "gasProduction": 1037918.4830342064,
+      "resourceProduction": 14605414.839340754,
+      "generatorCostGrowth": 1.1871999999999998
+    },
+    {
+      "tier": 33,
+      "ladderTier": 25.35,
+      "unlockCost": 17031128937943.945,
+      "researchCost": 1695458662406.8193,
+      "generatorBaseCost": 18923476597715.496,
+      "gasProduction": 1389665.1057816318,
+      "resourceProduction": 21383578.949630782,
+      "generatorCostGrowth": 1.1880249999999999
+    },
+    {
+      "tier": 34,
+      "ladderTier": 25.9,
+      "unlockCost": 31449109200851.6,
+      "researchCost": 3016142654824.2266,
+      "generatorBaseCost": 34943454667612.89,
+      "gasProduction": 1860617.3199474905,
+      "resourceProduction": 31307392.06827835,
+      "generatorCostGrowth": 1.18885
+    },
+    {
+      "tier": 35,
+      "ladderTier": 26.450000000000003,
+      "unlockCost": 58072866051972.81,
+      "researchCost": 5365578480890.961,
+      "generatorBaseCost": 64525406724414.234,
+      "gasProduction": 2491173.4466711064,
+      "resourceProduction": 45836704.90452799,
+      "generatorCostGrowth": 1.1896749999999998
+    },
+    {
+      "tier": 36,
+      "ladderTier": 27,
+      "unlockCost": 107235398940934.95,
+      "researchCost": 9545116305607.14,
+      "generatorBaseCost": 119150443267705.5,
+      "gasProduction": 3335422.6443373743,
+      "resourceProduction": 67108864,
+      "generatorCostGrowth": 1.1905
+    },
+    {
+      "tier": 37,
+      "ladderTier": 27.55,
+      "unlockCost": 198017276704235.72,
+      "researchCost": 16980321061754.156,
+      "generatorBaseCost": 220019196338039.7,
+      "gasProduction": 4465784.681201007,
+      "resourceProduction": 98253127.85356039,
+      "generatorCostGrowth": 1.191325
+    },
+    {
+      "tier": 38,
+      "ladderTier": 28.1,
+      "unlockCost": 365652035247792.75,
+      "researchCost": 30207206924327.965,
+      "generatorBaseCost": 406280039164214.1,
+      "gasProduction": 5979222.109290312,
+      "resourceProduction": 143850999.07231453,
+      "generatorCostGrowth": 1.1921499999999998
+    },
+    {
+      "tier": 39,
+      "ladderTier": 28.65,
+      "unlockCost": 675200735542650.5,
+      "researchCost": 53737225983576.336,
+      "generatorBaseCost": 750223039491833.9,
+      "gasProduction": 8005557.720398487,
+      "resourceProduction": 210610190.08926272,
+      "generatorCostGrowth": 1.192975
+    },
+    {
+      "tier": 40,
+      "ladderTier": 29.200000000000003,
+      "unlockCost": 1246802941951057.8,
+      "researchCost": 95596043144403.27,
+      "generatorBaseCost": 1385336602167842,
+      "gasProduction": 10718610.75624751,
+      "resourceProduction": 308351366.7300796,
+      "generatorCostGrowth": 1.1938
+    },
+    {
+      "tier": 41,
+      "ladderTier": 29.75,
+      "unlockCost": 2302304328517139.5,
+      "researchCost": 170060945603324.72,
+      "generatorBaseCost": 2558115920574599.5,
+      "gasProduction": 14351107.13788291,
+      "resourceProduction": 451452825.3547925,
+      "generatorCostGrowth": 1.1946249999999998
+    },
+    {
+      "tier": 42,
+      "ladderTier": 30.3,
+      "unlockCost": 4251357646633503,
+      "researchCost": 302530567879370,
+      "generatorBaseCost": 4723730718481670,
+      "gasProduction": 19214642.7150506,
+      "resourceProduction": 660965623.9961905,
+      "generatorCostGrowth": 1.19545
+    },
+    {
+      "tier": 43,
+      "ladderTier": 30.85,
+      "unlockCost": 7850413872622230,
+      "researchCost": 538187907733383.6,
+      "generatorBaseCost": 8722682080691366,
+      "gasProduction": 25726411.984790757,
+      "resourceProduction": 967710315.6045976,
+      "generatorCostGrowth": 1.196275
+    },
+    {
+      "tier": 44,
+      "ladderTier": 31.400000000000002,
+      "unlockCost": 14496309907086112,
+      "researchCost": 957411431382793.6,
+      "generatorBaseCost": 16107011007873458,
+      "gasProduction": 34444995.07101257,
+      "resourceProduction": 1416810830.8957188,
+      "generatorCostGrowth": 1.1970999999999998
+    }
+  ]
+}

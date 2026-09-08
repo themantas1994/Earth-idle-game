@@ -1,0 +1,4043 @@
+{
+  "cases": [
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1,
+            "e": 1,
+            "str": "1.0000000000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1,
+            "e": 1,
+            "str": "1.0000000000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.030371823805273,
+            "e": 2,
+            "str": "2.0303718238e+2"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.8287496713352,
+            "e": 7,
+            "str": "7.8287496713e+7"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 1,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.15,
+            "e": 1,
+            "str": "1.1500000000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.15,
+            "e": 1,
+            "str": "1.1500000000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.3349275973760637,
+            "e": 2,
+            "str": "2.3349275974e+2"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 9.003062122035479,
+            "e": 7,
+            "str": "9.0030621220e+7"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 5,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.0113571874999994,
+            "e": 1,
+            "str": "2.0113571875e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.0113571874999994,
+            "e": 1,
+            "str": "2.0113571875e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.083802961108218,
+            "e": 2,
+            "str": "4.0838029611e+2"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.5746411920578314,
+            "e": 8,
+            "str": "1.5746411921e+8"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 9,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.517876291919919,
+            "e": 1,
+            "str": "3.5178762919e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.517876291919919,
+            "e": 1,
+            "str": "3.5178762919e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.142596902746776,
+            "e": 2,
+            "str": "7.1425969027e+2"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.7540572864165958,
+            "e": 8,
+            "str": "2.7540572864e+8"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 10,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.0455577357079076,
+            "e": 1,
+            "str": "4.0455577357e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.0455577357079076,
+            "e": 1,
+            "str": "4.0455577357e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 8.213986438158795,
+            "e": 2,
+            "str": "8.2139864382e+2"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.167165879379086,
+            "e": 8,
+            "str": "3.1671658794e+8"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 37,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.7612462972611336,
+            "e": 3,
+            "str": "1.7612462973e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.7612462972611336,
+            "e": 3,
+            "str": "1.7612462973e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.5759848567403716,
+            "e": 4,
+            "str": "3.5759848567e+4"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.3788356370823438,
+            "e": 10,
+            "str": "1.3788356371e+10"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 100,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.1743134507002793,
+            "e": 7,
+            "str": "1.1743134507e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.1743134507002793,
+            "e": 7,
+            "str": "1.1743134507e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.3842929426173893,
+            "e": 8,
+            "str": "2.3842929426e+8"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 9.193406041214315,
+            "e": 13,
+            "str": "9.1934060412e+13"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "controlled_fire",
+      "owned": 0,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.05,
+            "e": 1,
+            "str": "3.0500000000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.0499999999999994,
+            "e": 1,
+            "str": "3.0500000000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.238179466708696,
+            "e": 2,
+            "str": "6.2381794667e+2"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.693277555511289,
+            "e": 8,
+            "str": "2.6932775555e+8"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "controlled_fire",
+      "owned": 1,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.512075,
+            "e": 1,
+            "str": "3.5120750000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.512075,
+            "e": 1,
+            "str": "3.5120750000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.183263655915064,
+            "e": 2,
+            "str": "7.1832636559e+2"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.101309105171249,
+            "e": 8,
+            "str": "3.1013091052e+8"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "controlled_fire",
+      "owned": 5,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.174752446114272,
+            "e": 1,
+            "str": "6.1747524461e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.174752446114272,
+            "e": 1,
+            "str": "6.1747524461e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.2629250466019462,
+            "e": 3,
+            "str": "1.2629250466e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 5.4525646471993445,
+            "e": 8,
+            "str": "5.4525646472e+8"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "controlled_fire",
+      "owned": 9,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.0856137118596332,
+            "e": 2,
+            "str": "1.0856137119e+2"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.0856137118596332,
+            "e": 2,
+            "str": "1.0856137119e+2"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.220410874131205,
+            "e": 3,
+            "str": "2.2204108741e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 9.586423095432295,
+            "e": 8,
+            "str": "9.5864230954e+8"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "controlled_fire",
+      "owned": 10,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.2500841892063674,
+            "e": 2,
+            "str": "1.2500841892e+2"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.2500841892063674,
+            "e": 2,
+            "str": "1.2500841892e+2"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.5568031215620826,
+            "e": 3,
+            "str": "2.5568031216e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.1038766194390286,
+            "e": 9,
+            "str": "1.1038766194e+9"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "controlled_fire",
+      "owned": 37,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 5.637229350746244,
+            "e": 3,
+            "str": "5.6372293507e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 5.637229350746244,
+            "e": 3,
+            "str": "5.6372293507e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.152985192949273,
+            "e": 5,
+            "str": "1.1529851929e+5"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.977909273978471,
+            "e": 10,
+            "str": "4.9779092740e+10"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "controlled_fire",
+      "owned": 100,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.080318546599602,
+            "e": 7,
+            "str": "4.0803185466e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.080318546599602,
+            "e": 7,
+            "str": "4.0803185466e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 8.345494877058464,
+            "e": 8,
+            "str": "8.3454948771e+8"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6030919216043125,
+            "e": 14,
+            "str": "3.6030919216e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.2840129087566665,
+            "e": 5,
+            "str": "2.2840129088e+5"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.2840129087566665,
+            "e": 5,
+            "str": "2.2840129088e+5"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.9540876545067745,
+            "e": 6,
+            "str": "4.9540876545e+6"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 5.270107138510189,
+            "e": 12,
+            "str": "5.2701071385e+12"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 1,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.6574490193383813,
+            "e": 5,
+            "str": "2.6574490193e+5"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.6574490193383813,
+            "e": 5,
+            "str": "2.6574490193e+5"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 5.764080986018631,
+            "e": 6,
+            "str": "5.7640809860e+6"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.131769655656606,
+            "e": 12,
+            "str": "6.1317696557e+12"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 5,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.870017168261945,
+            "e": 5,
+            "str": "4.8700171683e+5"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.870017168261945,
+            "e": 5,
+            "str": "4.8700171683e+5"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.0563202965282767,
+            "e": 7,
+            "str": "1.0563202965e+7"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.1237025913787777,
+            "e": 13,
+            "str": "1.1237025914e+13"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 9,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 8.92474965524301,
+            "e": 5,
+            "str": "8.9247496552e+5"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 8.924749655243009,
+            "e": 5,
+            "str": "8.9247496552e+5"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.9358030734892593,
+            "e": 7,
+            "str": "1.9358030735e+7"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.0592872609076607,
+            "e": 13,
+            "str": "2.0592872609e+13"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 10,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.038394622387524,
+            "e": 6,
+            "str": "1.0383946224e+6"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.038394622387524,
+            "e": 6,
+            "str": "1.0383946224e+6"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.2523068760047527,
+            "e": 7,
+            "str": "2.2523068760e+7"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.3959807280660628,
+            "e": 13,
+            "str": "2.3959807281e+13"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 37,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.195193792891514,
+            "e": 7,
+            "str": "6.1951937929e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.195193792891513,
+            "e": 7,
+            "str": "6.1951937929e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.343754799676163,
+            "e": 9,
+            "str": "1.3437547997e+9"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.429472438934012,
+            "e": 15,
+            "str": "1.4294724389e+15"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 100,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 8.616627455477069,
+            "e": 11,
+            "str": "8.6166274555e+11"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 8.616627455477067,
+            "e": 11,
+            "str": "8.6166274555e+11"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.8689705096238096,
+            "e": 13,
+            "str": "1.8689705096e+13"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.9881914716371916,
+            "e": 19,
+            "str": "1.9881914716e+19"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "cooking",
+      "owned": 0,
+      "nextCost": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "cooking",
+      "owned": 1,
+      "nextCost": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "cooking",
+      "owned": 5,
+      "nextCost": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "cooking",
+      "owned": 9,
+      "nextCost": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "cooking",
+      "owned": 10,
+      "nextCost": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "cooking",
+      "owned": 37,
+      "nextCost": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "cooking",
+      "owned": 100,
+      "nextCost": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "research",
+          "amount": {
+            "s": 1,
+            "m": 4.06125,
+            "e": 1,
+            "str": "4.0612500000e+1"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "the_wheel",
+      "owned": 0,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "the_wheel",
+      "owned": 1,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "the_wheel",
+      "owned": 5,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "the_wheel",
+      "owned": 9,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "the_wheel",
+      "owned": 10,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "the_wheel",
+      "owned": 37,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "the_wheel",
+      "owned": 100,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.245052644515622,
+            "e": 3,
+            "str": "7.2450526445e+3"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.8386437516328122,
+            "e": 8,
+            "str": "1.8386437516e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 1.9765049735370197,
+            "e": 7,
+            "str": "1.9765049735e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.8386437516328122,
+            "e": 8,
+            "str": "1.8386437516e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 1.9765049735370197,
+            "e": 7,
+            "str": "1.9765049735e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.168159170743406,
+            "e": 9,
+            "str": "4.1681591707e+9"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 4.480687095666119,
+            "e": 8,
+            "str": "4.4806870957e+8"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 8.689475763520162,
+            "e": 15,
+            "str": "8.6894757635e+15"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 9.341011301822265,
+            "e": 14,
+            "str": "9.3410113018e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 1,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.155809798789472,
+            "e": 8,
+            "str": "2.1558097988e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 2.3174520814721555,
+            "e": 7,
+            "str": "2.3174520815e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.155809798789472,
+            "e": 8,
+            "str": "2.1558097988e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 2.3174520814721555,
+            "e": 7,
+            "str": "2.3174520815e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.887166627696644,
+            "e": 9,
+            "str": "4.8871666277e+9"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 5.253605619668525,
+            "e": 8,
+            "str": "5.2536056197e+8"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.018841033272739,
+            "e": 16,
+            "str": "1.0188410333e+16"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 1.0952335751386606,
+            "e": 15,
+            "str": "1.0952335751e+15"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 5,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.074382962666011,
+            "e": 8,
+            "str": "4.0743829627e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 4.379879562124173,
+            "e": 7,
+            "str": "4.3798795621e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.074382962666011,
+            "e": 8,
+            "str": "4.0743829627e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 4.379879562124173,
+            "e": 7,
+            "str": "4.3798795621e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 9.236523766975257,
+            "e": 9,
+            "str": "9.2365237670e+9"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 9.929076879306917,
+            "e": 8,
+            "str": "9.9290768793e+8"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.9255634471846401,
+            "e": 16,
+            "str": "1.9255634472e+16"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 2.0699418943129704,
+            "e": 15,
+            "str": "2.0699418943e+15"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 9,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.700399421036405,
+            "e": 8,
+            "str": "7.7003994210e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 8.277774169348461,
+            "e": 7,
+            "str": "8.2777741693e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.700399421036406,
+            "e": 8,
+            "str": "7.7003994210e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 8.277774169348461,
+            "e": 7,
+            "str": "8.2777741693e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.745661193837944,
+            "e": 10,
+            "str": "1.7456611938e+10"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 1.8765505980520767,
+            "e": 9,
+            "str": "1.8765505981e+9"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6392277774908144,
+            "e": 16,
+            "str": "3.6392277775e+16"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 3.912096508993083,
+            "e": 15,
+            "str": "3.9120965090e+15"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 10,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 9.028718321165183,
+            "e": 8,
+            "str": "9.0287183212e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 9.70569021356107,
+            "e": 7,
+            "str": "9.7056902136e+7"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 9.028718321165183,
+            "e": 8,
+            "str": "9.0287183212e+8"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 9.70569021356107,
+            "e": 7,
+            "str": "9.7056902136e+7"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 2.046787749774989,
+            "e": 10,
+            "str": "2.0467877498e+10"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 2.2002555762160596,
+            "e": 9,
+            "str": "2.2002555762e+9"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 4.266994569107979,
+            "e": 16,
+            "str": "4.2669945691e+16"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 4.586933156794389,
+            "e": 15,
+            "str": "4.5869331568e+15"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 37,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.632436360344493,
+            "e": 10,
+            "str": "6.6324363603e+10"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 7.129735404831491,
+            "e": 9,
+            "str": "7.1297354048e+9"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 6.632436360344494,
+            "e": 10,
+            "str": "6.6324363603e+10"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 7.12973540483149,
+            "e": 9,
+            "str": "7.1297354048e+9"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.5035566522982857,
+            "e": 12,
+            "str": "1.5035566523e+12"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 1.6162930957251127,
+            "e": 11,
+            "str": "1.6162930957e+11"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.13450579837028,
+            "e": 18,
+            "str": "3.1345057984e+18"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 3.369530554550154,
+            "e": 17,
+            "str": "3.3695305546e+17"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 100,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.498934753071602,
+            "e": 15,
+            "str": "1.4989347531e+15"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 1.6113246472148368,
+            "e": 14,
+            "str": "1.6113246472e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 1.498934753071602,
+            "e": 15,
+            "str": "1.4989347531e+15"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 1.6113246472148368,
+            "e": 14,
+            "str": "1.6113246472e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.3980474095718805,
+            "e": 16,
+            "str": "3.3980474096e+16"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 3.652832474680871,
+            "e": 15,
+            "str": "3.6528324747e+15"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 7.08400264942402,
+            "e": 22,
+            "str": "7.0840026494e+22"
+          }
+        },
+        {
+          "resource": "steel",
+          "amount": {
+            "s": 1,
+            "m": 7.6151600638796255,
+            "e": 21,
+            "str": "7.6151600639e+21"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "stellar_energy",
+      "owned": 0,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "stellar_energy",
+      "owned": 1,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "stellar_energy",
+      "owned": 5,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "stellar_energy",
+      "owned": 9,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "stellar_energy",
+      "owned": 10,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "stellar_energy",
+      "owned": 37,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ]
+    },
+    {
+      "techId": "stellar_energy",
+      "owned": 100,
+      "nextCost": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk1": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk10": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ],
+      "bulk100": [
+        {
+          "resource": "energy",
+          "amount": {
+            "s": 1,
+            "m": 3.6565203524779273,
+            "e": 14,
+            "str": "3.6565203525e+14"
+          }
+        }
+      ]
+    }
+  ],
+  "affordability": [
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 1
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 1
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 19
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 68
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 167
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 464
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1946
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 0,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 17
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 65
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 164
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 461
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1943
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 3,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 2
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 2
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 43
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 142
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 439
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1921
+    },
+    {
+      "techId": "natural_fire",
+      "owned": 25,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 3
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 3
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 89
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 362
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1731
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 0,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 2
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 2
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 86
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 359
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1728
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 3,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 64
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 337
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1706
+    },
+    {
+      "techId": "coal_mining",
+      "owned": 25,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 43
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 303
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1605
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 0,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 40
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 300
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1602
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 3,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "0",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "0",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "10",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "10",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1000",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1000",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e6",
+      "maxQuantity": null,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e6",
+      "maxQuantity": 10,
+      "affordable": 0
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e12",
+      "maxQuantity": null,
+      "affordable": 18
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e12",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e30",
+      "maxQuantity": null,
+      "affordable": 278
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e30",
+      "maxQuantity": 10,
+      "affordable": 10
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e120",
+      "maxQuantity": null,
+      "affordable": 1580
+    },
+    {
+      "techId": "nuclear_power",
+      "owned": 25,
+      "balance": "1e120",
+      "maxQuantity": 10,
+      "affordable": 10
+    }
+  ],
+  "boundary": [
+    {
+      "techId": "natural_fire",
+      "units": 1,
+      "walletIsExactlyCostOf": 1,
+      "affordable": 1
+    },
+    {
+      "techId": "natural_fire",
+      "units": 2,
+      "walletIsExactlyCostOf": 2,
+      "affordable": 2
+    },
+    {
+      "techId": "natural_fire",
+      "units": 3,
+      "walletIsExactlyCostOf": 3,
+      "affordable": 3
+    },
+    {
+      "techId": "natural_fire",
+      "units": 4,
+      "walletIsExactlyCostOf": 4,
+      "affordable": 4
+    },
+    {
+      "techId": "natural_fire",
+      "units": 5,
+      "walletIsExactlyCostOf": 5,
+      "affordable": 5
+    },
+    {
+      "techId": "natural_fire",
+      "units": 17,
+      "walletIsExactlyCostOf": 17,
+      "affordable": 17
+    },
+    {
+      "techId": "natural_fire",
+      "units": 40,
+      "walletIsExactlyCostOf": 40,
+      "affordable": 40
+    },
+    {
+      "techId": "coal_mining",
+      "units": 1,
+      "walletIsExactlyCostOf": 1,
+      "affordable": 1
+    },
+    {
+      "techId": "coal_mining",
+      "units": 2,
+      "walletIsExactlyCostOf": 2,
+      "affordable": 2
+    },
+    {
+      "techId": "coal_mining",
+      "units": 3,
+      "walletIsExactlyCostOf": 3,
+      "affordable": 3
+    },
+    {
+      "techId": "coal_mining",
+      "units": 4,
+      "walletIsExactlyCostOf": 4,
+      "affordable": 4
+    },
+    {
+      "techId": "coal_mining",
+      "units": 5,
+      "walletIsExactlyCostOf": 5,
+      "affordable": 5
+    },
+    {
+      "techId": "coal_mining",
+      "units": 17,
+      "walletIsExactlyCostOf": 17,
+      "affordable": 17
+    },
+    {
+      "techId": "coal_mining",
+      "units": 40,
+      "walletIsExactlyCostOf": 40,
+      "affordable": 40
+    }
+  ],
+  "discounts": [
+    {
+      "discount": 0,
+      "nominal": "100",
+      "charged": {
+        "s": 1,
+        "m": 1,
+        "e": 2,
+        "str": "1.0000000000e+2"
+      }
+    },
+    {
+      "discount": 0,
+      "nominal": "1e12",
+      "charged": {
+        "s": 1,
+        "m": 1,
+        "e": 12,
+        "str": "1.0000000000e+12"
+      }
+    },
+    {
+      "discount": 0,
+      "nominalizedEnergyFrom1e6": {
+        "s": 1,
+        "m": 1,
+        "e": 6,
+        "str": "1.0000000000e+6"
+      }
+    },
+    {
+      "discount": 0.2,
+      "nominal": "100",
+      "charged": {
+        "s": 1,
+        "m": 8,
+        "e": 1,
+        "str": "8.0000000000e+1"
+      }
+    },
+    {
+      "discount": 0.2,
+      "nominal": "1e12",
+      "charged": {
+        "s": 1,
+        "m": 8,
+        "e": 11,
+        "str": "8.0000000000e+11"
+      }
+    },
+    {
+      "discount": 0.2,
+      "nominalizedEnergyFrom1e6": {
+        "s": 1,
+        "m": 1.25,
+        "e": 6,
+        "str": "1.2500000000e+6"
+      }
+    },
+    {
+      "discount": 0.4,
+      "nominal": "100",
+      "charged": {
+        "s": 1,
+        "m": 5.999999999999999,
+        "e": 1,
+        "str": "6.0000000000e+1"
+      }
+    },
+    {
+      "discount": 0.4,
+      "nominal": "1e12",
+      "charged": {
+        "s": 1,
+        "m": 5.999999999999999,
+        "e": 11,
+        "str": "6.0000000000e+11"
+      }
+    },
+    {
+      "discount": 0.4,
+      "nominalizedEnergyFrom1e6": {
+        "s": 1,
+        "m": 1.6666666666666667,
+        "e": 6,
+        "str": "1.6666666667e+6"
+      }
+    },
+    {
+      "discount": 0.8,
+      "nominal": "100",
+      "charged": {
+        "s": 1,
+        "m": 1.9999999999999996,
+        "e": 1,
+        "str": "2.0000000000e+1"
+      }
+    },
+    {
+      "discount": 0.8,
+      "nominal": "1e12",
+      "charged": {
+        "s": 1,
+        "m": 1.9999999999999996,
+        "e": 11,
+        "str": "2.0000000000e+11"
+      }
+    },
+    {
+      "discount": 0.8,
+      "nominalizedEnergyFrom1e6": {
+        "s": 1,
+        "m": 5.000000000000001,
+        "e": 6,
+        "str": "5.0000000000e+6"
+      }
+    },
+    {
+      "discount": 0.9,
+      "nominal": "100",
+      "charged": {
+        "s": 1,
+        "m": 9.999999999999998,
+        "e": 0,
+        "str": "10.0000000000e+0"
+      }
+    },
+    {
+      "discount": 0.9,
+      "nominal": "1e12",
+      "charged": {
+        "s": 1,
+        "m": 9.999999999999998,
+        "e": 10,
+        "str": "10.0000000000e+10"
+      }
+    },
+    {
+      "discount": 0.9,
+      "nominalizedEnergyFrom1e6": {
+        "s": 1,
+        "m": 1.0000000000000002,
+        "e": 7,
+        "str": "1.0000000000e+7"
+      }
+    },
+    {
+      "discount": 0.95,
+      "nominal": "100",
+      "charged": {
+        "s": 1,
+        "m": 9.999999999999998,
+        "e": 0,
+        "str": "10.0000000000e+0"
+      }
+    },
+    {
+      "discount": 0.95,
+      "nominal": "1e12",
+      "charged": {
+        "s": 1,
+        "m": 9.999999999999998,
+        "e": 10,
+        "str": "10.0000000000e+10"
+      }
+    },
+    {
+      "discount": 0.95,
+      "nominalizedEnergyFrom1e6": {
+        "s": 1,
+        "m": 1.0000000000000002,
+        "e": 7,
+        "str": "1.0000000000e+7"
+      }
+    },
+    {
+      "discount": 1.2,
+      "nominal": "100",
+      "charged": {
+        "s": 1,
+        "m": 9.999999999999998,
+        "e": 0,
+        "str": "10.0000000000e+0"
+      }
+    },
+    {
+      "discount": 1.2,
+      "nominal": "1e12",
+      "charged": {
+        "s": 1,
+        "m": 9.999999999999998,
+        "e": 10,
+        "str": "10.0000000000e+10"
+      }
+    },
+    {
+      "discount": 1.2,
+      "nominalizedEnergyFrom1e6": {
+        "s": 1,
+        "m": 1.0000000000000002,
+        "e": 7,
+        "str": "1.0000000000e+7"
+      }
+    }
+  ],
+  "ownership": [
+    {
+      "owned": 0,
+      "multiplier": 1,
+      "progress": 0,
+      "nextMilestone": 10
+    },
+    {
+      "owned": 1,
+      "multiplier": 1,
+      "progress": 0.1,
+      "nextMilestone": 10
+    },
+    {
+      "owned": 9,
+      "multiplier": 1,
+      "progress": 0.9,
+      "nextMilestone": 10
+    },
+    {
+      "owned": 10,
+      "multiplier": 2,
+      "progress": 0,
+      "nextMilestone": 20
+    },
+    {
+      "owned": 11,
+      "multiplier": 2,
+      "progress": 0.1,
+      "nextMilestone": 20
+    },
+    {
+      "owned": 19,
+      "multiplier": 2,
+      "progress": 0.9,
+      "nextMilestone": 20
+    },
+    {
+      "owned": 20,
+      "multiplier": 4,
+      "progress": 0,
+      "nextMilestone": 30
+    },
+    {
+      "owned": 50,
+      "multiplier": 32,
+      "progress": 0,
+      "nextMilestone": 60
+    },
+    {
+      "owned": 99,
+      "multiplier": 512,
+      "progress": 0.9,
+      "nextMilestone": 100
+    },
+    {
+      "owned": 100,
+      "multiplier": 1024,
+      "progress": 0,
+      "nextMilestone": 110
+    },
+    {
+      "owned": 1000,
+      "multiplier": 1.2676506002282294e+30,
+      "progress": 0,
+      "nextMilestone": 1010
+    }
+  ],
+  "ownershipCrossings": [
+    {
+      "before": 0,
+      "after": 5,
+      "crossed": []
+    },
+    {
+      "before": 0,
+      "after": 10,
+      "crossed": [
+        10
+      ]
+    },
+    {
+      "before": 0,
+      "after": 11,
+      "crossed": [
+        10
+      ]
+    },
+    {
+      "before": 5,
+      "after": 25,
+      "crossed": [
+        10,
+        20
+      ]
+    },
+    {
+      "before": 9,
+      "after": 10,
+      "crossed": [
+        10
+      ]
+    },
+    {
+      "before": 10,
+      "after": 10,
+      "crossed": []
+    },
+    {
+      "before": 12,
+      "after": 47,
+      "crossed": [
+        20,
+        30,
+        40
+      ]
+    },
+    {
+      "before": 0,
+      "after": 100,
+      "crossed": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ]
+    }
+  ]
+}
