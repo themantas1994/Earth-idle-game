@@ -17,6 +17,7 @@ import EventToast from './ui/components/EventToast';
 import MilestoneToast from './ui/components/MilestoneToast';
 import AchievementToast from './ui/components/AchievementToast';
 import TutorialOverlay from './ui/components/TutorialOverlay';
+import HeaderResources from './ui/components/HeaderResources';
 import { RUN_LABEL } from './engine/constants';
 import { formatTemperature, formatPercent } from './engine/format';
 import { onHardwareBack, exitApp, applyStatusBarTheme, hideSplash } from './platform/native';
@@ -122,6 +123,7 @@ export default function App() {
             </div>
           </div>
         </div>
+        {screen !== 'home' && <HeaderResources />}
       </header>
 
       <TutorialOverlay onNavigate={navigate} />

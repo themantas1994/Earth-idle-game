@@ -137,6 +137,41 @@ button {
   margin-top: 2px;
 }
 
+/*
+ * Balances follow the player off Home. Every buying decision happens on
+ * Technology or Production, where the Economy card isn't, so the same
+ * resources are mirrored here as chips. Auto-fit keeps one or two early-game
+ * resources readable across the full width and folds the late-game six into
+ * two rows, rather than a horizontal scroll that hides whatever falls off the
+ * right edge (the mistake the bottom nav already learned from).
+ */
+.app-header__resources {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.stat-chip--resource {
+  padding: 4px 6px;
+  min-width: 0;
+}
+
+.stat-chip--resource .stat-chip__value {
+  font-size: 0.8rem;
+  margin-top: 1px;
+  /* Long values ("full" notation, or a late-game balance) wrap inside the chip
+     instead of stretching the grid column and overflowing the header. */
+  overflow-wrap: anywhere;
+}
+
+.stat-chip__rate {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
 .app-main {
   flex: 1;
   overflow-y: auto;
