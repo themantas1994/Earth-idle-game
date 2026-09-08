@@ -24,3 +24,11 @@ android/app/debug/
 *.jks
 *.keystore
 keystore.properties
+
+# --- Native Android (Gradle) ---
+/build/
+/app/build/
+/.gradle/
+/local.properties
+/.idea/
+/captures/

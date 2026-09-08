@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto Backup is scoped to the save alone. Backing up everything would drag a
+  stale cache onto a fresh install; the save is the only thing worth restoring.
+-->
+<full-backup-content>
+    <include domain="file" path="datastore/earth-save.preferences_pb" />
+</full-backup-content>
