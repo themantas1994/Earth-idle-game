@@ -89,10 +89,17 @@ private fun formatFull(value: GameDecimal): String {
 /**
  * `Number.toLocaleString('en-US', { maximumFractionDigits: 2 })`: comma
  * grouping, at most two fraction digits, and trailing zeros dropped.
+ *
+ * Note this rounds the *shortest decimal that round-trips* to the double, not
+ * the exact binary value — which is what `toLocaleString` does and what
+ * `toFixed` (see `jsToFixed`) deliberately does not. Formatting 1e24 the other
+ * way prints 999,999,999,999,999,983,222,784, which is technically the stored
+ * value and visibly wrong to a player. Kotlin's `Double.toString` produces that
+ * shortest representation on JDK 19+.
  */
 private fun groupWithCommas(value: Double): String {
     if (!value.isFinite()) return if (value > 0) "∞" else "-∞"
-    val rounded = BigDecimal(value).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros()
+    val rounded = BigDecimal(value.toString()).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros()
     val plain = rounded.toPlainString()
     val negative = plain.startsWith("-")
     val body = if (negative) plain.substring(1) else plain

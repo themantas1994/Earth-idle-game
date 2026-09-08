@@ -9,36 +9,42 @@
         "s": 1,
         "m": 1.2345,
         "e": 42,
+        "finite": true,
         "str": "1.2345000000e+42"
       },
       "research": {
         "s": 1,
         "m": 9.87,
         "e": 17,
+        "finite": true,
         "str": "9.8700000000e+17"
       },
       "coal": {
         "s": 1,
         "m": 1,
         "e": 3,
+        "finite": true,
         "str": "1.0000000000e+3"
       },
       "oil": {
         "s": 0,
         "m": 0,
         "e": 0,
+        "finite": true,
         "str": "0.0000000000e+0"
       },
       "steel": {
         "s": 1,
         "m": 3.5,
         "e": 0,
+        "finite": true,
         "str": "3.5000000000e+0"
       },
       "concrete": {
         "s": 1,
         "m": 1,
         "e": -7,
+        "finite": true,
         "str": "1.0000000000e-7"
       }
     },
@@ -47,36 +53,42 @@
         "s": 1,
         "m": 4.125,
         "e": 2,
+        "finite": true,
         "str": "4.1250000000e+2"
       },
       "ch4": {
         "s": 1,
         "m": 1.5,
         "e": 3,
+        "finite": true,
         "str": "1.5000000000e+3"
       },
       "n2o": {
         "s": 0,
         "m": 0,
         "e": 0,
+        "finite": true,
         "str": "0.0000000000e+0"
       },
       "h2o": {
         "s": 0,
         "m": 0,
         "e": 0,
+        "finite": true,
         "str": "0.0000000000e+0"
       },
       "o3": {
         "s": 0,
         "m": 0,
         "e": 0,
+        "finite": true,
         "str": "0.0000000000e+0"
       },
       "fluorinated": {
         "s": 0,
         "m": 0,
         "e": 0,
+        "finite": true,
         "str": "0.0000000000e+0"
       }
     },
@@ -90,6 +102,7 @@
       "s": 1,
       "m": 4.44,
       "e": 9,
+      "finite": true,
       "str": "4.4400000000e+9"
     },
     "settings": {
@@ -140,12 +153,14 @@
       "s": 1,
       "m": 1.7760002374400004,
       "e": 4,
+      "finite": true,
       "str": "1.7760002374e+4"
     },
     "totalEarthPointsEarned": {
       "s": 1,
       "m": 4,
       "e": 5,
+      "finite": true,
       "str": "4.0000000000e+5"
     },
     "milestonesTriggered": {},
@@ -157,12 +172,14 @@
       "s": 1,
       "m": 1.7760000000000002,
       "e": 4,
+      "finite": true,
       "str": "1.7760000000e+4"
     },
     "totalEarthPointsEarned": {
       "s": 1,
       "m": 4,
       "e": 5,
+      "finite": true,
       "str": "4.0000000000e+5"
     }
   },

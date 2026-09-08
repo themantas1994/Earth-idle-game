@@ -295,10 +295,12 @@ internal fun formatExponent(exponent: Double): String {
 internal fun jsToFixed(value: Double, digits: Int): String {
     if (value.isNaN()) return "NaN"
     if (!value.isFinite()) return if (value > 0) "Infinity" else "-Infinity"
-    val negative = value < 0 || (value == 0.0 && 1.0 / value < 0)
+    // ECMAScript negates whenever x < 0, even when the rounded magnitude is all
+    // zeros: (-0.001).toFixed(2) is "-0.00". Negative zero is not < 0, so it
+    // prints as "0.00", same as here.
+    val negative = value < 0
     val magnitude = BigDecimal(kotlin.math.abs(value)).setScale(digits, RoundingMode.HALF_UP).toPlainString()
-    // ECMAScript prints -0 as "0.00", and negates only a non-zero result.
-    return if (negative && magnitude.any { it in '1'..'9' }) "-$magnitude" else magnitude
+    return if (negative) "-$magnitude" else magnitude
 }
 
 /** Shorthand mirroring the reference engine's `D(...)` helper. */

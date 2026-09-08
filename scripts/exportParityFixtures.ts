@@ -56,9 +56,21 @@ import { ladderTier, unlockCost, researchCost, generatorBaseCost, gasProduction,
 
 const OUT_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '../app/src/test/resources/parity');
 
-/** Decimals travel as their exact internal triple, so no precision is lost in the fixture itself. */
-function dec(value: Decimal): { s: number; m: number; e: number; str: string } {
-  return { s: value.sign, m: value.mantissa, e: value.exponent, str: value.toExponential(10) };
+/**
+ * Decimals travel as their exact internal triple, so no precision is lost in
+ * the fixture itself. `JSON.stringify` writes Infinity as `null`, which would
+ * be indistinguishable from a missing field, so finiteness is carried
+ * explicitly — division by zero is a real case the port has to match.
+ */
+function dec(value: Decimal): { s: number; m: number | null; e: number | null; finite: boolean; str: string } {
+  const finite = value.isFinite();
+  return {
+    s: value.sign,
+    m: finite ? value.mantissa : null,
+    e: finite ? value.exponent : null,
+    finite,
+    str: value.toExponential(10),
+  };
 }
 
 function decMap<T extends string>(map: Record<T, Decimal>): Record<string, ReturnType<typeof dec>> {

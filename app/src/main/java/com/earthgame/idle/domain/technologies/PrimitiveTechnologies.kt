@@ -1,0 +1,181 @@
+package com.earthgame.idle.domain.technologies
+
+import com.earthgame.idle.domain.model.GasId
+import com.earthgame.idle.domain.model.ResourceId
+
+/**
+ * The opening of the game. Every civilization begins with a single burning
+ * thing and works its way up: fire is both the first energy source and the
+ * first emission, so the branch doubles as the tutorial for the whole
+ * economy — every generator here turns fuel into Energy, and pays for it in
+ * carbon.
+ */
+val PRIMITIVE_TECHS: List<Technology> = listOf(
+    Technology(
+        id = "natural_fire",
+        displayName = "Natural Fire",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.GENERATOR,
+        tier = 0,
+        description = "A lightning-struck tree, still smouldering. You keep the embers alive, and they keep giving off heat — your very first source of Energy.",
+        icon = "🔥",
+        cost = listOf(TechCost(ResourceId.ENERGY, generatorBaseCost(0))),
+        costGrowth = generatorCostGrowth(0),
+        maxOwned = Technology.UNLIMITED,
+        effect = TechEffect(
+            gasProductionPerUnit = mapOf(GasId.CO2 to gasProduction(0)),
+            resourceProductionPerUnit = mapOf(ResourceId.ENERGY to resourceProduction(0)),
+        ),
+    ),
+    Technology(
+        id = "controlled_fire",
+        displayName = "Controlled Fire",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.GENERATOR,
+        tier = 1,
+        description = "A hearth you can light at will, rather than one you happen to find. Warmth, light, and the first fuel you burn on purpose.",
+        icon = "🪔",
+        requires = listOf("natural_fire"),
+        cost = listOf(TechCost(ResourceId.ENERGY, generatorBaseCost(1))),
+        costGrowth = generatorCostGrowth(1),
+        maxOwned = Technology.UNLIMITED,
+        effect = TechEffect(
+            gasProductionPerUnit = mapOf(GasId.CO2 to gasProduction(1)),
+            resourceProductionPerUnit = mapOf(ResourceId.ENERGY to resourceProduction(1), ResourceId.RESEARCH to resourceProduction(0) * 0.5),
+        ),
+    ),
+    Technology(
+        id = "cooking",
+        displayName = "Cooking",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.UNLOCK,
+        tier = 2,
+        description = "Cooked food yields more calories, freeing time for tool-making and ideas.",
+        icon = "🍖",
+        requires = listOf("controlled_fire"),
+        cost = listOf(TechCost(ResourceId.RESEARCH, researchCost(2))),
+        costGrowth = 1.0,
+        maxOwned = 1,
+        effect = TechEffect(
+            researchMultiplier = 1.15,
+        ),
+    ),
+    Technology(
+        id = "charcoal",
+        displayName = "Charcoal Kiln",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.GENERATOR,
+        tier = 3,
+        description = "Slow-burned wood yields a hotter, more portable fuel — civilization's first fuel stockpile.",
+        icon = "🪵",
+        requires = listOf("cooking"),
+        cost = listOf(TechCost(ResourceId.ENERGY, generatorBaseCost(3))),
+        costGrowth = generatorCostGrowth(3),
+        maxOwned = Technology.UNLIMITED,
+        effect = TechEffect(
+            gasProductionPerUnit = mapOf(GasId.CO2 to gasProduction(3)),
+            resourceProductionPerUnit = mapOf(ResourceId.ENERGY to resourceProduction(2), ResourceId.COAL to resourceProduction(2)),
+        ),
+    ),
+    Technology(
+        id = "pottery",
+        displayName = "Pottery",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.UNLOCK,
+        tier = 3,
+        description = "Fired clay vessels let surplus food be stored — the seed of permanent settlement.",
+        icon = "🏺",
+        requires = listOf("cooking"),
+        cost = listOf(TechCost(ResourceId.RESEARCH, researchCost(3))),
+        costGrowth = 1.0,
+        maxOwned = 1,
+        effect = TechEffect(
+            researchMultiplier = 1.15,
+        ),
+    ),
+    Technology(
+        id = "metalworking",
+        displayName = "Metalworking",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.UNLOCK,
+        tier = 4,
+        description = "Hot enough fires can shape metal. A new material age begins.",
+        icon = "⚒️",
+        requires = listOf("charcoal"),
+        cost = listOf(TechCost(ResourceId.RESEARCH, researchCost(4))),
+        costGrowth = 1.0,
+        maxOwned = 1,
+    ),
+    Technology(
+        id = "bronze",
+        displayName = "Bronze Smelting",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.GENERATOR,
+        tier = 5,
+        description = "Alloying copper and tin produces tools and weapons far tougher than stone.",
+        icon = "🔔",
+        requires = listOf("metalworking"),
+        cost = listOf(
+            TechCost(ResourceId.ENERGY, generatorBaseCost(5)),
+            TechCost(ResourceId.COAL, generatorBaseCost(3)),
+        ),
+        costGrowth = generatorCostGrowth(5),
+        maxOwned = Technology.UNLIMITED,
+        effect = TechEffect(
+            gasProductionPerUnit = mapOf(GasId.CO2 to gasProduction(5)),
+            resourceProductionPerUnit = mapOf(ResourceId.ENERGY to resourceProduction(4), ResourceId.STEEL to resourceProduction(3)),
+        ),
+    ),
+    Technology(
+        id = "iron",
+        displayName = "Iron Smelting",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.GENERATOR,
+        tier = 6,
+        description = "Hotter furnaces smelt iron — stronger, cheaper, and everywhere underfoot.",
+        icon = "⛓️",
+        requires = listOf("bronze"),
+        cost = listOf(
+            TechCost(ResourceId.ENERGY, generatorBaseCost(6)),
+            TechCost(ResourceId.COAL, generatorBaseCost(4)),
+        ),
+        costGrowth = generatorCostGrowth(6),
+        maxOwned = Technology.UNLIMITED,
+        effect = TechEffect(
+            gasProductionPerUnit = mapOf(GasId.CO2 to gasProduction(6)),
+            resourceProductionPerUnit = mapOf(ResourceId.ENERGY to resourceProduction(5), ResourceId.STEEL to resourceProduction(4)),
+        ),
+    ),
+    Technology(
+        id = "the_wheel",
+        displayName = "The Wheel",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.MULTIPLIER,
+        tier = 6,
+        description = "Everything you already do, done with less effort. +25% to all production.",
+        icon = "☸️",
+        requires = listOf("pottery", "metalworking"),
+        cost = listOf(TechCost(ResourceId.ENERGY, unlockCost(6))),
+        costGrowth = 1.0,
+        maxOwned = 1,
+        effect = TechEffect(
+            globalProductionMultiplier = 1.25,
+        ),
+    ),
+    Technology(
+        id = "early_agriculture",
+        displayName = "Early Agriculture",
+        branch = TechBranch.PRIMITIVE,
+        kind = TechKind.UNLOCK,
+        tier = 7,
+        description = "Deliberately planting and storing grain ends the nomadic era for good.",
+        icon = "🌱",
+        requires = listOf("pottery"),
+        cost = listOf(TechCost(ResourceId.RESEARCH, researchCost(7))),
+        costGrowth = 1.0,
+        maxOwned = 1,
+        effect = TechEffect(
+            researchMultiplier = 1.2,
+        ),
+    ),
+)
