@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useGameStore } from '../../store/useGameStore';
 import { NumberFormatMode } from '../../engine/format';
 import { Settings } from '../../engine/gameState';
+import { isAdConsentFormAvailable, showAdPrivacyOptions } from '../../platform/ads';
 
 function Switch({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
@@ -20,6 +22,12 @@ const FORMAT_OPTIONS: { id: NumberFormatMode; label: string }[] = [
 export default function SettingsScreen() {
   const settings = useGameStore((s) => s.state.settings);
   const updateSettings = useGameStore((s) => s.updateSettings);
+
+  // AdMob expects players who were shown a consent message to be able to come
+  // back and change it. Only players who got one have a form to reopen, so the
+  // row is hidden everywhere else rather than offering a button that fails.
+  const [canEditAdConsent, setCanEditAdConsent] = useState(false);
+  useEffect(() => setCanEditAdConsent(isAdConsentFormAvailable()), []);
 
   const toggle = (key: keyof Settings) => updateSettings({ [key]: !settings[key] } as Partial<Settings>);
 
@@ -84,6 +92,21 @@ export default function SettingsScreen() {
           <Switch on={settings.vibrationEnabled} onToggle={() => toggle('vibrationEnabled')} />
         </div>
       </div>
+
+      {canEditAdConsent && (
+        <>
+          <div className="section-label">Privacy</div>
+          <div className="card">
+            <button
+              className="qty-btn"
+              style={{ width: '100%', textAlign: 'left', padding: '10px 12px' }}
+              onClick={() => void showAdPrivacyOptions()}
+            >
+              Ad Privacy Choices
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

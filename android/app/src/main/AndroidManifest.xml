@@ -28,6 +28,15 @@
 
         </activity>
 
+        <!--
+            The Google Mobile Ads SDK reads the AdMob app ID from the manifest
+            at startup and throws if it is absent, so this must stay in step
+            with the banner unit in src/platform/ads.ts.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6872627319793193~7208922044" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -42,4 +51,8 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Ad requests check connectivity before firing; play-services-ads also
+         merges in com.google.android.gms.permission.AD_ID, which is why the
+         Play data-safety form has to declare the advertising ID. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

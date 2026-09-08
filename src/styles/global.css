@@ -21,6 +21,14 @@
   --tap-scale: 1;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
+  /*
+   * Height the AdMob banner needs at the bottom of the screen, plus its
+   * clearance gap. The banner is a native view drawn over the WebView, so it
+   * is invisible to layout; App.tsx overwrites this from the size the ad
+   * reports once it loads. It stays 0px in the browser build and on any device
+   * where no ad fills, which collapses every rule below to a no-op.
+   */
+  --ad-banner-inset: 0px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -85,6 +93,8 @@ button {
   background: var(--bg);
   position: relative;
   overflow: hidden;
+  /* Lifts the whole column — bottom nav included — clear of the banner ad. */
+  padding-bottom: var(--ad-banner-inset);
 }
 
 .app-header {
@@ -456,6 +466,10 @@ button {
 .modal-overlay {
   position: absolute;
   inset: 0;
+  /* `inset: 0` resolves against the shell's padding box, which now includes the
+     banner reservation, so the overlay's own buttons would end up under the ad
+     without this. */
+  bottom: var(--ad-banner-inset);
   background: rgba(4, 8, 14, 0.72);
   display: flex;
   align-items: center;

@@ -16,7 +16,7 @@ mobile-first.
 ```bash
 npm install
 npm run dev        # dev server at http://localhost:5173
-npm test           # vitest — 183 unit tests over the whole simulation engine
+npm test           # vitest — 208 unit tests over the whole simulation engine
 npm run test:e2e   # drives the packaged bundle in headless Chromium (see below)
 npm run build      # production build to dist/
 npm run lint       # tsc --noEmit
@@ -99,6 +99,47 @@ native and only active on-device (all no-ops in the browser build, behind
 - **Status bar** colour/style follows the in-app light/dark theme.
 - **Splash screen** is held until React paints, then dismissed, rather than on a timer.
 - Portrait-locked, `targetSdk 34`, `minSdk 22`, Auto Backup restricted to the save.
+- **An AdMob banner** anchored to the bottom of the screen — see below.
+
+### Ads (AdMob)
+
+A single anchored adaptive banner, via `@capacitor-community/admob`, wired up in
+`src/platform/ads.ts` and started once from `App.tsx`. There are no interstitials
+and no rewarded ads.
+
+| | |
+| --- | --- |
+| App ID | `ca-app-pub-6872627319793193~7208922044` — declared as `com.google.android.gms.ads.APPLICATION_ID` in `android/app/src/main/AndroidManifest.xml`, where the SDK reads it. It is **not** read from JavaScript, and the app crashes at startup if it is missing. |
+| Banner unit | `ca-app-pub-6872627319793193/5213314092` |
+| Test unit | `ca-app-pub-3940256099942544/6300978111` (Google's public sample unit) |
+
+Three things about the implementation are worth knowing before changing it:
+
+- **The banner is a native view drawn over the WebView.** Nothing in CSS knows it
+  is there, so the layout would happily put the bottom nav underneath it. The
+  plugin reports the ad's height once it loads; `App.tsx` writes that (plus an 8px
+  gap) into the `--ad-banner-inset` custom property, which pads the app shell and
+  raises the modal overlay's floor. The property is `0px` until an ad actually
+  loads, so the browser build and any device where nothing fills lose no space at
+  all — and it goes back to `0px` if the banner is removed. `npm run test:e2e`
+  asserts all three states.
+- **Only a production build asks for live ads.** `npm run dev`, and any build made
+  with `VITE_ADMOB_TEST=1`, request Google's test unit instead. AdMob counts
+  impressions and clicks a developer generates on their own live unit as invalid
+  traffic, and that gets accounts suspended — so to exercise ads on a device,
+  build with `VITE_ADMOB_TEST=1 npm run android:build`, not a plain debug build.
+- **Consent runs before the SDK is initialized.** Serving ads in the EEA/UK without
+  a User Messaging Platform consent message is a policy violation, so startup goes
+  UMP consent → `AdMob.initialize()` → `showBanner()`, in that order, and falls back
+  to requesting non-personalized ads whenever no consent choice could be recorded.
+  Where a consent form exists, Settings grows an **Ad Privacy Choices** row that
+  reopens it; players who were never shown one don't see the row.
+
+Two things are configured outside this repo and are on you: the GDPR/EEA consent
+message has to be created under **Privacy & messaging** in the AdMob console (the
+UMP form is loaded from there, not bundled), and the Play Console data-safety form
+has to declare the advertising ID, because `play-services-ads` merges
+`com.google.android.gms.permission.AD_ID` into the manifest.
 
 ## Technology choice: web app + Capacitor, not native Kotlin
 
@@ -374,15 +415,16 @@ progression is currently conveyed through color/theme, not custom artwork).
 ## What's been verified
 
 - **`npm run lint`** — `tsc --noEmit`, clean.
-- **`npm test`** — 183 unit tests covering the Decimal system, climate/forcing/habitability
+- **`npm test`** — 208 unit tests covering the Decimal system, climate/forcing/habitability
   formulas, the full technology graph, production math, prestige, offline catch-up, save
   round-tripping (including large-Decimal precision) and the v1→v2 migration, achievements,
   challenges, milestone news, the pacing invariants described under "Pacing", and the
   purchase-affordability boundary cases added by the audit below.
 - **`npm run test:e2e`** (`scripts/playtest.mjs`) — serves the *exact bundle packaged into the
   APK* (`android/app/src/main/assets/public`) and drives it in headless Chromium at both
-  390×844 and 360×740 with a mobile user agent and touch enabled: 27 assertions covering
-  layout (no document overflow, bottom nav on-screen, 48dp touch targets), the golden path
+  390×844 and 360×740 with a mobile user agent and touch enabled: 34 assertions covering
+  layout (no document overflow, bottom nav on-screen, 48dp touch targets, the banner-ad inset
+  raising and releasing the nav), the golden path
   (Energy accruing with no input → the Technology and Production screens selling disjoint
   lists → buying Controlled Fire on Production → CO₂ flowing → the first news headline), every
   one of the nine screens rendering live data, save-to-storage, and survival across a reload —
@@ -390,14 +432,22 @@ progression is currently conveyed through color/theme, not custom artwork).
 - **`./gradlew assembleDebug assembleRelease bundleRelease`** — all three Android variants
   build, with Android Lint's release-blocking checks reporting **no issues**. The debug APK is
   4.7 MB, the release AAB 3.6 MB. The five Capacitor plugin classes are confirmed present in
-  the packaged `classes.dex`.
+  the packaged `classes.dex`. That run predates the AdMob banner, which adds a sixth plugin and
+  the `play-services-ads` dependency; those have not been through Gradle here (no Android SDK
+  in this environment) — re-run the command above after `npm install`.
 
 **Not verified on real hardware.** This build environment has no KVM/VT-x, so an Android
 emulator cannot boot and no physical device is attached. Everything above the native bridge is
 exercised in a Chromium of the same engine family as the Android WebView; what remains unproven
-by execution is the behaviour of the five native plugins themselves (Preferences, App, Haptics,
+by execution is the behaviour of the native plugins themselves (Preferences, App, Haptics,
 StatusBar, SplashScreen) — they are verified structurally (registered, compiled into the APK)
 rather than by running. Install `app-debug.apk` on a device to close that gap.
+
+The same gap covers AdMob, and more of it: the banner's Gradle wiring, manifest app ID and the
+inset it drives are in place and the inset is exercised in Chromium, but no ad has been
+requested from a real device here, and the consent form itself is served from the AdMob console
+rather than the APK. Build with `VITE_ADMOB_TEST=1 npm run android:build` and install on a
+device to see a real (test) banner fill.
 
 ## Code audit
 
