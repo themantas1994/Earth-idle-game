@@ -1,33 +1,29 @@
 import { describe, it, expect } from 'vitest';
 import { D } from './bignum';
 import { createNewGame } from './gameState';
-import { applyManualTap, purchaseTechnology, grantTechnology } from './economy';
+import { purchaseTechnology, grantTechnology } from './economy';
 import { computePrestigeMultipliers } from './prestige';
 import { nextPurchaseCost, TECH_BY_ID } from './technologies';
+import { simulateStep } from './simulation';
 
 const noPrestige = computePrestigeMultipliers({});
 
-describe('applyManualTap', () => {
-  it('adds energy and increments the tap counter', () => {
+describe('the starting economy', () => {
+  it('hands every run a running Natural Fire, so Energy accrues with no manual input', () => {
     const state = createNewGame(0);
-    const next = applyManualTap(state, noPrestige);
-    expect(next.resources.energy.gt(0)).toBe(true);
-    expect(next.lifetimeStats.totalTaps).toBe(1);
-  });
+    expect(state.techOwned.natural_fire).toBe(1);
 
-  it('scales with the prestige tap-power multiplier', () => {
-    const state = createNewGame(0);
-    const boosted = computePrestigeMultipliers({ tap_conditioning: 2 });
-    const normal = applyManualTap(state, noPrestige).resources.energy;
-    const withBoost = applyManualTap(state, boosted).resources.energy;
-    expect(withBoost.gt(normal)).toBe(true);
+    const { productionRates } = simulateStep(state, 1, noPrestige);
+    expect(productionRates.resourcePerS.energy.gt(0)).toBe(true);
   });
 });
 
 describe('purchaseTechnology', () => {
-  it('fails when requirements are not met', () => {
-    const state = createNewGame(0);
-    const result = purchaseTechnology(state, 'controlled_fire', 1, noPrestige);
+  it('fails when requirements are not met, however rich the player is', () => {
+    let state = createNewGame(0);
+    state = { ...state, resources: { ...state.resources, energy: D('1e100'), coal: D('1e100') } };
+    // Iron Smelting requires Bronze Smelting, which a fresh run has not unlocked.
+    const result = purchaseTechnology(state, 'iron', 1, noPrestige);
     expect(result.success).toBe(false);
   });
 

@@ -5,6 +5,8 @@ import { GAS_LIST } from '../../engine/gases';
 import { RESOURCES } from '../../engine/resources';
 import { ScreenId } from '../components/BottomNav';
 import { formatPercent } from '../../engine/format';
+import { complexityCostMultiplier } from '../../engine/economy';
+import NewsFeed from '../components/NewsFeed';
 
 function useObjective(): string {
   const techOwned = useGameStore((s) => s.state.techOwned);
@@ -20,7 +22,19 @@ function useObjective(): string {
     (t) => (techOwned[t.id] ?? 0) === 0 && isTechAvailable(t, techOwned) && !disabledTechIds.has(t.id),
   );
   if (!next) return 'Keep producing — your economy is growing.';
-  return `Next: ${next.name}`;
+  // Generators are bought on Production, everything else on Technology, so
+  // the hint has to name the right tab or it sends the player to an empty list.
+  const tab = next.kind === 'generator' ? 'Production' : 'Technology';
+  return `Next: ${next.name} — ${tab} tab`;
+}
+
+function useObjectiveScreen(): ScreenId {
+  const techOwned = useGameStore((s) => s.state.techOwned);
+  const disabledTechIds = useGameStore((s) => s.derived.disabledTechIds);
+  const next = ALL_TECHNOLOGIES.find(
+    (t) => (techOwned[t.id] ?? 0) === 0 && isTechAvailable(t, techOwned) && !disabledTechIds.has(t.id),
+  );
+  return next?.kind === 'generator' ? 'production' : 'technology';
 }
 
 export default function HomeScreen({ onNavigate }: { onNavigate: (id: ScreenId) => void }) {
@@ -30,15 +44,18 @@ export default function HomeScreen({ onNavigate }: { onNavigate: (id: ScreenId) 
   const forcing = useGameStore((s) => s.state.forcing);
   const habitability = useGameStore((s) => s.state.habitability);
   const collapsed = useGameStore((s) => s.state.collapsed);
-  const tap = useGameStore((s) => s.tap);
   const confirmResetEarth = useGameStore((s) => s.confirmResetEarth);
+  const techOwned = useGameStore((s) => s.state.techOwned);
   const objective = useObjective();
+  const objectiveScreen = useObjectiveScreen();
+  const complexityReduction = useGameStore((s) => s.derived.prestigeMultipliers.complexityReduction);
+  const complexity = complexityCostMultiplier(techOwned, complexityReduction);
 
   const habitabilityColor = habitability.fraction > 0.5 ? 'var(--good)' : habitability.fraction > 0.15 ? 'var(--warning)' : 'var(--danger)';
 
   return (
     <div>
-      <div className="card" onClick={() => onNavigate('technology')} style={{ cursor: 'pointer' }}>
+      <div className="card" onClick={() => onNavigate(objectiveScreen)} style={{ cursor: 'pointer' }}>
         <div className="card__title">🎯 Objective</div>
         <div style={{ fontSize: '0.88rem', color: 'var(--text-dim)' }}>{objective}</div>
       </div>
@@ -67,6 +84,18 @@ export default function HomeScreen({ onNavigate }: { onNavigate: (id: ScreenId) 
       </div>
 
       <div className="card">
+        <div className="card__title">🏛️ Civilization Complexity</div>
+        <div className="row">
+          <span className="row__label">Cost of anything new</span>
+          <span className="row__value">×{complexity < 100 ? complexity.toFixed(2) : format(complexity)}</span>
+        </div>
+        <div className="tech-card__desc">
+          The broader your civilization gets, the more every further step costs. Only{' '}
+          <em>new</em> technologies count — building more of what you already run is never affected.
+        </div>
+      </div>
+
+      <div className="card">
         <div className="card__title">☁️ Major Greenhouse Gases</div>
         {GAS_LIST.filter((g) => g.directlyEmitted).map((gas) => {
           const rate = productionRates.gasGrossKgPerS[gas.id];
@@ -79,11 +108,11 @@ export default function HomeScreen({ onNavigate }: { onNavigate: (id: ScreenId) 
           );
         })}
         {GAS_LIST.every((g) => productionRates.gasGrossKgPerS[g.id].isZero()) && (
-          <div className="empty-hint">Tap to earn Energy, then unlock Controlled Fire on the Technology tab.</div>
+          <div className="empty-hint">Your fires are banked. Build more on the Production tab.</div>
         )}
       </div>
 
-      <button className="tap-button" onClick={tap}>👆 Tap to Produce Energy</button>
+      <NewsFeed limit={4} />
 
       <button
         className={`reset-button ${collapsed ? 'reset-button--ready' : 'reset-button--disabled'}`}

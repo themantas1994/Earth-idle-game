@@ -35,7 +35,13 @@ export const GASES: Record<GasId, GasDefinition> = {
     formula: 'CO₂',
     unit: 'ppm',
     baseline: CLIMATE.baseline.co2Ppm,
-    massPerUnit: 7.82e12, // kg per ppm, real-world-derived scale
+    // Kilograms per ppm. Derived from the real-world figure (~7.8e12 kg/ppm)
+    // and then scaled down, because CO2 is the gas this game is *about*: at the
+    // real ratio a whole run's combustion moves the needle by a couple of
+    // hundred ppm and the marquee gas ends up a rounding error next to the
+    // synthetic ones. See the note on `fluorinated` for the other half of this
+    // trade.
+    massPerUnit: 2e12,
     lifetimeYears: 120,
     directlyEmitted: true,
     forcing: (c, base) => CLIMATE.forcing.co2Alpha * Math.log(Math.max(c, 1e-6) / base),
@@ -57,7 +63,7 @@ export const GASES: Record<GasId, GasDefinition> = {
     formula: 'N₂O',
     unit: 'ppb',
     baseline: CLIMATE.baseline.n2oPpb,
-    massPerUnit: 7.8e9,
+    massPerUnit: 1.6e10,
     lifetimeYears: 114,
     directlyEmitted: true,
     forcing: (c, base) => CLIMATE.forcing.n2oAlpha * (Math.sqrt(Math.max(c, 0)) - Math.sqrt(base)),
@@ -90,7 +96,12 @@ export const GASES: Record<GasId, GasDefinition> = {
     formula: 'CFCs/HFCs/PFCs/SF₆',
     unit: 'ppt',
     baseline: CLIMATE.baseline.fluorinatedPpt,
-    massPerUnit: 6.5e6,
+    // Trace gases are absurdly potent per kilogram, and with a linear forcing
+    // response and a 3200-year lifetime an unscaled value lets one late branch
+    // out-heat every fire, furnace and engine in the run combined. Scaled so
+    // f-gases stay what they should be — a nasty lategame accelerant rather
+    // than the whole apocalypse.
+    massPerUnit: 3e7,
     lifetimeYears: 3200, // SF6-scale: extremely long-lived, essentially permanent on game timescales
     directlyEmitted: true,
     forcing: (c, base) => CLIMATE.forcing.fluorinatedAlphaPerPpt * Math.max(c - base, 0),

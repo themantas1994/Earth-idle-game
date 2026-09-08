@@ -114,6 +114,45 @@ function zeroResourceMap(): Record<ResourceId, Decimal> {
   return Object.fromEntries(RESOURCE_LIST.map((r) => [r.id, Decimal.ZERO])) as Record<ResourceId, Decimal>;
 }
 
+/**
+ * What one technology contributes at `owned` units, with every multiplier
+ * applied. Split out from `computeProductionRates` so the Production screen
+ * can show a building's own contribution rather than the global total for the
+ * gases it happens to emit.
+ */
+export function computeTechProductionRates(
+  tech: Technology,
+  owned: number,
+  multipliers: EffectiveMultipliers,
+): ProductionRates {
+  const gasGrossKgPerS = zeroGasMap();
+  const gasRemovalKgPerS = zeroGasMap();
+  const resourcePerS = zeroResourceMap();
+  if (owned <= 0 || tech.kind !== 'generator') return { gasGrossKgPerS, gasRemovalKgPerS, resourcePerS };
+
+  const scale = techScale(tech, multipliers);
+
+  if (tech.effect.gasProductionPerUnit) {
+    for (const [gasId, perUnit] of Object.entries(tech.effect.gasProductionPerUnit) as [GasId, number][]) {
+      const gasMultiplier = (multipliers.perGas[gasId] ?? 1) * multipliers.allGas;
+      gasGrossKgPerS[gasId] = D(perUnit).mul(owned).mul(scale).mul(gasMultiplier);
+    }
+  }
+  if (tech.effect.gasRemovalPerUnit) {
+    for (const [gasId, perUnit] of Object.entries(tech.effect.gasRemovalPerUnit) as [GasId, number][]) {
+      gasRemovalKgPerS[gasId] = D(perUnit).mul(owned).mul(scale);
+    }
+  }
+  if (tech.effect.resourceProductionPerUnit) {
+    for (const [resId, perUnit] of Object.entries(tech.effect.resourceProductionPerUnit) as [ResourceId, number][]) {
+      const resMultiplier = (multipliers.perResource[resId] ?? 1) * (resId === 'research' ? multipliers.research : 1);
+      resourcePerS[resId] = D(perUnit).mul(owned).mul(scale).mul(resMultiplier);
+    }
+  }
+
+  return { gasGrossKgPerS, gasRemovalKgPerS, resourcePerS };
+}
+
 /** Sums every owned generator's per-unit output into total production rates, with all multipliers applied. */
 export function computeProductionRates(
   techOwned: Record<string, number>,
@@ -126,27 +165,14 @@ export function computeProductionRates(
   for (const tech of ALL_TECHNOLOGIES) {
     const owned = techOwned[tech.id] ?? 0;
     if (owned <= 0 || tech.kind !== 'generator') continue;
-    const scale = techScale(tech, multipliers);
+    const contribution = computeTechProductionRates(tech, owned, multipliers);
 
-    if (tech.effect.gasProductionPerUnit) {
-      for (const [gasId, perUnit] of Object.entries(tech.effect.gasProductionPerUnit) as [GasId, number][]) {
-        const gasMultiplier = (multipliers.perGas[gasId] ?? 1) * multipliers.allGas;
-        const rate = D(perUnit).mul(owned).mul(scale).mul(gasMultiplier);
-        gasGrossKgPerS[gasId] = gasGrossKgPerS[gasId].add(rate);
-      }
+    for (const gas of GAS_LIST) {
+      gasGrossKgPerS[gas.id] = gasGrossKgPerS[gas.id].add(contribution.gasGrossKgPerS[gas.id]);
+      gasRemovalKgPerS[gas.id] = gasRemovalKgPerS[gas.id].add(contribution.gasRemovalKgPerS[gas.id]);
     }
-    if (tech.effect.gasRemovalPerUnit) {
-      for (const [gasId, perUnit] of Object.entries(tech.effect.gasRemovalPerUnit) as [GasId, number][]) {
-        const rate = D(perUnit).mul(owned).mul(scale);
-        gasRemovalKgPerS[gasId] = gasRemovalKgPerS[gasId].add(rate);
-      }
-    }
-    if (tech.effect.resourceProductionPerUnit) {
-      for (const [resId, perUnit] of Object.entries(tech.effect.resourceProductionPerUnit) as [ResourceId, number][]) {
-        const resMultiplier = (multipliers.perResource[resId] ?? 1) * (resId === 'research' ? multipliers.research : 1);
-        const rate = D(perUnit).mul(owned).mul(scale).mul(resMultiplier);
-        resourcePerS[resId] = resourcePerS[resId].add(rate);
-      }
+    for (const res of RESOURCE_LIST) {
+      resourcePerS[res.id] = resourcePerS[res.id].add(contribution.resourcePerS[res.id]);
     }
   }
 

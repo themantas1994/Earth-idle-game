@@ -1,20 +1,31 @@
 import { Technology } from './types';
 import { unlockCost, researchCost, generatorBaseCost, gasProduction, resourceProduction, generatorCostGrowth } from './scaling';
 
+/**
+ * The opening of the game. Every civilization begins with a single burning
+ * thing and works its way up: fire is both the first energy source and the
+ * first emission, so the branch doubles as the tutorial for the whole
+ * economy — every generator here turns fuel into Energy, and pays for it in
+ * carbon.
+ */
 export const PRIMITIVE_TECHS: Technology[] = [
   {
     id: 'natural_fire',
     name: 'Natural Fire',
     branch: 'primitive',
-    kind: 'unlock',
+    kind: 'generator',
     tier: 0,
-    description: 'Wildfires exist long before humans learn to use them. Observe how fire behaves.',
+    description:
+      'A lightning-struck tree, still smouldering. You keep the embers alive, and they keep giving off heat — your very first source of Energy.',
     icon: '🔥',
     requires: [],
-    cost: [{ resource: 'research', baseAmount: researchCost(0) }],
-    costGrowth: 1,
-    maxOwned: 1,
-    effect: {},
+    cost: [{ resource: 'energy', baseAmount: generatorBaseCost(0) }],
+    costGrowth: generatorCostGrowth(0),
+    maxOwned: Infinity,
+    effect: {
+      gasProductionPerUnit: { co2: gasProduction(0) },
+      resourceProductionPerUnit: { energy: resourceProduction(0) },
+    },
   },
   {
     id: 'controlled_fire',
@@ -22,15 +33,16 @@ export const PRIMITIVE_TECHS: Technology[] = [
     branch: 'primitive',
     kind: 'generator',
     tier: 1,
-    description: 'Tame fire for warmth and light. Your first deliberate act of combustion — and emission.',
-    icon: '🔥',
+    description:
+      'A hearth you can light at will, rather than one you happen to find. Warmth, light, and the first fuel you burn on purpose.',
+    icon: '🪔',
     requires: ['natural_fire'],
     cost: [{ resource: 'energy', baseAmount: generatorBaseCost(1) }],
     costGrowth: generatorCostGrowth(1),
     maxOwned: Infinity,
     effect: {
       gasProductionPerUnit: { co2: gasProduction(1) },
-      resourceProductionPerUnit: { research: resourceProduction(1) * 0.5 },
+      resourceProductionPerUnit: { energy: resourceProduction(1), research: resourceProduction(0) * 0.5 },
     },
   },
   {
@@ -45,11 +57,11 @@ export const PRIMITIVE_TECHS: Technology[] = [
     cost: [{ resource: 'research', baseAmount: researchCost(2) }],
     costGrowth: 1,
     maxOwned: 1,
-    effect: { researchMultiplier: 1.05 },
+    effect: { researchMultiplier: 1.15 },
   },
   {
     id: 'charcoal',
-    name: 'Charcoal',
+    name: 'Charcoal Kiln',
     branch: 'primitive',
     kind: 'generator',
     tier: 3,
@@ -61,7 +73,7 @@ export const PRIMITIVE_TECHS: Technology[] = [
     maxOwned: Infinity,
     effect: {
       gasProductionPerUnit: { co2: gasProduction(3) },
-      resourceProductionPerUnit: { coal: resourceProduction(2) },
+      resourceProductionPerUnit: { energy: resourceProduction(2), coal: resourceProduction(2) },
     },
   },
   {
@@ -76,7 +88,7 @@ export const PRIMITIVE_TECHS: Technology[] = [
     cost: [{ resource: 'research', baseAmount: researchCost(3) }],
     costGrowth: 1,
     maxOwned: 1,
-    effect: { researchMultiplier: 1.05 },
+    effect: { researchMultiplier: 1.15 },
   },
   {
     id: 'metalworking',
@@ -94,7 +106,7 @@ export const PRIMITIVE_TECHS: Technology[] = [
   },
   {
     id: 'bronze',
-    name: 'Bronze',
+    name: 'Bronze Smelting',
     branch: 'primitive',
     kind: 'generator',
     tier: 5,
@@ -109,12 +121,12 @@ export const PRIMITIVE_TECHS: Technology[] = [
     maxOwned: Infinity,
     effect: {
       gasProductionPerUnit: { co2: gasProduction(5) },
-      resourceProductionPerUnit: { steel: resourceProduction(3) },
+      resourceProductionPerUnit: { energy: resourceProduction(4), steel: resourceProduction(3) },
     },
   },
   {
     id: 'iron',
-    name: 'Iron',
+    name: 'Iron Smelting',
     branch: 'primitive',
     kind: 'generator',
     tier: 6,
@@ -129,8 +141,22 @@ export const PRIMITIVE_TECHS: Technology[] = [
     maxOwned: Infinity,
     effect: {
       gasProductionPerUnit: { co2: gasProduction(6) },
-      resourceProductionPerUnit: { steel: resourceProduction(4) },
+      resourceProductionPerUnit: { energy: resourceProduction(5), steel: resourceProduction(4) },
     },
+  },
+  {
+    id: 'the_wheel',
+    name: 'The Wheel',
+    branch: 'primitive',
+    kind: 'multiplier',
+    tier: 6,
+    description: 'Everything you already do, done with less effort. +25% to all production.',
+    icon: '☸️',
+    requires: ['pottery', 'metalworking'],
+    cost: [{ resource: 'energy', baseAmount: unlockCost(6) }],
+    costGrowth: 1,
+    maxOwned: 1,
+    effect: { globalProductionMultiplier: 1.25 },
   },
   {
     id: 'early_agriculture',
@@ -144,6 +170,6 @@ export const PRIMITIVE_TECHS: Technology[] = [
     cost: [{ resource: 'research', baseAmount: researchCost(7) }],
     costGrowth: 1,
     maxOwned: 1,
-    effect: { researchMultiplier: 1.1 },
+    effect: { researchMultiplier: 1.2 },
   },
 ];

@@ -5,8 +5,10 @@ import {
   computeEffectiveMultipliers,
   computeProductionRates,
   computeCivLevel,
+  computeTechProductionRates,
   simulateStep,
 } from './simulation';
+import { TECH_BY_ID } from './technologies';
 import { computePrestigeMultipliers } from './prestige';
 
 const noPrestige = computePrestigeMultipliers({});
@@ -137,5 +139,31 @@ describe('simulateStep', () => {
     const peak = afterGrowth.runStats.peakTemperatureC;
     const afterMore = simulateStep({ ...afterGrowth, techOwned: {} }, 1e6, noPrestige).state;
     expect(afterMore.runStats.peakTemperatureC).toBeGreaterThanOrEqual(peak);
+  });
+});
+
+describe('computeTechProductionRates', () => {
+  it('reports one technology\'s own contribution, not the global rate for its gases', () => {
+    const multipliers = computeEffectiveMultipliers({}, computePrestigeMultipliers({}));
+    const owned = { natural_fire: 4, controlled_fire: 3 };
+
+    const total = computeProductionRates(owned, multipliers);
+    const fromNaturalFire = computeTechProductionRates(TECH_BY_ID['natural_fire'], 4, multipliers);
+    const fromControlledFire = computeTechProductionRates(TECH_BY_ID['controlled_fire'], 3, multipliers);
+
+    expect(fromNaturalFire.gasGrossKgPerS.co2.lt(total.gasGrossKgPerS.co2)).toBe(true);
+    expect(
+      fromNaturalFire.gasGrossKgPerS.co2
+        .add(fromControlledFire.gasGrossKgPerS.co2)
+        .sub(total.gasGrossKgPerS.co2)
+        .abs()
+        .lt(D('1e-9')),
+    ).toBe(true);
+  });
+
+  it('is zero for a technology that is not an owned generator', () => {
+    const multipliers = computeEffectiveMultipliers({}, computePrestigeMultipliers({}));
+    expect(computeTechProductionRates(TECH_BY_ID['cooking'], 1, multipliers).resourcePerS.energy.isZero()).toBe(true);
+    expect(computeTechProductionRates(TECH_BY_ID['natural_fire'], 0, multipliers).resourcePerS.energy.isZero()).toBe(true);
   });
 });

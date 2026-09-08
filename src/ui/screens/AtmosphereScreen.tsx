@@ -2,6 +2,7 @@ import { useGameStore } from '../../store/useGameStore';
 import { useNumberFormat } from '../hooks';
 import { GAS_LIST } from '../../engine/gases';
 import { gasDisplayConcentration, computeSinkEfficiency } from '../../engine/climate';
+import NewsFeed from '../components/NewsFeed';
 
 const GAS_COLORS: Record<string, string> = {
   co2: 'var(--co2)',
@@ -86,6 +87,9 @@ export default function AtmosphereScreen() {
         <div className="row"><span className="row__label">Ocean pH</span><span className="row__value">{oceanPh.toFixed(2)}</span></div>
         <div className="row"><span className="row__label">Sea Level Rise</span><span className="row__value">+{seaLevel.toFixed(2)} m</span></div>
       </div>
+
+      <div className="section-label">This Earth, in the News</div>
+      <NewsFeed />
     </div>
   );
 }

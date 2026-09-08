@@ -35,7 +35,7 @@ export interface LifetimeStats {
   highestCo2Ppm: number;
   fastestResetSeconds: number | null;
   longestRunSeconds: number;
-  totalTaps: number;
+  totalTechnologiesPurchased: number;
   totalEarthPointsEarned: Decimal;
 }
 
@@ -67,6 +67,23 @@ export interface ActiveEvent {
   startedAt: number;
   endsAt: number;
 }
+
+/**
+ * One headline in the world-news feed. Milestone events write these as the
+ * planet crosses thresholds, so the run has a readable narrative of what the
+ * player's emissions actually did rather than only a temperature readout.
+ */
+export interface NewsItem {
+  /** Milestone definition id — also the per-run dedupe key. */
+  milestoneId: string;
+  /** Wall-clock ms the headline fired at. */
+  at: number;
+  /** Seconds into the run, so the feed still reads correctly after a reload. */
+  runSeconds: number;
+}
+
+/** Newest-first cap on the per-run news feed, so a long run can't grow the save without bound. */
+export const NEWS_FEED_LIMIT = 40;
 
 export interface GameState {
   saveVersion: number;
@@ -104,6 +121,11 @@ export interface GameState {
 
   activeEvents: ActiveEvent[];
 
+  /** Milestone ids already fired this run (each headline fires at most once per Earth). */
+  milestonesTriggered: Record<string, boolean>;
+  /** Newest-first world-news headlines for the current run. */
+  newsFeed: NewsItem[];
+
   settings: Settings;
 
   tutorial: {
@@ -115,15 +137,15 @@ export interface GameState {
   collapsed: boolean;
 }
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 /**
  * Technologies every run starts with already "owned". Natural Fire predates
- * any deliberate human action (wildfires exist on their own) and every
- * later technology's cost is denominated in resources produced by
- * technology — so if it were purchasable like everything else, it would be
- * an unaffordable dead end at the very start of the game. Modeling it as a
- * starting condition rather than a purchase avoids that soft-lock.
+ * any deliberate human action — a lightning strike, not an invention — and
+ * it is the game's only unconditional source of Energy. Since every
+ * purchase in the game is denominated in resources that generators produce,
+ * the player has to be handed one running generator or the economy can
+ * never start; that first burning tree is it.
  */
 export const STARTING_TECH_IDS = ['natural_fire'];
 
@@ -151,7 +173,7 @@ export function createInitialLifetimeStats(): LifetimeStats {
     highestCo2Ppm: 280,
     fastestResetSeconds: null,
     longestRunSeconds: 0,
-    totalTaps: 0,
+    totalTechnologiesPurchased: 0,
     totalEarthPointsEarned: Decimal.ZERO,
   };
 }
@@ -194,6 +216,8 @@ export function createNewGame(now: number = Date.now()): GameState {
     },
 
     activeEvents: [],
+    milestonesTriggered: {},
+    newsFeed: [],
 
     settings: { ...DEFAULT_SETTINGS },
 
@@ -233,6 +257,8 @@ export function startNewRun(previous: GameState, now: number = Date.now()): Game
     runStats: createInitialRunStats(now),
 
     activeEvents: [],
+    milestonesTriggered: {},
+    newsFeed: [],
     collapsed: false,
   };
 }

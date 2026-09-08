@@ -43,7 +43,7 @@ page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
 page.on('console', (m) => { if (m.type() === 'error') errors.push(`console.error: ${m.text()}`); });
 
 await page.goto(`http://localhost:${PORT}/index.html`, { waitUntil: 'networkidle' });
-await page.waitForSelector('.tap-button', { timeout: 15000 });
+await page.waitForSelector('.bottom-nav', { timeout: 15000 });
 
 const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); };
@@ -82,35 +82,63 @@ const nav = await page.evaluate(() => {
 check('all nav destinations fit on screen', nav.offscreen.length === 0 && nav.scrollW <= nav.clientW + 1, `${nav.count} items, offscreen=[${nav.offscreen}]`);
 check('nav touch targets meet 48dp minimum', nav.minHeight >= 48, `min=${nav.minHeight.toFixed(1)}px`);
 
-// --- the core loop: tap earns energy
+// --- the core loop: Energy accrues on its own, with nothing to tap
 const energyOf = () => page.evaluate(() => {
-  const row = [...document.querySelectorAll('.row')].find((r) => r.textContent.includes('Energy'));
+  const row = [...document.querySelectorAll('.row')].find((r) => r.textContent.trim().startsWith('Energy'));
   return row ? row.querySelector('.row__value')?.textContent?.trim() : null;
 });
-for (let i = 0; i < 30; i++) await page.click('.tap-button');
-const afterTaps = await energyOf();
-check('tapping produces Energy', afterTaps !== null && !/^0\b/.test(afterTaps), `energy=${afterTaps}`);
+check('no tap button anywhere on the page', (await page.locator('.tap-button').count()) === 0);
+await page.waitForTimeout(3000);
+const passiveEnergy = await energyOf();
+check('Natural Fire produces Energy with no player input', passiveEnergy !== null && !/^0(\.0+)?\s/.test(passiveEnergy), `energy=${passiveEnergy}`);
 
-// --- buy the first generator on the Technology screen
-await page.click('.bottom-nav__item:has-text("Tech")').catch(async () => {
-  await page.click('[data-screen="technology"]');
-});
+// --- the two shopping screens are genuinely different lists
+await page.click('[data-screen="technology"]');
 await page.waitForTimeout(400);
-const techCards = await page.locator('.tech-card').count();
-check('technology screen lists purchasable tech', techCards > 0, `${techCards} cards`);
+const techNames = await page.locator('.tech-card__name').allInnerTexts();
+check('technology screen lists research nodes', techNames.length > 0, `${techNames.length} cards`);
+check('technology screen sells no generators', !techNames.includes('Natural Fire') && !techNames.includes('Controlled Fire'), techNames.slice(0, 3).join(', '));
 
-// Buy Controlled Fire (the first generator) as soon as it is affordable.
+await page.click('[data-screen="production"]');
+await page.waitForTimeout(400);
+const prodNames = await page.locator('.tech-card__name').allInnerTexts();
+check('production screen sells the generators', prodNames.includes('Natural Fire'), `${prodNames.length} cards`);
+
+// Fast-forward the wallet rather than idling through the opening minutes: this
+// is checking that a purchase works, not how long one takes to afford.
+//
+// It has to run as an init script rather than a plain evaluate-then-reload,
+// because the app saves on `beforeunload` — a wallet written before the reload
+// is overwritten by the real state on the way out. An init script runs after
+// that final save and before the app boots, so its patch is the one loaded.
+// One-shot, so the later persistence reload still reflects real play.
+await context.addInitScript(() => {
+  try {
+    if (sessionStorage.getItem('playtest-wallet-seeded')) return;
+    const raw = localStorage.getItem('earth-idle-save');
+    if (!raw) return;
+    const save = JSON.parse(raw);
+    if (!save.resources?.energy) return;
+    save.resources.energy = { __decimal: [1, 1, 6] };
+    save.resources.research = { __decimal: [1, 1, 6] };
+    localStorage.setItem('earth-idle-save', JSON.stringify(save));
+    sessionStorage.setItem('playtest-wallet-seeded', '1');
+  } catch {
+    // A browser with storage disabled just plays the slow way; the checks below still hold.
+  }
+});
+await page.reload({ waitUntil: 'networkidle' });
+await page.waitForSelector('.bottom-nav', { timeout: 15000 });
+await page.click('[data-screen="production"]');
+await page.waitForTimeout(500);
+
 let bought = false;
-for (let attempt = 0; attempt < 60 && !bought; attempt++) {
+for (let attempt = 0; attempt < 20 && !bought; attempt++) {
   const buy = page.locator('.tech-card', { hasText: 'Controlled Fire' }).locator('button:not([disabled])').first();
   if (await buy.count()) { await buy.click(); bought = true; break; }
-  // earn more by tapping on Home, then come back
-  await page.locator('.bottom-nav__item').first().click();
-  for (let i = 0; i < 25; i++) await page.click('.tap-button');
-  await page.locator('.bottom-nav__item', { hasText: 'Tech' }).first().click();
-  await page.waitForTimeout(150);
+  await page.waitForTimeout(500);
 }
-check('bought the first generator (Controlled Fire)', bought);
+check('bought a generator on the Production screen (Controlled Fire)', bought);
 
 // --- gases must start accumulating from an owned generator
 await page.locator('.bottom-nav__item').first().click();
@@ -135,9 +163,13 @@ for (let i = 0; i < navLabels.length; i++) {
   check(`screen "${navLabels[i].replace(/\n/g, ' ').trim()}" renders content`, main.trim().length > 20 && errors.length === before, `${main.trim().length} chars`);
 }
 
-// --- persistence: the save must survive a reload
+// --- the world-news feed renders (its first headline fires on Controlled Fire)
 await page.locator('.bottom-nav__item').first().click();
-for (let i = 0; i < 10; i++) await page.click('.tap-button');
+await page.waitForTimeout(800);
+const newsText = await page.locator('.card', { hasText: 'World News' }).first().innerText();
+check('world news feed reports the first milestone', /Smoke on the horizon/.test(newsText), newsText.split('\n').slice(0, 3).join(' / '));
+
+// --- persistence: the save must survive a reload
 await page.waitForTimeout(1200);
 await page.evaluate(() => window.dispatchEvent(new Event('beforeunload')));
 await page.waitForTimeout(300);
@@ -145,7 +177,7 @@ const savedRaw = await page.evaluate(() => localStorage.getItem('earth-idle-save
 check('game state is written to storage', Boolean(savedRaw) && savedRaw.length > 500, `${savedRaw?.length ?? 0} bytes`);
 
 await page.reload({ waitUntil: 'networkidle' });
-await page.waitForSelector('.tap-button', { timeout: 15000 });
+await page.waitForSelector('.bottom-nav', { timeout: 15000 });
 await page.waitForTimeout(600);
 const ownedAfterReload = await page.evaluate(() => {
   const raw = localStorage.getItem('earth-idle-save');
@@ -161,6 +193,9 @@ if (SHOT_DIR) await page.screenshot({ path: `${SHOT_DIR}/shot-atmosphere.png` })
 await page.locator('.bottom-nav__item', { hasText: 'Tech' }).first().click().catch(() => {});
 await page.waitForTimeout(400);
 if (SHOT_DIR) await page.screenshot({ path: `${SHOT_DIR}/shot-tech.png` });
+await page.locator('.bottom-nav__item', { hasText: 'Output' }).first().click().catch(() => {});
+await page.waitForTimeout(400);
+if (SHOT_DIR) await page.screenshot({ path: `${SHOT_DIR}/shot-production.png` });
 
 check('no uncaught page errors during the whole run', errors.length === 0, errors.slice(0, 5).join(' | '));
 
