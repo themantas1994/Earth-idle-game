@@ -5,6 +5,7 @@ import { simulateStep, computeCivLevel, computeEffectiveMultipliers, EffectiveMu
 import { computePrestigeMultipliers, PrestigeMultipliers, calculatePrestigeGain, PRESTIGE_UPGRADE_BY_ID, prestigeUpgradeCost } from '../engine/prestige';
 import { computeOfflineProgress, OfflineProgressResult } from '../engine/offline';
 import { purchaseTechnology, grantTechnology } from '../engine/economy';
+import { ownershipMilestonesCrossed, ownershipMultiplier } from '../engine/ownership';
 import { checkAchievements } from '../engine/achievements';
 import {
   CHALLENGE_BY_ID,
@@ -34,6 +35,14 @@ export interface EarthCollapseSummary {
   earthPointsEarned: Decimal;
 }
 
+/** A generator crossing an ownership threshold, surfaced as a short congratulatory toast. */
+export interface OwnershipToast {
+  techId: string;
+  atUnits: number;
+  /** The generator's total ownership multiplier now that this threshold has landed. */
+  multiplier: number;
+}
+
 export interface DerivedState {
   civLevel: number;
   prestigeMultipliers: PrestigeMultipliers;
@@ -52,6 +61,8 @@ export interface GameStore {
   activeEventToast: string | null;
   /** Milestone headline currently being surfaced as a toast, if any. */
   activeMilestoneToast: string | null;
+  /** Ownership-bonus celebration currently on screen ("Coal Mining ×50 — output doubled"). */
+  activeOwnershipToast: OwnershipToast | null;
 
   init: () => Promise<void>;
   tick: (nowMs: number) => void;
@@ -64,6 +75,7 @@ export interface GameStore {
   clearNewAchievements: () => void;
   dismissEventToast: () => void;
   dismissMilestoneToast: () => void;
+  dismissOwnershipToast: () => void;
   startChallenge: (id: string) => void;
   abandonChallenge: () => void;
   updateSettings: (partial: Partial<Settings>) => void;
@@ -106,6 +118,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   newlyUnlockedAchievements: [],
   activeEventToast: null,
   activeMilestoneToast: null,
+  activeOwnershipToast: null,
 
   init: async () => {
     const loadedState = await loadGame(storage);
@@ -183,8 +196,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let nextState = { ...stepped, lastTickAt: nowMs, activeEvents: removeExpiredEvents(stepped.activeEvents, nowMs) };
 
     // Occasionally roll for a new random event (skip while a challenge or the tutorial is active, to keep those focused).
-    if (!nextState.challenges.activeId && nextState.activeEvents.length < 2) {
-      const rollChance = dtSeconds * 0.003; // ~ once every ~5-6 minutes on average, before eligibility filtering
+    if (!nextState.challenges.activeId && nextState.activeEvents.length < 3) {
+      const rollChance = dtSeconds * 0.006; // ~ once every ~3 minutes on average, before eligibility filtering
       if (Math.random() < rollChance) {
         const civLevel = computeCivLevel(nextState.techOwned);
         const activeIds = new Set(nextState.activeEvents.map((e) => e.eventDefId));
@@ -210,6 +223,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const result = purchaseTechnology(state, techId, q, derived.prestigeMultipliers, derived.disabledTechIds);
     if (!result.success) return;
     if (state.settings.vibrationEnabled) hapticTap();
+
+    // A Buy Max can cross several ownership thresholds at once. Celebrate the
+    // highest one crossed rather than the final owned count, so the toast
+    // names an actual threshold; the multiplier alongside it is the
+    // generator's new total, which is what the card is already showing.
+    const before = state.techOwned[techId] ?? 0;
+    const after = result.state.techOwned[techId] ?? 0;
+    const crossed = ownershipMilestonesCrossed(before, after);
+
     const counted: GameState = {
       ...result.state,
       lifetimeStats: {
@@ -218,6 +240,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
     };
     finalizeStateUpdate(set, get, state, counted);
+    if (crossed.length > 0) {
+      set({
+        activeOwnershipToast: {
+          techId,
+          atUnits: crossed[crossed.length - 1],
+          multiplier: ownershipMultiplier(after),
+        },
+      });
+    }
     get().saveNow();
   },
 
@@ -317,6 +348,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   clearNewAchievements: () => set({ newlyUnlockedAchievements: [] }),
   dismissEventToast: () => set({ activeEventToast: null }),
   dismissMilestoneToast: () => set({ activeMilestoneToast: null }),
+  dismissOwnershipToast: () => set({ activeOwnershipToast: null }),
 
   startChallenge: (id) => {
     const { state } = get();

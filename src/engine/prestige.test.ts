@@ -5,9 +5,14 @@ import {
   prestigeUpgradeCost,
   computePrestigeMultipliers,
   calculatePrestigeGain,
+  speedMultiplier,
 } from './prestige';
-import { GAS_LIST, GasId } from './gases';
+import { GAS_LIST } from './gases';
+import { PRESTIGE } from './constants';
 import { GasTotals } from './gameState';
+
+/** A run at exactly the reference pace, so the speed term is a neutral ×1 in these tests. */
+const REFERENCE_RUN = PRESTIGE.referenceRunSeconds;
 
 function zeroGasTotals(): GasTotals {
   return Object.fromEntries(GAS_LIST.map((g) => [g.id, Decimal.ZERO])) as GasTotals;
@@ -69,8 +74,8 @@ describe('calculatePrestigeGain', () => {
     const totals = zeroGasTotals();
     const low = { ...totals, co2: D(1e10) };
     const high = { ...totals, co2: D(1e15) };
-    const gainLow = calculatePrestigeGain({ totalGasProducedKg: low, peakForcingWm2: 1, civLevel: 1, runDurationSeconds: 600 });
-    const gainHigh = calculatePrestigeGain({ totalGasProducedKg: high, peakForcingWm2: 1, civLevel: 1, runDurationSeconds: 600 });
+    const gainLow = calculatePrestigeGain({ totalGasProducedKg: low, peakForcingWm2: 1, civLevel: 1, runDurationSeconds: REFERENCE_RUN });
+    const gainHigh = calculatePrestigeGain({ totalGasProducedKg: high, peakForcingWm2: 1, civLevel: 1, runDurationSeconds: REFERENCE_RUN });
     expect(gainHigh.gt(gainLow)).toBe(true);
   });
 
@@ -78,17 +83,38 @@ describe('calculatePrestigeGain', () => {
     const totals = zeroGasTotals();
     const base = { ...totals, co2: D(1e12) };
     const tenX = { ...totals, co2: D(1e13) };
-    const gainBase = calculatePrestigeGain({ totalGasProducedKg: base, peakForcingWm2: 5, civLevel: 5, runDurationSeconds: 1800 });
-    const gainTenX = calculatePrestigeGain({ totalGasProducedKg: tenX, peakForcingWm2: 5, civLevel: 5, runDurationSeconds: 1800 });
+    const gainBase = calculatePrestigeGain({ totalGasProducedKg: base, peakForcingWm2: 5, civLevel: 5, runDurationSeconds: REFERENCE_RUN });
+    const gainTenX = calculatePrestigeGain({ totalGasProducedKg: tenX, peakForcingWm2: 5, civLevel: 5, runDurationSeconds: REFERENCE_RUN });
     const ratio = gainTenX.div(gainBase).toNumber();
     expect(ratio).toBeLessThan(10);
     expect(ratio).toBeGreaterThan(1);
   });
 
+  it('pays a faster run more than a slower one with the same outcome', () => {
+    const totals = { ...zeroGasTotals(), co2: D(1e15) };
+    const outcome = { totalGasProducedKg: totals, peakForcingWm2: 30, civLevel: 1500 };
+    const slow = calculatePrestigeGain({ ...outcome, runDurationSeconds: REFERENCE_RUN * 2 });
+    const fast = calculatePrestigeGain({ ...outcome, runDurationSeconds: REFERENCE_RUN / 2 });
+    expect(fast.gt(slow)).toBe(true);
+    // Halving the run time is worth roughly the square of the speed-up, so
+    // beating your last Earth is the thing that funds the next one.
+    expect(fast.div(slow).toNumber()).toBeCloseTo(16, 3);
+  });
+
+  it('bounds the speed term at both ends', () => {
+    expect(speedMultiplier(PRESTIGE.referenceRunSeconds)).toBeCloseTo(1, 9);
+    expect(speedMultiplier(PRESTIGE.referenceRunSeconds * 1000)).toBe(PRESTIGE.minSpeedMultiplier);
+    expect(speedMultiplier(1)).toBe(PRESTIGE.maxSpeedMultiplier);
+    // A broken clock must never mint points.
+    expect(speedMultiplier(0)).toBe(1);
+    expect(speedMultiplier(-5)).toBe(1);
+    expect(speedMultiplier(Number.NaN)).toBe(1);
+  });
+
   it('rewards higher peak forcing and civilization level', () => {
     const totals = { ...zeroGasTotals(), co2: D(1e12) };
-    const weak = calculatePrestigeGain({ totalGasProducedKg: totals, peakForcingWm2: 1, civLevel: 1, runDurationSeconds: 600 });
-    const strong = calculatePrestigeGain({ totalGasProducedKg: totals, peakForcingWm2: 20, civLevel: 30, runDurationSeconds: 600 });
+    const weak = calculatePrestigeGain({ totalGasProducedKg: totals, peakForcingWm2: 1, civLevel: 1, runDurationSeconds: REFERENCE_RUN });
+    const strong = calculatePrestigeGain({ totalGasProducedKg: totals, peakForcingWm2: 20, civLevel: 30, runDurationSeconds: REFERENCE_RUN });
     expect(strong.gt(weak)).toBe(true);
   });
 });

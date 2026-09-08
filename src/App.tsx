@@ -16,6 +16,7 @@ import CollapseModal from './ui/components/CollapseModal';
 import EventToast from './ui/components/EventToast';
 import MilestoneToast from './ui/components/MilestoneToast';
 import AchievementToast from './ui/components/AchievementToast';
+import OwnershipToast from './ui/components/OwnershipToast';
 import TutorialOverlay from './ui/components/TutorialOverlay';
 import HeaderResources from './ui/components/HeaderResources';
 import { RUN_LABEL } from './engine/constants';
@@ -148,6 +149,7 @@ export default function App() {
       <EventToast />
       <MilestoneToast />
       <AchievementToast />
+      <OwnershipToast />
     </div>
   );
 }

@@ -10,39 +10,43 @@ import {
   maxAffordableQuantity,
 } from './technologies';
 import { PrestigeMultipliers } from './prestige';
-import { BALANCE } from './constants';
 
 /**
- * Cost multiplier charged by the sheer breadth of the civilization: every
- * *distinct* technology already owned makes the next purchase dearer. See
- * `BALANCE.complexityCostGrowth` for why this exists and what it is for.
+ * Pricing rule of the whole game, and the one invariant every part of this
+ * file exists to protect:
  *
- * Extra units of something already owned are free of it — the count is of
- * distinct technologies, not of buildings — so this taxes expansion into new
- * frontiers, never investment in what you already run.
+ *   **A price never rises for any reason other than your own purchases of
+ *   that exact thing.**
+ *
+ * Concretely, the amount charged for a technology is a pure function of
+ * `(technology, how many of that technology you already own)`, scaled down —
+ * never up — by the prestige discount. Nothing about the rest of the
+ * civilization enters into it. So:
+ *
+ * - a one-time unlock, multiplier or choice is quoted once and costs exactly
+ *   that forever, however large the tree around it grows;
+ * - a generator's *first* unit always costs its listed base price, and only
+ *   the units you have personally bought of it make the next one dearer.
+ *
+ * There used to be a civilization-complexity surcharge here that multiplied
+ * every price by the number of distinct technologies owned. It paced the
+ * middle of the game, but it did so by quietly re-pricing things the player
+ * had already been shown — every new frontier made every *other* frontier
+ * more expensive, so the reward for expanding was a bigger bill. Pacing now
+ * comes entirely from the tier curves in `constants.ts > BALANCE`, which are
+ * baked into each technology's listed price up front and never move.
  */
-export function complexityCostMultiplier(techOwned: Record<string, number>, reduction = 0): number {
-  let distinct = 0;
-  for (const owned of Object.values(techOwned)) {
-    if (owned > 0) distinct++;
-  }
-  // The technology every run is handed for free shouldn't already be charging
-  // the player drag, so a fresh Earth starts at exactly ×1.
-  const charged = Math.max(0, distinct - 1) * (1 - Math.min(0.75, Math.max(0, reduction)));
-  return Math.pow(BALANCE.complexityCostGrowth, charged);
-}
 
-/** The price actually charged for `nominal`, after complexity drag and any prestige discount. */
-export function effectiveCostAmount(nominal: Decimal, complexity: number, discount: number): Decimal {
-  const withComplexity = complexity === 1 ? nominal : nominal.mul(complexity);
-  return discount <= 0 ? withComplexity : withComplexity.mul(1 - discount);
+/** The price actually charged for `nominal`, after any prestige discount. Only ever ≤ `nominal`. */
+export function effectiveCostAmount(nominal: Decimal, discount: number): Decimal {
+  return discount <= 0 ? nominal : nominal.mul(1 - Math.min(0.9, discount));
 }
 
 /**
  * Restates a wallet in the "nominal" units the cost curves are written in, so
  * the closed-form affordability maths in `technologies/index.ts` needs no
- * knowledge of discounts or drag: divide what the player holds by exactly the
- * factors that will multiply the price.
+ * knowledge of the prestige discount: divide what the player holds by exactly
+ * the factor that will multiply the price.
  *
  * Exported because the UI has to answer the same question the engine does —
  * running both off this keeps a Buy button from ever offering a purchase
@@ -51,15 +55,13 @@ export function effectiveCostAmount(nominal: Decimal, complexity: number, discou
 export function nominalizeWallet(
   resources: ResourceTotals,
   costs: { resource: string }[],
-  complexity: number,
   discount: number,
 ): Record<string, Decimal> {
   const scaled: Record<string, Decimal> = {};
+  const factor = 1 - Math.min(0.9, Math.max(0, discount));
   for (const c of costs) {
-    let balance = resources[c.resource as ResourceId] ?? Decimal.ZERO;
-    if (discount > 0) balance = balance.div(1 - discount);
-    if (complexity !== 1) balance = balance.div(complexity);
-    scaled[c.resource] = balance;
+    const balance = resources[c.resource as ResourceId] ?? Decimal.ZERO;
+    scaled[c.resource] = factor >= 1 ? balance : balance.div(factor);
   }
   return scaled;
 }
@@ -91,8 +93,7 @@ export function purchaseTechnology(
   const roomLeft = tech.maxOwned === Infinity ? Infinity : tech.maxOwned - owned;
   if (roomLeft <= 0) return { state, purchasedQuantity: 0, success: false };
 
-  const complexity = complexityCostMultiplier(state.techOwned, prestige.complexityReduction);
-  const scaledAvailable = nominalizeWallet(state.resources, tech.cost, complexity, prestige.techCostDiscount);
+  const scaledAvailable = nominalizeWallet(state.resources, tech.cost, prestige.techCostDiscount);
 
   const cappedQuantity = Math.min(requestedQuantity, roomLeft === Infinity ? Number.MAX_SAFE_INTEGER : roomLeft);
   const quantity = maxAffordableQuantity(tech, owned, scaledAvailable, cappedQuantity);
@@ -101,7 +102,7 @@ export function purchaseTechnology(
   const totalCost = bulkPurchaseCost(tech, owned, quantity);
   const newResources = { ...state.resources };
   for (const c of totalCost) {
-    const charged = effectiveCostAmount(c.amount, complexity, prestige.techCostDiscount);
+    const charged = effectiveCostAmount(c.amount, prestige.techCostDiscount);
     newResources[c.resource as ResourceId] = newResources[c.resource as ResourceId].sub(charged).clampMin(0);
   }
 

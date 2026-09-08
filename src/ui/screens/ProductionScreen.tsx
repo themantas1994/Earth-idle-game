@@ -6,16 +6,17 @@ import TechCard, { BuyQuantity } from '../components/TechCard';
 import QuantitySelector from '../components/QuantitySelector';
 import { GASES } from '../../engine/gases';
 import { RESOURCES } from '../../engine/resources';
-import { complexityCostMultiplier } from '../../engine/economy';
+import { OWNERSHIP_BONUS } from '../../engine/constants';
 import { computeTechProductionRates } from '../../engine/simulation';
 
 export default function ProductionScreen() {
-  const [quantity, setQuantity] = useState<BuyQuantity>(1);
+  // Defaults to Max: the loop this game is built on is "come back to a
+  // stockpile, spend all of it at once", and making that the one-tap default
+  // is most of what makes a check-in feel good.
+  const [quantity, setQuantity] = useState<BuyQuantity>('max');
   const techOwned = useGameStore((s) => s.state.techOwned);
   const multipliers = useGameStore((s) => s.derived.effectiveMultipliers);
-  const { format, formatRate } = useNumberFormat();
-  const complexityReduction = useGameStore((s) => s.derived.prestigeMultipliers.complexityReduction);
-  const complexity = complexityCostMultiplier(techOwned, complexityReduction);
+  const { formatRate } = useNumberFormat();
 
   // Every generator in the game lives here — this is the only screen that
   // sells them. Ones whose prerequisites aren't met yet are still listed
@@ -27,11 +28,11 @@ export default function ProductionScreen() {
   return (
     <div>
       <QuantitySelector value={quantity} onChange={setQuantity} />
-      {complexity > 1.005 && (
-        <div style={{ fontSize: '0.7rem', color: 'var(--text-faint)', margin: '-4px 0 10px', paddingLeft: 2 }}>
-          Complexity surcharge on everything: ×{complexity < 100 ? complexity.toFixed(2) : format(complexity)}
-        </div>
-      )}
+      <div className="screen-note">
+        Every building's price is fixed the moment you see it. Only the copies
+        you buy of a building make <em>that</em> building's next copy dearer —
+        and every {OWNERSHIP_BONUS.everyUnits}th copy doubles its output.
+      </div>
       {unlockedCount === 0 && (
         <div className="empty-hint">Nothing buildable yet — research a technology that unlocks one.</div>
       )}

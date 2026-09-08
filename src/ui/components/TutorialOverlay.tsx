@@ -33,6 +33,17 @@ const STEPS: TutorialStep[] = [
     cta: 'Continue',
   },
   {
+    title: 'Every Tenth One Is Free Money',
+    body: 'Look under any building on the Production tab: a thin bar counting toward its next bonus. Every tenth copy you own of a building doubles that building\'s output — permanently, for the rest of the run. Buy Max is the default for exactly this reason.',
+    navigateTo: 'production',
+    cta: 'Good to know',
+  },
+  {
+    title: 'Prices Never Move',
+    body: 'One promise worth knowing up front: nothing in this game ever gets more expensive behind your back. A price you have been quoted is the price you pay whenever you come back for it. The only thing that raises a building\'s price is you, buying more of that same building.',
+    cta: 'Understood',
+  },
+  {
     title: 'First Emissions',
     body: 'Your fires are now producing CO₂ around the clock. Check the Atmosphere tab any time to see exactly how much heating each gas is responsible for.',
     cta: 'Got it',
@@ -73,7 +84,7 @@ const STEPS: TutorialStep[] = [
   },
   {
     title: 'Step 8 — The Long Game',
-    body: 'This Earth will take a long time to kill — days of real time, not minutes. It keeps running while you are away, so check in, spend what has piled up, and let it burn. When habitability reaches zero you can RESET EARTH and bank Earth Points that make every future civilization faster.',
+    body: 'This Earth will take a few days of real time to kill. It keeps running while you are away — up to twelve hours banked at a time — so check in, spend what has piled up, and let it burn. When habitability reaches zero you can RESET EARTH and bank Earth Points. Those make the next civilization faster, and a faster run is worth far more points than a slow one.',
     cta: 'Start playing',
   },
 ];

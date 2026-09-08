@@ -19,6 +19,7 @@ import {
 } from './habitability';
 import { GameState, GasTotals } from './gameState';
 import { PrestigeMultipliers } from './prestige';
+import { ownershipMultiplier } from './ownership';
 
 /** Aggregated, ready-to-apply multiplier bundle for one simulation step. */
 export interface EffectiveMultipliers {
@@ -97,8 +98,13 @@ export function computeEffectiveMultipliers(
   return result;
 }
 
-function techScale(tech: Technology, multipliers: EffectiveMultipliers): number {
-  return multipliers.global * (multipliers.perBranch[tech.branch] ?? 1);
+/**
+ * Everything that scales one building's output: the global and per-branch
+ * multipliers it shares with the rest of the civilization, times the
+ * ownership bonus it has earned on its own (see `ownership.ts`).
+ */
+function techScale(tech: Technology, owned: number, multipliers: EffectiveMultipliers): number {
+  return multipliers.global * (multipliers.perBranch[tech.branch] ?? 1) * ownershipMultiplier(owned);
 }
 
 export interface ProductionRates {
@@ -130,7 +136,7 @@ export function computeTechProductionRates(
   const resourcePerS = zeroResourceMap();
   if (owned <= 0 || tech.kind !== 'generator') return { gasGrossKgPerS, gasRemovalKgPerS, resourcePerS };
 
-  const scale = techScale(tech, multipliers);
+  const scale = techScale(tech, owned, multipliers);
 
   if (tech.effect.gasProductionPerUnit) {
     for (const [gasId, perUnit] of Object.entries(tech.effect.gasProductionPerUnit) as [GasId, number][]) {

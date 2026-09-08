@@ -20,7 +20,37 @@ export interface RandomEventDefinition {
   instantGasBurstKg?: Partial<Record<GasId, number>>;
 }
 
+/**
+ * Short-lived multiplier swings rolled by chance, roughly every few minutes.
+ *
+ * The set skews hard toward the positive on purpose. A negative event in an
+ * idle game is a tax on being away — you were not there, you could not react,
+ * and all it did was quietly make the bar fill slower. The two that remain
+ * are short, mild, and exist so that a green banner means something; every
+ * other roll is a gift. Weights and durations are tuned so the *positive*
+ * ones are the ones long enough to notice and act on.
+ */
 export const RANDOM_EVENTS: RandomEventDefinition[] = [
+  {
+    id: 'good_harvest',
+    name: 'Bumper Harvest',
+    description: 'A season goes exactly right. Everything you run produces triple for a while.',
+    icon: '🌻',
+    minCivLevel: 1,
+    durationSeconds: 90,
+    weight: 4,
+    effect: { global: 3 },
+  },
+  {
+    id: 'master_craftsman',
+    name: 'Master Craftsman',
+    description: 'Someone works out a better way to do it, and tells everyone. Research floods in.',
+    icon: '🔨',
+    minCivLevel: 3,
+    durationSeconds: 90,
+    weight: 4,
+    effect: { research: 8 },
+  },
   {
     id: 'volcanic_eruption',
     name: 'Volcanic Eruption',
@@ -49,9 +79,9 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: 'Shifting ocean currents temporarily amplify warming feedback loops.',
     icon: '🌊',
     minCivLevel: 5,
-    durationSeconds: 90,
-    weight: 2,
-    effect: { allGas: 1.4 },
+    durationSeconds: 120,
+    weight: 3,
+    effect: { allGas: 2 },
   },
   {
     id: 'methane_release',
@@ -59,9 +89,9 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: 'Thawing permafrost vents a burst of trapped methane.',
     icon: '🧊',
     minCivLevel: 8,
-    durationSeconds: 60,
-    weight: 2,
-    effect: { perGas: { ch4: 3 } },
+    durationSeconds: 120,
+    weight: 3,
+    effect: { perGas: { ch4: 5 } },
   },
   {
     id: 'industrial_boom',
@@ -69,9 +99,9 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: "A surge of investment sends every factory's output soaring.",
     icon: '📈',
     minCivLevel: 6,
-    durationSeconds: 60,
-    weight: 3,
-    effect: { global: 5 },
+    durationSeconds: 120,
+    weight: 4,
+    effect: { global: 8 },
   },
   {
     id: 'economic_crash',
@@ -79,10 +109,10 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: 'Markets collapse. Industrial output slows to a crawl.',
     icon: '📉',
     minCivLevel: 6,
-    durationSeconds: 45,
-    weight: 2,
+    durationSeconds: 30,
+    weight: 1,
     isNegative: true,
-    effect: { global: 0.5 },
+    effect: { global: 0.7 },
   },
   {
     id: 'green_revolution',
@@ -90,9 +120,9 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: 'New techniques send agricultural output through the roof.',
     icon: '🌾',
     minCivLevel: 7,
-    durationSeconds: 60,
-    weight: 2,
-    effect: { perBranch: { agriculture: 10 } },
+    durationSeconds: 120,
+    weight: 3,
+    effect: { perBranch: { agriculture: 15 } },
   },
   {
     id: 'technological_breakthrough',
@@ -100,9 +130,9 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: 'A sudden insight accelerates research dramatically.',
     icon: '💡',
     minCivLevel: 10,
-    durationSeconds: 60,
-    weight: 3,
-    effect: { research: 20 },
+    durationSeconds: 120,
+    weight: 4,
+    effect: { research: 30 },
   },
   {
     id: 'supply_chain_shock',
@@ -110,10 +140,10 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: 'Global logistics seize up, throttling every branch at once.',
     icon: '🚧',
     minCivLevel: 18,
-    durationSeconds: 45,
-    weight: 2,
+    durationSeconds: 30,
+    weight: 1,
     isNegative: true,
-    effect: { global: 0.6 },
+    effect: { global: 0.75 },
   },
   {
     id: 'agi_breakthrough',
@@ -121,9 +151,9 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: 'Machines start optimizing the optimizers. Research goes vertical.',
     icon: '🤖',
     minCivLevel: 26,
-    durationSeconds: 60,
-    weight: 2,
-    effect: { research: 50, global: 2 },
+    durationSeconds: 150,
+    weight: 4,
+    effect: { research: 50, global: 4 },
   },
   {
     id: 'stellar_flare',
@@ -131,9 +161,9 @@ export const RANDOM_EVENTS: RandomEventDefinition[] = [
     description: "Your Dyson swarm catches a solar flare at full charge — a brief, absurd surge of everything.",
     icon: '☀️',
     minCivLevel: 40,
-    durationSeconds: 45,
-    weight: 2,
-    effect: { global: 10, allGas: 3 },
+    durationSeconds: 150,
+    weight: 4,
+    effect: { global: 20, allGas: 3 },
   },
 ];
 
