@@ -22,6 +22,7 @@ import HeaderResources from './ui/components/HeaderResources';
 import { RUN_LABEL } from './engine/constants';
 import { formatTemperature, formatPercent } from './engine/format';
 import { onHardwareBack, exitApp, applyStatusBarTheme, hideSplash } from './platform/native';
+import { startBannerAd } from './platform/ads';
 
 export default function App() {
   const loaded = useGameStore((s) => s.loaded);
@@ -51,6 +52,29 @@ export default function App() {
 
   useEffect(() => {
     hideSplash();
+  }, []);
+
+  // The AdMob banner is a native view floating over the WebView, invisible to
+  // the layout, so the shell reserves its height as a bottom inset — otherwise
+  // the ad covers the bottom nav. `--ad-banner-inset` stays 0px until an ad
+  // actually loads, so the browser build and a no-fill device lose nothing.
+  useEffect(() => {
+    let disposed = false;
+    let dispose: (() => void) | undefined;
+
+    const setInset = (px: number) => {
+      document.documentElement.style.setProperty('--ad-banner-inset', `${px}px`);
+    };
+
+    void startBannerAd(setInset).then((d) => {
+      if (disposed) d();
+      else dispose = d;
+    });
+
+    return () => {
+      disposed = true;
+      dispose?.();
+    };
   }, []);
 
   // Without this, Android's back button closes the app from any screen — the

@@ -82,6 +82,36 @@ const nav = await page.evaluate(() => {
 check('all nav destinations fit on screen', nav.offscreen.length === 0 && nav.scrollW <= nav.clientW + 1, `${nav.count} items, offscreen=[${nav.offscreen}]`);
 check('nav touch targets meet 48dp minimum', nav.minHeight >= 48, `min=${nav.minHeight.toFixed(1)}px`);
 
+// --- AdMob banner reservation. The banner is a native view over the WebView,
+// so a browser can't render it; what it *can* verify is the part that goes
+// wrong silently — that the inset App.tsx sets from the reported ad height
+// actually lifts the bottom nav clear of the banner's strip instead of leaving
+// nine touch targets underneath it.
+const AD_H = 58;
+const adLayout = await page.evaluate((adInset) => {
+  const read = () => ({ navBottom: document.querySelector('.bottom-nav').getBoundingClientRect().bottom });
+  const before = read();
+  document.documentElement.style.setProperty('--ad-banner-inset', `${adInset}px`);
+  const during = read();
+  document.documentElement.style.setProperty('--ad-banner-inset', '0px');
+  return { before, during, after: read(), innerH: window.innerHeight };
+}, AD_H);
+check(
+  'no banner reservation until an ad loads',
+  Math.abs(adLayout.before.navBottom - adLayout.innerH) <= 1,
+  `navBottom=${adLayout.before.navBottom.toFixed(1)} innerH=${adLayout.innerH}`,
+);
+check(
+  'a loaded banner lifts the bottom nav clear of the ad',
+  Math.abs(adLayout.before.navBottom - adLayout.during.navBottom - AD_H) <= 1,
+  `navBottom ${adLayout.before.navBottom.toFixed(1)} -> ${adLayout.during.navBottom.toFixed(1)}`,
+);
+check(
+  'removing the banner gives the space straight back',
+  Math.abs(adLayout.after.navBottom - adLayout.before.navBottom) <= 1,
+  `navBottom=${adLayout.after.navBottom.toFixed(1)}`,
+);
+
 // --- the core loop: Energy accrues on its own, with nothing to tap
 const energyOf = () => page.evaluate(() => {
   const row = [...document.querySelectorAll('.row')].find((r) => r.textContent.trim().startsWith('Energy'));

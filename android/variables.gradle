@@ -13,4 +13,8 @@ ext {
     androidxJunitVersion = '1.1.5'
     androidxEspressoCoreVersion = '3.5.1'
     cordovaAndroidVersion = '10.1.1'
+    // Pinned for the AdMob plugin, which otherwise picks its own defaults.
+    // play-services-ads 23.x needs compileSdk 34, which is what we build against.
+    playServicesAdsVersion = '23.0.0'
+    kotlin_version = '1.9.10'
 }
