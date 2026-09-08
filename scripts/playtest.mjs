@@ -152,6 +152,44 @@ check('CO2 production rate appears after buying a generator', Boolean(co2Rate), 
 const tempText = await page.locator('.stat-chip').first().innerText();
 check('header shows a live temperature', /[\d.]/.test(tempText), tempText.replace(/\n/g, ' '));
 
+// --- balances follow the player off Home. Home already carries the Economy
+// card, so the strip is deliberately absent there and present everywhere else.
+check('header carries no resource strip on Home', (await page.locator('.app-header__resources').count()) === 0);
+const homeEconomy = await page.evaluate(() => {
+  const card = [...document.querySelectorAll('.card')].find((c) => c.textContent.includes('Economy'));
+  return card ? [...card.querySelectorAll('.row__label')].map((l) => l.textContent.trim()) : [];
+});
+
+await page.click('[data-screen="production"]');
+await page.waitForTimeout(400);
+const headerResources = await page.evaluate(() => {
+  const strip = document.querySelector('.app-header__resources');
+  if (!strip) return null;
+  const header = document.querySelector('.app-header').getBoundingClientRect();
+  const chips = [...strip.querySelectorAll('.stat-chip--resource')];
+  return {
+    labels: chips.map((c) => c.querySelector('.stat-chip__label').textContent.trim()),
+    values: chips.map((c) => c.querySelector('.stat-chip__value').textContent.trim()),
+    // A chip escaping the header (or the viewport) is the failure mode this
+    // grid is laid out to avoid — nothing may be pushed out of sight.
+    escaped: chips.filter((c) => {
+      const r = c.getBoundingClientRect();
+      return r.right > window.innerWidth + 0.5 || r.bottom > header.bottom + 0.5;
+    }).length,
+  };
+});
+check(
+  'header mirrors every Economy resource off Home',
+  headerResources !== null && headerResources.labels.length === homeEconomy.length && headerResources.labels.length > 0,
+  `home=[${homeEconomy}] header=[${headerResources?.labels}]`,
+);
+check(
+  'header resource chips carry live balances and rates',
+  headerResources !== null && headerResources.values.every((v) => /\d/.test(v) && /\/s/.test(v)),
+  headerResources?.values.join(' | ') ?? 'none',
+);
+check('header resource chips stay inside the header', headerResources !== null && headerResources.escaped === 0, `${headerResources?.escaped} escaped`);
+
 // --- every screen renders without throwing
 const screens = ['Home', 'Atmo', 'Tech', 'Prod', 'Prestige', 'Wins', 'Trials', 'Stats', 'Settings'];
 const navLabels = await page.locator('.bottom-nav__item').allInnerTexts();

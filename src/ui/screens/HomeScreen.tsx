@@ -2,7 +2,7 @@ import { useGameStore } from '../../store/useGameStore';
 import { useNumberFormat } from '../hooks';
 import { ALL_TECHNOLOGIES, isTechAvailable } from '../../engine/technologies';
 import { GAS_LIST } from '../../engine/gases';
-import { RESOURCES } from '../../engine/resources';
+import { visibleResources } from '../resourceVisibility';
 import { ScreenId } from '../components/BottomNav';
 import { formatPercent } from '../../engine/format';
 import { complexityCostMultiplier } from '../../engine/economy';
@@ -71,16 +71,12 @@ export default function HomeScreen({ onNavigate }: { onNavigate: (id: ScreenId) 
 
       <div className="card">
         <div className="card__title">⚙️ Economy</div>
-        {Object.values(RESOURCES).map((res) => {
-          const rate = productionRates.resourcePerS[res.id];
-          if (resources[res.id].isZero() && rate.isZero()) return null;
-          return (
-            <div className="row" key={res.id}>
-              <span className="row__label">{res.name}</span>
-              <span className="row__value">{format(resources[res.id])} <span style={{ color: 'var(--text-faint)', fontWeight: 400 }}>({formatRate(rate, '/s')})</span></span>
-            </div>
-          );
-        })}
+        {visibleResources(resources, productionRates.resourcePerS).map((res) => (
+          <div className="row" key={res.id}>
+            <span className="row__label">{res.name}</span>
+            <span className="row__value">{format(resources[res.id])} <span style={{ color: 'var(--text-faint)', fontWeight: 400 }}>({formatRate(productionRates.resourcePerS[res.id], '/s')})</span></span>
+          </div>
+        ))}
       </div>
 
       <div className="card">
