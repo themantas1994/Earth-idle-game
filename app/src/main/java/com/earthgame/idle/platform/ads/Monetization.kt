@@ -9,7 +9,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
@@ -98,7 +97,7 @@ class MonetizationController(private val activity: Activity) {
                     }
                     privacyOptionsAvailable = information.privacyOptionsRequirementStatus ==
                         ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
-                    initializeAds(information.canRequestAds())
+                    initializeAds()
                     onReady(information.canRequestAds())
                 }
             },
@@ -107,24 +106,18 @@ class MonetizationController(private val activity: Activity) {
                 // non-personalized ads rather than serving nothing or, worse,
                 // serving personalized ads without consent.
                 Log.w(TAG, "Consent info update failed: ${requestError.message}")
-                initializeAds(false)
+                initializeAds()
                 onReady(false)
             },
         )
     }
 
-    private fun initializeAds(personalized: Boolean) {
+    private fun initializeAds() {
         if (!initialized.compareAndSet(false, true)) return
-        runCatching {
-            if (!personalized) {
-                MobileAds.setRequestConfiguration(
-                    RequestConfiguration.Builder()
-                        .setTagForChildDirectedTreatment(RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_UNSPECIFIED)
-                        .build(),
-                )
-            }
-            MobileAds.initialize(activity) {}
-        }.onFailure { Log.w(TAG, "Mobile Ads init failed", it) }
+        // Whether ads may be personalized is carried on the request itself (see
+        // createBannerView), not in the global configuration.
+        runCatching { MobileAds.initialize(activity) {} }
+            .onFailure { Log.w(TAG, "Mobile Ads init failed", it) }
     }
 
     /** Re-opens the consent form so a player can change their choice later. */
@@ -139,14 +132,16 @@ class MonetizationController(private val activity: Activity) {
     /**
      * Builds the anchored adaptive banner.
      *
-     * Adaptive banners size themselves to the device width and are what Google
-     * recommends over the fixed 320x50. Returns null if the view cannot be
-     * created at all, which the composable renders as no banner.
+     * Adaptive banners size themselves to the device width, which is what
+     * Google recommends over the fixed 320x50. The "large" variant is the
+     * current API — the older fixed-height anchored sizes are deprecated.
+     * Returns null if the view cannot be created at all, which the composable
+     * renders as no banner.
      */
     fun createBannerView(widthDp: Int, personalized: Boolean): AdView? = runCatching {
         AdView(activity).apply {
             adUnitId = MonetizationConfig.bannerUnitId(activity)
-            setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, widthDp))
+            setAdSize(AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, widthDp))
             val request = AdRequest.Builder()
                 .apply {
                     if (!personalized) {

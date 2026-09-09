@@ -1,0 +1,7 @@
+# Golden parity fixtures are generated; keep them out of diffs and reviews.
+app/src/test/resources/parity/*.json linguist-generated=true -diff
+
+# Gradle wrapper
+gradlew text eol=lf
+gradlew.bat text eol=crlf
+*.jar binary

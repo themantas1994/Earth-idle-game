@@ -21,12 +21,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.earthgame.idle.presentation.navigation.Destination
 import com.earthgame.idle.presentation.theme.Dimens
 import com.earthgame.idle.presentation.theme.gameColors
+
+/** Identifies the rail, so UI tests can scroll it deliberately. */
+const val SideNavTestTag = "earth:sidenav"
 
 /**
  * The tablet and unfolded-foldable navigation: a rail down the left, with room
@@ -50,6 +56,7 @@ fun SideNav(
             .background(colors.surfaceElevated)
             .windowInsetsPadding(WindowInsets.systemBars)
             .verticalScroll(rememberScrollState())
+            .testTag(SideNavTestTag)
             .padding(vertical = 8.dp, horizontal = 6.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
@@ -65,7 +72,10 @@ fun SideNav(
                         onClick = { onSelect(destination) },
                     )
                     .heightIn(min = Dimens.MinTouchTarget)
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = 10.dp)
+                    // Merged and labelled like the bottom bar's tabs, so the
+                    // emoji is not announced as a second, meaningless node.
+                    .semantics(mergeDescendants = true) { contentDescription = destination.title },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(destination.icon, fontSize = 16.sp)

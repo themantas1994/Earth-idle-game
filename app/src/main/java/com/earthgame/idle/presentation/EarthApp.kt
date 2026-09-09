@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.earthgame.idle.domain.model.GameState
 import com.earthgame.idle.domain.technologies.TechBranch
@@ -169,11 +170,16 @@ fun EarthApp(
                 ) {
                     // On a wide screen the content column is capped rather than
                     // stretched: a stat row a tablet wide is unreadable.
+                    //
+                    // The tag identifies the scrolling content list to UI tests,
+                    // which otherwise cannot tell it apart from the side rail.
                     val contentModifier = if (wide) {
-                        Modifier.widthIn(max = 640.dp).padding(horizontal = Dimens.ScreenPadding)
+                        Modifier.widthIn(max = 640.dp)
                     } else {
-                        Modifier.fillMaxWidth().padding(horizontal = Dimens.ScreenPadding)
+                        Modifier.fillMaxWidth()
                     }
+                        .padding(horizontal = Dimens.ScreenPadding)
+                        .testTag(ContentListTestTag)
 
                     val contentPadding = PaddingValues(
                         top = Dimens.CardSpacing,
@@ -335,6 +341,9 @@ fun EarthApp(
         )
     }
 }
+
+/** Identifies the scrolling content list, so UI tests can scroll it deliberately. */
+const val ContentListTestTag = "earth:content"
 
 /** Persists the navigation back stack across configuration changes and process death. */
 private val destinationStackSaver = androidx.compose.runtime.saveable.listSaver<MutableList<Destination>, String>(
