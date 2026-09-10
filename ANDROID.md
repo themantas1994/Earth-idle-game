@@ -4,6 +4,14 @@ A native Kotlin/Jetpack Compose Android game. Open the repository root in
 Android Studio — it is the Gradle project — or build it from the command line
 with the wrapper.
 
+> **This page is the quick reference.** The full treatment now lives in the
+> technical wiki: **[Build system](docs/wiki/Build-System.md)** (toolchain,
+> variants, dependencies, R8, CI), **[Release process](docs/wiki/Release-Process.md)**
+> (versioning, signing, the release checklist),
+> **[Advertising](docs/wiki/Advertising.md)** and
+> **[Testing](docs/wiki/Testing.md)**. Start at
+> **[docs/wiki/Home.md](docs/wiki/Home.md)**.
+
 ## Requirements
 
 | | |
@@ -135,12 +143,14 @@ app/src/main/java/com/earthgame/idle/
 ```
 
 `domain/` has no Android dependency at all, which is why the entire simulation
-is covered by fast JVM tests rather than instrumented ones.
+is covered by fast JVM tests rather than instrumented ones. Its only non-project
+imports are `java.math`, `kotlin.math`, `kotlin.random` and
+`kotlinx.serialization.json` — see [Architecture](docs/wiki/Architecture.md).
 
 ## Tests
 
 ```bash
-./gradlew test                 # ~120 JVM tests, a few seconds
+./gradlew test                 # 205 JVM tests, a few seconds
 ./gradlew connectedAndroidTest # instrumented; needs a device or emulator
 ```
 
