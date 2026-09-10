@@ -67,7 +67,11 @@ export const CHALLENGES: Challenge[] = [
       disabledTechIds: ALL_TECHNOLOGIES.filter((t) => t.branch === 'fossilFuels' || ['automobile', 'diesel_engine', 'jet_aircraft', 'petrochemicals'].includes(t.id)).map((t) => t.id),
     },
     goal: { description: 'Reach civilization level 35 without any oil technology.', check: (_s, civLevel) => civLevel >= 35 },
-    rewardDescription: '+20% Transportation branch production, permanently',
+    // The copy here advertised a Transportation branch bonus that the effect
+    // below never granted. The effect is the shipped balance and is left as it
+    // is; the text is what was wrong, so the text is what changed. Kept in
+    // step with the Kotlin port, which pins this string in ContentParityTest.
+    rewardDescription: '+5% permanent production',
     reward: { globalProductionMultiplier: 1.05 },
   },
   {
@@ -87,7 +91,11 @@ export const CHALLENGES: Challenge[] = [
     icon: '⏱️',
     restriction: {},
     goal: { description: 'Reset within 15 minutes of starting the run.', check: (s) => (Date.now() - s.runStartedAt) / 1000 <= 900 },
-    rewardDescription: '+15% Earth Points from every future prestige',
+    // A x1.0 multiplier is not a bonus, and this copy promised one anyway:
+    // there is no 'Earth Points earned' field in the effect shape for it to
+    // have been wired to. Described for what it is rather than inventing a
+    // balance change. See docs/CODEBASE_AUDIT.md in the Android repository.
+    rewardDescription: 'Bragging rights \u2014 this one pays no permanent bonus',
     reward: { globalProductionMultiplier: 1.0 },
   },
   {

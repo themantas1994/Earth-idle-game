@@ -5,8 +5,10 @@ package com.earthgame.idle.domain.engine
  * here (or in the technology data files) rather than scattered through engine
  * logic, so the game can be rebalanced without touching simulation code.
  *
- * The values are the reference implementation's, unchanged. `BalanceParityTest`
- * asserts they still match the numbers captured from it.
+ * The values are the reference implementation's, unchanged.
+ * `TechnologyParityTest` asserts the curves they drive still match the numbers
+ * captured from it, and `BalanceInvariantsTest` asserts the relationships
+ * between them that the game's pacing depends on.
  */
 
 /** Display name of the prestige currency. Change this one string to rebrand it. */

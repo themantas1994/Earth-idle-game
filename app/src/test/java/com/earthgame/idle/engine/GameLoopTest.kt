@@ -93,10 +93,32 @@ class GameLoopTest {
     }
 
     @Test
-    fun `time never runs backwards`() {
+    fun `a backwards clock re-anchors the tick instead of rewinding the world`() {
         val state = stateWith("controlled_fire" to 5)
         val result = advance(state, now - 5000)
-        assertEquals("a backwards clock must change nothing", state, result.state)
+
+        assertEquals(
+            "nothing may be un-produced by a clock correction",
+            state.copy(lastTickAt = now - 5000),
+            result.state,
+        )
+    }
+
+    @Test
+    fun `the game keeps running after the clock is moved backwards`() {
+        // A manual time change or an NTP correction leaves lastTickAt in the
+        // future. Re-anchoring is what stops the game freezing until the wall
+        // clock catches back up.
+        val state = stateWith("controlled_fire" to 5)
+        val rewound = advance(state, now - 3_600_000).state
+
+        val energyBefore = rewound.resources[ResourceId.ENERGY]
+        val resumed = advance(rewound, now - 3_600_000 + 1_000).state
+
+        assertTrue(
+            "production must resume immediately after the correction",
+            resumed.resources[ResourceId.ENERGY].gt(energyBefore),
+        )
     }
 
     @Test

@@ -115,7 +115,18 @@ class GameLoop(private val random: Random = Random.Default) {
      */
     fun advance(state: GameState, nowMs: Long, derived: DerivedState): StepResult {
         val elapsedMs = nowMs - state.lastTickAt
-        if (elapsedMs <= 0) return StepResult(state, StepEvents())
+        if (elapsedMs == 0L) return StepResult(state, StepEvents())
+
+        if (elapsedMs < 0) {
+            // The device clock moved backwards — a manual change, a time-zone
+            // edit, or an NTP correction — leaving `lastTickAt` in the future.
+            // Nothing is simulated (time must never run backwards: no resource
+            // is un-produced and no gas un-emitted), but the tick is re-anchored
+            // to now. Without that the game is frozen until the wall clock
+            // catches back up, which for an hour-long correction means an hour
+            // of a player watching a dead planet.
+            return StepResult(state.copy(lastTickAt = nowMs), StepEvents())
+        }
 
         val dtSeconds = elapsedMs / 1000.0
 
@@ -130,8 +141,11 @@ class GameLoop(private val random: Random = Random.Default) {
                 activeEvents = removeExpiredEvents(offline.state.activeEvents, nowMs),
             )
             val bookkept = applyBookkeeping(state, caughtUp, nowMs)
-            // A blink-and-you-missed-it gap is not worth a modal.
-            val worthReporting = offline.simulatedSeconds > 5
+            // A blink-and-you-missed-it gap is not worth a modal. In practice
+            // this only ever suppresses the summary for a player who has turned
+            // offline progress off — the gap threshold above is already well
+            // clear of this floor, so every real absence is reported.
+            val worthReporting = offline.simulatedSeconds > MIN_REPORTABLE_ABSENCE_SECONDS
             return StepResult(
                 bookkept.state,
                 bookkept.events.copy(offlineProgress = if (worthReporting) offline else null),
@@ -398,6 +412,9 @@ class GameLoop(private val random: Random = Random.Default) {
         const val EVENT_ROLL_CHANCE_PER_SECOND = 0.006
 
         const val MAX_CONCURRENT_EVENTS = 3
+
+        /** Below this an absence is settled silently rather than shown as a summary. */
+        const val MIN_REPORTABLE_ABSENCE_SECONDS = 5.0
     }
 }
 

@@ -33,9 +33,22 @@ private val COMPACT_SUFFIXES = arrayOf(
     "Vg",
 )
 
+/** Offsetting the fallback by a full alphabet is what skips the one-letter run. */
+private const val SINGLE_LETTER_COUNT = 26
+
+/**
+ * The suffix for a magnitude tier, falling back past the named list.
+ *
+ * The fallback starts at two letters ("AA") rather than one, which is what
+ * keeps it unambiguous: a single-letter fallback printed 1e69 as "1B" and 1e96
+ * as "1K", colliding with billions and thousands — both of which a run passes
+ * through on the way there, so a player could not tell 1e9 from 1e69 on the
+ * only screen that shows it. Every named suffix is a single letter or mixed
+ * case, so no all-caps pair can collide with one.
+ */
 private fun letterSuffixForTier(tier: Int): String {
     if (tier < COMPACT_SUFFIXES.size) return COMPACT_SUFFIXES[tier]
-    var n = tier - COMPACT_SUFFIXES.size
+    var n = tier - COMPACT_SUFFIXES.size + SINGLE_LETTER_COUNT
     val builder = StringBuilder()
     do {
         builder.insert(0, ('A' + (n % 26)))

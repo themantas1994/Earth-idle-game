@@ -20,8 +20,8 @@ import kotlin.math.pow
  * unit price grows by `unitCostGrowth^10` — about ×4 at the shipped value —
  * against a single ×2 from the bonus, so the value of each further copy still
  * falls and broadening into new technology still wins in the long run. Depth is
- * a satisfying detour, not a replacement for the tech tree. `BalanceTest`
- * guards the relationship directly.
+ * a satisfying detour, not a replacement for the tech tree.
+ * `BalanceInvariantsTest` guards the relationship directly.
  */
 
 /** How many ownership thresholds [owned] units have crossed. */

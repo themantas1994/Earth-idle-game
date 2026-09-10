@@ -17,6 +17,14 @@ import kotlin.math.max
  *
  * Adding a version means: bump [SAVE_VERSION], add one `if (version < n)` block
  * here, and add a case to `SaveMigrationTest`.
+ *
+ * A save from a *newer* build than this one keeps its own version number rather
+ * than being stamped down to [SAVE_VERSION]. Stamping it down would mean that
+ * upgrading back to the newer build re-ran migrations the save had already been
+ * through — running `migrateV2ToV3`'s rescale twice would divide a player's
+ * banked Earth Points by 250,000 a second time. Fields this build does not know
+ * about are still dropped on the next write, which is unavoidable on a
+ * downgrade; corrupting the ones it does know about is not.
  */
 fun migrate(state: GameState): GameState {
     var migrated = state
@@ -29,7 +37,7 @@ fun migrate(state: GameState): GameState {
         migrated = migrateV2ToV3(migrated)
     }
 
-    return if (migrated.saveVersion == SAVE_VERSION) migrated else migrated.copy(saveVersion = SAVE_VERSION)
+    return if (migrated.saveVersion >= SAVE_VERSION) migrated else migrated.copy(saveVersion = SAVE_VERSION)
 }
 
 /**

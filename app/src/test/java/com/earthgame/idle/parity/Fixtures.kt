@@ -64,7 +64,7 @@ object Fixtures {
         val stream = Fixtures::class.java.classLoader!!.getResourceAsStream("parity/$name.json")
             ?: error(
                 "Missing parity fixture parity/$name.json. Regenerate with " +
-                    "`npm run parity:fixtures` in tools/ts-reference.",
+                    "`npm run fixtures` in tools/ts-reference.",
             )
         stream.bufferedReader().use { json.parseToJsonElement(it.readText()) }
     }
