@@ -15,13 +15,43 @@ Native Kotlin and Jetpack Compose. No WebView, no JavaScript.
 > under warming — so the numbers behave sensibly at both small and absurd
 > scale.
 
-**Building, testing and signing: [ANDROID.md](ANDROID.md).**
+## Building
+
+Open the repository root in Android Studio — it is the Gradle project — or use
+the wrapper from the command line. You need:
+
+- **JDK 21.** The wrapper pins Gradle 9.7.1 and AGP 9.4.0, which run on 17–21;
+  21 is what CI uses.
+- **Android SDK** with `platforms;android-37`, `build-tools;37.0.0` and
+  `platform-tools`. The app targets API 37 and runs back to API 24.
+- **`ANDROID_HOME`** pointing at that SDK, or `sdk.dir=/path/to/sdk` in a
+  `local.properties` at the repository root (git-ignored).
+
+Nothing else — no Node, no npm, no web toolchain anywhere in the build path.
 
 ```bash
-./gradlew test           # the simulation's test suite, on the JVM
-./gradlew assembleDebug  # an installable APK
-./gradlew bundleRelease  # a Play bundle
+git clone https://github.com/themantas1994/Earth-idle-game.git
+cd Earth-idle-game
+./gradlew assembleDebug
+adb install app/build/outputs/apk/debug/app-debug.apk
 ```
+
+The debug build installs alongside a release build rather than replacing it —
+it carries a `.debug` application-id suffix — so you can keep both on one
+device.
+
+| | |
+| --- | --- |
+| `./gradlew assembleDebug` | Debug APK → `app/build/outputs/apk/debug/app-debug.apk` |
+| `./gradlew bundleRelease` | Play bundle → `app/build/outputs/bundle/release/app-release.aab` |
+| `./gradlew assembleRelease` | Release APK → `app/build/outputs/apk/release/` (`app-release-unsigned.apk` until a keystore is configured) |
+| `./gradlew test` | The whole simulation, on the JVM, in a few seconds |
+| `./gradlew lintDebug lintRelease` | Reports → `app/build/reports/lint-results-*.html` |
+| `./gradlew connectedAndroidTest` | Instrumented tests; needs a device or emulator |
+
+A release build assembles unsigned when no keystore is configured, so a fresh
+clone is never blocked on secrets. **[ANDROID.md](ANDROID.md)** covers signing,
+where the AdMob identifiers live, the project layout and CI.
 
 ## The game
 

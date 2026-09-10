@@ -33,7 +33,7 @@ Outputs land under `app/build/outputs/`:
 | Artifact | Path |
 | --- | --- |
 | Debug APK | `apk/debug/app-debug.apk` |
-| Release APK | `apk/release/app-release.apk` (unsigned unless a keystore is configured) |
+| Release APK | `apk/release/app-release.apk`, or `app-release-unsigned.apk` when no keystore is configured |
 | Play bundle | `bundle/release/app-release.aab` |
 | Lint reports | `../reports/lint-results-debug.html`, `lint-results-release.html` |
 | Test reports | `../reports/tests/testDebugUnitTest/index.html` |
