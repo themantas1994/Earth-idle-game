@@ -1,0 +1,2072 @@
+{
+  "rolls": [
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.05,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.17,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.33,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.5,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.66,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.8,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.99,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [],
+      "random": 0.999999,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": null
+    },
+    {
+      "civLevel": 0,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.05,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.17,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.33,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.5,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.66,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.8,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.99,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [],
+      "random": 0.999999,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": null
+    },
+    {
+      "civLevel": 1,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": null
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.05,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.17,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.33,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.5,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.66,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.8,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.99,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 3,
+      "active": [],
+      "random": 0.999999,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 3,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.05,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.17,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.33,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.5,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.66,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.8,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.99,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 6,
+      "active": [],
+      "random": 0.999999,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 6,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.05,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.33,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.5,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.66,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.8,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.99,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 10,
+      "active": [],
+      "random": 0.999999,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "methane_release"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": "methane_release"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 10,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.05,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.33,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.5,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.66,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.8,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.99,
+      "picked": "supply_chain_shock"
+    },
+    {
+      "civLevel": 20,
+      "active": [],
+      "random": 0.999999,
+      "picked": "supply_chain_shock"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "methane_release"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "supply_chain_shock"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "supply_chain_shock"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": "methane_release"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": "supply_chain_shock"
+    },
+    {
+      "civLevel": 20,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": "supply_chain_shock"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.05,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.33,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.5,
+      "picked": "methane_release"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.66,
+      "picked": "economic_crash"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.8,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.99,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [],
+      "random": 0.999999,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": "methane_release"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 30,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.05,
+      "picked": "good_harvest"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.17,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.33,
+      "picked": "wildfire"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.5,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.66,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.8,
+      "picked": "supply_chain_shock"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.99,
+      "picked": "stellar_flare"
+    },
+    {
+      "civLevel": 45,
+      "active": [],
+      "random": 0.999999,
+      "picked": "stellar_flare"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.17,
+      "picked": "volcanic_eruption"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.33,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.5,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.66,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.8,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.99,
+      "picked": "stellar_flare"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest"
+      ],
+      "random": 0.999999,
+      "picked": "stellar_flare"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.05,
+      "picked": "master_craftsman"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.17,
+      "picked": "el_nino"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.33,
+      "picked": "industrial_boom"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.5,
+      "picked": "green_revolution"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.66,
+      "picked": "technological_breakthrough"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.8,
+      "picked": "agi_breakthrough"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.99,
+      "picked": "stellar_flare"
+    },
+    {
+      "civLevel": 45,
+      "active": [
+        "good_harvest",
+        "volcanic_eruption",
+        "wildfire"
+      ],
+      "random": 0.999999,
+      "picked": "stellar_flare"
+    }
+  ],
+  "multipliers": [
+    {
+      "events": [],
+      "nowMs": 1000000,
+      "result": {}
+    },
+    {
+      "events": [
+        {
+          "id": "a",
+          "eventDefId": "good_harvest",
+          "startedAt": 0,
+          "endsAt": 1001000
+        }
+      ],
+      "nowMs": 1000000,
+      "result": {
+        "global": 3
+      }
+    },
+    {
+      "events": [
+        {
+          "id": "a",
+          "eventDefId": "good_harvest",
+          "startedAt": 0,
+          "endsAt": 1001000
+        },
+        {
+          "id": "b",
+          "eventDefId": "industrial_boom",
+          "startedAt": 0,
+          "endsAt": 1001000
+        },
+        {
+          "id": "c",
+          "eventDefId": "methane_release",
+          "startedAt": 0,
+          "endsAt": 1001000
+        },
+        {
+          "id": "d",
+          "eventDefId": "green_revolution",
+          "startedAt": 0,
+          "endsAt": 1001000
+        },
+        {
+          "id": "expired",
+          "eventDefId": "stellar_flare",
+          "startedAt": 0,
+          "endsAt": 999999
+        }
+      ],
+      "nowMs": 1000000,
+      "result": {
+        "global": 24,
+        "perGas": {
+          "ch4": 5
+        },
+        "perBranch": {
+          "agriculture": 15
+        }
+      }
+    }
+  ],
+  "bursts": [
+    {
+      "eventId": "volcanic_eruption",
+      "before": {
+        "co2": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "ch4": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "n2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "h2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "o3": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "fluorinated": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        }
+      },
+      "after": {
+        "co2": {
+          "s": 1,
+          "m": 7.025,
+          "e": 0,
+          "finite": true,
+          "str": "7.0250000000e+0"
+        },
+        "ch4": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "n2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "h2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "o3": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "fluorinated": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        }
+      }
+    },
+    {
+      "eventId": "wildfire",
+      "before": {
+        "co2": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "ch4": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "n2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "h2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "o3": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "fluorinated": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        }
+      },
+      "after": {
+        "co2": {
+          "s": 1,
+          "m": 7.1,
+          "e": 0,
+          "finite": true,
+          "str": "7.1000000000e+0"
+        },
+        "ch4": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "n2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "h2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "o3": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "fluorinated": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        }
+      }
+    },
+    {
+      "eventId": "good_harvest",
+      "before": {
+        "co2": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "ch4": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "n2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "h2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "o3": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "fluorinated": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        }
+      },
+      "after": {
+        "co2": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "ch4": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "n2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "h2o": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "o3": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        },
+        "fluorinated": {
+          "s": 1,
+          "m": 7,
+          "e": 0,
+          "finite": true,
+          "str": "7.0000000000e+0"
+        }
+      }
+    }
+  ]
+}

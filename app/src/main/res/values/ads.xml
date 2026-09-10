@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  THE one place production AdMob identifiers are configured.
+
+  Both values are public identifiers, not secrets: they ship inside every APK
+  and are visible to anyone who unzips one. Nothing here is a key, and no key
+  belongs here — see ANDROID.md > "Ads".
+
+  Debug builds ignore both of these and request Google's public test units
+  instead (see MonetizationConfig). AdMob counts impressions and clicks a
+  developer generates on their own live unit as invalid traffic, and that gets
+  accounts suspended, so a live unit is only ever requested from a
+  non-debuggable build.
+-->
+<resources>
+    <!-- Read by the Mobile Ads SDK from the manifest at startup. -->
+    <string name="admob_application_id" translatable="false">ca-app-pub-6872627319793193~7208922044</string>
+    <!-- The anchored bottom banner. There are no interstitials and no rewarded ads. -->
+    <string name="admob_banner_unit_id" translatable="false">ca-app-pub-6872627319793193/5213314092</string>
+</resources>

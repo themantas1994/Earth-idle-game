@@ -1,0 +1,1867 @@
+{
+  "numbers": [
+    {
+      "value": "0",
+      "mode": "compact",
+      "precision": 2,
+      "out": "0"
+    },
+    {
+      "value": "0",
+      "mode": "compact",
+      "precision": 3,
+      "out": "0"
+    },
+    {
+      "value": "0",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "0.00"
+    },
+    {
+      "value": "0",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "0.000"
+    },
+    {
+      "value": "0",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "0.00e+0"
+    },
+    {
+      "value": "0",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "0.000e+0"
+    },
+    {
+      "value": "0",
+      "mode": "full",
+      "precision": 2,
+      "out": "0"
+    },
+    {
+      "value": "0",
+      "mode": "full",
+      "precision": 3,
+      "out": "0"
+    },
+    {
+      "value": "1",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1"
+    },
+    {
+      "value": "1",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1"
+    },
+    {
+      "value": "1",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+0"
+    },
+    {
+      "value": "1",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+0"
+    },
+    {
+      "value": "1",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+0"
+    },
+    {
+      "value": "1",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+0"
+    },
+    {
+      "value": "1",
+      "mode": "full",
+      "precision": 2,
+      "out": "1"
+    },
+    {
+      "value": "1",
+      "mode": "full",
+      "precision": 3,
+      "out": "1"
+    },
+    {
+      "value": "-1",
+      "mode": "compact",
+      "precision": 2,
+      "out": "-1"
+    },
+    {
+      "value": "-1",
+      "mode": "compact",
+      "precision": 3,
+      "out": "-1"
+    },
+    {
+      "value": "-1",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "-1.00e+0"
+    },
+    {
+      "value": "-1",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "-1.000e+0"
+    },
+    {
+      "value": "-1",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "-1.00e+0"
+    },
+    {
+      "value": "-1",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "-1.000e+0"
+    },
+    {
+      "value": "-1",
+      "mode": "full",
+      "precision": 2,
+      "out": "-1"
+    },
+    {
+      "value": "-1",
+      "mode": "full",
+      "precision": 3,
+      "out": "-1"
+    },
+    {
+      "value": "9.5",
+      "mode": "compact",
+      "precision": 2,
+      "out": "9.5"
+    },
+    {
+      "value": "9.5",
+      "mode": "compact",
+      "precision": 3,
+      "out": "9.5"
+    },
+    {
+      "value": "9.5",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "9.50e+0"
+    },
+    {
+      "value": "9.5",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "9.500e+0"
+    },
+    {
+      "value": "9.5",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "9.50e+0"
+    },
+    {
+      "value": "9.5",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "9.500e+0"
+    },
+    {
+      "value": "9.5",
+      "mode": "full",
+      "precision": 2,
+      "out": "9.5"
+    },
+    {
+      "value": "9.5",
+      "mode": "full",
+      "precision": 3,
+      "out": "9.5"
+    },
+    {
+      "value": "10",
+      "mode": "compact",
+      "precision": 2,
+      "out": "10"
+    },
+    {
+      "value": "10",
+      "mode": "compact",
+      "precision": 3,
+      "out": "10"
+    },
+    {
+      "value": "10",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+1"
+    },
+    {
+      "value": "10",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+1"
+    },
+    {
+      "value": "10",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "10.00e+0"
+    },
+    {
+      "value": "10",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "10.000e+0"
+    },
+    {
+      "value": "10",
+      "mode": "full",
+      "precision": 2,
+      "out": "10"
+    },
+    {
+      "value": "10",
+      "mode": "full",
+      "precision": 3,
+      "out": "10"
+    },
+    {
+      "value": "99.99",
+      "mode": "compact",
+      "precision": 2,
+      "out": "100"
+    },
+    {
+      "value": "99.99",
+      "mode": "compact",
+      "precision": 3,
+      "out": "99.99"
+    },
+    {
+      "value": "99.99",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "10.00e+1"
+    },
+    {
+      "value": "99.99",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "9.999e+1"
+    },
+    {
+      "value": "99.99",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "99.99e+0"
+    },
+    {
+      "value": "99.99",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "99.990e+0"
+    },
+    {
+      "value": "99.99",
+      "mode": "full",
+      "precision": 2,
+      "out": "99.99"
+    },
+    {
+      "value": "99.99",
+      "mode": "full",
+      "precision": 3,
+      "out": "99.99"
+    },
+    {
+      "value": "100",
+      "mode": "compact",
+      "precision": 2,
+      "out": "100"
+    },
+    {
+      "value": "100",
+      "mode": "compact",
+      "precision": 3,
+      "out": "100"
+    },
+    {
+      "value": "100",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+2"
+    },
+    {
+      "value": "100",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+2"
+    },
+    {
+      "value": "100",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "100.00e+0"
+    },
+    {
+      "value": "100",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "100.000e+0"
+    },
+    {
+      "value": "100",
+      "mode": "full",
+      "precision": 2,
+      "out": "100"
+    },
+    {
+      "value": "100",
+      "mode": "full",
+      "precision": 3,
+      "out": "100"
+    },
+    {
+      "value": "999",
+      "mode": "compact",
+      "precision": 2,
+      "out": "999"
+    },
+    {
+      "value": "999",
+      "mode": "compact",
+      "precision": 3,
+      "out": "999"
+    },
+    {
+      "value": "999",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "9.99e+2"
+    },
+    {
+      "value": "999",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "9.990e+2"
+    },
+    {
+      "value": "999",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "999.00e+0"
+    },
+    {
+      "value": "999",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "999.000e+0"
+    },
+    {
+      "value": "999",
+      "mode": "full",
+      "precision": 2,
+      "out": "999"
+    },
+    {
+      "value": "999",
+      "mode": "full",
+      "precision": 3,
+      "out": "999"
+    },
+    {
+      "value": "1000",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1K"
+    },
+    {
+      "value": "1000",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1K"
+    },
+    {
+      "value": "1000",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+3"
+    },
+    {
+      "value": "1000",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+3"
+    },
+    {
+      "value": "1000",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+3"
+    },
+    {
+      "value": "1000",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+3"
+    },
+    {
+      "value": "1000",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000"
+    },
+    {
+      "value": "1000",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000"
+    },
+    {
+      "value": "1234",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1.23K"
+    },
+    {
+      "value": "1234",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1.234K"
+    },
+    {
+      "value": "1234",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.23e+3"
+    },
+    {
+      "value": "1234",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.234e+3"
+    },
+    {
+      "value": "1234",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.23e+3"
+    },
+    {
+      "value": "1234",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.234e+3"
+    },
+    {
+      "value": "1234",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,234"
+    },
+    {
+      "value": "1234",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,234"
+    },
+    {
+      "value": "999999",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1000K"
+    },
+    {
+      "value": "999999",
+      "mode": "compact",
+      "precision": 3,
+      "out": "999.999K"
+    },
+    {
+      "value": "999999",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "10.00e+5"
+    },
+    {
+      "value": "999999",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "10.000e+5"
+    },
+    {
+      "value": "999999",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1000.00e+3"
+    },
+    {
+      "value": "999999",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "999.999e+3"
+    },
+    {
+      "value": "999999",
+      "mode": "full",
+      "precision": 2,
+      "out": "999,999"
+    },
+    {
+      "value": "999999",
+      "mode": "full",
+      "precision": 3,
+      "out": "999,999"
+    },
+    {
+      "value": "1e6",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1M"
+    },
+    {
+      "value": "1e6",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1M"
+    },
+    {
+      "value": "1e6",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+6"
+    },
+    {
+      "value": "1e6",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+6"
+    },
+    {
+      "value": "1e6",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+6"
+    },
+    {
+      "value": "1e6",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+6"
+    },
+    {
+      "value": "1e6",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000"
+    },
+    {
+      "value": "1e6",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1.5M"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1.5M"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.50e+6"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.500e+6"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.50e+6"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.500e+6"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,500,000"
+    },
+    {
+      "value": "1.5e6",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,500,000"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "compact",
+      "precision": 2,
+      "out": "-1.5M"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "compact",
+      "precision": 3,
+      "out": "-1.5M"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "-1.50e+6"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "-1.500e+6"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "-1.50e+6"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "-1.500e+6"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "full",
+      "precision": 2,
+      "out": "-1,500,000"
+    },
+    {
+      "value": "-1.5e6",
+      "mode": "full",
+      "precision": 3,
+      "out": "-1,500,000"
+    },
+    {
+      "value": "1e9",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1B"
+    },
+    {
+      "value": "1e9",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1B"
+    },
+    {
+      "value": "1e9",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+9"
+    },
+    {
+      "value": "1e9",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+9"
+    },
+    {
+      "value": "1e9",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+9"
+    },
+    {
+      "value": "1e9",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+9"
+    },
+    {
+      "value": "1e9",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000"
+    },
+    {
+      "value": "1e9",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1.23T"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1.234T"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.23e+12"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.234e+12"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.23e+12"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.234e+12"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,234,000,000,000"
+    },
+    {
+      "value": "1.234e12",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,234,000,000,000"
+    },
+    {
+      "value": "1e15",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1Qa"
+    },
+    {
+      "value": "1e15",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1Qa"
+    },
+    {
+      "value": "1e15",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+15"
+    },
+    {
+      "value": "1e15",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+15"
+    },
+    {
+      "value": "1e15",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+15"
+    },
+    {
+      "value": "1e15",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+15"
+    },
+    {
+      "value": "1e15",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000"
+    },
+    {
+      "value": "1e15",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000"
+    },
+    {
+      "value": "1e18",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1Qi"
+    },
+    {
+      "value": "1e18",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1Qi"
+    },
+    {
+      "value": "1e18",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+18"
+    },
+    {
+      "value": "1e18",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+18"
+    },
+    {
+      "value": "1e18",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+18"
+    },
+    {
+      "value": "1e18",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+18"
+    },
+    {
+      "value": "1e18",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e18",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e21",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1Sx"
+    },
+    {
+      "value": "1e21",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1Sx"
+    },
+    {
+      "value": "1e21",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+21"
+    },
+    {
+      "value": "1e21",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+21"
+    },
+    {
+      "value": "1e21",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+21"
+    },
+    {
+      "value": "1e21",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+21"
+    },
+    {
+      "value": "1e21",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e21",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e24",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1Sp"
+    },
+    {
+      "value": "1e24",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1Sp"
+    },
+    {
+      "value": "1e24",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+24"
+    },
+    {
+      "value": "1e24",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+24"
+    },
+    {
+      "value": "1e24",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+24"
+    },
+    {
+      "value": "1e24",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+24"
+    },
+    {
+      "value": "1e24",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e24",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e30",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1No"
+    },
+    {
+      "value": "1e30",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1No"
+    },
+    {
+      "value": "1e30",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+30"
+    },
+    {
+      "value": "1e30",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+30"
+    },
+    {
+      "value": "1e30",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+30"
+    },
+    {
+      "value": "1e30",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+30"
+    },
+    {
+      "value": "1e30",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e30",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e33",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1Dc"
+    },
+    {
+      "value": "1e33",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1Dc"
+    },
+    {
+      "value": "1e33",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+33"
+    },
+    {
+      "value": "1e33",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+33"
+    },
+    {
+      "value": "1e33",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+33"
+    },
+    {
+      "value": "1e33",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+33"
+    },
+    {
+      "value": "1e33",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e33",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e60",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1NoDc"
+    },
+    {
+      "value": "1e60",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1NoDc"
+    },
+    {
+      "value": "1e60",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+60"
+    },
+    {
+      "value": "1e60",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+60"
+    },
+    {
+      "value": "1e60",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+60"
+    },
+    {
+      "value": "1e60",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+60"
+    },
+    {
+      "value": "1e60",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e60",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e63",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1Vg"
+    },
+    {
+      "value": "1e63",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1Vg"
+    },
+    {
+      "value": "1e63",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+63"
+    },
+    {
+      "value": "1e63",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+63"
+    },
+    {
+      "value": "1e63",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+63"
+    },
+    {
+      "value": "1e63",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+63"
+    },
+    {
+      "value": "1e63",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e63",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e66",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1A"
+    },
+    {
+      "value": "1e66",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1A"
+    },
+    {
+      "value": "1e66",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+66"
+    },
+    {
+      "value": "1e66",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+66"
+    },
+    {
+      "value": "1e66",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+66"
+    },
+    {
+      "value": "1e66",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+66"
+    },
+    {
+      "value": "1e66",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e66",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e69",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1B"
+    },
+    {
+      "value": "1e69",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1B"
+    },
+    {
+      "value": "1e69",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+69"
+    },
+    {
+      "value": "1e69",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+69"
+    },
+    {
+      "value": "1e69",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+69"
+    },
+    {
+      "value": "1e69",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+69"
+    },
+    {
+      "value": "1e69",
+      "mode": "full",
+      "precision": 2,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e69",
+      "mode": "full",
+      "precision": 3,
+      "out": "1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e100",
+      "mode": "compact",
+      "precision": 2,
+      "out": "10L"
+    },
+    {
+      "value": "1e100",
+      "mode": "compact",
+      "precision": 3,
+      "out": "10L"
+    },
+    {
+      "value": "1e100",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+100"
+    },
+    {
+      "value": "1e100",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+100"
+    },
+    {
+      "value": "1e100",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "10.00e+99"
+    },
+    {
+      "value": "1e100",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "10.000e+99"
+    },
+    {
+      "value": "1e100",
+      "mode": "full",
+      "precision": 2,
+      "out": "10,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e100",
+      "mode": "full",
+      "precision": 3,
+      "out": "10,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000"
+    },
+    {
+      "value": "1e120",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1S"
+    },
+    {
+      "value": "1e120",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1S"
+    },
+    {
+      "value": "1e120",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+120"
+    },
+    {
+      "value": "1e120",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+120"
+    },
+    {
+      "value": "1e120",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+120"
+    },
+    {
+      "value": "1e120",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+120"
+    },
+    {
+      "value": "1e120",
+      "mode": "full",
+      "precision": 2,
+      "out": "1.0000e+120"
+    },
+    {
+      "value": "1e120",
+      "mode": "full",
+      "precision": 3,
+      "out": "1.0000e+120"
+    },
+    {
+      "value": "1e303",
+      "mode": "compact",
+      "precision": 2,
+      "out": "1CB"
+    },
+    {
+      "value": "1e303",
+      "mode": "compact",
+      "precision": 3,
+      "out": "1CB"
+    },
+    {
+      "value": "1e303",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+303"
+    },
+    {
+      "value": "1e303",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+303"
+    },
+    {
+      "value": "1e303",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e+303"
+    },
+    {
+      "value": "1e303",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e+303"
+    },
+    {
+      "value": "1e303",
+      "mode": "full",
+      "precision": 2,
+      "out": "1.0000e+303"
+    },
+    {
+      "value": "1e303",
+      "mode": "full",
+      "precision": 3,
+      "out": "1.0000e+303"
+    },
+    {
+      "value": "1e400",
+      "mode": "compact",
+      "precision": 2,
+      "out": "10DH"
+    },
+    {
+      "value": "1e400",
+      "mode": "compact",
+      "precision": 3,
+      "out": "10DH"
+    },
+    {
+      "value": "1e400",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+400"
+    },
+    {
+      "value": "1e400",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+400"
+    },
+    {
+      "value": "1e400",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "10.00e+399"
+    },
+    {
+      "value": "1e400",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "10.000e+399"
+    },
+    {
+      "value": "1e400",
+      "mode": "full",
+      "precision": 2,
+      "out": "1.0000e+400"
+    },
+    {
+      "value": "1e400",
+      "mode": "full",
+      "precision": 3,
+      "out": "1.0000e+400"
+    },
+    {
+      "value": "1e1000",
+      "mode": "compact",
+      "precision": 2,
+      "out": "10KZ"
+    },
+    {
+      "value": "1e1000",
+      "mode": "compact",
+      "precision": 3,
+      "out": "10KZ"
+    },
+    {
+      "value": "1e1000",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e+1000"
+    },
+    {
+      "value": "1e1000",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e+1000"
+    },
+    {
+      "value": "1e1000",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "10.00e+999"
+    },
+    {
+      "value": "1e1000",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "10.000e+999"
+    },
+    {
+      "value": "1e1000",
+      "mode": "full",
+      "precision": 2,
+      "out": "1.0000e+1000"
+    },
+    {
+      "value": "1e1000",
+      "mode": "full",
+      "precision": 3,
+      "out": "1.0000e+1000"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "compact",
+      "precision": 2,
+      "out": "-10KZ"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "compact",
+      "precision": 3,
+      "out": "-10KZ"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "-1.00e+1000"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "-1.000e+1000"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "-10.00e+999"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "-10.000e+999"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "full",
+      "precision": 2,
+      "out": "-1.0000e+1000"
+    },
+    {
+      "value": "-1e1000",
+      "mode": "full",
+      "precision": 3,
+      "out": "-1.0000e+1000"
+    },
+    {
+      "value": "0.001",
+      "mode": "compact",
+      "precision": 2,
+      "out": "0"
+    },
+    {
+      "value": "0.001",
+      "mode": "compact",
+      "precision": 3,
+      "out": "0.001"
+    },
+    {
+      "value": "0.001",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e-3"
+    },
+    {
+      "value": "0.001",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e-3"
+    },
+    {
+      "value": "0.001",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e-3"
+    },
+    {
+      "value": "0.001",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e-3"
+    },
+    {
+      "value": "0.001",
+      "mode": "full",
+      "precision": 2,
+      "out": "0"
+    },
+    {
+      "value": "0.001",
+      "mode": "full",
+      "precision": 3,
+      "out": "0"
+    },
+    {
+      "value": "0.5",
+      "mode": "compact",
+      "precision": 2,
+      "out": "0.5"
+    },
+    {
+      "value": "0.5",
+      "mode": "compact",
+      "precision": 3,
+      "out": "0.5"
+    },
+    {
+      "value": "0.5",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "5.00e-1"
+    },
+    {
+      "value": "0.5",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "5.000e-1"
+    },
+    {
+      "value": "0.5",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "500.00e-3"
+    },
+    {
+      "value": "0.5",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "500.000e-3"
+    },
+    {
+      "value": "0.5",
+      "mode": "full",
+      "precision": 2,
+      "out": "0.5"
+    },
+    {
+      "value": "0.5",
+      "mode": "full",
+      "precision": 3,
+      "out": "0.5"
+    },
+    {
+      "value": "1e-9",
+      "mode": "compact",
+      "precision": 2,
+      "out": "0"
+    },
+    {
+      "value": "1e-9",
+      "mode": "compact",
+      "precision": 3,
+      "out": "0"
+    },
+    {
+      "value": "1e-9",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.00e-9"
+    },
+    {
+      "value": "1e-9",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.000e-9"
+    },
+    {
+      "value": "1e-9",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "1.00e-9"
+    },
+    {
+      "value": "1e-9",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "1.000e-9"
+    },
+    {
+      "value": "1e-9",
+      "mode": "full",
+      "precision": 2,
+      "out": "0"
+    },
+    {
+      "value": "1e-9",
+      "mode": "full",
+      "precision": 3,
+      "out": "0"
+    },
+    {
+      "value": "123456.789",
+      "mode": "compact",
+      "precision": 2,
+      "out": "123.46K"
+    },
+    {
+      "value": "123456.789",
+      "mode": "compact",
+      "precision": 3,
+      "out": "123.457K"
+    },
+    {
+      "value": "123456.789",
+      "mode": "scientific",
+      "precision": 2,
+      "out": "1.23e+5"
+    },
+    {
+      "value": "123456.789",
+      "mode": "scientific",
+      "precision": 3,
+      "out": "1.235e+5"
+    },
+    {
+      "value": "123456.789",
+      "mode": "engineering",
+      "precision": 2,
+      "out": "123.46e+3"
+    },
+    {
+      "value": "123456.789",
+      "mode": "engineering",
+      "precision": 3,
+      "out": "123.457e+3"
+    },
+    {
+      "value": "123456.789",
+      "mode": "full",
+      "precision": 2,
+      "out": "123,456.79"
+    },
+    {
+      "value": "123456.789",
+      "mode": "full",
+      "precision": 3,
+      "out": "123,456.79"
+    }
+  ],
+  "durations": [
+    {
+      "seconds": 0,
+      "out": "0s"
+    },
+    {
+      "seconds": 1,
+      "out": "1s"
+    },
+    {
+      "seconds": 9,
+      "out": "9s"
+    },
+    {
+      "seconds": 59,
+      "out": "59s"
+    },
+    {
+      "seconds": 60,
+      "out": "1m 0s"
+    },
+    {
+      "seconds": 61,
+      "out": "1m 1s"
+    },
+    {
+      "seconds": 90,
+      "out": "1m 30s"
+    },
+    {
+      "seconds": 599,
+      "out": "9m 59s"
+    },
+    {
+      "seconds": 3599,
+      "out": "59m 59s"
+    },
+    {
+      "seconds": 3600,
+      "out": "1h 0m"
+    },
+    {
+      "seconds": 3661,
+      "out": "1h 1m"
+    },
+    {
+      "seconds": 7200,
+      "out": "2h 0m"
+    },
+    {
+      "seconds": 86399,
+      "out": "23h 59m"
+    },
+    {
+      "seconds": 86400,
+      "out": "1d 0h"
+    },
+    {
+      "seconds": 90061,
+      "out": "1d 1h"
+    },
+    {
+      "seconds": 1234567,
+      "out": "14d 6h"
+    }
+  ],
+  "temperatures": [
+    {
+      "celsius": -3.14159,
+      "out2": "-3.14°C",
+      "out0": "-3°C"
+    },
+    {
+      "celsius": -0.001,
+      "out2": "-0.00°C",
+      "out0": "-0°C"
+    },
+    {
+      "celsius": 0,
+      "out2": "+0.00°C",
+      "out0": "+0°C"
+    },
+    {
+      "celsius": 0.5,
+      "out2": "+0.50°C",
+      "out0": "+1°C"
+    },
+    {
+      "celsius": 1.5,
+      "out2": "+1.50°C",
+      "out0": "+2°C"
+    },
+    {
+      "celsius": 15.239,
+      "out2": "+15.24°C",
+      "out0": "+15°C"
+    },
+    {
+      "celsius": 1234.5,
+      "out2": "+1234.50°C",
+      "out0": "+1235°C"
+    }
+  ],
+  "percents": [
+    {
+      "fraction": 0,
+      "out1": "0.0%",
+      "out3": "0.000%"
+    },
+    {
+      "fraction": 0.0001,
+      "out1": "0.0%",
+      "out3": "0.010%"
+    },
+    {
+      "fraction": 0.125,
+      "out1": "12.5%",
+      "out3": "12.500%"
+    },
+    {
+      "fraction": 0.5,
+      "out1": "50.0%",
+      "out3": "50.000%"
+    },
+    {
+      "fraction": 0.99994,
+      "out1": "100.0%",
+      "out3": "99.994%"
+    },
+    {
+      "fraction": 1,
+      "out1": "100.0%",
+      "out3": "100.000%"
+    }
+  ]
+}

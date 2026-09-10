@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The activity is edge-to-edge and draws its own chrome in Compose, so the
+      platform theme only has to bridge the gap between process start and the
+      first composed frame: paint the same dark ground the game sits on, and
+      keep the system bars transparent so nothing jumps when Compose takes over.
+    -->
+    <style name="Theme.Earth" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/splash_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

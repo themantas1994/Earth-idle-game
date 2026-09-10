@@ -1,0 +1,1139 @@
+{
+  "achievements": [
+    {
+      "id": "first_spark",
+      "name": "First Spark",
+      "description": "Discover Controlled Fire.",
+      "icon": "🔥"
+    },
+    {
+      "id": "first_emission",
+      "name": "First Emission",
+      "description": "Produce your first greenhouse gas.",
+      "icon": "💨"
+    },
+    {
+      "id": "rise_of_agriculture",
+      "name": "Rise of Agriculture",
+      "description": "Unlock Early Agriculture.",
+      "icon": "🌱"
+    },
+    {
+      "id": "industrial_revolution",
+      "name": "Industrial Revolution",
+      "description": "Build your first Factory.",
+      "icon": "🏭"
+    },
+    {
+      "id": "let_there_be_light",
+      "name": "Let There Be Light",
+      "description": "Generate your first electricity.",
+      "icon": "💡"
+    },
+    {
+      "id": "fossil_fever",
+      "name": "Fossil Fever",
+      "description": "Start drilling for oil.",
+      "icon": "🛢️"
+    },
+    {
+      "id": "carbon_age",
+      "name": "Carbon Age",
+      "description": "Reach 1,000 ppm atmospheric CO₂.",
+      "icon": "☁️"
+    },
+    {
+      "id": "hot",
+      "name": "Hot",
+      "description": "Reach +5°C global temperature anomaly.",
+      "icon": "🌡️"
+    },
+    {
+      "id": "very_hot",
+      "name": "Very Hot",
+      "description": "Reach +10°C global temperature anomaly.",
+      "icon": "🌡️"
+    },
+    {
+      "id": "scorching",
+      "name": "Scorching",
+      "description": "Reach +25°C global temperature anomaly.",
+      "icon": "🔥"
+    },
+    {
+      "id": "apocalyptic_heat",
+      "name": "Apocalyptic Heat",
+      "description": "Reach +50°C global temperature anomaly.",
+      "icon": "☠️"
+    },
+    {
+      "id": "oops",
+      "name": "Oops",
+      "description": "Make Earth uninhabitable.",
+      "icon": "💀"
+    },
+    {
+      "id": "again",
+      "name": "Again?",
+      "description": "Reset Earth for the first time.",
+      "icon": "🔄"
+    },
+    {
+      "id": "faster_this_time",
+      "name": "Faster This Time",
+      "description": "Reset faster than your previous run.",
+      "icon": "⏱️"
+    },
+    {
+      "id": "civilization_speedrun",
+      "name": "Civilization Speedrun",
+      "description": "Reach the reset condition in under 12 hours.",
+      "icon": "⚡"
+    },
+    {
+      "id": "industrial_monster",
+      "name": "Industrial Monster",
+      "description": "Own 100 of any single generator.",
+      "icon": "🏗️"
+    },
+    {
+      "id": "economies_of_scale",
+      "name": "Economies of Scale",
+      "description": "Push a single building to a ×32 ownership bonus.",
+      "icon": "⚡"
+    },
+    {
+      "id": "bigger_than_earth",
+      "name": "Bigger Than Earth",
+      "description": "Accumulate 1 quintillion (1e18) of any resource.",
+      "icon": "🌌"
+    },
+    {
+      "id": "methane_world",
+      "name": "Methane World",
+      "description": "Make CH₄ your atmosphere's dominant warming contributor.",
+      "icon": "🐄"
+    },
+    {
+      "id": "ozone_hole",
+      "name": "Ozone Hole",
+      "description": "Deplete the ozone layer with CFCs.",
+      "icon": "🕳️"
+    },
+    {
+      "id": "rising_tides",
+      "name": "Rising Tides",
+      "description": "Cause 50m of sea level rise.",
+      "icon": "🌊"
+    },
+    {
+      "id": "mass_extinction",
+      "name": "Mass Extinction",
+      "description": "Reduce biodiversity below 10%.",
+      "icon": "🦴"
+    },
+    {
+      "id": "acid_ocean",
+      "name": "Acid Ocean",
+      "description": "Drop ocean pH to 7.0 or below.",
+      "icon": "🧪"
+    },
+    {
+      "id": "new_beginning",
+      "name": "New Beginning",
+      "description": "Earn your first Earth Points.",
+      "icon": "✨"
+    },
+    {
+      "id": "wealthy_civilization",
+      "name": "Wealthy Civilization",
+      "description": "Accumulate 1,000,000 Earth Points.",
+      "icon": "💰"
+    },
+    {
+      "id": "hearth_keeper",
+      "name": "Hearth Keeper",
+      "description": "Keep 50 Natural Fires burning at once.",
+      "icon": "🔥"
+    },
+    {
+      "id": "front_page",
+      "name": "Front Page",
+      "description": "Make the world news 10 times in a single run.",
+      "icon": "📰"
+    },
+    {
+      "id": "road_not_taken",
+      "name": "The Road Not Taken",
+      "description": "Commit to a strategic technology choice.",
+      "icon": "🔀"
+    },
+    {
+      "id": "digital_age",
+      "name": "Digital Age",
+      "description": "Build your first Computer.",
+      "icon": "💻"
+    },
+    {
+      "id": "into_the_absurd",
+      "name": "Into the Absurd",
+      "description": "Harness Stellar Energy.",
+      "icon": "🌟"
+    },
+    {
+      "id": "serial_destroyer",
+      "name": "Serial Destroyer",
+      "description": "Reset Earth 10 times.",
+      "icon": "♻️"
+    },
+    {
+      "id": "renaissance_civilization",
+      "name": "Renaissance Civilization",
+      "description": "Own at least one technology from every branch.",
+      "icon": "🎓"
+    }
+  ],
+  "challenges": [
+    {
+      "id": "ice_age",
+      "name": "Ice Age",
+      "description": "Reach a strong industrial base while keeping temperature below +2°C.",
+      "icon": "🧊",
+      "restriction": {
+        "disabledTechIds": null,
+        "maxTechTier": null,
+        "maxTemperatureC": 2,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Reach civilization level 40 without exceeding +2°C.",
+      "rewardDescription": "+10% permanent production",
+      "reward": {
+        "globalProductionMultiplier": 1.1
+      },
+      "disabledTechIds": []
+    },
+    {
+      "id": "low_carbon",
+      "name": "Low Carbon",
+      "description": "Coal technologies are forbidden for the entire run.",
+      "icon": "🚫",
+      "restriction": {
+        "disabledTechIds": [
+          "charcoal",
+          "coal_mining",
+          "coal_power_plant",
+          "coal_industrialization",
+          "supercritical_coal",
+          "coal_mega_mining"
+        ],
+        "maxTechTier": null,
+        "maxTemperatureC": null,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Accumulate 1 trillion (1e12) total Energy produced.",
+      "rewardDescription": "+25% Research, permanently",
+      "reward": {
+        "researchMultiplier": 1.25
+      },
+      "disabledTechIds": [
+        "charcoal",
+        "coal_industrialization",
+        "coal_mega_mining",
+        "coal_mining",
+        "coal_power_plant",
+        "supercritical_coal"
+      ]
+    },
+    {
+      "id": "no_oil",
+      "name": "No Oil",
+      "description": "Oil and its downstream technologies are off-limits.",
+      "icon": "🛢️",
+      "restriction": {
+        "disabledTechIds": [
+          "oil_drilling",
+          "oil_refinery",
+          "petrochemicals",
+          "natural_gas",
+          "automobile",
+          "diesel_engine",
+          "fracking",
+          "offshore_drilling",
+          "jet_aircraft",
+          "oil_sands",
+          "coal_mega_mining"
+        ],
+        "maxTechTier": null,
+        "maxTemperatureC": null,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Reach civilization level 35 without any oil technology.",
+      "rewardDescription": "+20% Transportation branch production, permanently",
+      "reward": {
+        "globalProductionMultiplier": 1.05
+      },
+      "disabledTechIds": [
+        "automobile",
+        "coal_mega_mining",
+        "diesel_engine",
+        "fracking",
+        "jet_aircraft",
+        "natural_gas",
+        "offshore_drilling",
+        "oil_drilling",
+        "oil_refinery",
+        "oil_sands",
+        "petrochemicals"
+      ]
+    },
+    {
+      "id": "primitive",
+      "name": "Primitive",
+      "description": "Never advance past the Iron Age.",
+      "icon": "⛏️",
+      "restriction": {
+        "disabledTechIds": null,
+        "maxTechTier": 6,
+        "maxTemperatureC": null,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Reach 400 ppm atmospheric CO₂ using only Primitive-era technology.",
+      "rewardDescription": "Start every future run with extra starting Energy",
+      "reward": {
+        "startingResources": {
+          "energy": 500
+        }
+      },
+      "disabledTechIds": [
+        "247_manufacturing",
+        "advanced_chemical_manufacturing",
+        "advanced_manufacturing",
+        "ai",
+        "airports",
+        "ammonia",
+        "animal_domestication",
+        "asteroid_capture",
+        "automobile",
+        "cement_production",
+        "cfcs",
+        "chemical_industry",
+        "cloud_computing",
+        "coal_industrialization",
+        "coal_mega_mining",
+        "coal_mining",
+        "coal_power_plant",
+        "combined_cycle_gas",
+        "commercial_aviation",
+        "computers",
+        "concrete",
+        "consumer_economy",
+        "container_ships",
+        "containerization",
+        "data_centers",
+        "diesel_engine",
+        "dyson_swarm_prototype",
+        "early_agriculture",
+        "factories",
+        "factory_farming",
+        "farming",
+        "fertilizer",
+        "fracking",
+        "fusion_power",
+        "gas_turbine",
+        "generator_dynamo",
+        "global_aviation_networks",
+        "global_logistics",
+        "global_supply_chains",
+        "global_urbanization",
+        "grid_electricity",
+        "hfcs",
+        "highways",
+        "horse_and_cart",
+        "hydroelectricity",
+        "hyperscale_data_centers",
+        "industrial_agriculture",
+        "industrial_chemistry",
+        "industrial_fluorinated_gases",
+        "industrial_furnaces",
+        "international_trade",
+        "internet",
+        "irrigation",
+        "jet_aircraft",
+        "livestock",
+        "mass_ai_infrastructure",
+        "mass_electrification",
+        "mass_manufacturing",
+        "mass_production_cars",
+        "matrioshka_brain",
+        "mega_farms",
+        "mega_infrastructure",
+        "megacities",
+        "megacorporations",
+        "moon_mining",
+        "natural_gas",
+        "nuclear_industrialization",
+        "nuclear_power",
+        "offshore_drilling",
+        "oil_drilling",
+        "oil_refinery",
+        "oil_sands",
+        "orbital_industry",
+        "petrochemicals",
+        "planetary_industry",
+        "refrigeration",
+        "rice_cultivation",
+        "skyscrapers",
+        "space_elevator",
+        "steam_engine",
+        "steam_locomotive",
+        "steam_vehicle",
+        "steel_buildings",
+        "steel_production",
+        "stellar_energy",
+        "supercritical_coal",
+        "supersonic_aviation",
+        "synthetic_fertilizer",
+        "terraforming_engines",
+        "trucks"
+      ]
+    },
+    {
+      "id": "speedrun",
+      "name": "Speedrun",
+      "description": "Reset Earth as quickly as possible.",
+      "icon": "⏱️",
+      "restriction": {
+        "disabledTechIds": null,
+        "maxTechTier": null,
+        "maxTemperatureC": null,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Reset within 15 minutes of starting the run.",
+      "rewardDescription": "+15% Earth Points from every future prestige",
+      "reward": {
+        "globalProductionMultiplier": 1
+      },
+      "disabledTechIds": []
+    },
+    {
+      "id": "single_gas",
+      "name": "Single Gas",
+      "description": "Only technologies that emit CO₂ (or nothing) may be used.",
+      "icon": "☁️",
+      "restriction": {
+        "disabledTechIds": [
+          "animal_domestication",
+          "horse_and_cart",
+          "rice_cultivation",
+          "livestock",
+          "ammonia",
+          "synthetic_fertilizer",
+          "fracking",
+          "refrigeration",
+          "mega_farms",
+          "jet_aircraft",
+          "factory_farming",
+          "commercial_aviation",
+          "cfcs",
+          "megacities",
+          "hfcs",
+          "supersonic_aviation",
+          "industrial_fluorinated_gases",
+          "consumer_economy",
+          "global_aviation_networks",
+          "planetary_industry",
+          "terraforming_engines",
+          "matrioshka_brain"
+        ],
+        "maxTechTier": null,
+        "maxTemperatureC": null,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Reach civilization level 30 using only CO₂-producing technology.",
+      "rewardDescription": "+30% CO₂ production, permanently",
+      "reward": {
+        "gasProductionMultiplier": {
+          "gas": "co2",
+          "multiplier": 1.3
+        }
+      },
+      "disabledTechIds": [
+        "ammonia",
+        "animal_domestication",
+        "cfcs",
+        "commercial_aviation",
+        "consumer_economy",
+        "factory_farming",
+        "fracking",
+        "global_aviation_networks",
+        "hfcs",
+        "horse_and_cart",
+        "industrial_fluorinated_gases",
+        "jet_aircraft",
+        "livestock",
+        "matrioshka_brain",
+        "mega_farms",
+        "megacities",
+        "planetary_industry",
+        "refrigeration",
+        "rice_cultivation",
+        "supersonic_aviation",
+        "synthetic_fertilizer",
+        "terraforming_engines"
+      ]
+    },
+    {
+      "id": "methane_world_challenge",
+      "name": "Methane World",
+      "description": "Make CH₄ the dominant greenhouse gas by the time you reset.",
+      "icon": "🐄",
+      "restriction": {
+        "disabledTechIds": null,
+        "maxTechTier": null,
+        "maxTemperatureC": null,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Reset while CH₄ contributes more forcing than any other gas.",
+      "rewardDescription": "+50% CH₄ production, permanently",
+      "reward": {
+        "gasProductionMultiplier": {
+          "gas": "ch4",
+          "multiplier": 1.5
+        }
+      },
+      "disabledTechIds": []
+    },
+    {
+      "id": "zero_emissions",
+      "name": "Zero Emissions",
+      "description": "Build a strong civilization while keeping gross emissions minimal.",
+      "icon": "🌱",
+      "restriction": {
+        "disabledTechIds": [
+          "coal_power_plant",
+          "supercritical_coal",
+          "coal_mega_mining",
+          "oil_sands"
+        ],
+        "maxTechTier": null,
+        "maxTemperatureC": null,
+        "onlyGasIds": null
+      },
+      "goalDescription": "Reach civilization level 25 while total gross gas production stays under 1e6 kg/s.",
+      "rewardDescription": "+20% Research, permanently",
+      "reward": {
+        "researchMultiplier": 1.2
+      },
+      "disabledTechIds": [
+        "coal_mega_mining",
+        "coal_power_plant",
+        "oil_sands",
+        "supercritical_coal"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "good_harvest",
+      "name": "Bumper Harvest",
+      "description": "A season goes exactly right. Everything you run produces triple for a while.",
+      "icon": "🌻",
+      "minCivLevel": 1,
+      "durationSeconds": 90,
+      "weight": 4,
+      "isNegative": false,
+      "effect": {
+        "global": 3
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "master_craftsman",
+      "name": "Master Craftsman",
+      "description": "Someone works out a better way to do it, and tells everyone. Research floods in.",
+      "icon": "🔨",
+      "minCivLevel": 3,
+      "durationSeconds": 90,
+      "weight": 4,
+      "isNegative": false,
+      "effect": {
+        "research": 8
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "volcanic_eruption",
+      "name": "Volcanic Eruption",
+      "description": "A major eruption injects a pulse of CO₂ into the atmosphere.",
+      "icon": "🌋",
+      "minCivLevel": 0,
+      "durationSeconds": 30,
+      "weight": 3,
+      "isNegative": false,
+      "effect": {},
+      "instantGasBurstKg": {
+        "co2": 50000000000
+      }
+    },
+    {
+      "id": "wildfire",
+      "name": "Wildfire",
+      "description": "Vast wildfires release a large burst of carbon dioxide.",
+      "icon": "🔥",
+      "minCivLevel": 3,
+      "durationSeconds": 30,
+      "weight": 3,
+      "isNegative": false,
+      "effect": {},
+      "instantGasBurstKg": {
+        "co2": 200000000000
+      }
+    },
+    {
+      "id": "el_nino",
+      "name": "El Niño",
+      "description": "Shifting ocean currents temporarily amplify warming feedback loops.",
+      "icon": "🌊",
+      "minCivLevel": 5,
+      "durationSeconds": 120,
+      "weight": 3,
+      "isNegative": false,
+      "effect": {
+        "allGas": 2
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "methane_release",
+      "name": "Methane Release",
+      "description": "Thawing permafrost vents a burst of trapped methane.",
+      "icon": "🧊",
+      "minCivLevel": 8,
+      "durationSeconds": 120,
+      "weight": 3,
+      "isNegative": false,
+      "effect": {
+        "perGas": {
+          "ch4": 5
+        }
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "industrial_boom",
+      "name": "Industrial Boom",
+      "description": "A surge of investment sends every factory's output soaring.",
+      "icon": "📈",
+      "minCivLevel": 6,
+      "durationSeconds": 120,
+      "weight": 4,
+      "isNegative": false,
+      "effect": {
+        "global": 8
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "economic_crash",
+      "name": "Economic Crash",
+      "description": "Markets collapse. Industrial output slows to a crawl.",
+      "icon": "📉",
+      "minCivLevel": 6,
+      "durationSeconds": 30,
+      "weight": 1,
+      "isNegative": true,
+      "effect": {
+        "global": 0.7
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "green_revolution",
+      "name": "Green Revolution",
+      "description": "New techniques send agricultural output through the roof.",
+      "icon": "🌾",
+      "minCivLevel": 7,
+      "durationSeconds": 120,
+      "weight": 3,
+      "isNegative": false,
+      "effect": {
+        "perBranch": {
+          "agriculture": 15
+        }
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "technological_breakthrough",
+      "name": "Technological Breakthrough",
+      "description": "A sudden insight accelerates research dramatically.",
+      "icon": "💡",
+      "minCivLevel": 10,
+      "durationSeconds": 120,
+      "weight": 4,
+      "isNegative": false,
+      "effect": {
+        "research": 30
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "supply_chain_shock",
+      "name": "Supply Chain Shock",
+      "description": "Global logistics seize up, throttling every branch at once.",
+      "icon": "🚧",
+      "minCivLevel": 18,
+      "durationSeconds": 30,
+      "weight": 1,
+      "isNegative": true,
+      "effect": {
+        "global": 0.75
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "agi_breakthrough",
+      "name": "AGI Breakthrough",
+      "description": "Machines start optimizing the optimizers. Research goes vertical.",
+      "icon": "🤖",
+      "minCivLevel": 26,
+      "durationSeconds": 150,
+      "weight": 4,
+      "isNegative": false,
+      "effect": {
+        "research": 50,
+        "global": 4
+      },
+      "instantGasBurstKg": null
+    },
+    {
+      "id": "stellar_flare",
+      "name": "Stellar Flare",
+      "description": "Your Dyson swarm catches a solar flare at full charge — a brief, absurd surge of everything.",
+      "icon": "☀️",
+      "minCivLevel": 40,
+      "durationSeconds": 150,
+      "weight": 4,
+      "isNegative": false,
+      "effect": {
+        "global": 20,
+        "allGas": 3
+      },
+      "instantGasBurstKg": null
+    }
+  ],
+  "milestones": [
+    {
+      "id": "first_smoke",
+      "headline": "Smoke on the horizon",
+      "body": "A column of smoke rises from the valley for the first time by somebody's deliberate choice. Nobody is around to write it down, but the atmosphere is keeping score.",
+      "source": "PREHISTORY · THE VALLEY",
+      "icon": "🔥",
+      "category": "industry"
+    },
+    {
+      "id": "the_first_field",
+      "headline": "The first field is cleared",
+      "body": "A stretch of forest is burned back and planted. It feeds more people than the forest did — and it is the first time anyone has decided what a landscape is for.",
+      "source": "PREHISTORY · THE FLOODPLAIN",
+      "icon": "🌾",
+      "category": "industry"
+    },
+    {
+      "id": "industrial_era",
+      "headline": "Steam and iron remake the world",
+      "body": "Mills that never sleep, cities black with soot, and coal hauled out of the ground faster than anyone can count it. Progress, they are calling it.",
+      "source": "THE TIMES · MANCHESTER",
+      "icon": "🏭",
+      "category": "industry"
+    },
+    {
+      "id": "coal_smog",
+      "headline": "Coal smog kills thousands in a week",
+      "body": "A temperature inversion has trapped a city's chimney smoke at street level. Physicians report the death toll is highest among the men who dig the coal.",
+      "source": "THE ILLUSTRATED NEWS · LONDON",
+      "icon": "🌫️",
+      "category": "society"
+    },
+    {
+      "id": "river_ran_black",
+      "headline": "River declared \"biologically dead\" below the mills",
+      "body": "Steelworks upstream have discharged for a decade into water that fishermen worked for a thousand years. An inquiry has been promised, then postponed.",
+      "source": "THE CHRONICLE · THE RIVER",
+      "icon": "🏭",
+      "category": "ecology"
+    },
+    {
+      "id": "assembly_line",
+      "headline": "Factories switch to continuous production",
+      "body": "The line no longer stops at night. Output has doubled twice in a year, and the coal to run it is being burned as fast as it can be shovelled.",
+      "source": "BUSINESS WIRE · DETROIT",
+      "icon": "⚙️",
+      "category": "industry"
+    },
+    {
+      "id": "grid_switched_on",
+      "headline": "City lights up for the first time",
+      "body": "A coal-fired station on the edge of town has electrified a whole district. Crowds gathered to watch. Nobody looked at the chimney.",
+      "source": "EVENING STANDARD · THE CITY",
+      "icon": "💡",
+      "category": "industry"
+    },
+    {
+      "id": "oil_age",
+      "headline": "Oil strike opens a new age of fuel",
+      "body": "Crude is coming out of the ground faster than it can be barrelled. Analysts predict the supply is, for practical purposes, infinite.",
+      "source": "WALL STREET JOURNAL · TEXAS",
+      "icon": "🛢️",
+      "category": "industry"
+    },
+    {
+      "id": "the_automobile",
+      "headline": "A car in every driveway",
+      "body": "Private motoring has gone from a curiosity to an expectation in a generation. Cities are being rebuilt around it, and the exhaust is being described as the smell of prosperity.",
+      "source": "LIFE · LOS ANGELES",
+      "icon": "🚗",
+      "category": "society"
+    },
+    {
+      "id": "ozone_hole",
+      "headline": "A hole is found in the ozone layer",
+      "body": "Refrigerant gases invented to be harmless turn out to destroy stratospheric ozone on contact. Industry has called the finding \"premature\".",
+      "source": "NEW SCIENTIST · HALLEY BAY",
+      "icon": "🧴",
+      "category": "ecology"
+    },
+    {
+      "id": "megacity",
+      "headline": "World's first 30-million-person city",
+      "body": "Concrete, steel and air conditioning have made a metropolis possible where the climate never was. Both the concrete and the cooling are enormously carbon-intensive; neither is mentioned at the ribbon-cutting.",
+      "source": "AP · THE DELTA",
+      "icon": "🏙️",
+      "category": "society"
+    },
+    {
+      "id": "fracking_boom",
+      "headline": "Fracking unlocks \"a century of cheap gas\"",
+      "body": "Shale wells are producing at rates nobody forecast. Residents downwind report they can set their tap water alight; the industry disputes the connection.",
+      "source": "BLOOMBERG · NORTH DAKOTA",
+      "icon": "⛽",
+      "category": "industry"
+    },
+    {
+      "id": "factory_farms",
+      "headline": "Livestock population passes human population",
+      "body": "Industrial husbandry now runs more cattle than there are people to eat them. Methane from their digestion has become a measurable share of global emissions.",
+      "source": "FAO · GLOBAL",
+      "icon": "🐄",
+      "category": "ecology"
+    },
+    {
+      "id": "container_trade",
+      "headline": "Global shipping now moves more than nations produce",
+      "body": "Standardised steel boxes have made distance almost free. Freighters burn the heaviest, dirtiest fraction of the barrel to do it.",
+      "source": "FINANCIAL TIMES · ROTTERDAM",
+      "icon": "🚢",
+      "category": "industry"
+    },
+    {
+      "id": "the_internet",
+      "headline": "The world connects itself",
+      "body": "Everyone alive can now be told anything, instantly. Among the first things widely circulated is the evidence for what the burning is doing.",
+      "source": "WIRED · GLOBAL",
+      "icon": "🌐",
+      "category": "society"
+    },
+    {
+      "id": "data_centers",
+      "headline": "Data centres overtake aviation for electricity use",
+      "body": "The buildings that hold the world's information draw more power than the world's aeroplanes. Almost all of it is generated by burning something.",
+      "source": "IEA · PARIS",
+      "icon": "🖥️",
+      "category": "industry"
+    },
+    {
+      "id": "jet_age",
+      "headline": "Mass air travel becomes routine",
+      "body": "Millions are now airborne at any moment, each of them emitting at an altitude where it does the most harm.",
+      "source": "REUTERS · HEATHROW",
+      "icon": "✈️",
+      "category": "society"
+    },
+    {
+      "id": "co2_300",
+      "headline": "CO₂ higher than at any point in 800,000 years",
+      "body": "Ice cores hold a continuous record of the atmosphere going back eight hundred millennia. This week's reading is off the top of it.",
+      "source": "AP · MAUNA LOA OBSERVATORY",
+      "icon": "📈",
+      "category": "climate"
+    },
+    {
+      "id": "co2_350",
+      "headline": "CO₂ passes 350 ppm — \"the safe ceiling\"",
+      "body": "Climatologists have long called 350 parts per million the upper limit for a stable climate. The needle went through it this morning and kept going.",
+      "source": "AP · MAUNA LOA OBSERVATORY",
+      "icon": "🌡️",
+      "category": "climate"
+    },
+    {
+      "id": "paris_1_5",
+      "headline": "World blows past the 1.5 °C limit",
+      "body": "The threshold at the heart of every climate treaty ever signed has been crossed. Delegates are expected to negotiate a new, higher threshold.",
+      "source": "REUTERS · PARIS",
+      "icon": "🌍",
+      "category": "climate"
+    },
+    {
+      "id": "co2_400",
+      "headline": "Carbon dioxide breaks 400 ppm",
+      "body": "The last time the atmosphere held this much CO₂, there were forests near the South Pole. Officials have described the reading as \"a milestone\" and declined to say of what.",
+      "source": "BBC · GENEVA",
+      "icon": "📊",
+      "category": "climate"
+    },
+    {
+      "id": "amazon_burning",
+      "headline": "The Amazon is on fire",
+      "body": "Record heat and record drought have turned the world's largest rainforest into kindling. Smoke plumes are visible from orbit; the forest that spent ten thousand years absorbing carbon is now releasing it.",
+      "source": "REUTERS · MANAUS, BRAZIL",
+      "icon": "🌳",
+      "category": "ecology"
+    },
+    {
+      "id": "reef_bleached",
+      "headline": "Great Barrier Reef declared functionally dead",
+      "body": "Marine biologists confirm that ocean heat and acidification have bleached the last resilient reef sections. \"We are no longer studying an ecosystem,\" one researcher said. \"We are studying a ruin.\"",
+      "source": "ABC · QUEENSLAND, AUSTRALIA",
+      "icon": "🪸",
+      "category": "ecology"
+    },
+    {
+      "id": "arctic_ice_free",
+      "headline": "Arctic recorded ice-free in summer",
+      "body": "For the first time in human history, satellites found open water at the North Pole in September. Shipping companies have called the news \"an opportunity\".",
+      "source": "NSIDC · BOULDER, COLORADO",
+      "icon": "🧊",
+      "category": "climate"
+    },
+    {
+      "id": "crop_failure",
+      "headline": "Simultaneous harvest failure across three continents",
+      "body": "Heat and drought have hit the world's breadbaskets in the same season. Grain prices have tripled and export bans are spreading faster than aid.",
+      "source": "FAO · ROME",
+      "icon": "🌾",
+      "category": "society"
+    },
+    {
+      "id": "wet_bulb",
+      "headline": "Deadly wet-bulb conditions strike South Asia",
+      "body": "Humid heat has passed the limit at which a human body can cool itself. Authorities have advised 400 million people to remain indoors, where there is no power for cooling.",
+      "source": "AFP · KARACHI",
+      "icon": "🥵",
+      "category": "society"
+    },
+    {
+      "id": "sea_level_cities",
+      "headline": "Miami, Jakarta and Alexandria begin permanent evacuation",
+      "body": "Sea walls have been overtopped for the third year running. Three coastal megacities are being abandoned rather than defended — the first of many, planners concede.",
+      "source": "GUARDIAN · JAKARTA",
+      "icon": "🌊",
+      "category": "society"
+    },
+    {
+      "id": "permafrost_thaw",
+      "headline": "Siberian permafrost is venting methane",
+      "body": "Ground frozen for forty thousand years is collapsing into craters and releasing the carbon inside it. The thaw now adds more greenhouse gas each year than it can be stopped from adding.",
+      "source": "TASS · YAKUTSK, SIBERIA",
+      "icon": "💨",
+      "category": "climate"
+    },
+    {
+      "id": "insect_collapse",
+      "headline": "Global insect populations collapse",
+      "body": "Pollinator numbers have fallen below the level agriculture depends on. Orchards in four countries are being pollinated by hand.",
+      "source": "NATURE · CAMBRIDGE",
+      "icon": "🐝",
+      "category": "ecology"
+    },
+    {
+      "id": "amazon_savanna",
+      "headline": "Amazon rainforest passes point of no return",
+      "body": "Ecologists confirm the dieback is self-sustaining: what is left of the forest is now drying itself out. The basin is becoming savanna, and every dying tree adds to the problem.",
+      "source": "REUTERS · BRASÍLIA",
+      "icon": "🪵",
+      "category": "ecology"
+    },
+    {
+      "id": "co2_500",
+      "headline": "CO₂ passes 500 ppm; monitoring stations begin closing",
+      "body": "Two long-running observatories have gone offline this month, one to fire and one to funding. The remaining stations report the curve is steepening.",
+      "source": "WMO · GENEVA",
+      "icon": "📉",
+      "category": "climate"
+    },
+    {
+      "id": "gulf_stream",
+      "headline": "Atlantic overturning circulation has stalled",
+      "body": "The current that keeps northern Europe temperate has slowed to a stop. Meteorologists warn of winters no living person has experienced, in a world that is otherwise cooking.",
+      "source": "DER SPIEGEL · HAMBURG",
+      "icon": "🌀",
+      "category": "climate"
+    },
+    {
+      "id": "climate_refugees",
+      "headline": "One billion people are now displaced",
+      "body": "The UN refugee agency has stopped publishing a running total, saying the figure \"changes faster than it can be verified\".",
+      "source": "UNHCR · GENEVA",
+      "icon": "🚶",
+      "category": "society"
+    },
+    {
+      "id": "co2_1000",
+      "headline": "CO₂ passes 1,000 ppm — beyond every published projection",
+      "body": "The concentration has left the range any climate model was built to handle. Researchers are extrapolating, with the caveat that extrapolation is all anyone has left.",
+      "source": "WMO · GENEVA",
+      "icon": "🔥",
+      "category": "climate"
+    },
+    {
+      "id": "ocean_dead_zones",
+      "headline": "Oceans declared largely lifeless",
+      "body": "Acidification has dissolved the base of the marine food web. Fisheries worldwide have closed; the sea, for the first time, is quiet.",
+      "source": "NOAA · SILVER SPRING",
+      "icon": "🐟",
+      "category": "ecology"
+    },
+    {
+      "id": "coastlines_gone",
+      "headline": "Five metres of sea level rise; coastlines redrawn",
+      "body": "Cartographers have begun issuing world maps annually rather than by edition. Most of the world's ports, and the industry that fed them, are underwater.",
+      "source": "REUTERS · THE COAST",
+      "icon": "🗺️",
+      "category": "society"
+    },
+    {
+      "id": "grid_failure",
+      "headline": "Heat forces cascading failure of the global grid",
+      "body": "Transmission lines sag, transformers fail, and the cooling systems fail with them. Industry continues regardless, on generators.",
+      "source": "BLOOMBERG · SINGAPORE",
+      "icon": "⚡",
+      "category": "society"
+    },
+    {
+      "id": "last_broadcast",
+      "headline": "Final scheduled news broadcast airs",
+      "body": "With habitability in single digits, the last continuously operating newsroom has gone dark. Its closing line: \"Whatever it was you were doing, it worked.\"",
+      "source": "WORLD SERVICE · LOCATION WITHHELD",
+      "icon": "📻",
+      "category": "apocalypse"
+    },
+    {
+      "id": "venus_watch",
+      "headline": "Astronomers begin comparing Earth to Venus",
+      "body": "At current forcing, the paper notes, the distinction is \"increasingly a matter of degree\". Peer review has been waived for lack of reviewers.",
+      "source": "ARXIV · PREPRINT",
+      "icon": "🪐",
+      "category": "apocalypse"
+    }
+  ],
+  "gases": [
+    {
+      "id": "co2",
+      "name": "Carbon Dioxide",
+      "formula": "CO₂",
+      "unit": "ppm",
+      "baseline": 280,
+      "massPerUnit": 2000000000000,
+      "lifetimeYears": 120,
+      "directlyEmitted": true
+    },
+    {
+      "id": "ch4",
+      "name": "Methane",
+      "formula": "CH₄",
+      "unit": "ppb",
+      "baseline": 700,
+      "massPerUnit": 2750000000,
+      "lifetimeYears": 12,
+      "directlyEmitted": true
+    },
+    {
+      "id": "n2o",
+      "name": "Nitrous Oxide",
+      "formula": "N₂O",
+      "unit": "ppb",
+      "baseline": 270,
+      "massPerUnit": 16000000000,
+      "lifetimeYears": 114,
+      "directlyEmitted": true
+    },
+    {
+      "id": "h2o",
+      "name": "Water Vapor",
+      "formula": "H₂O",
+      "unit": "ppm",
+      "baseline": 0,
+      "massPerUnit": 10000000000000,
+      "lifetimeYears": 0.03,
+      "directlyEmitted": false
+    },
+    {
+      "id": "o3",
+      "name": "Tropospheric Ozone",
+      "formula": "O₃",
+      "unit": "DU",
+      "baseline": 300,
+      "massPerUnit": 5000000000,
+      "lifetimeYears": 0.06,
+      "directlyEmitted": true
+    },
+    {
+      "id": "fluorinated",
+      "name": "Fluorinated Gases",
+      "formula": "CFCs/HFCs/PFCs/SF₆",
+      "unit": "ppt",
+      "baseline": 0,
+      "massPerUnit": 30000000,
+      "lifetimeYears": 3200,
+      "directlyEmitted": true
+    }
+  ],
+  "resources": [
+    {
+      "id": "energy",
+      "name": "Energy",
+      "shortName": "Energy",
+      "description": "The general economic/industrial currency. Most technologies are built with Energy."
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "shortName": "RP",
+      "description": "Generated by your civilization's knowledge base. Spent to unlock new technology-tree nodes."
+    },
+    {
+      "id": "coal",
+      "name": "Coal",
+      "shortName": "Coal",
+      "description": "A mined material. Feeds early industrial and power technologies."
+    },
+    {
+      "id": "oil",
+      "name": "Oil",
+      "shortName": "Oil",
+      "description": "A drilled material. Feeds fossil-fuel, petrochemical and transportation technologies."
+    },
+    {
+      "id": "steel",
+      "name": "Steel",
+      "shortName": "Steel",
+      "description": "A refined material. Feeds construction and heavy-industry technologies."
+    },
+    {
+      "id": "concrete",
+      "name": "Concrete",
+      "shortName": "Concrete",
+      "description": "A manufactured material. Feeds construction and urbanization technologies."
+    }
+  ]
+}

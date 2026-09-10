@@ -1,0 +1,17 @@
+{
+  "name": "earth-ts-reference",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Frozen TypeScript engine from the original web build, kept only to regenerate the Kotlin port's golden parity fixtures. Not part of the shipped app.",
+  "scripts": {
+    "test": "vitest run",
+    "fixtures": "vite-node exportParityFixtures.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2",
+    "vite": "^5.4.21",
+    "vite-node": "^2.1.9",
+    "vitest": "^2.1.9"
+  }
+}
