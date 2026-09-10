@@ -268,7 +268,7 @@
         "onlyGasIds": null
       },
       "goalDescription": "Reach civilization level 35 without any oil technology.",
-      "rewardDescription": "+20% Transportation branch production, permanently",
+      "rewardDescription": "+5% permanent production",
       "reward": {
         "globalProductionMultiplier": 1.05
       },
@@ -409,7 +409,7 @@
         "onlyGasIds": null
       },
       "goalDescription": "Reset within 15 minutes of starting the run.",
-      "rewardDescription": "+15% Earth Points from every future prestige",
+      "rewardDescription": "Bragging rights — this one pays no permanent bonus",
       "reward": {
         "globalProductionMultiplier": 1
       },

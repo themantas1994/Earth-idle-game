@@ -9,6 +9,7 @@ import com.earthgame.idle.domain.formatting.formatTemperature
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -74,7 +75,18 @@ class FormattingParityTest {
         // 1e63 is the last named suffix ("Vg"); beyond it the alphabetic
         // fallback has to produce something, forever, rather than crash or
         // print an empty suffix.
-        assertEquals("1CA", formatNumber(gd("1e300"), NumberFormatMode.COMPACT))
-        assertEquals("1AKQ", formatNumber(gd("1e3000"), NumberFormatMode.COMPACT))
+        assertEquals("1AA", formatNumber(gd("1e66"), NumberFormatMode.COMPACT))
+        assertEquals("1DA", formatNumber(gd("1e300"), NumberFormatMode.COMPACT))
+        assertEquals("1ALQ", formatNumber(gd("1e3000"), NumberFormatMode.COMPACT))
+
+        // And it must stay unambiguous: the fallback starts at two letters so it
+        // can never reprint "K", "M", "B" or "T" at a magnitude a thousand-fold
+        // times larger. 1e69 read as "1B" was indistinguishable from 1e9.
+        val seen = mutableSetOf<String>()
+        for (exponent in 0..900 step 3) {
+            val formatted = formatNumber(gd("1e$exponent"), NumberFormatMode.COMPACT)
+            val suffix = formatted.dropWhile { it.isDigit() || it == '.' }
+            assertTrue("1e$exponent reused the suffix \"$suffix\"", seen.add(suffix))
+        }
     }
 }

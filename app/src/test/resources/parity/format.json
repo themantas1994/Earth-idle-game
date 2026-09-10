@@ -1156,13 +1156,13 @@
       "value": "1e66",
       "mode": "compact",
       "precision": 2,
-      "out": "1A"
+      "out": "1AA"
     },
     {
       "value": "1e66",
       "mode": "compact",
       "precision": 3,
-      "out": "1A"
+      "out": "1AA"
     },
     {
       "value": "1e66",
@@ -1204,13 +1204,13 @@
       "value": "1e69",
       "mode": "compact",
       "precision": 2,
-      "out": "1B"
+      "out": "1AB"
     },
     {
       "value": "1e69",
       "mode": "compact",
       "precision": 3,
-      "out": "1B"
+      "out": "1AB"
     },
     {
       "value": "1e69",
@@ -1252,13 +1252,13 @@
       "value": "1e100",
       "mode": "compact",
       "precision": 2,
-      "out": "10L"
+      "out": "10AL"
     },
     {
       "value": "1e100",
       "mode": "compact",
       "precision": 3,
-      "out": "10L"
+      "out": "10AL"
     },
     {
       "value": "1e100",
@@ -1300,13 +1300,13 @@
       "value": "1e120",
       "mode": "compact",
       "precision": 2,
-      "out": "1S"
+      "out": "1AS"
     },
     {
       "value": "1e120",
       "mode": "compact",
       "precision": 3,
-      "out": "1S"
+      "out": "1AS"
     },
     {
       "value": "1e120",
@@ -1348,13 +1348,13 @@
       "value": "1e303",
       "mode": "compact",
       "precision": 2,
-      "out": "1CB"
+      "out": "1DB"
     },
     {
       "value": "1e303",
       "mode": "compact",
       "precision": 3,
-      "out": "1CB"
+      "out": "1DB"
     },
     {
       "value": "1e303",
@@ -1396,13 +1396,13 @@
       "value": "1e400",
       "mode": "compact",
       "precision": 2,
-      "out": "10DH"
+      "out": "10EH"
     },
     {
       "value": "1e400",
       "mode": "compact",
       "precision": 3,
-      "out": "10DH"
+      "out": "10EH"
     },
     {
       "value": "1e400",
@@ -1444,13 +1444,13 @@
       "value": "1e1000",
       "mode": "compact",
       "precision": 2,
-      "out": "10KZ"
+      "out": "10LZ"
     },
     {
       "value": "1e1000",
       "mode": "compact",
       "precision": 3,
-      "out": "10KZ"
+      "out": "10LZ"
     },
     {
       "value": "1e1000",
@@ -1492,13 +1492,13 @@
       "value": "-1e1000",
       "mode": "compact",
       "precision": 2,
-      "out": "-10KZ"
+      "out": "-10LZ"
     },
     {
       "value": "-1e1000",
       "mode": "compact",
       "precision": 3,
-      "out": "-10KZ"
+      "out": "-10LZ"
     },
     {
       "value": "-1e1000",

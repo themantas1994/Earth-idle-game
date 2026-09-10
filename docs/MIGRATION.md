@@ -2,7 +2,9 @@
 
 The record of how the original web game became a native Android app: what each
 piece of the old code became, what was verified and how, and what deliberately
-differs.
+differs. This is **history** — the port is complete. For how the parity contract
+works day to day, see [Reference parity](wiki/Reference-Parity.md); for the
+current architecture, [Architecture](wiki/Architecture.md).
 
 ## Where everything went
 
@@ -90,6 +92,13 @@ a temperature the other gases already set.
 
 Everything else — every formula, constant, threshold, price, growth rate,
 technology, achievement, challenge, event and headline — is unchanged.
+
+> **Since this was written:** two bugs shared by both engines were found in the
+> [2026-09-10 audit](CODEBASE_AUDIT.md) and fixed in *both*, with the affected
+> fixtures regenerated — the ambiguous compact number suffixes past 1e63, and two
+> challenge reward descriptions that did not match their own effects. Fixing the
+> oracle keeps parity rather than breaking it, but it is a deliberate act; the
+> full list is in [Reference parity](wiki/Reference-Parity.md).
 
 ## What is not proven by execution
 

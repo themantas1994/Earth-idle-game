@@ -27,7 +27,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -71,12 +70,21 @@ enum class BuyQuantity(val label: String, val amount: Int) {
  * that is a dropped frame every 250 ms. Saving runs on IO inside the
  * repository. The main thread only ever reads the finished [StateFlow].
  *
+ * That means two threads produce state: the tick, and the player tapping Buy.
+ * Every transition is therefore a *read-compute-write* under [stateLock] rather
+ * than a bare [MutableStateFlow.update]: the compute step reads the current
+ * state, and a purchase settled against a snapshot the tick has since replaced
+ * would silently undo itself (the tech un-bought, the resources refunded). The
+ * critical section is a single tick's worth of work — tens of microseconds —
+ * so the main thread is never held up for a visible frame.
+ *
  * ## Lifecycle
  *
- * The loop is tied to [viewModelScope], so it cannot outlive the screen. It is
- * additionally paused while the app is backgrounded ([onEnterBackground]),
- * because there is nothing to render and Android will not reliably keep running
- * it anyway — coming back calls [onEnterForeground], which settles the whole
+ * The loops are tied to [viewModelScope], so they cannot outlive the screen.
+ * They are additionally stopped while the app is backgrounded
+ * ([onEnterBackground]), because there is nothing to render, Android will not
+ * reliably keep running them anyway, and a paused game has nothing new to
+ * autosave. Coming back calls [onEnterForeground], which settles the whole
  * absence in one closed-form step. That is the entire offline-progress
  * mechanism: no background service, no scheduled work, no wake locks.
  */
@@ -95,6 +103,9 @@ class GameViewModel(
         GameUiState(state = initialState, derived = computeDerived(initialState, initialState.lastTickAt)),
     )
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
+
+    /** Serializes the tick against player actions — see "Threading" above. */
+    private val stateLock = Any()
 
     private var tickJob: Job? = null
     private var autosaveJob: Job? = null
@@ -117,12 +128,14 @@ class GameViewModel(
 
             if (loadedState == null) {
                 val fresh = createNewGame(now)
-                _uiState.value = GameUiState(
-                    state = fresh,
-                    derived = computeDerived(fresh, now),
-                    loaded = true,
-                    saveWasCorrupted = result is LoadResult.Corrupted,
-                )
+                synchronized(stateLock) {
+                    _uiState.value = GameUiState(
+                        state = fresh,
+                        derived = computeDerived(fresh, now),
+                        loaded = true,
+                        saveWasCorrupted = result is LoadResult.Corrupted,
+                    )
+                }
             } else {
                 // Settle the absence before the first frame, so the player sees
                 // the world as it is now rather than as it was when they left.
@@ -130,13 +143,15 @@ class GameViewModel(
                 val stepped = withContext(simulationDispatcher) {
                     gameLoop.advance(loadedState, now, derived)
                 }
-                _uiState.value = GameUiState(
-                    state = stepped.state,
-                    derived = computeDerived(stepped.state, now),
-                    loaded = true,
-                    offlineSummary = stepped.events.offlineProgress,
-                    recoveredFromBackup = result is LoadResult.RecoveredFromBackup,
-                ).applyEvents(stepped.events)
+                synchronized(stateLock) {
+                    _uiState.value = GameUiState(
+                        state = stepped.state,
+                        derived = computeDerived(stepped.state, now),
+                        loaded = true,
+                        offlineSummary = stepped.events.offlineProgress,
+                        recoveredFromBackup = result is LoadResult.RecoveredFromBackup,
+                    ).applyEvents(stepped.events)
+                }
                 audio.setSoundEnabled(stepped.state.settings.soundEnabled)
                 audio.setMusicEnabled(stepped.state.settings.musicEnabled)
             }
@@ -163,24 +178,34 @@ class GameViewModel(
         }
     }
 
+    private fun stopLoops() {
+        tickJob?.cancel()
+        tickJob = null
+        autosaveJob?.cancel()
+        autosaveJob = null
+    }
+
     private fun tick() {
         val now = clock()
-        val current = _uiState.value
-        if (!current.loaded) return
 
-        val result = gameLoop.advance(current.state, now, current.derived)
-        if (result.state === current.state) return
+        val events = mutate { current ->
+            if (!current.loaded) return@mutate null
+            val result = gameLoop.advance(current.state, now, current.derived)
+            if (result.state === current.state) return@mutate null
 
-        _uiState.update { previous ->
-            previous.copy(
-                state = result.state,
-                derived = computeDerived(result.state, now),
-                offlineSummary = result.events.offlineProgress ?: previous.offlineSummary,
-            ).applyEvents(result.events)
-        }
+            Transition(
+                next = current.copy(
+                    state = result.state,
+                    derived = computeDerived(result.state, now),
+                    offlineSummary = result.events.offlineProgress ?: current.offlineSummary,
+                ).applyEvents(result.events),
+                carried = result.events to current.state.settings.vibrationEnabled,
+            )
+        } ?: return
 
-        if (result.events.justCollapsed) {
-            if (current.state.settings.vibrationEnabled) haptics.impact()
+        val (stepEvents, vibrationEnabled) = events
+        if (stepEvents.justCollapsed) {
+            if (vibrationEnabled) haptics.impact()
             audio.play(Sound.COLLAPSE)
         }
     }
@@ -196,83 +221,144 @@ class GameViewModel(
         activeOwnershipToast = events.ownershipMilestone ?: activeOwnershipToast,
     )
 
+    // ------------------------------------------------- atomic state changes --
+
+    /** The next UI state, plus whatever the caller needs to act on outside the lock. */
+    private class Transition<T>(val next: GameUiState, val carried: T)
+
+    /**
+     * Runs one read-compute-write against [_uiState] under [stateLock] and
+     * returns whatever the transition carried, or null when [transform] decided
+     * nothing should change.
+     *
+     * Side effects — haptics, audio, saving — deliberately happen *outside* the
+     * lock, on what the transition carried out.
+     */
+    private fun <T> mutate(transform: (GameUiState) -> Transition<T>?): T? =
+        synchronized(stateLock) {
+            val current = _uiState.value
+            val transition = transform(current) ?: return@synchronized null
+            _uiState.value = transition.next
+            transition.carried
+        }
+
+    /** [mutate] for the common case: a pure [GameState] transition with no carried value. */
+    private fun commit(transform: (GameState) -> GameState): Boolean =
+        mutate { current ->
+            val next = transform(current.state)
+            if (next === current.state) {
+                null
+            } else {
+                Transition(current.copy(state = next, derived = computeDerived(next, clock())), Unit)
+            }
+        } != null
+
+    /** [mutate] for a change that only touches the UI slots, never the game state. */
+    private fun updateUi(transform: (GameUiState) -> GameUiState) {
+        mutate { current -> Transition(transform(current), Unit) }
+    }
+
     // ------------------------------------------------------------- actions --
 
     fun buyTechnology(techId: String, quantity: BuyQuantity) {
-        val current = _uiState.value
-        val result = gameLoop.purchase(current.state, techId, quantity.amount, current.derived)
-        if (result.state === current.state) return
+        val outcome = mutate { current ->
+            val result = gameLoop.purchase(current.state, techId, quantity.amount, current.derived)
+            if (result.state === current.state) return@mutate null
 
-        if (current.state.settings.vibrationEnabled) haptics.tap()
-        audio.play(if (result.events.ownershipMilestone != null) Sound.MILESTONE else Sound.PURCHASE)
+            Transition(
+                next = current.copy(
+                    state = result.state,
+                    derived = computeDerived(result.state, clock()),
+                ).applyEvents(result.events),
+                carried = current.state.settings.vibrationEnabled to (result.events.ownershipMilestone != null),
+            )
+        } ?: return
 
-        commit(result.state) { it.applyEvents(result.events) }
+        val (vibrationEnabled, crossedThreshold) = outcome
+        if (vibrationEnabled) haptics.tap()
+        audio.play(if (crossedThreshold) Sound.MILESTONE else Sound.PURCHASE)
     }
 
     fun buyPrestigeUpgrade(upgradeId: String) {
-        val current = _uiState.value
-        val next = gameLoop.buyPrestigeUpgrade(current.state, upgradeId)
-        if (next === current.state) return
-        if (current.state.settings.vibrationEnabled) haptics.tap()
+        val vibrationEnabled = mutate { current ->
+            val next = gameLoop.buyPrestigeUpgrade(current.state, upgradeId)
+            if (next === current.state) return@mutate null
+
+            Transition(
+                next = current.copy(state = next, derived = computeDerived(next, clock())),
+                carried = current.state.settings.vibrationEnabled,
+            )
+        } ?: return
+
+        if (vibrationEnabled) haptics.tap()
         audio.play(Sound.PURCHASE)
-        commit(next)
     }
 
     /** Whether the Reset button should do anything — the planet has to be dead first. */
     fun canResetEarth(): Boolean = _uiState.value.state.collapsed
 
     fun resetEarth() {
-        val current = _uiState.value
-        if (!current.state.collapsed) return
-
         val now = clock()
-        val summary = gameLoop.scoreRun(current.state, now, current.derived)
-        val result = gameLoop.resetEarth(current.state, now, current.derived)
-        if (result.state === current.state) return
 
-        if (current.state.settings.vibrationEnabled) haptics.impact()
+        val vibrationEnabled = mutate { current ->
+            if (!current.state.collapsed) return@mutate null
+            val summary = gameLoop.scoreRun(current.state, now, current.derived)
+            val result = gameLoop.resetEarth(current.state, now, current.derived)
+            if (result.state === current.state) return@mutate null
 
-        _uiState.update { previous ->
-            previous.copy(
-                state = result.state,
-                derived = computeDerived(result.state, now),
-                collapseSummary = summary,
-            ).applyEvents(result.events)
-        }
+            Transition(
+                next = current.copy(
+                    state = result.state,
+                    derived = computeDerived(result.state, now),
+                    collapseSummary = summary,
+                ).applyEvents(result.events),
+                carried = current.state.settings.vibrationEnabled,
+            )
+        } ?: return
+
+        if (vibrationEnabled) haptics.impact()
         saveNow()
     }
 
     fun startChallenge(challengeId: String) {
-        val current = _uiState.value
-        commit(gameLoop.startChallenge(current.state, challengeId, clock()))
-        saveNow()
+        val now = clock()
+        if (commit { gameLoop.startChallenge(it, challengeId, now) }) saveNow()
     }
 
-    fun abandonChallenge() = commit(gameLoop.abandonChallenge(_uiState.value.state))
+    fun abandonChallenge() {
+        commit(gameLoop::abandonChallenge)
+    }
 
     fun updateSettings(transform: (Settings) -> Settings) {
-        val current = _uiState.value
-        val settings = transform(current.state.settings)
+        val settings = mutate { current ->
+            val settings = transform(current.state.settings)
+            val next = gameLoop.updateSettings(current.state, settings)
+            Transition(
+                next = current.copy(state = next, derived = computeDerived(next, clock())),
+                carried = settings,
+            )
+        } ?: return
+
         audio.setSoundEnabled(settings.soundEnabled)
         audio.setMusicEnabled(settings.musicEnabled)
-        commit(gameLoop.updateSettings(current.state, settings))
         saveNow()
     }
 
-    fun advanceTutorial() = commit(gameLoop.advanceTutorial(_uiState.value.state))
+    fun advanceTutorial() {
+        commit(gameLoop::advanceTutorial)
+    }
 
     fun skipTutorial() {
-        commit(gameLoop.skipTutorial(_uiState.value.state))
-        saveNow()
+        if (commit(gameLoop::skipTutorial)) saveNow()
     }
 
-    fun dismissOfflineSummary() = _uiState.update { it.copy(offlineSummary = null) }
-    fun dismissCollapseSummary() = _uiState.update { it.copy(collapseSummary = null) }
-    fun dismissAchievementToast() = _uiState.update { it.copy(newAchievements = emptyList()) }
-    fun dismissEventToast() = _uiState.update { it.copy(activeEventToast = null) }
-    fun dismissMilestoneToast() = _uiState.update { it.copy(activeMilestoneToast = null) }
-    fun dismissOwnershipToast() = _uiState.update { it.copy(activeOwnershipToast = null) }
-    fun dismissSaveWarnings() = _uiState.update { it.copy(recoveredFromBackup = false, saveWasCorrupted = false) }
+    fun dismissOfflineSummary() = updateUi { it.copy(offlineSummary = null) }
+    fun dismissCollapseSummary() = updateUi { it.copy(collapseSummary = null) }
+    fun dismissAchievementToast() = updateUi { it.copy(newAchievements = emptyList()) }
+    fun dismissEventToast() = updateUi { it.copy(activeEventToast = null) }
+    fun dismissMilestoneToast() = updateUi { it.copy(activeMilestoneToast = null) }
+    fun dismissOwnershipToast() = updateUi { it.copy(activeOwnershipToast = null) }
+    fun dismissSaveWarnings() = updateUi { it.copy(recoveredFromBackup = false, saveWasCorrupted = false) }
 
     // ----------------------------------------------------------- lifecycle --
 
@@ -280,17 +366,23 @@ class GameViewModel(
      * The authoritative save point. Android does not guarantee anything runs
      * when it kills a backgrounded app, so the moment the app stops being
      * visible is the last reliable chance to write.
+     *
+     * Both loops stop here. The tick has nothing to render and the autosave has
+     * nothing new to write — leaving it running would rewrite an unchanging
+     * save every fifteen seconds for as long as the app sits in the background.
      */
     fun onEnterBackground() {
-        tickJob?.cancel()
-        tickJob = null
+        stopLoops()
         saveNow()
     }
 
-    /** Resumes the loop, settling the whole absence in one step first. */
+    /** Resumes the loops, settling the whole absence in one step first. */
     fun onEnterForeground() {
         if (!started) return
-        if (_uiState.value.loaded) tick()
+        // The catch-up is a full simulation step and belongs off the main
+        // thread like every other one, even though it is a single closed-form
+        // call rather than a replayed loop.
+        if (_uiState.value.loaded) viewModelScope.launch(simulationDispatcher) { tick() }
         if (tickJob == null) startLoops()
     }
 
@@ -300,14 +392,8 @@ class GameViewModel(
         viewModelScope.launch { saveRepository.save(state.state) }
     }
 
-    private fun commit(next: GameState, decorate: (GameUiState) -> GameUiState = { it }) {
-        val now = clock()
-        _uiState.update { previous ->
-            decorate(previous.copy(state = next, derived = computeDerived(next, now)))
-        }
-    }
-
     override fun onCleared() {
+        stopLoops()
         audio.release()
     }
 

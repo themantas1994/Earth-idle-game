@@ -9,11 +9,20 @@ const COMPACT_SUFFIXES = [
   'Vg',
 ];
 
+/** Offsetting the fallback by a full alphabet is what skips the one-letter run. */
+const SINGLE_LETTER_COUNT = 26;
+
 function letterSuffixForTier(tier: number): string {
-  // Beyond the named list (tier ~21, i.e. 1e66), fall back to a stable
-  // alphabetic scheme (AA, AB, ... ) so formatting never runs out.
+  // Beyond the named list (tier 21, i.e. 1e63) fall back to a stable
+  // alphabetic scheme so formatting never runs out.
+  //
+  // The fallback starts at two letters ("AA") rather than one, which is what
+  // keeps it unambiguous: a single-letter fallback would have printed 1e69 as
+  // "1B" and 1e96 as "1K", colliding with billions and thousands — both of
+  // which a run passes through on the way there. Every named suffix is either a
+  // single letter or mixed case, so no all-caps pair can collide with one.
   if (tier < COMPACT_SUFFIXES.length) return COMPACT_SUFFIXES[tier];
-  let n = tier - COMPACT_SUFFIXES.length;
+  let n = tier - COMPACT_SUFFIXES.length + SINGLE_LETTER_COUNT;
   let s = '';
   do {
     s = String.fromCharCode(65 + (n % 26)) + s;

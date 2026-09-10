@@ -262,12 +262,22 @@ object SaveSerialization {
     private fun JsonObject.obj(key: String): JsonObject? = (this[key] as? JsonObject)
     private fun JsonObject.arr(key: String): JsonArray? = (this[key] as? JsonArray)
 
+    /**
+     * A finite Double, or [default].
+     *
+     * Non-finite values are rejected rather than passed through. JSON has no
+     * literal for Infinity, but `1e999` is a perfectly legal token that parses
+     * to it, and a single infinite temperature or forcing turns every
+     * downstream value into NaN for the rest of the run — a save that is
+     * structurally valid but permanently unplayable. Nothing the encoder writes
+     * is ever non-finite (see [encodeDecimal]), so this can only reject damage.
+     */
     private fun JsonElement?.asDoubleOr(default: Double): Double =
         (this as? JsonPrimitive)?.takeIf { it.isString.not() && it.content != "null" }
-            ?.content?.toDoubleOrNull() ?: default
+            ?.content?.toDoubleOrNull()?.takeIf { it.isFinite() } ?: default
 
     private fun JsonElement?.asDoubleOrNull(): Double? =
-        (this as? JsonPrimitive)?.content?.toDoubleOrNull()
+        (this as? JsonPrimitive)?.content?.toDoubleOrNull()?.takeIf { it.isFinite() }
 
     private fun JsonElement?.asLongOr(default: Long): Long =
         (this as? JsonPrimitive)?.content?.toDoubleOrNull()?.toLong() ?: default
@@ -285,6 +295,8 @@ object SaveSerialization {
         val triple = (element as? JsonObject)?.get(DECIMAL_TAG) as? JsonArray ?: return GameDecimal.ZERO
         if (triple.size < 3) return GameDecimal.ZERO
         val sign = triple[0].asIntOr(0)
+        // asDoubleOr rejects non-finite, so a damaged triple decodes as zero
+        // rather than as an infinity that would poison every later step.
         val mantissa = triple[1].asDoubleOr(0.0)
         val exponent = triple[2].asDoubleOr(0.0)
         if (sign == 0 || mantissa == 0.0) return GameDecimal.ZERO
@@ -312,11 +324,21 @@ object SaveSerialization {
         }
     }
 
+    /**
+     * Owned counts, dropping anything that is not a positive quantity.
+     *
+     * Every consumer of `techOwned` and `upgradesOwned` treats "absent" and
+     * "zero" identically, so a zero or negative count carries no information —
+     * but a *negative* one would flow into ownership bonuses and cost curves as
+     * a real number. Dropping it is both the cheaper and the safer reading of a
+     * hand-edited or damaged save.
+     */
     private fun decodeIntMap(element: JsonElement?): Map<String, Int> {
         val o = element as? JsonObject ?: return emptyMap()
         return o.mapNotNull { (key, value) ->
-            val count = (value as? JsonPrimitive)?.content?.toDoubleOrNull()?.toInt() ?: return@mapNotNull null
-            key to count
+            val raw = (value as? JsonPrimitive)?.content?.toDoubleOrNull() ?: return@mapNotNull null
+            if (!raw.isFinite() || raw < 1.0) return@mapNotNull null
+            key to raw.coerceAtMost(Int.MAX_VALUE.toDouble()).toInt()
         }.toMap()
     }
 
@@ -456,7 +478,7 @@ object SaveSerialization {
             ),
 
             tutorial = TutorialState(
-                step = tutorialJson?.get("step").asIntOr(0),
+                step = tutorialJson?.get("step").asIntOr(0).coerceAtLeast(0),
                 completed = tutorialJson?.get("completed").asBoolOr(false),
                 skipped = tutorialJson?.get("skipped").asBoolOr(false),
             ),

@@ -77,7 +77,11 @@ val CHALLENGES: List<Challenge> = listOf(
             }.map { it.id }.toSet(),
         ),
         goal = ChallengeGoal("Reach civilization level 35 without any oil technology.") { _, civLevel -> civLevel >= 35 },
-        rewardDescription = "+20% Transportation branch production, permanently",
+        // The reference implementation's copy here advertised a Transportation
+        // branch bonus that its own effect never granted. The effect is the
+        // shipped balance and is left exactly as it is; the text is what was
+        // wrong, so the text is what changed.
+        rewardDescription = "+5% permanent production",
         reward = PrestigeUpgradeEffect(globalProductionMultiplier = 1.05),
     ),
     Challenge(
@@ -103,7 +107,12 @@ val CHALLENGES: List<Challenge> = listOf(
         goal = ChallengeGoal("Reset within 15 minutes of starting the run.") { state, _ ->
             (state.lastTickAt - state.runStartedAt) / 1000.0 <= 900
         },
-        rewardDescription = "+15% Earth Points from every future prestige",
+        // A ×1.0 multiplier is not a bonus, and the reference implementation's
+        // copy promised one anyway: there is no "Earth Points earned" field in
+        // PrestigeUpgradeEffect for it to have been wired to. Rather than
+        // invent a balance change, the reward is described for what it is —
+        // adding that field is tracked in docs/CODEBASE_AUDIT.md.
+        rewardDescription = "Bragging rights — this one pays no permanent bonus",
         reward = PrestigeUpgradeEffect(globalProductionMultiplier = 1.0),
     ),
     Challenge(
@@ -141,6 +150,10 @@ val CHALLENGES: List<Challenge> = listOf(
         restriction = ChallengeRestriction(
             disabledTechIds = setOf("coal_power_plant", "supercritical_coal", "coal_mega_mining", "oil_sands"),
         ),
+        // The goal text is the reference implementation's and is pinned by
+        // `ContentParityTest`; the emission ceiling it mentions is enforced by
+        // the disabled-technology list above rather than by a live check on the
+        // production rate. See docs/CODEBASE_AUDIT.md.
         goal = ChallengeGoal("Reach civilization level 25 while total gross gas production stays under 1e6 kg/s.") { _, civLevel ->
             civLevel >= 25
         },

@@ -114,24 +114,45 @@ android {
     }
 }
 
+/**
+ * The domain layer deliberately has no Compose dependency, so its value types
+ * cannot carry `@Immutable`. They are declared stable here instead — without it
+ * every composable taking a `GameState`, a `GameDecimal` or a `Technology` is
+ * unskippable, and the whole screen recomposes on every 250 ms tick. See
+ * `app/compose-stability.conf`.
+ */
+composeCompiler {
+    stabilityConfigurationFiles.add(layout.projectDirectory.file("compose-stability.conf"))
+
+    // `./gradlew assembleDebug -Pearth.composeReports=true` writes the Compose
+    // compiler's own skippability/stability reports to build/compose-reports,
+    // which is how the list above was arrived at and how to check it still
+    // earns its keep. Off by default: the reports cost build time.
+    if (providers.gradleProperty("earth.composeReports").isPresent) {
+        reportsDestination.set(layout.buildDirectory.dir("compose-reports"))
+        metricsDestination.set(layout.buildDirectory.dir("compose-reports"))
+    }
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.window)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
+    // Nothing declares an @Preview yet; this is the annotation artifact that
+    // pairs with the debug-only renderer below, kept so adding the first preview
+    // is not also a build-file change.
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    // Brings androidx.window in transitively; the app has no direct use for it.
     implementation(libs.androidx.compose.material3.window.size)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
@@ -152,8 +173,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

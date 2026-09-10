@@ -1,33 +1,124 @@
-# EARTH
+<div align="center">
 
-An idle/incremental civilization simulator for Android: build technology,
-generate greenhouse gases, heat the planet past the point of habitability, then
-reset and do it faster next time. Themed around atmospheric chemistry and
-civilizational collapse, in the tradition of *Antimatter Dimensions* and
-*AdVenture Capitalist*. Portrait-first, one-handed, and designed to be checked
-in on a few times a day rather than watched.
+# 🌍 EARTH
 
-Native Kotlin and Jetpack Compose. No WebView, no JavaScript.
+**An open-source idle game for Android about building a civilization — and cooking the planet it stands on.**
 
-> This is a gameplay simulation, not a scientific climate model. The formulas
-> are simplified but internally consistent, and use real, plausible
-> relationships — logarithmic CO₂ forcing, gas lifetimes, sinks that weaken
-> under warming — so the numbers behave sensibly at both small and absurd
-> scale.
+[![Android CI](https://github.com/themantas1994/Earth-idle-game/actions/workflows/android.yml/badge.svg)](https://github.com/themantas1994/Earth-idle-game/actions/workflows/android.yml)
+[![Platform](https://img.shields.io/badge/platform-Android%207.0%2B-3DDC84?logo=android&logoColor=white)](#getting-started)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![Tests](https://img.shields.io/badge/tests-205%20passing-brightgreen)](#for-developers)
 
-## Building
+*Incremental · Civilization simulator · Climate strategy · Fully offline*
 
-Open the repository root in Android Studio — it is the Gradle project — or use
-the wrapper from the command line. You need:
+</div>
 
-- **JDK 21.** The wrapper pins Gradle 9.7.1 and AGP 9.4.0, which run on 17–21;
-  21 is what CI uses.
-- **Android SDK** with `platforms;android-37`, `build-tools;37.0.0` and
-  `platform-tools`. The app targets API 37 and runs back to API 24.
-- **`ANDROID_HOME`** pointing at that SDK, or `sdk.dir=/path/to/sdk` in a
-  `local.properties` at the repository root (git-ignored).
+---
 
-Nothing else — no Node, no npm, no web toolchain anywhere in the build path.
+## What is EARTH?
+
+EARTH is an **idle / incremental game** for Android. You start with a single lightning-struck
+tree, still smouldering, and you finish with a Dyson swarm and an atmosphere no longer capable
+of holding people.
+
+There is no tap button. Your civilization produces on its own, whether the app is open or not.
+What you do is decide *what to build next* — and every choice heats the planet a little more.
+When habitability finally reaches zero, the run ends, you bank **Earth Points**, and the next
+civilization starts from the ashes a little faster than the last one did.
+
+It is a **civilization simulator** and a **climate strategy game** wearing the clothes of a
+number-goes-up game, in the tradition of *Antimatter Dimensions* and *AdVenture Capitalist* —
+except the number that goes up is the one you should probably be worrying about.
+
+> [!NOTE]
+> **This is a gameplay simulation, not a scientific climate model.** The formulas are
+> simplified but internally consistent, and built on real, plausible *relationships* —
+> logarithmic CO₂ forcing, per-gas atmospheric lifetimes, natural sinks that weaken as the
+> world warms. They are tuned so the game behaves coherently from one campfire to 10⁴⁰⁰
+> kilograms of methane. They are not a prediction of anything.
+
+**Free. Open source. No accounts, no tracking, and it works with the plane in flight mode.**
+
+---
+
+## How to play
+
+The loop takes about thirty seconds to learn and several days to finish.
+
+| | |
+| :-- | :-- |
+| **1. Burn something** | Your Natural Fire produces Energy on its own. It never stops. |
+| **2. Research** | Spend Energy and Research on the **Technology** tab to unlock what comes next. |
+| **3. Build** | Buy generators on the **Production** tab. More copies, more output. |
+| **4. Watch the sky** | The **Atmosphere** tab fills in with what you have done to it. |
+| **5. Collapse** | Habitability hits zero. The Earth is finished — and so is the run. |
+| **6. Prestige** | Bank Earth Points, spend them on permanent upgrades, start EARTH 2. |
+| **7. Go faster** | Repeat. Every civilization is quicker and dirtier than the last. |
+
+Two rules make it different from most idle games:
+
+🔒 **Prices never rise.** The price you were quoted is the price you pay, however large your
+civilization grows. The *only* thing that makes something more expensive is you, buying more
+of that exact thing. No hidden complexity tax, no re-pricing of what you were already saving
+toward — the countdown on a button is a promise, not an estimate.
+
+⚡ **Every tenth copy doubles its output.** Each generator keeps its own progress track, so
+going deep on one building pays off visibly — and it is spaced so branching out into new
+technology still wins in the long run. Depth is a satisfying detour, not a replacement for
+the tech tree.
+
+---
+
+## Offline progression
+
+**The game runs while it is closed.** Not "sort of" — it is the point of the design.
+
+When you leave, EARTH records the time. When you come back, it computes exactly what your
+civilization produced while you were gone and hands it to you in one lump, with a summary of
+what changed. Up to **12 hours** is banked by default, and prestige upgrades push that as far
+as **8 days**.
+
+This is done with mathematics, not a background service. The gas-concentration model has an
+exact closed-form solution, so eight hours away is a *single calculation* that lands on the
+same numbers as if you had sat and watched all 115,200 ticks. That means:
+
+- **no background service**, no scheduled work, no wake locks;
+- **no battery drain** while the game is closed;
+- coming back to a stockpile big enough to buy a dozen things at once, which is the entire
+  point of checking in on an idle game.
+
+There is no punishment for closing the app and no advantage to leaving it open.
+
+---
+
+## Features
+
+| | |
+| :-- | :-- |
+| 🔬 **99 technologies** | Across 11 branches, from Controlled Fire to a Matrioshka Brain. 68 are repeatable generators, 31 are research nodes — including a mutually exclusive Coal-vs-Nuclear decision you only get to make once per Earth. |
+| ☁️ **6 greenhouse gases** | CO₂, CH₄, N₂O, H₂O, O₃ and an aggregate fluorinated bucket. Each has its own atmospheric lifetime, forcing curve and display unit, and they interact — water vapour is modelled as a feedback that the *other* gases drive. |
+| 🌡️ **A 5-factor habitability model** | Temperature, ocean acidity, sea level, agriculture and biodiversity, **multiplied** together — so any single one of them collapsing ends the run, even while the others look fine. |
+| ✨ **Prestige** | Earth Points and 11 permanent upgrades, scored on how *fast* the run was rather than only how it ended. Faster runs pay dramatically better. |
+| 🎯 **8 challenges** | Runs with a live restriction — no coal, never above +2 °C, never past the Iron Age — for a permanent reward. |
+| 🏆 **32 achievements** | From "First Spark" to "Apocalyptic Heat". |
+| 🎲 **13 random events** | Short multiplier swings, deliberately skewed heavily positive: a negative event in an idle game is a tax on being away, and only two of the thirteen are one. |
+| 📰 **39 world-news headlines** | Deterministic, once per run, with no mechanical effect whatsoever. They exist so a multi-day run reads as a story of consequences instead of a rising number. |
+| ♾️ **Numbers without a ceiling** | A finished run passes 10⁴⁰⁰, which an ordinary double cannot even hold. Four notations to read them in: compact, scientific, engineering and full. |
+| 📱 **Built for a phone** | Portrait, one-handed, nine tabs, dark and light themes, and a tablet layout that uses the extra width as margin rather than stretching stat rows across it. |
+
+---
+
+## Getting started
+
+EARTH runs on **Android 7.0 (API 24) and newer**, which is somewhere north of 98% of active
+devices.
+
+> [!IMPORTANT]
+> **There is no published release yet.** No Play Store listing, no APK on the releases page —
+> the [Releases](https://github.com/themantas1994/Earth-idle-game/releases) page is empty as
+> of this writing. Watch the repository to hear about the first one. Until then, building it
+> yourself is the way to play it, and it takes one command.
 
 ```bash
 git clone https://github.com/themantas1994/Earth-idle-game.git
@@ -36,57 +127,147 @@ cd Earth-idle-game
 adb install app/build/outputs/apk/debug/app-debug.apk
 ```
 
-The debug build installs alongside a release build rather than replacing it —
-it carries a `.debug` application-id suffix — so you can keep both on one
-device.
+You need **JDK 21** and an **Android SDK** with `platforms;android-37` and
+`build-tools;37.0.0` — point `ANDROID_HOME` at it, or put `sdk.dir=/path/to/sdk` in a
+`local.properties` file at the repository root. Android Studio has all of this already; open
+the repository root and press Run.
 
-| | |
-| --- | --- |
-| `./gradlew assembleDebug` | Debug APK → `app/build/outputs/apk/debug/app-debug.apk` |
-| `./gradlew bundleRelease` | Play bundle → `app/build/outputs/bundle/release/app-release.aab` |
-| `./gradlew assembleRelease` | Release APK → `app/build/outputs/apk/release/` (`app-release-unsigned.apk` until a keystore is configured) |
-| `./gradlew test` | The whole simulation, on the JVM, in a few seconds |
-| `./gradlew lintDebug lintRelease` | Reports → `app/build/reports/lint-results-*.html` |
-| `./gradlew connectedAndroidTest` | Instrumented tests; needs a device or emulator |
+Full build, signing and release instructions live in
+**[docs/wiki/Build-System.md](docs/wiki/Build-System.md)**.
 
-A release build assembles unsigned when no keystore is configured, so a fresh
-clone is never blocked on secrets. **[ANDROID.md](ANDROID.md)** covers signing,
-where the AdMob identifiers live, the project layout and CI.
+---
 
-## The game
+## Privacy
 
-You start with one lightning-struck tree, still smouldering. It produces Energy
-whether you are watching or not — there is no tap button, because Energy comes
-from a source of energy. Everything after that is the same loop: research an
-unlock on the **Technology** tab, build what it unlocked on the **Production**
-tab, watch the **Atmosphere** tab fill in with what you have done.
+EARTH is **local-first by design**, and the code is there to check.
 
-A first Earth takes a few days of real time. It keeps running while the app is
-closed — twelve hours banked at a time, more with upgrades — so a check-in
-means arriving to a stockpile and spending all of it at once. When habitability
-reaches zero the run ends, and you bank Earth Points toward making the next
-civilization faster.
+- **Your save never leaves your device.** It is a file in the app's private storage. There is
+  no account, no cloud save, no server, and no way for anyone else to read it. Android's own
+  Auto Backup can include it if you have that switched on, which is between you and Google.
+- **No analytics. No telemetry. No crash reporting. No tracking of any kind.**
+- **The simulation makes zero network requests.** Every number in the game is computed on your
+  phone.
+- **One ad banner**, at the bottom of the screen. That is the only reason the app asks for the
+  internet permission, and the only thing in the app that talks to a network. There are no
+  interstitials and no rewarded ads, nothing in the game is gated behind watching one, and if
+  it never loads the game plays exactly the same. In the EEA and UK you get Google's consent
+  form first, and you can reopen it any time from Settings.
 
-**Prices never rise.** A price you have been quoted is the price you pay,
-however large the tree around it grows. The only thing that ever makes
-something dearer is you, buying more of that same thing.
+Details, including exactly which permissions exist and why, are in
+**[docs/wiki/Security-and-Privacy.md](docs/wiki/Security-and-Privacy.md)**.
 
-**Every tenth copy doubles its output.** Each generator carries its own
-progress track, so going deep on one building has a visible payoff — spaced so
-that broadening into new technology still wins in the long run.
+---
 
-## What is in it
+## FAQ
 
-| | |
-| --- | --- |
-| **99 technologies** | Across 11 branches, from Controlled Fire to a Matrioshka Brain, including a mutually exclusive Coal-vs-Nuclear strategic choice. 68 are repeatable generators; 31 are research nodes. |
-| **6 greenhouse gases** | CO₂, CH₄, N₂O, H₂O, O₃ and an aggregate fluorinated bucket, each with its own lifetime, forcing curve and display unit. |
-| **A 5-factor habitability model** | Temperature, ocean acidity, sea level, agriculture and biodiversity — *multiplied*, so any one of them collapsing ends the run. |
-| **Prestige** | Earth Points and 11 permanent upgrades, scored on how *fast* the run was rather than only how it ended. |
-| **32 achievements, 8 challenges, 13 random events** | Challenges impose a live restriction for a permanent reward. |
-| **39 world-news headlines** | Deterministic, once per run, no mechanical effect — they exist so a multi-day run reads as a story rather than a rising number. |
+<details>
+<summary><b>Is the game free?</b></summary><br>
 
-## How it is built
+Yes. Free to play, free to build, free to fork, with no in-app purchases of any kind. There is
+a single banner ad and nothing in the game is locked behind it.
+</details>
+
+<details>
+<summary><b>Does it work offline?</b></summary><br>
+
+Completely. The entire simulation runs on your device with no network access at all. You can
+play the whole game in flight mode; the only thing that needs a connection is the ad banner,
+and the game does not care whether it loads.
+</details>
+
+<details>
+<summary><b>Is there a tap-to-earn mechanic?</b></summary><br>
+
+No, and deliberately not. Energy comes from things that produce energy — a fire, a mill, a
+reactor — not from your thumb. The original build had tapping and it was removed: it made the
+first ten minutes about wrist stamina and was worthless for the rest of the run. What you do
+in EARTH is *choose*, not grind.
+</details>
+
+<details>
+<summary><b>What happens when Earth becomes uninhabitable?</b></summary><br>
+
+The run ends. You get a summary of what your civilization managed — peak temperature, peak
+CO₂, how long it lasted, what it produced — and you bank Earth Points for it. Then you press
+Reset and start EARTH 2 with your permanent upgrades intact. Nothing is lost; that *is* the
+progression.
+</details>
+
+<details>
+<summary><b>What is prestige?</b></summary><br>
+
+The reset loop. When a planet dies you convert the run into **Earth Points**, a currency that
+survives the reset, and spend them on permanent upgrades — more production, cheaper
+technology, a longer offline cap, generators and resources you start each new Earth already
+holding.
+
+The payout is scored on total greenhouse gas produced, how hard you pushed the atmosphere, how
+far up the tech tree you got, and — most importantly — **how fast you did it**. Every run ends
+in the same place, so scoring only the ending would pay a stronger civilization *less*, since
+a stronger one kills the planet sooner. Speed is what prestige upgrades actually buy, so speed
+is what gets scored.
+</details>
+
+<details>
+<summary><b>How does offline progression work?</b></summary><br>
+
+Close the app, come back later, and everything your civilization produced while you were away
+is waiting, with a summary of what changed. Up to 12 hours by default, up to 8 days with
+upgrades.
+
+It costs no battery, because nothing runs in the background: the game notes the time you left
+and computes the answer in one step when you return. See
+[Offline progression](#offline-progression) above.
+</details>
+
+<details>
+<summary><b>Is this a scientific climate simulator?</b></summary><br>
+
+**No.** It is a game. The relationships are real ones — CO₂ forcing really is logarithmic,
+gases really do have wildly different atmospheric lifetimes, warming really does weaken
+natural carbon sinks — but the numbers are tuned for a satisfying multi-day run, not for
+accuracy. CO₂'s kilograms-per-ppm is scaled down by a factor of about four; sea level rises at
+a game-time rate that would be absurd in reality.
+
+If it leaves you curious about the real thing, that is the best outcome it can hope for. Do
+not cite it.
+</details>
+
+<details>
+<summary><b>How large can the numbers get?</b></summary><br>
+
+Larger than a computer's normal floating-point numbers can hold. A double gives up at about
+1.8 × 10³⁰⁸; a finished EARTH run sails past 10⁴⁰⁰ and prestige multiplies from there.
+
+The game stores every value as `sign × mantissa × 10^exponent` with the exponent *itself* a
+full-size number, which puts the ceiling somewhere around 10^(1.8 × 10³⁰⁸) — a number with
+more digits than the universe has atoms. You will not reach it. Pick a notation you like in
+Settings; there are four.
+</details>
+
+<details>
+<summary><b>Can I lose my save?</b></summary><br>
+
+The game keeps two copies. Every save rotates the previous one into a backup slot in the same
+atomic write, so a phone killed mid-save still has a good one. If the main save is ever
+unreadable the game loads the backup and tells you it did. If the file itself is damaged
+beyond that, the game starts fresh and says so rather than crashing on launch.
+</details>
+
+<details>
+<summary><b>Why does my planet die faster every run?</b></summary><br>
+
+Because you are better at killing it. Prestige upgrades multiply production, and production is
+what heats the atmosphere. That is intended — the whole progression is getting quicker at the
+same apocalypse, and the prestige payout rewards exactly that.
+</details>
+
+---
+
+## For developers
+
+Native **Kotlin** and **Jetpack Compose**. No WebView, no JavaScript, no cross-platform
+runtime.
 
 ```
 domain/        Pure Kotlin. No Android, no Compose. The whole simulation.
@@ -95,57 +276,82 @@ platform/      Haptics, audio, ads — each behind an interface.
 presentation/  ViewModel, StateFlow, Compose UI.
 ```
 
-Three things are worth knowing about the architecture.
+Three things are worth knowing:
 
-**The engine is a pure function of state.** `simulateStep(state, dt)` returns
-the next state and nothing else — no clocks, no I/O, no Android. That is what
-lets the entire simulation be tested in a few seconds on the JVM, and what
-makes the offline path and the live path provably identical.
+**The engine is a pure function of state.** `simulateStep(state, dt)` returns the next state
+and nothing else — no clocks, no I/O, no Android anywhere in `domain/`. That is what lets the
+entire simulation be tested in seconds on the JVM, and what makes the offline path and the
+live path provably identical.
 
-**Gas concentrations are integrated in closed form**, not stepped. `dE/dt =
-production − k·E` has an exact solution, so one call with `dt = 8 hours`
-produces the same numbers as 115,200 calls with `dt = 250 ms`. Offline progress
-is therefore a single calculation rather than a simulation loop, and there is
-no background service, no scheduled work and no wake locks anywhere in the app.
+**Gas concentrations are integrated in closed form.** `dE/dt = production − k·E` has an exact
+solution, so one call with `dt = 8 hours` produces the same numbers as 115,200 calls with
+`dt = 250 ms`. Offline progress is one calculation, not a replayed loop.
 
-**Numbers are arbitrary-scale.** A finished run passes 1e400, which a `Double`
-cannot hold. `GameDecimal` stores `sign × mantissa × 10^exponent` with the
-exponent itself a `Double`, so the representable range runs to about
-10^(1.8e308) — unreachable in this game — and the save format stores the exact
-triple rather than a rounded number.
+**Numbers are arbitrary-scale.** `GameDecimal` stores `sign × mantissa × 10^exponent` with the
+exponent itself a `Double`, and the save format persists the exact triple rather than a
+rounded number.
 
-## Porting notes
+```bash
+./gradlew test                    # 205 JVM tests, seconds
+./gradlew lintDebug lintRelease   # Android lint, both variants
+./gradlew assembleDebug           # debug APK
+./gradlew bundleRelease           # Play bundle
+```
 
-This started life as a TypeScript/React game shipped through Capacitor. The
-Android app is a full native rewrite, and its correctness is checked against
-the original by execution rather than by reading: the reference engine's
-answers were captured as golden fixtures, and the Kotlin suite asserts against
-them — every field of all 99 technologies, 576 Decimal operand pairs, 3,240 gas
-integrations, every formatting mode in every notation, the save format
-including the v1→v2→v3 migration chain, and a 95-step scripted playthrough
-compared value by value.
+The suite is mostly **parity tests**: the original TypeScript engine's answers were captured
+as golden fixtures, and the Kotlin port asserts against them — every field of all 99
+technologies, 576 arbitrary-precision operand pairs, 3,240 gas integrations, every formatting
+mode, the whole save-migration chain, and a 95-step scripted playthrough compared value by
+value. The frozen reference lives in [`tools/ts-reference/`](tools/ts-reference) and nothing
+in the app build depends on it.
 
-The frozen reference lives in `tools/ts-reference/` so those fixtures can be
-regenerated. Nothing in the build depends on it.
+**📖 [Full technical documentation →](docs/wiki/Home.md)**
 
-Two deliberate differences from the reference, both documented where they live:
+| | |
+| :-- | :-- |
+| [Developer overview](docs/DEVELOPER_OVERVIEW.md) | Start here if you are new to the codebase |
+| [Architecture](docs/wiki/Architecture.md) | Layers, dependency rules, what is forbidden where |
+| [Game engine](docs/wiki/Game-Engine.md) | GameState, simulateStep, the game loop |
+| [GameDecimal](docs/wiki/GameDecimal.md) | The arbitrary-scale number type |
+| [Climate model](docs/wiki/Climate-Model.md) | Every formula, with its rationale |
+| [Save system](docs/wiki/Save-System.md) | Format, slots, corruption recovery |
+| [Testing](docs/wiki/Testing.md) | How to run everything, how to add parity cases |
+| [Contributing](docs/wiki/Contributing.md) | Conventions, and the things people get wrong |
+| [Codebase audit](docs/CODEBASE_AUDIT.md) | Known issues and remaining technical debt |
 
-- **The Speedrun challenge** scores elapsed run time from the game clock rather
-  than reading a wall clock inside its goal check, so the same state always
-  gives the same answer. Live behaviour is unchanged.
-- **Water vapour** lags one simulation step, because it is a feedback driven by
-  the previous step's temperature rather than an accumulating stock. This
-  matches the reference; it emits nothing and is never banked or scored.
+---
 
-## Known gaps
+## Contributing
 
-- **No audio assets ship.** The sound and music settings are real and the audio
-  layer is wired up, but there is nothing to play yet — the same state the
-  original was in. Adding a raw resource and a `Sound` entry is all it takes.
-- **Not yet run on physical hardware.** The build environment has no KVM, so no
-  emulator can boot here. Everything above the platform layer is covered by JVM
-  tests; the instrumented suite (`connectedAndroidTest`) covers DataStore and
-  the Compose UI but has not been executed against a real device.
-- **The fluorinated gases are one aggregate bucket.** Splitting CFCs, HFCs,
-  PFCs and SF₆ into four is a data change rather than an engine change — the
-  gas registry is built for it.
+Contributions are welcome — bug reports, balance feedback, accessibility fixes, and code.
+**[docs/wiki/Contributing.md](docs/wiki/Contributing.md)** covers the architecture rules, the
+testing requirements, and the specific things a first change tends to get wrong (adding a
+technology, changing a formula, or touching the save format each have a procedure).
+
+The one hard rule: **the reference implementation in `tools/ts-reference/` is the parity
+oracle.** If you change gameplay maths, change it in both and regenerate the fixtures.
+
+---
+
+## License
+
+> [!WARNING]
+> **This repository does not currently carry a licence file.** Under copyright law that means
+> the default applies — all rights reserved — and nobody has permission to copy, modify or
+> redistribute the source, whatever the word "open-source" elsewhere in this README suggests
+> about the project's intent.
+>
+> This is very likely an oversight rather than a decision, but choosing a licence is the
+> repository owner's call and not one this documentation can make for them.
+> [docs/GITHUB-METADATA.md](docs/GITHUB-METADATA.md) has a recommendation and the exact steps.
+
+---
+
+<div align="center">
+
+**EARTH** · an open-source Android idle game about technology, greenhouse gases and
+starting over
+
+[Documentation](docs/wiki/Home.md) · [Player FAQ](docs/wiki/FAQ.md) · [Contributing](docs/wiki/Contributing.md) · [Report a bug](https://github.com/themantas1994/Earth-idle-game/issues)
+
+</div>
