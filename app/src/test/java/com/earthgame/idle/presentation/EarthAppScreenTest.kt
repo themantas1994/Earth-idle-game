@@ -80,7 +80,6 @@ class EarthAppScreenTest {
                     uiState = GameUiState(state = state, derived = derived, loaded = true),
                     windowWidthSizeClass = widthSizeClass,
                     monetization = null,
-                    adsPersonalized = false,
                     onBuyTechnology = onBuy,
                     onBuyPrestigeUpgrade = {},
                     onResetEarth = onReset,
@@ -141,7 +140,7 @@ class EarthAppScreenTest {
         setContent()
         // Nine tabs have to fit on a phone, so each carries its full name as an
         // accessibility label — which is also how they are found here.
-        for (destination in Destination.entries) {
+        for (destination in Destination.navigationEntries) {
             navigateTo(destination)
         }
         navigateTo(Destination.HOME)
@@ -248,7 +247,7 @@ class EarthAppScreenTest {
         // A palette mistake shows up as a crash or an invisible screen, so the
         // light theme gets the same walk-through as the dark one.
         setContent(state = playableState().let { it.copy(settings = it.settings.copy(darkMode = ThemePreference.LIGHT)) })
-        for (destination in Destination.entries) {
+        for (destination in Destination.navigationEntries) {
             navigateTo(destination)
         }
         navigateTo(Destination.HOME)

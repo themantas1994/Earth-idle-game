@@ -2,8 +2,11 @@ package com.earthgame.idle.platform.ads
 
 import android.app.Activity
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import com.earthgame.idle.BuildConfig
 import com.earthgame.idle.R
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -13,31 +16,34 @@ import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Where the ad identifiers come from.
  *
- * The app ID is read from the manifest by the Mobile Ads SDK itself; both
- * values live in `res/values/ads.xml`, which is the single place to change them
- * for a different AdMob account. Neither is a secret — they ship in every APK —
- * and no secret belongs here.
+ * Both live in `res/values/ads.xml`; the debug variant overlays that file with
+ * Google's public sample identifiers, so which set a build uses is decided at
+ * resource-merge time rather than by a runtime branch that could be got wrong.
+ * The app ID is read straight out of the merged manifest by the Mobile Ads SDK
+ * and never appears in code at all.
  *
- * A debuggable build always requests Google's public test units instead.
- * AdMob counts impressions and clicks a developer generates on their own live
- * unit as invalid traffic, and repeat offences suspend the whole account, so a
- * live unit is only ever requested from a release build.
+ * Neither identifier is a secret — they ship in every APK — and no secret
+ * belongs here.
  */
 object MonetizationConfig {
 
-    /** Google's public sample banner unit, which always fills. */
-    const val TEST_BANNER_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"
+    fun bannerUnitId(context: Context): String = context.getString(R.string.admob_banner_unit_id)
 
-    fun bannerUnitId(context: Context): String =
-        if (isDebuggable(context)) TEST_BANNER_UNIT_ID else context.getString(R.string.admob_banner_unit_id)
-
-    fun isDebuggable(context: Context): Boolean =
-        (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+    /**
+     * The hashed device ID UMP needs before it will honour a forced debug
+     * geography on physical hardware. Empty in release, and empty in debug
+     * until a developer pastes one in — see the debug overlay.
+     */
+    fun umpTestDeviceHashedId(context: Context): String? =
+        context.getString(R.string.ump_test_device_hashed_id).takeIf { it.isNotBlank() }
 }
 
 /**
@@ -46,40 +52,74 @@ object MonetizationConfig {
  *
  * Nothing in the simulation knows this class exists. Every failure path — no
  * Play Services, no network at launch, a misconfigured unit, a consent form
- * that will not load — ends the same way: the banner is not shown and the game
- * plays exactly as it would have. An ad is never allowed to cost the player
- * more than the ad.
+ * that will not load, a player who declines — ends the same way: the banner is
+ * not shown and the game plays exactly as it would have. An ad is never allowed
+ * to cost the player more than the ad.
  */
 class MonetizationController(private val activity: Activity) {
 
     private val initialized = AtomicBoolean(false)
     private var consentInformation: ConsentInformation? = null
 
+    /**
+     * Whether the recorded consent state permits requesting an ad at all.
+     *
+     * Compose state, not a plain field: the consent flow finishes some time
+     * after the first frame, and the banner and the Settings entry both have to
+     * notice when it does.
+     */
+    var canRequestAds: Boolean by mutableStateOf(false)
+        private set
+
     /** Whether a consent form exists to reopen from Settings. */
-    var privacyOptionsAvailable: Boolean = false
+    var privacyOptionsAvailable: Boolean by mutableStateOf(false)
         private set
 
     /**
-     * Runs Google's User Messaging Platform flow, then initializes the Mobile
-     * Ads SDK.
+     * Runs Google's User Messaging Platform flow, then — only if the resulting
+     * consent state allows it — initializes the Mobile Ads SDK.
      *
-     * Order matters: serving ads in the EEA or UK without a consent message is
-     * a policy violation, so consent is gathered *before* the SDK starts, as
-     * Google's guide requires. When no choice can be recorded at all — the form
-     * failed to load, or UMP itself errored — the SDK is still started but
-     * personalization is switched off, which is the conservative reading.
+     * The order is the one Google's guide requires, and it is not negotiable:
+     * the Mobile Ads SDK may preload an ad the moment it is initialized, so
+     * initializing before consent has been gathered is itself the violation.
+     *
+     * ```
+     * requestConsentInfoUpdate ──► loadAndShowConsentFormIfRequired
+     *                                        │
+     *                                        ▼
+     *                               canRequestAds() ? ──no──► nothing happens
+     *                                        │yes
+     *                                        ▼
+     *                          MobileAds.initialize (background thread)
+     *                                        ▼
+     *                                    banner loads
+     * ```
+     *
+     * Whether the ads that follow are personalized is *not* decided here. The
+     * UMP SDK writes the IAB TCF consent signals, the Mobile Ads SDK reads them
+     * and picks its serving mode from them. The `npa=1` network extra exists for
+     * publishers handling consent without a TCF-certified CMP; setting it
+     * alongside UMP would override the player's actual choice in one direction
+     * only, so it is deliberately absent.
+     *
+     * Safe to call more than once: UMP expects `requestConsentInfoUpdate` on
+     * every launch, and [initializeAds] is idempotent.
      */
-    fun start(onReady: (canRequestAds: Boolean) -> Unit) {
+    fun start() {
         val parameters = ConsentRequestParameters.Builder()
             .apply {
-                if (MonetizationConfig.isDebuggable(activity)) {
-                    // Without this a debug build on a device outside the EEA
-                    // never sees the form, so the flow cannot be exercised.
-                    setConsentDebugSettings(
-                        ConsentDebugSettings.Builder(activity)
-                            .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-                            .build(),
-                    )
+                if (BuildConfig.DEBUG) {
+                    // Without this a debug build outside the EEA never sees the
+                    // form, so the flow cannot be exercised. UMP only honours it
+                    // on a device it considers a test device — automatic on an
+                    // emulator, and on hardware only once a hashed ID is set.
+                    val debugSettings = ConsentDebugSettings.Builder(activity)
+                        .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                        .apply {
+                            MonetizationConfig.umpTestDeviceHashedId(activity)?.let(::addTestDeviceHashedId)
+                        }
+                        .build()
+                    setConsentDebugSettings(debugSettings)
                 }
             }
             .build()
@@ -93,40 +133,66 @@ class MonetizationController(private val activity: Activity) {
             {
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
                     if (formError != null) {
+                        // The message is Google's own diagnostic text; it carries
+                        // no player data and no identifier.
                         Log.w(TAG, "Consent form unavailable: ${formError.message}")
                     }
-                    privacyOptionsAvailable = information.privacyOptionsRequirementStatus ==
-                        ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
-                    initializeAds()
-                    onReady(information.canRequestAds())
+                    onConsentSettled(information)
                 }
             },
             { requestError ->
-                // Consent could not even be asked about. Fall back to
-                // non-personalized ads rather than serving nothing or, worse,
-                // serving personalized ads without consent.
+                // Consent could not even be asked about — offline at launch, or
+                // UMP itself errored. No recorded consent means no ad request:
+                // the game simply runs without a banner.
                 Log.w(TAG, "Consent info update failed: ${requestError.message}")
-                initializeAds()
-                onReady(false)
+                onConsentSettled(information)
             },
         )
     }
 
-    private fun initializeAds() {
-        if (!initialized.compareAndSet(false, true)) return
-        // Whether ads may be personalized is carried on the request itself (see
-        // createBannerView), not in the global configuration.
-        runCatching { MobileAds.initialize(activity) {} }
-            .onFailure { Log.w(TAG, "Mobile Ads init failed", it) }
+    private fun onConsentSettled(information: ConsentInformation) {
+        privacyOptionsAvailable = runCatching {
+            information.privacyOptionsRequirementStatus ==
+                ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+        }.getOrDefault(false)
+
+        val permitted = runCatching { information.canRequestAds() }.getOrDefault(false)
+        if (permitted) initializeAds()
+        // Set last: this is what lets the banner composable start, and it must
+        // not do so before the SDK has been told to come up.
+        canRequestAds = permitted
     }
 
-    /** Re-opens the consent form so a player can change their choice later. */
+    /**
+     * Brings the Mobile Ads SDK up exactly once, on a background thread.
+     *
+     * `MobileAds.initialize` does real work — Play Services handshake, disk and
+     * network I/O — and Google's quick start puts it on `Dispatchers.IO` for
+     * that reason. Nothing waits on the callback: the banner retries on its own
+     * schedule, and the game has already drawn.
+     */
+    private fun initializeAds() {
+        if (!initialized.compareAndSet(false, true)) return
+        CoroutineScope(Dispatchers.IO).launch {
+            runCatching { MobileAds.initialize(activity) {} }
+                .onFailure { Log.w(TAG, "Mobile Ads init failed", it) }
+        }
+    }
+
+    /**
+     * Re-opens the consent form so a player can change or withdraw their choice.
+     *
+     * The new state is picked up on the next launch, which is how UMP works —
+     * the form dismissal callback does not re-run the gathering flow — so the
+     * flags are refreshed here too rather than left stale for the session.
+     */
     fun showPrivacyOptions() {
         runCatching {
             UserMessagingPlatform.showPrivacyOptionsForm(activity) { error ->
                 if (error != null) Log.w(TAG, "Privacy options form failed: ${error.message}")
+                consentInformation?.let(::onConsentSettled)
             }
-        }
+        }.onFailure { Log.w(TAG, "Privacy options form could not be shown", it) }
     }
 
     /**
@@ -135,27 +201,19 @@ class MonetizationController(private val activity: Activity) {
      * Adaptive banners size themselves to the device width, which is what
      * Google recommends over the fixed 320x50. The "large" variant is the
      * current API — the older fixed-height anchored sizes are deprecated.
-     * Returns null if the view cannot be created at all, which the composable
-     * renders as no banner.
+     * Returns null if the view cannot be created at all, or if consent does not
+     * permit an ad request, both of which the composable renders as no banner.
      */
-    fun createBannerView(widthDp: Int, personalized: Boolean): AdView? = runCatching {
-        AdView(activity).apply {
-            adUnitId = MonetizationConfig.bannerUnitId(activity)
-            setAdSize(AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, widthDp))
-            val request = AdRequest.Builder()
-                .apply {
-                    if (!personalized) {
-                        // The SDK's documented opt-out for non-personalized ads.
-                        addNetworkExtrasBundle(
-                            com.google.ads.mediation.admob.AdMobAdapter::class.java,
-                            android.os.Bundle().apply { putString("npa", "1") },
-                        )
-                    }
-                }
-                .build()
-            loadAd(request)
-        }
-    }.onFailure { Log.w(TAG, "Banner creation failed", it) }.getOrNull()
+    fun createBannerView(widthDp: Int): AdView? {
+        if (!canRequestAds) return null
+        return runCatching {
+            AdView(activity).apply {
+                adUnitId = MonetizationConfig.bannerUnitId(activity)
+                setAdSize(AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, widthDp))
+                loadAd(AdRequest.Builder().build())
+            }
+        }.onFailure { Log.w(TAG, "Banner creation failed", it) }.getOrNull()
+    }
 
     private companion object {
         const val TAG = "Monetization"

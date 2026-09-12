@@ -5,7 +5,7 @@
 ## Running everything
 
 ```bash
-./gradlew test                    # 205 JVM tests, ~30 s cold, seconds warm
+./gradlew test                    # 215 JVM tests, ~30 s cold, seconds warm
 ./gradlew lintDebug lintRelease   # Android lint, both variants
 ./gradlew connectedAndroidTest    # instrumented; needs a device or emulator
 
@@ -83,6 +83,8 @@ These are the tests that would catch "the game is unplayable" as opposed to "a f
 | `GameViewModelTest` | JVM + virtual time | Loading, tick cadence, autosave, background/foreground, the cap, backup fallback, corruption, haptics and audio gating |
 | `GameViewModelConcurrencyTest` | JVM + **real threads** | The tick racing the player. One deterministic forced interleaving plus two invariant stress tests |
 | `EarthAppScreenTest` | **Robolectric** | The whole Compose UI: nine destinations, Back unwinding, a purchase reaching the game, disjoint shopping lists, every Settings toggle, the reset gate, the tutorial, light theme, the wide layout |
+| `AboutScreenTest` | **Robolectric** | About and the licence notices: reachable from Settings, showing the real build, stating the project's licence rather than assuming one, Back unwinding Licenses → About → Settings, and the bundled notices asset being real |
+| `ProductionAdConfigTest` | JVM | The shipped AdMob identifiers, read from `ads.xml` in both source sets: the production values are exactly the account's, the debug overlay is Google's sample, no sample identifier is in the release resources, and the app ID is declared exactly once per variant |
 
 ### Instrumented
 

@@ -67,7 +67,7 @@ fun BottomNav(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            for (destination in Destination.entries) {
+            for (destination in Destination.navigationEntries) {
                 val selected = destination == current
                 Column(
                     modifier = Modifier

@@ -9,6 +9,13 @@ documentation, the TypeScript reference, CI and repository metadata.
 This document separates **FIXED** from **REMAINING**. Nothing is listed as fixed unless the code
 actually changed and a build or test confirmed it.
 
+> [!NOTE]
+> **This is a point-in-time record of the 2026-09-10 audit, not a live document.** The
+> release-preparation work that followed changed several of the things described here — notably
+> how debug and release ad configuration are separated, the consent flow, and the test count.
+> For the current state, read [Release blockers](RELEASE_BLOCKERS.md),
+> [Advertising](wiki/Advertising.md) and [Privacy](wiki/Privacy.md).
+
 ---
 
 ## Architecture assessment

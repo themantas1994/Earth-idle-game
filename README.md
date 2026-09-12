@@ -8,7 +8,7 @@
 [![Platform](https://img.shields.io/badge/platform-Android%207.0%2B-3DDC84?logo=android&logoColor=white)](#getting-started)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Tests](https://img.shields.io/badge/tests-205%20passing-brightgreen)](#for-developers)
+[![Tests](https://img.shields.io/badge/tests-215%20passing-brightgreen)](#for-developers)
 
 *Incremental · Civilization simulator · Climate strategy · Fully offline*
 
@@ -114,11 +114,20 @@ There is no punishment for closing the app and no advantage to leaving it open.
 EARTH runs on **Android 7.0 (API 24) and newer**, which is somewhere north of 98% of active
 devices.
 
+### Where to get it
+
+| | |
+| :-- | :-- |
+| **Google Play** | Not published yet |
+| **GitHub Releases** | Not published yet — [the releases page](https://github.com/themantas1994/Earth-idle-game/releases) is empty |
+| **Build it yourself** | One command, below |
+
 > [!IMPORTANT]
-> **There is no published release yet.** No Play Store listing, no APK on the releases page —
-> the [Releases](https://github.com/themantas1994/Earth-idle-game/releases) page is empty as
-> of this writing. Watch the repository to hear about the first one. Until then, building it
-> yourself is the way to play it, and it takes one command.
+> **There is no published release yet**, and the repository is not yet ready for one: it carries
+> no licence file, and no signing key exists, so the release build produces *unsigned* artifacts.
+> [docs/RELEASE_BLOCKERS.md](docs/RELEASE_BLOCKERS.md) is the honest list of what is outstanding.
+> Watch the repository to hear about the first release. Until then, building it yourself is the
+> way to play it, and it takes one command.
 
 ```bash
 git clone https://github.com/themantas1994/Earth-idle-game.git
@@ -127,13 +136,14 @@ cd Earth-idle-game
 adb install app/build/outputs/apk/debug/app-debug.apk
 ```
 
-You need **JDK 21** and an **Android SDK** with `platforms;android-37` and
-`build-tools;37.0.0` — point `ANDROID_HOME` at it, or put `sdk.dir=/path/to/sdk` in a
+You need **JDK 21** and an **Android SDK** with `platforms;android-37.0` and
+`build-tools;36.0.0` — point `ANDROID_HOME` at it, or put `sdk.dir=/path/to/sdk` in a
 `local.properties` file at the repository root. Android Studio has all of this already; open
 the repository root and press Run.
 
-Full build, signing and release instructions live in
-**[docs/wiki/Build-System.md](docs/wiki/Build-System.md)**.
+Full build instructions live in **[docs/wiki/Build-System.md](docs/wiki/Build-System.md)**;
+signing and publishing in **[docs/RELEASE-SIGNING.md](docs/RELEASE-SIGNING.md)** and
+**[docs/wiki/Release-Process.md](docs/wiki/Release-Process.md)**.
 
 ---
 
@@ -153,8 +163,26 @@ EARTH is **local-first by design**, and the code is there to check.
   it never loads the game plays exactly the same. In the EEA and UK you get Google's consent
   form first, and you can reopen it any time from Settings.
 
-Details, including exactly which permissions exist and why, are in
+**The full privacy policy is [docs/PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md).** The
+implementation behind it — the consent flow, what each permission is for, what is logged — is in
+**[docs/wiki/Privacy.md](docs/wiki/Privacy.md)** and
 **[docs/wiki/Security-and-Privacy.md](docs/wiki/Security-and-Privacy.md)**.
+
+### Advertising
+
+EARTH carries **one banner advertisement**, at the bottom of the screen, supplied by Google
+AdMob. It is the only network traffic the app produces.
+
+- There are **no interstitials and no rewarded ads**, and nothing in the game is locked behind
+  one. If it never loads, the game plays exactly the same.
+- In the **EEA, the UK and Switzerland** you get Google's consent form before anything is
+  requested. **Decline and no advertisement is requested at all** — not a non-personalised one,
+  none.
+- You can change or withdraw that choice any time from **Settings → Manage advertising
+  privacy**, or **Settings → About → Manage advertising privacy**.
+
+How it is built, and why it can never touch the live ad account from a developer build, is in
+**[docs/wiki/Advertising.md](docs/wiki/Advertising.md)**.
 
 ---
 
@@ -292,7 +320,7 @@ exponent itself a `Double`, and the save format persists the exact triple rather
 rounded number.
 
 ```bash
-./gradlew test                    # 205 JVM tests, seconds
+./gradlew test                    # 215 JVM tests, seconds
 ./gradlew lintDebug lintRelease   # Android lint, both variants
 ./gradlew assembleDebug           # debug APK
 ./gradlew bundleRelease           # Play bundle
@@ -318,6 +346,10 @@ in the app build depends on it.
 | [Testing](docs/wiki/Testing.md) | How to run everything, how to add parity cases |
 | [Contributing](docs/wiki/Contributing.md) | Conventions, and the things people get wrong |
 | [Codebase audit](docs/CODEBASE_AUDIT.md) | Known issues and remaining technical debt |
+| [Release blockers](docs/RELEASE_BLOCKERS.md) | What stands between this and a public release |
+| [Release process](docs/wiki/Release-Process.md) | Versioning, signing, artifacts, the checklist |
+| [Privacy policy](docs/PRIVACY_POLICY.md) | What the app stores and what leaves the device |
+| [Third-party licences](docs/THIRD_PARTY_LICENSES.md) | Every dependency, audited |
 
 ---
 
@@ -343,7 +375,30 @@ oracle.** If you change gameplay maths, change it in both and regenerate the fix
 >
 > This is very likely an oversight rather than a decision, but choosing a licence is the
 > repository owner's call and not one this documentation can make for them.
-> [docs/GITHUB-METADATA.md](docs/GITHUB-METADATA.md) has a recommendation and the exact steps.
+> **[docs/wiki/Licensing.md](docs/wiki/Licensing.md)** lays out the options and the four places
+> a choice has to be applied; [docs/GITHUB-METADATA.md](docs/GITHUB-METADATA.md) has the GitHub
+> settings steps.
+
+### Third-party software
+
+EARTH ships **149 third-party modules** — AndroidX and Jetpack Compose, Kotlin and kotlinx,
+Google Play services, the Mobile Ads SDK and the User Messaging Platform. Every licence was read
+from each module's own published metadata:
+
+| | |
+| :-- | :-- |
+| Apache-2.0 | 136 modules |
+| Android SDK Licence | 11 modules (Google Play services, UMP) |
+| BSD-3-Clause | 1 (a repackaged subset of Protocol Buffers) |
+| MIT | 1 (Checker Framework qualifiers) |
+| Copyleft | **none** |
+
+Android, Kotlin, Jetpack Compose, Google Mobile Ads and the User Messaging Platform are other
+people's work, used under their licences — this project claims none of them.
+
+The audit is **[docs/THIRD_PARTY_LICENSES.md](docs/THIRD_PARTY_LICENSES.md)**, the distributable
+notices are **[THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt)**, and both are also readable
+inside the app at **Settings → About → Open Source Licenses**.
 
 ---
 

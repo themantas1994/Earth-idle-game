@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug-variant overlay for app/src/main/res/values/ads.xml.
+
+  Both values below are Google's own public sample identifiers, published in the
+  Mobile Ads SDK documentation for exactly this purpose. Because the override is
+  a resource overlay rather than a runtime branch, a debug build cannot reach
+  the live account at all: the manifest's APPLICATION_ID meta-data and the
+  banner request both resolve to these at merge time, and nothing in the app has
+  to decide which to use.
+
+  This matters. AdMob counts impressions and clicks a developer generates on
+  their own live unit as invalid traffic, and repeat offences suspend the whole
+  account. Test units always fill, which also makes them the easiest way to
+  check the banner's layout.
+
+  There is deliberately no release overlay: release uses the production values
+  in the main source set, which is the only place they appear.
+-->
+<resources>
+    <!-- https://developers.google.com/admob/android/quick-start -->
+    <string name="admob_application_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <!-- https://developers.google.com/admob/android/test-ads — sample adaptive banner -->
+    <string name="admob_banner_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!--
+      Optional. UMP only applies the forced EEA debug geography on a device it
+      has been told is a test device; an emulator counts automatically, a real
+      handset does not. Run the app once, read the hashed ID the UMP SDK logs
+      ("Use ConsentDebugSettings.Builder().addTestDeviceHashedId(...)"), and
+      paste it here to exercise the consent flow on hardware outside the EEA.
+      Leave empty otherwise — see docs/wiki/Advertising.md.
+    -->
+    <string name="ump_test_device_hashed_id" translatable="false"></string>
+</resources>

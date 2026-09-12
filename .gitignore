@@ -25,3 +25,6 @@ node_modules/
 # --- OS ---
 .DS_Store
 *.log
+
+# --- Release artifacts collected by ./gradlew packageReleaseArtifacts ---
+/release/

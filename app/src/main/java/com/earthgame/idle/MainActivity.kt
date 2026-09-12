@@ -8,9 +8,6 @@ import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -29,7 +26,13 @@ class MainActivity : ComponentActivity() {
         GameViewModel.Factory(application.saveRepository, application.haptics, application.audio)
     }
 
-    private var monetization: MonetizationController? = null
+    /**
+     * Created once, in [onCreate], and never inside a composable: the Mobile
+     * Ads SDK must be brought up exactly once per process, and a controller
+     * constructed during composition would be rebuilt on every recomposition
+     * that outlived its key.
+     */
+    private lateinit var monetization: MonetizationController
 
     /**
      * Watches the *process*, not this activity.
@@ -59,21 +62,16 @@ class MainActivity : ComponentActivity() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(processObserver)
         viewModel.start()
 
+        // Consent, then the SDK, then the banner — in that order, because the
+        // Mobile Ads SDK may preload an ad the moment it is initialized, and
+        // doing that before asking in the EEA/UK is the policy violation. The
+        // flow runs off the launch path and nothing waits on it; the game is
+        // fully playable, ad or no ad, before it finishes.
+        monetization = MonetizationController(this)
+        monetization.start()
+
         setContent {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-            var adsPersonalized by remember { mutableStateOf(false) }
-            var adsReady by remember { mutableStateOf(false) }
-
-            // Consent, then the SDK, then the banner — in that order, because
-            // serving ads in the EEA/UK before asking is a policy violation.
-            androidx.compose.runtime.LaunchedEffect(Unit) {
-                val controller = MonetizationController(this@MainActivity)
-                monetization = controller
-                controller.start { canRequestAds ->
-                    adsPersonalized = canRequestAds
-                    adsReady = true
-                }
-            }
 
             EarthTheme(
                 themePreference = uiState.state.settings.darkMode,
@@ -82,8 +80,7 @@ class MainActivity : ComponentActivity() {
                 EarthApp(
                     uiState = uiState,
                     windowWidthSizeClass = calculateWindowSizeClass(this).widthSizeClass,
-                    monetization = if (adsReady) monetization else null,
-                    adsPersonalized = adsPersonalized,
+                    monetization = monetization,
                     onBuyTechnology = viewModel::buyTechnology,
                     onBuyPrestigeUpgrade = viewModel::buyPrestigeUpgrade,
                     onResetEarth = viewModel::resetEarth,

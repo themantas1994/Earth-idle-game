@@ -41,10 +41,13 @@ entry points beyond the launcher.
 `destinationStackSaver` is a `listSaver` over route strings, so the stack survives configuration
 changes **and** process death, and an unknown route restores to Home rather than crashing.
 
-## The nine destinations
+## Nine tabs, eleven destinations
 
 ```kotlin
-enum class Destination(val route: String, val title: String, val shortLabel: String, val icon: String) {
+enum class Destination(
+    val route: String, val title: String, val shortLabel: String, val icon: String,
+    val inNavigation: Boolean = true,
+) {
     HOME("home", "Home", "Home", "🌍"),
     ATMOSPHERE("atmosphere", "Atmosphere", "Air", "☁️"),
     TECHNOLOGY("technology", "Technology", "Tech", "🔬"),
@@ -53,13 +56,25 @@ enum class Destination(val route: String, val title: String, val shortLabel: Str
     CHALLENGES("challenges", "Challenges", "Trials", "🎯"),
     ACHIEVEMENTS("achievements", "Achievements", "Awards", "🏆"),
     STATISTICS("statistics", "Statistics", "Stats", "📊"),
-    SETTINGS("settings", "Settings", "Setup", "⚙️");
+    SETTINGS("settings", "Settings", "Setup", "⚙️"),
+    ABOUT("about", "About", "About", "ℹ️", inNavigation = false),
+    LICENSES("licenses", "Open Source Licenses", "Licenses", "📄", inNavigation = false);
 }
 ```
 
 `shortLabel` is what fits under an icon on a 360 dp phone with nine columns across; `title` is the
 full name, used as the **accessibility label** — so a screen reader announces "Atmosphere" where
 the tab says "Air".
+
+`inNavigation` separates the nine game tabs from the screens reached from inside another one.
+`BottomNav` and `SideNav` iterate `Destination.navigationEntries`; a tenth and eleventh column
+would not fit across a phone, and neither About nor the licence notices is somewhere a player
+navigates to mid-game.
+
+They are **ordinary destinations** otherwise: opened from Settings with the same `navigate()`,
+pushed onto the same back stack, restored by the same saver. Back unwinds
+Licenses → About → Settings exactly as it unwinds any other path, which
+`AboutScreenTest.backUnwindsLicencesToAboutToSettings` asserts.
 
 ## The bars
 
