@@ -32,9 +32,14 @@ either. `VIBRATE` is for the two haptic pulses.
 > It is not declared here but it *is* in the shipped app, and the Play Console data-safety form
 > has to declare it. See [Security and privacy](Security-and-Privacy.md).
 
-One exported component: `MainActivity`, with the launcher intent filter. Nothing else is exported,
-there are no services, no receivers, no content providers and no deep links — so the app's entire
-external attack surface is "the user tapped the icon".
+**The app's own manifest declares one component**: `MainActivity`, with the launcher intent filter.
+No services, no receivers, no providers and no deep links are written here, so the app's own
+external entry point is "the user tapped the icon".
+
+The **merged** manifest is larger, because the ad SDK's dependency chain contributes components of
+its own — including three that are exported, each behind a system permission. They are inventoried
+in [Security and privacy](Security-and-Privacy.md#attack-surface); the short version is that
+nothing in this repository reaches any of them.
 
 ```xml
 android:launchMode="singleTask"

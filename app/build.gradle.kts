@@ -1,3 +1,5 @@
+import java.io.File
+import java.security.MessageDigest
 import java.util.Properties
 
 plugins {
@@ -245,19 +247,27 @@ androidComponents {
  * Collects the release artifacts under `release/` with the names a GitHub
  * release and a Play upload are filed under.
  *
+ * Alongside them it writes the two things a release is unreadable without: the
+ * R8 `mapping.txt` for the exact build (a crash report from a minified APK is
+ * noise without it) and a `SHA256SUMS` file so whoever downloads an artifact
+ * can check they got the one that was built.
+ *
  * `release/` is git-ignored: a 20 MB binary in a repository is a mistake that
  * is painful to undo, and the artifacts are reproducible from a tag. The task
  * only ever copies what the build just produced, and it refuses to pretend a
- * missing artifact exists.
+ * missing artifact exists. Nothing it writes is a secret — the keystore is
+ * never read here, and CI deletes its decoded copy before this runs.
  */
-val packageReleaseArtifacts by tasks.registering {
+tasks.register("packageReleaseArtifacts") {
     group = "distribution"
-    description = "Copies the release APK and AAB into release/ as EARTH-<version>-release.*"
+    description = "Copies the release APK, AAB, mapping.txt and checksums into release/"
     dependsOn("assembleRelease", "bundleRelease")
 
     val apkDir = layout.buildDirectory.dir("outputs/apk/release")
     val bundleDir = layout.buildDirectory.dir("outputs/bundle/release")
+    val mappingFile = layout.buildDirectory.file("outputs/mapping/release/mapping.txt")
     val destination = rootProject.layout.projectDirectory.dir("release")
+    val rootDir = rootProject.projectDir
     val version = earthVersionName
     // An artifact nobody can install must not be named as though they can. AGP
     // says so in the APK's filename but not the bundle's, so the signing
@@ -266,7 +276,7 @@ val packageReleaseArtifacts by tasks.registering {
 
     doLast {
         val target = destination.asFile.apply { mkdirs() }
-        var copied = 0
+        val produced = mutableListOf<File>()
         listOf("apk" to apkDir, "aab" to bundleDir).forEach { (extension, source) ->
             source.get().asFile.listFiles()
                 ?.filter { it.isFile && it.extension == extension }
@@ -274,11 +284,40 @@ val packageReleaseArtifacts by tasks.registering {
                 .forEach { artifact ->
                     val copy = target.resolve("EARTH-$version-release$suffix.$extension")
                     artifact.copyTo(copy, overwrite = true)
-                    copied++
-                    logger.lifecycle("Release artifact: ${copy.relativeTo(rootProject.projectDir)}")
+                    produced += copy
+                    logger.lifecycle("Release artifact: ${copy.relativeTo(rootDir)}")
                 }
         }
-        check(copied > 0) { "No release artifacts were produced under ${apkDir.get()} or ${bundleDir.get()}." }
+        check(produced.isNotEmpty()) {
+            "No release artifacts were produced under ${apkDir.get()} or ${bundleDir.get()}."
+        }
+
+        // Only exists when minification ran, which is every release build here —
+        // but a build type without R8 must not fail the packaging over it.
+        val mapping = mappingFile.get().asFile
+        if (mapping.isFile) {
+            val copy = target.resolve("EARTH-$version-release-mapping.txt")
+            mapping.copyTo(copy, overwrite = true)
+            produced += copy
+            logger.lifecycle("Release artifact: ${copy.relativeTo(rootDir)}")
+        } else {
+            logger.lifecycle("No mapping.txt was produced; a crash report from this build cannot be deobfuscated.")
+        }
+
+        // Written last so it covers everything above it, in the same format
+        // `sha256sum -c` reads.
+        val digest = MessageDigest.getInstance("SHA-256")
+        val checksums = target.resolve("SHA256SUMS")
+        checksums.writeText(
+            produced.joinToString("\n", postfix = "\n") { artifact ->
+                digest.reset()
+                val hash = digest.digest(artifact.readBytes())
+                    .joinToString("") { byte -> "%02x".format(byte) }
+                "$hash  ${artifact.name}"
+            },
+        )
+        logger.lifecycle("Release artifact: ${checksums.relativeTo(rootDir)}")
+
         if (!hasReleaseSigning) {
             logger.lifecycle(
                 "These artifacts are UNSIGNED: no keystore was configured. " +

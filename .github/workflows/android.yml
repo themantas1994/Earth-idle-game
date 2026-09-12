@@ -98,5 +98,7 @@ jobs:
             app/build/outputs/apk/debug/*.apk
             release/EARTH-*.apk
             release/EARTH-*.aab
+            release/EARTH-*-mapping.txt
+            release/SHA256SUMS
             app/build/reports/lint-results-*.html
             app/build/reports/tests/**

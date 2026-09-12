@@ -89,13 +89,15 @@ The underlying outputs stay where AGP puts them (`app/build/outputs/apk/release/
 
 **Before tagging**
 
-- [ ] `./gradlew test` — all 215 pass
+- [ ] `./gradlew test` — all 216 pass
 - [ ] `./gradlew lintDebug lintRelease` — zero issues
 - [ ] `python3 scripts/third-party-notices.py --check` — every shipped module is attributed
 - [ ] `./gradlew connectedAndroidTest` on a real device, or an explicit note that it was not run
-- [ ] **[Production QA checklist](../PRODUCTION_QA_CHECKLIST.md) walked on a release build,
-      on a physical device** — not a debug build; it has a different application ID, different
-      AdMob identifiers and no minification
+- [ ] **[Final device QA](../FINAL_DEVICE_QA.md) walked on a release build, on a physical
+      device** — not a debug build; it has a different application ID, different AdMob
+      identifiers and no minification. The release variant is the only minified one, so this
+      is the only thing that has ever run R8's output. See also the longer
+      [Production QA checklist](../PRODUCTION_QA_CHECKLIST.md)
 - [ ] `earthVersionCode` incremented, `earthVersionName` set
 - [ ] Fixtures regenerated if any shared maths changed, and `git status` clean
 - [ ] Wiki pages updated for anything that moved
@@ -121,11 +123,15 @@ git tag -a v1.0.0 -m "EARTH 1.0.0"
 git push origin v1.0.0
 ```
 
-Then create a GitHub release for the tag, attach the **signed APK** so players can sideload it, and
-update the README's "no published release yet" note.
+Then create a GitHub release for the tag, attach the **signed APK** and `SHA256SUMS` so players can
+sideload it and check what they downloaded, and update the README's "no published release yet" note.
+[Release notes template](../RELEASE_NOTES_TEMPLATE.md) is the draft to start from.
 
-**Keep `app/build/outputs/mapping/release/mapping.txt`** with every release. Without it a crash
-report from a minified build is unreadable.
+**Keep the R8 mapping** with every release. Without it a crash report from a minified build is
+unreadable. `packageReleaseArtifacts` now writes it to `release/EARTH-<version>-release-mapping.txt`
+alongside the artifacts, and a `SHA256SUMS` covering all three; the original stays where AGP put it
+at `app/build/outputs/mapping/release/mapping.txt`. Keep the mapping, but do not attach it to a
+public release.
 
 ## Never document a secret
 

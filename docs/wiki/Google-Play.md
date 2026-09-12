@@ -44,9 +44,10 @@ Each of these was checked against the built artifacts, not asserted:
 | 16 KB page alignment | `bundletool dump config` → `PAGE_ALIGNMENT_16K` |
 | Not debuggable | `android:debuggable` absent from the release manifest |
 | Real app label and icon | `application-label:'EARTH'`, adaptive icon at five densities |
-| One exported component | `MainActivity` with the launcher filter; nothing else exported |
-| Minified build that works | R8 + resource shrinking on; UMP and Mobile Ads classes retained |
-| Production ad identifiers | `aapt2 dump resources` on the release APK; no sample ID anywhere in it |
+| One exported component **of this app's own** | `MainActivity` with the launcher filter. The merged manifest also exports WorkManager's `SystemJobService` (`BIND_JOB_SERVICE`) and two receivers behind `DUMP`, all from the ad SDK's dependencies — [full inventory](Security-and-Privacy.md#attack-surface) |
+| No broad package visibility | No `QUERY_ALL_PACKAGES`; the merged `<queries>` list is narrow and comes from `androidx.browser` and the ad SDK |
+| Minified build that **builds** | R8 + resource shrinking on; UMP and Mobile Ads classes retained (198 of 224 `consent_sdk` classes). **Not the same as a minified build that runs** — see [Final device QA](../FINAL_DEVICE_QA.md) |
+| Production ad identifiers | `aapt2 dump resources` on the release APK; no sample ID anywhere in it, and no production ID anywhere in the debug APK |
 
 Reproduce the lot:
 
@@ -54,6 +55,8 @@ Reproduce the lot:
 ./gradlew packageReleaseArtifacts
 $ANDROID_HOME/build-tools/<version>/aapt2 dump badging release/EARTH-*.apk
 $ANDROID_HOME/build-tools/<version>/aapt2 dump resources release/EARTH-*.apk | grep -A1 admob_
+$ANDROID_HOME/build-tools/<version>/zipalign -c -P 16 -v 4 release/EARTH-*.apk | tail -1
+$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer manifest print release/EARTH-*.apk
 ```
 
 ---

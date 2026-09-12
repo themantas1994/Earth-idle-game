@@ -8,7 +8,7 @@
 [![Platform](https://img.shields.io/badge/platform-Android%207.0%2B-3DDC84?logo=android&logoColor=white)](#getting-started)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Tests](https://img.shields.io/badge/tests-215%20passing-brightgreen)](#for-developers)
+[![Tests](https://img.shields.io/badge/tests-216%20passing-brightgreen)](#for-developers)
 
 *Incremental · Civilization simulator · Climate strategy · Fully offline*
 
@@ -320,7 +320,7 @@ exponent itself a `Double`, and the save format persists the exact triple rather
 rounded number.
 
 ```bash
-./gradlew test                    # 215 JVM tests, seconds
+./gradlew test                    # 216 JVM tests, seconds
 ./gradlew lintDebug lintRelease   # Android lint, both variants
 ./gradlew assembleDebug           # debug APK
 ./gradlew bundleRelease           # Play bundle
@@ -348,6 +348,7 @@ in the app build depends on it.
 | [Codebase audit](docs/CODEBASE_AUDIT.md) | Known issues and remaining technical debt |
 | [Release blockers](docs/RELEASE_BLOCKERS.md) | What stands between this and a public release |
 | [Release process](docs/wiki/Release-Process.md) | Versioning, signing, artifacts, the checklist |
+| [Final device QA](docs/FINAL_DEVICE_QA.md) | The manual pass on real hardware, before anything ships |
 | [Privacy policy](docs/PRIVACY_POLICY.md) | What the app stores and what leaves the device |
 | [Third-party licences](docs/THIRD_PARTY_LICENSES.md) | Every dependency, audited |
 

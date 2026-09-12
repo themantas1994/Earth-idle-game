@@ -119,6 +119,15 @@ $ANDROID_HOME/build-tools/<version>/aapt2 dump badging \
 No location, camera, microphone, contacts, calendar, photos, storage,
 notifications, exact alarms or `QUERY_ALL_PACKAGES`.
 
+The merged manifest **does** carry a `<queries>` element, contributed by
+`androidx.browser` and the Mobile Ads SDK. It is package-visibility filtering, not
+a permission, and it is narrow: an https `VIEW` intent, `CustomTabsService`, a
+calendar `INSERT`, an `sms` `VIEW`, a `DIAL`, and the Play Store package by name.
+It lets those SDKs find a browser or a Custom Tabs provider for an ad's landing
+page and the consent form. It is emphatically **not** `QUERY_ALL_PACKAGES` — the
+app cannot enumerate what is installed — but "the app queries nothing" would be
+the wrong thing to say, so it is recorded here.
+
 ## Age and child-directed treatment
 
 EARTH has **no age gate** and therefore makes no assumption about a player's age.

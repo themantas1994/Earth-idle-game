@@ -45,7 +45,7 @@ Everything points **inward** at `domain/`. Nothing points out of it.
 
 This is the single most important rule in the codebase, and it buys four concrete things:
 
-1. **The tests are fast.** 215 JVM tests run in a few seconds. A simulation coupled to Android
+1. **The tests are fast.** 216 JVM tests run in a few seconds. A simulation coupled to Android
    would need Robolectric or a device for all of them; here only the persistence and UI tests
    pay that cost.
 2. **The offline path is provably the live path.** `simulateStep` cannot read a clock, so

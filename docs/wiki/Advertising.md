@@ -125,7 +125,18 @@ width; `onAdFailedToLoad` takes it back), so a device where nothing fills, a pla
 network, and a player who declined consent all lose no screen to an empty strip.
 
 The `AdView` is destroyed in `DisposableEffect`'s `onDispose`, so it cannot leak the activity, and
-it is rebuilt when the window width changes.
+it is rebuilt when the window width changes. Because `AndroidView` calls its factory once per node
+and keeps that view for the node's lifetime, the banner is wrapped in `key(adView)` — without it a
+width change would build and request a replacement while the *destroyed* original stayed on screen.
+The activity handles `orientation` and `screenSize` itself, so that path is a plain rotation, not an
+edge case.
+
+**Build in composition, request from an effect.** `createBannerView` constructs and sizes the view;
+`loadBanner` makes the request, from `DisposableEffect`, after the `AdListener` is attached. An ad
+that resolves immediately — a cached fill, or a failure the SDK answers without the network — would
+otherwise report to a listener that did not exist yet and leave the banner sized as though nothing
+had loaded. It also keeps an abandoned composition from spending a request on an `AdView` nobody
+will ever destroy.
 
 Adaptive sizing uses `AdSize.getLargeAnchoredAdaptiveBannerAdSize` against
 `LocalWindowInfo.current.containerSize` rather than `Configuration.screenWidthDp`, which rounds to

@@ -13,6 +13,11 @@ being shipped.
 adb install -r release/EARTH-<version>-release.apk
 ```
 
+> **For the first release, walk [Final device QA](FINAL_DEVICE_QA.md) instead** —
+> it is the same ground in 43 numbered steps, ordered so one pass covers it, and
+> it names which blocker each step closes. This page stays as the fuller
+> reference and as the per-release regression list.
+
 > A signed release APK cannot be installed over a debug build, and vice versa —
 > different signatures and different application IDs. Uninstall first if
 > switching, and remember that doing so deletes the save.

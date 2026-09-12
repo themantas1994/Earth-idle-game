@@ -51,14 +51,21 @@ $ANDROID_HOME/build-tools/<version>/aapt2 dump badging \
   app/build/outputs/apk/release/app-release*.apk | grep uses-permission
 ```
 
-The same libraries add components the app never touches: `androidx.work` and `androidx.room`
-services and receivers, `com.google.android.gms.ads.AdActivity`, `OutOfContextTestingActivity` and
-`HsdpShimActivity`. They come with the ad SDK and cannot be removed short of dropping ads — but
-they belong in an honest description of what ships.
-
 No location, no camera, no microphone, no contacts, no storage, no notifications, no exact alarms,
-no `QUERY_ALL_PACKAGES`. **Nothing the app itself declares is a foreground service** — that
-permission arrives with WorkManager, and no code in this repository starts one.
+no `QUERY_ALL_PACKAGES`.
+
+**Nothing this repository declares is a foreground service, and no code here starts one.**
+`FOREGROUND_SERVICE` and WorkManager's `SystemForegroundService` both arrive with the ad SDK's
+dependency chain. WorkManager itself *is* initialised in the process — `androidx.startup`'s
+`InitializationProvider` lists `WorkManagerInitializer` — but this app enqueues no work.
+
+### Package visibility
+
+The merged manifest carries a `<queries>` element from `androidx.browser` and the Mobile Ads SDK:
+an https `VIEW` intent, `CustomTabsService`, a calendar `INSERT`, an `sms` `VIEW`, a `DIAL`, and
+`com.android.vending` by name. That is how those SDKs find a browser or a Custom Tabs provider for
+an ad's landing page and for the consent form. It is filtered visibility, not `QUERY_ALL_PACKAGES`:
+the app cannot enumerate what is installed.
 
 ## The save
 
@@ -79,10 +86,31 @@ stale alongside it. To opt out entirely, set `android:allowBackup="false"`.
 
 ## Attack surface
 
-**One exported component:** `MainActivity`, with the launcher intent filter. No services, no
-receivers, no content providers, no deep links, no exported providers, and no `intent-filter` that
-accepts data from another app. **The app's entire external entry point is "the user tapped the
+**The only component this repository declares is `MainActivity`**, with the launcher intent filter
+and nothing else — no services, no receivers, no providers, no deep links, and no `intent-filter`
+that accepts data from another app. **The app's own external entry point is "the user tapped the
 icon."**
+
+The **merged** manifest is bigger, and describing it as one activity would be false. Read from the
+release APK (`apkanalyzer manifest print app/build/outputs/apk/release/app-release*.apk`), it holds
+6 activities, 5 services, 9 receivers and 2 providers. Three of those are exported, each gated by a
+permission the app does not hold and no ordinary app can:
+
+| Exported component | From | Gate |
+| :-- | :-- | :-- |
+| `MainActivity` | this app | Launcher intent filter — the intended entry point |
+| `androidx.work.impl.background.systemjob.SystemJobService` | WorkManager | `BIND_JOB_SERVICE`, held only by the system JobScheduler |
+| `androidx.work.impl.diagnostics.DiagnosticsReceiver` | WorkManager | `DUMP` — signature/privileged, i.e. adb and system only |
+| `androidx.profileinstaller.ProfileInstallReceiver` | ProfileInstaller | `DUMP` — the same |
+
+Everything else is `exported="false"`: `AdActivity`, `AdService`, `OutOfContextTestingActivity`,
+`NotificationHandlerActivity`, `GoogleApiActivity`, `HsdpShimActivity`, `MobileAdsInitProvider`,
+`androidx.startup.InitializationProvider`, `MultiInstanceInvalidationService`, and WorkManager's
+alarm service, foreground service and constraint-proxy receivers.
+
+None of it comes from this repository, none of it can be removed short of dropping ads, and no code
+here calls into any of it. The honest summary is: **this app adds one exported component to a set
+of platform-library components whose exported members are reachable only by the system.**
 
 | | |
 | :-- | :-- |
