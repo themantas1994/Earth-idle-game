@@ -198,7 +198,7 @@ The fixtures themselves are committed, so `./gradlew test` needs none of this.
 ## Continuous integration
 
 `.github/workflows/android.yml` runs the documentation link check, the unit
-tests, both lint variants, a regeneration check on `THIRD_PARTY_NOTICES.txt`,
+tests, both lint variants, a coverage check on `THIRD_PARTY_NOTICES.txt`,
 the debug APK and both release artifacts on every push and pull request, then
 uploads the artifacts and reports.
 

@@ -92,8 +92,19 @@ components Google embeds inside its own binaries from Google's published index.
 recognise, rather than filing it under a default. An unattributed dependency
 should stop a release, so it stops the script.
 
-CI regenerates the file and fails if the committed copy differs — a stale notices
-file is a stale in-app licence screen.
+**CI checks rather than regenerates.** `--check` compares the committed file
+against the resolved classpath and fails on a module missing from it, or one
+still listed after leaving the build. It reads no POMs and no artifacts, so it
+cannot fail because a runner's Gradle cache holds less than a developer's —
+which is exactly how the first version of this check failed, reporting all 149
+dependencies as unlicensed when the truth was a cold cache.
+
+Regeneration stays a maintainer step, run where a build has just populated the
+cache:
+
+```bash
+./gradlew assembleRelease && python3 scripts/third-party-notices.py
+```
 
 ### How they reach the player
 

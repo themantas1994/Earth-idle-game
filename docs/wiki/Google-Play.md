@@ -106,7 +106,7 @@ that says otherwise would be false:
 ./gradlew clean
 ./gradlew test
 ./gradlew lintDebug lintRelease
-python3 scripts/third-party-notices.py && git diff --exit-code -- THIRD_PARTY_NOTICES.txt
+python3 scripts/third-party-notices.py --check
 
 # 3. Build both artifacts, signed
 EARTH_KEYSTORE=… EARTH_KEYSTORE_PASSWORD=… EARTH_KEY_ALIAS=… EARTH_KEY_PASSWORD=… \

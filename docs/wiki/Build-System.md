@@ -167,7 +167,7 @@ Ubuntu, JDK 21 (Temurin), `gradle/actions/setup-gradle` with the cache read-only
 1. `python3 scripts/check-docs-links.py` — every relative Markdown link and anchor
 2. `./gradlew testDebugUnitTest --stacktrace`
 3. `./gradlew lintDebug lintRelease --stacktrace`
-4. `python3 scripts/third-party-notices.py`, then `git diff --exit-code -- THIRD_PARTY_NOTICES.txt`
+4. `python3 scripts/third-party-notices.py --check`
 5. `./gradlew assembleDebug --stacktrace`
 6. Decode `EARTH_KEYSTORE_BASE64` into `$RUNNER_TEMP`, if the secret exists
 7. `./gradlew packageReleaseArtifacts --stacktrace`
@@ -178,7 +178,11 @@ Artifacts (debug APK, release APK and AAB, lint reports, test reports) are uploa
 `if: always()`.
 
 Step 4 fails the build if a dependency changed without the notices being regenerated — a stale
-notices file is a stale in-app licence screen.
+notices file is a stale in-app licence screen. It **checks** rather than regenerates: regeneration
+reads POMs and artifacts out of the Gradle module cache, and a runner's cache holds only what its
+build happened to need, so a full regeneration there reported every dependency as unlicensed
+instead of reporting the real problem. `--check` compares the committed file against the resolved
+classpath and needs no cache at all.
 
 Release signing secrets are **optional**: without them the artifacts are still produced, unsigned,
 so a pull request from a fork is not blocked. See [Release signing](../RELEASE-SIGNING.md).

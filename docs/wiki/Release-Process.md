@@ -91,7 +91,7 @@ The underlying outputs stay where AGP puts them (`app/build/outputs/apk/release/
 
 - [ ] `./gradlew test` — all 215 pass
 - [ ] `./gradlew lintDebug lintRelease` — zero issues
-- [ ] `python3 scripts/third-party-notices.py` and `git diff --exit-code -- THIRD_PARTY_NOTICES.txt`
+- [ ] `python3 scripts/third-party-notices.py --check` — every shipped module is attributed
 - [ ] `./gradlew connectedAndroidTest` on a real device, or an explicit note that it was not run
 - [ ] **[Production QA checklist](../PRODUCTION_QA_CHECKLIST.md) walked on a release build,
       on a physical device** — not a debug build; it has a different application ID, different

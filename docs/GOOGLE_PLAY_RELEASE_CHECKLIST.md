@@ -92,7 +92,7 @@ banner, or an icon generated to fill a slot, is worse than delaying the listing.
 ./gradlew clean
 ./gradlew test
 ./gradlew lintDebug lintRelease
-python3 scripts/third-party-notices.py && git diff --exit-code -- THIRD_PARTY_NOTICES.txt
+python3 scripts/third-party-notices.py --check
 ./gradlew packageReleaseArtifacts
 ```
 

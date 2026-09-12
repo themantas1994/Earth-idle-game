@@ -12,13 +12,25 @@ hand-maintained list and never from a guess:
     LICENSE files embedded in the artifacts, and, for the Google SDKs, the
     `third_party_licenses.json` index Google publishes inside each AAR.
 
-Run it after adding or upgrading any dependency:
+Two modes:
 
-    python3 scripts/third-party-notices.py
+    python3 scripts/third-party-notices.py            # regenerate
+    python3 scripts/third-party-notices.py --check    # verify coverage only
 
-It rewrites THIRD_PARTY_NOTICES.txt in place and prints a summary. The file is
-committed, and the build copies it into the app's assets so the in-app
-"Open Source Licenses" screen shows exactly what the repository says.
+**Regenerate** rewrites THIRD_PARTY_NOTICES.txt in place. It needs a warm Gradle
+module cache, because that is where the POMs and artifacts it reads live — so
+run a build first. This is a maintainer step, run on a machine that has just
+built the app.
+
+**Check** only compares the module list against the committed file: every
+resolved module must appear in it, and nothing in it may have left the
+classpath. That is the failure mode a stale notices file actually has, and it
+needs no cache, no artifact downloads and no licence parsing — which is what
+makes it safe to run in CI, where the module cache may hold only what the build
+happened to need.
+
+The file is committed, and the build copies it into the app's assets so the
+in-app "Open Source Licenses" screen shows exactly what the repository says.
 
 Requires a working Android SDK, because it runs Gradle. Nothing else.
 """
@@ -36,7 +48,10 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE = os.path.expanduser("~/.gradle/caches/modules-2/files-2.1")
+# GRADLE_USER_HOME wins where it is set — CI runners set it to somewhere that is
+# not the invoking user's home.
+GRADLE_HOME = os.environ.get("GRADLE_USER_HOME") or os.path.expanduser("~/.gradle")
+CACHE = os.path.join(GRADLE_HOME, "caches", "modules-2", "files-2.1")
 POM_NS = "{http://maven.apache.org/POM/4.0.0}"
 OUTPUT = os.path.join(ROOT, "THIRD_PARTY_NOTICES.txt")
 
@@ -164,13 +179,78 @@ def indent(coordinates: list[str]) -> str:
     return "\n".join("    " + coordinate for coordinate in coordinates)
 
 
+def cold_cache_exit(detail: str) -> None:
+    """Everything this script reads is something a build already downloaded.
+
+    A cold or differently-located module cache is therefore not an error about
+    the dependencies — it is an error about this machine, and the two look
+    nothing alike once said out loud. CI gets `--check`, which needs neither.
+    """
+    sys.exit(
+        f"{detail}\n\n"
+        f"Looked under {CACHE}\n"
+        "This script reads the POMs and artifacts a build has already downloaded;\n"
+        "it never fetches its own. Build first, then re-run:\n"
+        "    ./gradlew assembleRelease && python3 scripts/third-party-notices.py\n\n"
+        "To verify the committed file instead, which needs no cache at all:\n"
+        "    python3 scripts/third-party-notices.py --check"
+    )
+
+
+def check(modules: dict[tuple[str, str], str]) -> None:
+    """Verifies the committed notices cover exactly the current classpath.
+
+    Deliberately reads nothing but the module list and the committed file. A
+    stale notices file's actual symptom is a coordinate missing from it or one
+    lingering after a dependency was dropped, and both are visible in the text
+    alone — so this needs no Gradle cache, and cannot fail because a CI runner's
+    cache happens to hold fewer artifacts than a developer's.
+    """
+    with open(OUTPUT, encoding="utf-8") as handle:
+        notices = handle.read()
+
+    expected = {f"{group}:{artifact}:{version}" for (group, artifact), version in modules.items()}
+    listed = set(re.findall(r"^ {4}([A-Za-z0-9_.\-]+:[A-Za-z0-9_.\-]+:[^\s]+)$", notices, re.M))
+
+    missing = sorted(expected - listed)
+    stale = sorted(listed - expected)
+    problems = []
+    if missing:
+        problems.append(
+            "These modules are on the release classpath but are not in\n"
+            f"{os.path.basename(OUTPUT)} — the app ships them unattributed:\n" + indent(missing)
+        )
+    if stale:
+        problems.append(
+            f"These modules are in {os.path.basename(OUTPUT)} but are no longer on the\n"
+            "release classpath, so it describes a build that no longer exists:\n" + indent(stale)
+        )
+    if problems:
+        sys.exit(
+            "\n\n".join(problems)
+            + "\n\nRegenerate on a machine with a warm Gradle cache:\n"
+            "    ./gradlew assembleRelease && python3 scripts/third-party-notices.py"
+        )
+    print(f"{len(expected)} modules on the release classpath, all attributed in {os.path.basename(OUTPUT)}")
+
+
 def main() -> None:
+    if "--check" in sys.argv[1:]:
+        check(resolve_classpath())
+        return
+
     modules = resolve_classpath()
 
     buckets: dict[str, list[str]] = collections.defaultdict(list)
     for (group, artifact), version in sorted(modules.items()):
         bucket = classify(pom_licences(group, artifact, version))
         buckets[bucket].append(f"{group}:{artifact}:{version}")
+
+    # Every single module unresolved means the cache is cold, not that 149
+    # dependencies are unlicensed. Saying so is the difference between a
+    # one-line fix and an afternoon.
+    if len(buckets["UNKNOWN"]) == len(modules):
+        cold_cache_exit(f"No POM was found for any of the {len(modules)} resolved modules.")
 
     if buckets["UNKNOWN"]:
         sys.exit(
@@ -180,10 +260,11 @@ def main() -> None:
             + indent(buckets["UNKNOWN"])
         )
 
-    notices = embedded_licence_text("androidx.core", "core", modules[("androidx.core", "core")], r"LICENSE\.txt$")
-    if notices is None:
-        sys.exit("Could not read the Apache-2.0 text from the androidx.core artifact.")
-    apache = notices
+    apache = embedded_licence_text(
+        "androidx.core", "core", modules[("androidx.core", "core")], r"LICENSE\.txt$"
+    )
+    if apache is None:
+        cold_cache_exit("The androidx.core artifact is not in the cache, so the Apache-2.0 text could not be read.")
 
     protobuf = embedded_licence_text(
         "androidx.datastore",
@@ -192,7 +273,10 @@ def main() -> None:
         r"LICENSE\.txt$",
     )
     if protobuf is None:
-        sys.exit("Could not read the BSD-3-Clause text from the bundled protobuf artifact.")
+        cold_cache_exit(
+            "The datastore-preferences-external-protobuf artifact is not in the cache,\n"
+            "so the BSD-3-Clause text could not be read."
+        )
 
     propagating = has_notice_file(modules)
     notice_clause = (
@@ -204,6 +288,11 @@ def main() -> None:
     )
 
     components = google_embedded_components(modules)
+    if not components:
+        cold_cache_exit(
+            "None of the Google AARs is in the cache, so the components they embed\n"
+            "could not be listed."
+        )
     version_name = read_version_name()
 
     document = TEMPLATE.format(
