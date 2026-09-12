@@ -159,7 +159,8 @@ source, author or licence, and a licence cannot be read off a file's pixels.
 it is original work of the project and under which licence; or records the stock
 source and its terms; or it is replaced. Guessing is exactly what an asset audit
 exists to prevent. See
-[Release blockers C4](../RELEASE_BLOCKERS.md#c4-the-launcher-icons-provenance-is-unrecorded).
+[Release blockers O4](../RELEASE_BLOCKERS.md#o4-the-launcher-icons-provenance-is-unrecorded) and
+[Assets](../ASSETS.md).
 
 ---
 

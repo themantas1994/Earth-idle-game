@@ -2,13 +2,21 @@
 
 [← Documentation home](wiki/Home.md)
 
-A draft for the **GitHub release** and for the **Play "What's new"** field, filled
-in against the version this repository currently builds. It is a draft, not a
-publication: nothing here should go out until
-[Release blockers](RELEASE_BLOCKERS.md) has no open CRITICAL item.
+A longer draft of the release notes, filled in against the version this
+repository currently builds. It is a draft, not a publication: nothing here
+should go out until [Release blockers](RELEASE_BLOCKERS.md) has no open
+[technical blocker](RELEASE_BLOCKERS.md#technical-blockers) and every
+[owner requirement](RELEASE_BLOCKERS.md#owner--distribution-requirements) marked
+*blocking* is closed.
+
+> The page actually published on GitHub is
+> **[GitHub release template](GITHUB_RELEASE_TEMPLATE.md)** — copy that one. It
+> carries the installation steps, the checksum block and the privacy summary a
+> player downloading an APK needs. This file is the longer draft behind it, and
+> also serves as the source for a Play "What's new" field if Play is ever added.
 
 > [!WARNING]
-> **Do not publish a release from an unsigned build.** `packageReleaseArtifacts`
+> **Do not publish a release from an unsigned build.** `packageReleaseApk`
 > names an unsigned artifact `EARTH-<version>-release-unsigned.apk`, and an
 > unsigned APK cannot be installed by anyone who downloads it. Attach
 > `EARTH-<version>-release.apk` — the signed one — or attach nothing.
@@ -38,13 +46,13 @@ the rules in [Release process](wiki/Release-Process.md#the-rules).
 | File | From | Why |
 | :-- | :-- | :-- |
 | `EARTH-1.0.0-release.apk` | `release/` | So a player can sideload it |
-| `SHA256SUMS` | `release/` | So they can check what they downloaded |
+| `SHA256SUMS.txt` | `release/` | So they can check what they downloaded |
 | `EARTH-1.0.0-release.aab` | `release/` | Optional. Play uploads only — a player cannot install an AAB, so attach it only if you want the exact upload archived alongside the tag |
 | `EARTH-1.0.0-release-mapping.txt` | `release/` | **Keep it, do not attach it.** Without it a crash report from this build is unreadable; publishing it is not required and hands out your symbol map |
 
 ```bash
-./gradlew packageReleaseArtifacts
-sha256sum -c release/SHA256SUMS
+./gradlew packageReleaseApk
+sha256sum -c release/SHA256SUMS.txt
 ```
 
 ---
@@ -96,7 +104,7 @@ Full detail: [Privacy policy](https://github.com/themantas1994/Earth-idle-game/b
 ### Installing the APK
 
 ```
-sha256sum -c SHA256SUMS
+sha256sum -c SHA256SUMS.txt
 ```
 
 Then allow installation from your browser or file manager when Android asks.
@@ -124,12 +132,12 @@ and in [`THIRD_PARTY_NOTICES.txt`](https://github.com/themantas1994/Earth-idle-g
 
 *[EARTH's own licence — fill in from the `LICENSE` file once one exists. Until then
 default copyright applies and this section must not claim otherwise. See
-[C1](https://github.com/themantas1994/Earth-idle-game/blob/main/docs/RELEASE_BLOCKERS.md#c1-the-project-has-no-licence).]*
+[O1](https://github.com/themantas1994/Earth-idle-game/blob/main/docs/RELEASE_BLOCKERS.md#o1-the-project-has-no-licence).]*
 
 ### Checksums
 
 ```
-[paste release/SHA256SUMS here]
+[paste release/SHA256SUMS.txt here]
 ```
 
 ---
@@ -152,7 +160,8 @@ your device. One banner ad, and the game is identical without it.
 
 ## Before you publish
 
-- [ ] [Release blockers](RELEASE_BLOCKERS.md) has **no open CRITICAL item**
+- [ ] [Release blockers](RELEASE_BLOCKERS.md) has **no open technical blocker**, and every
+      **owner requirement marked *blocking*** is closed
 - [ ] [Final device QA](FINAL_DEVICE_QA.md) walked on real hardware, on this exact build
 - [ ] The attached APK is **signed** — its filename has no `-unsigned`
 - [ ] `apksigner verify --print-certs` shows the certificate you expect

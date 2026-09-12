@@ -37,7 +37,7 @@ build file.**
 ./gradlew assembleDebug            # debug APK, standard debug key
 ./gradlew assembleRelease          # release APK
 ./gradlew bundleRelease            # Play bundle (AAB)
-./gradlew test                     # JVM unit tests (216)
+./gradlew test                     # JVM unit tests (220)
 ./gradlew lintDebug lintRelease
 ./gradlew connectedAndroidTest     # instrumented; needs a device or emulator
 
@@ -157,7 +157,8 @@ Two things in `app/build.gradle.kts` produce files the build then consumes:
 | | |
 | :-- | :-- |
 | `BundleNoticesTask` | Copies `THIRD_PARTY_NOTICES.txt` from the repository root into the variant's assets, wired through `variant.sources.assets.addGeneratedSourceDirectory` so task ordering is AGP's problem rather than a `dependsOn` guess. One committed copy, no drift — see [Licensing](Licensing.md). |
-| `packageReleaseArtifacts` | Runs `assembleRelease` and `bundleRelease` and collects both into `release/` as `EARTH-<version>-release.{apk,aab}`, suffixed `-unsigned` when no keystore is configured. `release/` is git-ignored. |
+| `packageReleaseApk` | Runs `assembleRelease` and collects the APK, its R8 `mapping.txt` and a `SHA256SUMS.txt` into `release/` as `EARTH-<version>-release.apk`, suffixed `-unsigned` when no keystore is configured. **This is the GitHub release artifact.** `release/` is git-ignored, and this version's previous artifacts are cleared before each run. |
+| `packageReleaseArtifacts` | As `packageReleaseApk`, and additionally runs `bundleRelease` to add `EARTH-<version>-release.aab`. Only needed for a Play upload — a player cannot install an AAB. |
 
 ## CI
 
@@ -170,7 +171,7 @@ Ubuntu, JDK 21 (Temurin), `gradle/actions/setup-gradle` with the cache read-only
 4. `python3 scripts/third-party-notices.py --check`
 5. `./gradlew assembleDebug --stacktrace`
 6. Decode `EARTH_KEYSTORE_BASE64` into `$RUNNER_TEMP`, if the secret exists
-7. `./gradlew packageReleaseArtifacts --stacktrace`
+7. `./gradlew packageReleaseApk --stacktrace` (or `packageReleaseArtifacts` to build the AAB too)
 8. Delete the keystore — `if: always()`, and **before** the upload step so it can never be globbed
    into an artifact
 

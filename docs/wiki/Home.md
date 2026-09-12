@@ -62,11 +62,13 @@ Pure Kotlin, no Android. This is where the game actually is.
 | | |
 | :-- | :-- |
 | [Release process](Release-Process.md) | Versioning, signing, artifacts, the checklist |
-| [Release signing](../RELEASE-SIGNING.md) | Keystores, CI signing, Play App Signing, what must never be committed |
-| [Google Play](Google-Play.md) | What the build satisfies, what Play Console needs |
+| **[Release signing](../RELEASE-SIGNING.md)** | Creating, protecting and backing up the release key; building and verifying the signed APK |
+| **[GitHub release template](../GITHUB_RELEASE_TEMPLATE.md)** | The release page to copy, with installation instructions for players |
+| [Google Play](Google-Play.md) | A future option, not this release. What the build already satisfies and what Play Console would need |
 | [Licensing](Licensing.md) | The project's licence, the dependencies', the artwork's |
 | [Privacy](Privacy.md) | Consent architecture, player controls, keeping the policy true |
-| **[Release blockers](../RELEASE_BLOCKERS.md)** | Everything outstanding, classified by severity |
+| **[Release blockers](../RELEASE_BLOCKERS.md)** | Everything outstanding, split into technical blockers and owner requirements |
+| [Assets](../ASSETS.md) | Every shipped non-code asset and what is known about its provenance |
 
 | Working document | |
 | :-- | :-- |
@@ -118,7 +120,7 @@ flowchart TD
 - **The live path and the offline path are the same code.** A 250 ms tick and an 8-hour
   catch-up call the same function; the gas integration is closed-form, so they agree exactly.
 - **`domain/` has no Android dependency at all.** That is enforced socially, documented in
-  [Architecture](Architecture.md), and is the reason 216 tests run on the JVM in seconds.
+  [Architecture](Architecture.md), and is the reason 220 tests run on the JVM in seconds.
 
 ---
 

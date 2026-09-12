@@ -8,12 +8,12 @@ Everything EARTH claims about itself has been established by building the releas
 artifact and taking it apart. None of it has been established by *running* it: no
 environment that has built this project has had an emulator or KVM, so the
 minified release binary has never executed. That is
-[blocker C6](RELEASE_BLOCKERS.md#c6-the-release-build-has-never-run-on-a-physical-device),
+[blocker O6](RELEASE_BLOCKERS.md#o6-the-release-build-has-never-run-on-a-physical-device),
 and this page is how it gets closed.
 
 > [!IMPORTANT]
 > **The release variant is the only minified one.** `isMinifyEnabled` and
-> `isShrinkResources` are set on `release` alone, so all 216 unit tests — the
+> `isShrinkResources` are set on `release` alone, so all 220 unit tests — the
 > Robolectric UI and DataStore suites included — run against unminified code. A
 > debug build proves nothing about R8. **Test the signed release APK or nothing.**
 
@@ -27,14 +27,14 @@ Budget about 45 minutes. Tick as you go; a box you skipped is not a box that pas
 ./gradlew clean
 ./gradlew test lintDebug lintRelease
 python3 scripts/third-party-notices.py --check
-./gradlew packageReleaseArtifacts
+./gradlew packageReleaseApk
 ```
 
 You need a keystore configured first ([Release signing](RELEASE-SIGNING.md)) —
 without one the artifact is named `-unsigned` and cannot be installed at all.
 
 ```bash
-sha256sum -c release/SHA256SUMS
+sha256sum -c release/SHA256SUMS.txt
 adb install -r release/EARTH-1.0.0-release.apk
 ```
 
@@ -67,7 +67,7 @@ $ANDROID_HOME/cmdline-tools/latest/bin/retrace \
 - [ ] **4. UMP.** In the EEA, the UK or Switzerland, a Google consent message
       appears **before any advertisement**. Outside those regions it correctly
       does not. **If no form appears where one should, that is
-      [C5](RELEASE_BLOCKERS.md#c5-no-consent-message-exists-in-the-admob-console) —
+      [O5](RELEASE_BLOCKERS.md#o5-no-consent-message-exists-in-the-admob-console) —
       the AdMob console message is missing or unpublished, not an app bug.** To
       exercise the flow outside the EEA, use a debug build, which forces UMP's EEA
       debug geography.
@@ -190,9 +190,9 @@ Neither suite has ever run. Both need a device:
 ## Recording the result
 
 A pass is only useful if it is written down. Note the device, the Android version,
-the artifact's SHA-256 from `release/SHA256SUMS`, and anything that failed.
+the artifact's SHA-256 from `release/SHA256SUMS.txt`, and anything that failed.
 
-**If everything above passes**, C6 can be closed —
+**If everything above passes**, O6 can be closed —
 [update the blockers](RELEASE_BLOCKERS.md) with the device and date rather than
 deleting the entry. **If anything fails**, it is a release blocker until it does
 not: this is the last gate before other people run this code.

@@ -114,6 +114,12 @@ android {
             "/META-INF/{AL2.0,LGPL2.1}",
             "/META-INF/DEPENDENCIES",
             "META-INF/*.version",
+            // kotlinx-coroutines ships this for its debug agent to read when one
+            // is attached with `DebugProbes.install()`. Nothing here installs
+            // one, and a development diagnostic has no business in a production
+            // APK — so it is dropped from every variant rather than shipped
+            // inert. Purely a packaging exclusion: no code path reads it.
+            "DebugProbesKt.bin",
         )
     }
 
@@ -244,85 +250,129 @@ androidComponents {
 }
 
 /**
- * Collects the release artifacts under `release/` with the names a GitHub
- * release and a Play upload are filed under.
+ * Collects the release artifacts under `release/` with the names a release is
+ * filed under.
  *
- * Alongside them it writes the two things a release is unreadable without: the
- * R8 `mapping.txt` for the exact build (a crash report from a minified APK is
- * noise without it) and a `SHA256SUMS` file so whoever downloads an artifact
- * can check they got the one that was built.
+ * Two entry points, because the two distribution channels do not want the same
+ * things:
+ *
+ * | Task | Produces | For |
+ * | :-- | :-- | :-- |
+ * | `packageReleaseApk` | APK, `mapping.txt`, `SHA256SUMS.txt` | **GitHub Releases** — an APK is the only artifact a player can install |
+ * | `packageReleaseArtifacts` | the same, plus the AAB | Play uploads, which will not accept an APK for a new app |
+ *
+ * A GitHub release needs no bundle, and building one is a second full R8 pass,
+ * so `bundleRelease` is deliberately not on the path of the task that cuts one.
+ * Neither task is a prerequisite of the other; both are safe to run alone.
+ *
+ * Alongside the binaries each writes the two things a release is unreadable
+ * without: the R8 `mapping.txt` for the exact build (a crash report from a
+ * minified APK is noise without it) and a `SHA256SUMS.txt` so whoever downloads
+ * an artifact can check they got the one that was built.
  *
  * `release/` is git-ignored: a 20 MB binary in a repository is a mistake that
- * is painful to undo, and the artifacts are reproducible from a tag. The task
- * only ever copies what the build just produced, and it refuses to pretend a
- * missing artifact exists. Nothing it writes is a secret — the keystore is
+ * is painful to undo, and the artifacts are reproducible from a tag. Each task
+ * only ever copies what the build just produced, and refuses to pretend a
+ * missing artifact exists. Nothing either writes is a secret — the keystore is
  * never read here, and CI deletes its decoded copy before this runs.
  */
-tasks.register("packageReleaseArtifacts") {
-    group = "distribution"
-    description = "Copies the release APK, AAB, mapping.txt and checksums into release/"
-    dependsOn("assembleRelease", "bundleRelease")
-
-    val apkDir = layout.buildDirectory.dir("outputs/apk/release")
-    val bundleDir = layout.buildDirectory.dir("outputs/bundle/release")
-    val mappingFile = layout.buildDirectory.file("outputs/mapping/release/mapping.txt")
-    val destination = rootProject.layout.projectDirectory.dir("release")
-    val rootDir = rootProject.projectDir
-    val version = earthVersionName
-    // An artifact nobody can install must not be named as though they can. AGP
-    // says so in the APK's filename but not the bundle's, so the signing
-    // configuration decides it for both.
-    val suffix = if (hasReleaseSigning) "" else "-unsigned"
-
-    doLast {
-        val target = destination.asFile.apply { mkdirs() }
-        val produced = mutableListOf<File>()
-        listOf("apk" to apkDir, "aab" to bundleDir).forEach { (extension, source) ->
-            source.get().asFile.listFiles()
-                ?.filter { it.isFile && it.extension == extension }
-                .orEmpty()
-                .forEach { artifact ->
-                    val copy = target.resolve("EARTH-$version-release$suffix.$extension")
-                    artifact.copyTo(copy, overwrite = true)
-                    produced += copy
-                    logger.lifecycle("Release artifact: ${copy.relativeTo(rootDir)}")
-                }
-        }
-        check(produced.isNotEmpty()) {
-            "No release artifacts were produced under ${apkDir.get()} or ${bundleDir.get()}."
-        }
-
-        // Only exists when minification ran, which is every release build here —
-        // but a build type without R8 must not fail the packaging over it.
-        val mapping = mappingFile.get().asFile
-        if (mapping.isFile) {
-            val copy = target.resolve("EARTH-$version-release-mapping.txt")
-            mapping.copyTo(copy, overwrite = true)
-            produced += copy
-            logger.lifecycle("Release artifact: ${copy.relativeTo(rootDir)}")
+fun registerReleasePackaging(taskName: String, includeBundle: Boolean) =
+    tasks.register(taskName) {
+        group = "distribution"
+        description = if (includeBundle) {
+            "Copies the release APK, AAB, mapping.txt and checksums into release/"
         } else {
-            logger.lifecycle("No mapping.txt was produced; a crash report from this build cannot be deobfuscated.")
+            "Copies the release APK, mapping.txt and checksums into release/ for a GitHub release"
+        }
+        dependsOn(listOfNotNull("assembleRelease", "bundleRelease".takeIf { includeBundle }))
+
+        val apkDir = layout.buildDirectory.dir("outputs/apk/release")
+        val bundleDir = layout.buildDirectory.dir("outputs/bundle/release")
+        val mappingFile = layout.buildDirectory.file("outputs/mapping/release/mapping.txt")
+        val destination = rootProject.layout.projectDirectory.dir("release")
+        val rootDir = rootProject.projectDir
+        val version = earthVersionName
+        // An artifact nobody can install must not be named as though they can. AGP
+        // says so in the APK's filename but not the bundle's, so the signing
+        // configuration decides it for both.
+        val suffix = if (hasReleaseSigning) "" else "-unsigned"
+        val sources = buildList {
+            add("apk" to apkDir)
+            if (includeBundle) add("aab" to bundleDir)
         }
 
-        // Written last so it covers everything above it, in the same format
-        // `sha256sum -c` reads.
-        val digest = MessageDigest.getInstance("SHA-256")
-        val checksums = target.resolve("SHA256SUMS")
-        checksums.writeText(
-            produced.joinToString("\n", postfix = "\n") { artifact ->
-                digest.reset()
-                val hash = digest.digest(artifact.readBytes())
-                    .joinToString("") { byte -> "%02x".format(byte) }
-                "$hash  ${artifact.name}"
-            },
-        )
-        logger.lifecycle("Release artifact: ${checksums.relativeTo(rootDir)}")
+        doLast {
+            val target = destination.asFile.apply { mkdirs() }
 
-        if (!hasReleaseSigning) {
-            logger.lifecycle(
-                "These artifacts are UNSIGNED: no keystore was configured. " +
-                    "See docs/RELEASE-SIGNING.md before distributing them.",
+            // Clear this version's previous output first. Signing a build that was
+            // packaged unsigned earlier leaves both names in the directory, and an
+            // `-unsigned` APK sitting next to a signed one is exactly the file that
+            // gets attached to a release by mistake. Only this version's artifacts
+            // are pruned, so an earlier release archived here survives.
+            target.listFiles()
+                ?.filter {
+                    it.isFile && (
+                        it.name.startsWith("EARTH-$version-release") ||
+                            it.name == "SHA256SUMS.txt" ||
+                            it.name == "SHA256SUMS"
+                        )
+                }
+                .orEmpty()
+                .forEach { it.delete() }
+
+            val produced = mutableListOf<File>()
+            sources.forEach { (extension, source) ->
+                source.get().asFile.listFiles()
+                    ?.filter { it.isFile && it.extension == extension }
+                    .orEmpty()
+                    .forEach { artifact ->
+                        val copy = target.resolve("EARTH-$version-release$suffix.$extension")
+                        artifact.copyTo(copy, overwrite = true)
+                        produced += copy
+                        logger.lifecycle("Release artifact: ${copy.relativeTo(rootDir)}")
+                    }
+            }
+            check(produced.isNotEmpty()) {
+                "No release artifacts were produced under " +
+                    sources.joinToString(" or ") { (_, source) -> source.get().toString() } + "."
+            }
+
+            // Only exists when minification ran, which is every release build here —
+            // but a build type without R8 must not fail the packaging over it.
+            val mapping = mappingFile.get().asFile
+            if (mapping.isFile) {
+                val copy = target.resolve("EARTH-$version-release-mapping.txt")
+                mapping.copyTo(copy, overwrite = true)
+                produced += copy
+                logger.lifecycle("Release artifact: ${copy.relativeTo(rootDir)}")
+            } else {
+                logger.lifecycle("No mapping.txt was produced; a crash report from this build cannot be deobfuscated.")
+            }
+
+            // Written last so it covers everything above it, in the same format
+            // `sha256sum -c` reads.
+            val digest = MessageDigest.getInstance("SHA-256")
+            val checksums = target.resolve("SHA256SUMS.txt")
+            checksums.writeText(
+                produced.joinToString("\n", postfix = "\n") { artifact ->
+                    digest.reset()
+                    val hash = digest.digest(artifact.readBytes())
+                        .joinToString("") { byte -> "%02x".format(byte) }
+                    "$hash  ${artifact.name}"
+                },
             )
+            logger.lifecycle("Release artifact: ${checksums.relativeTo(rootDir)}")
+
+            if (!hasReleaseSigning) {
+                logger.lifecycle(
+                    "These artifacts are UNSIGNED: no keystore was configured. They cannot be " +
+                        "installed and must not be attached to a release. " +
+                        "See docs/RELEASE-SIGNING.md.",
+                )
+            }
         }
     }
-}
+
+// The GitHub release artifact, and the Play-plus-GitHub set. See above.
+registerReleasePackaging("packageReleaseApk", includeBundle = false)
+registerReleasePackaging("packageReleaseArtifacts", includeBundle = true)

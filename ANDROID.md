@@ -34,8 +34,9 @@ the app.
 ```bash
 ./gradlew assembleDebug      # debug APK, signed with the standard debug key
 ./gradlew assembleRelease    # release APK
-./gradlew bundleRelease      # Play bundle (AAB)
-./gradlew packageReleaseArtifacts  # both of the above, collected into release/
+./gradlew packageReleaseApk   # release APK + mapping + checksums, collected into release/
+./gradlew bundleRelease      # Play bundle (AAB) — not needed for a GitHub release
+./gradlew packageReleaseArtifacts  # as packageReleaseApk, plus the AAB
 ./gradlew test               # JVM unit tests
 ./gradlew lintDebug lintRelease
 ./gradlew connectedAndroidTest   # instrumented tests; needs a device or emulator
@@ -48,7 +49,7 @@ Outputs land under `app/build/outputs/`:
 | Debug APK | `apk/debug/app-debug.apk` |
 | Release APK | `apk/release/app-release.apk`, or `app-release-unsigned.apk` when no keystore is configured |
 | Play bundle | `bundle/release/app-release.aab` |
-| Collected release artifacts | `release/EARTH-<version>-release.{apk,aab}` (git-ignored), from `packageReleaseArtifacts` |
+| Collected release artifacts | `release/EARTH-<version>-release.apk`, its `-mapping.txt` and `SHA256SUMS.txt` (git-ignored), from `packageReleaseApk`; add the `.aab` with `packageReleaseArtifacts` |
 | Lint reports | `../reports/lint-results-debug.html`, `lint-results-release.html` |
 | Test reports | `../reports/tests/testDebugUnitTest/index.html` |
 
@@ -58,37 +59,41 @@ debug variant carries the `.debug` application-id suffix.
 
 ## Signing a release
 
-**Full procedure, including CI and Play App Signing:
-[docs/RELEASE-SIGNING.md](docs/RELEASE-SIGNING.md).**
+**Full procedure, written for GitHub Releases distribution:
+[docs/RELEASE-SIGNING.md](docs/RELEASE-SIGNING.md).** EARTH is published as a
+signed APK on GitHub, so the key below *is* the app signing key — **back it up,
+and sign every future release with the same one.**
 
 No keystore is committed, and none should be. Create one and supply it through
 a git-ignored `keystore.properties` at the repository root, Gradle properties,
 or environment variables — checked in that order:
 
 ```bash
-keytool -genkeypair -v -keystore earth-release.jks \
-  -keyalg RSA -keysize 2048 -validity 10000 -alias earth
+keytool -genkeypair -v -keystore earth-release-key.jks \
+  -keyalg RSA -keysize 4096 -validity 10000 -alias earth-release
 ```
 
 ```properties
 # keystore.properties (git-ignored — never commit this)
-storeFile=/abs/path/earth-release.jks
+storeFile=/abs/path/earth-release-key.jks
 storePassword=…
-keyAlias=earth
+keyAlias=earth-release
 keyPassword=…
 ```
 
 or:
 
 ```bash
-EARTH_KEYSTORE=/abs/path/earth-release.jks \
-EARTH_KEYSTORE_PASSWORD=… EARTH_KEY_ALIAS=earth EARTH_KEY_PASSWORD=… \
-  ./gradlew bundleRelease
+EARTH_KEYSTORE=/abs/path/earth-release-key.jks \
+EARTH_KEYSTORE_PASSWORD=… EARTH_KEY_ALIAS=earth-release EARTH_KEY_PASSWORD=… \
+  ./gradlew packageReleaseApk
 ```
 
 When nothing is configured the release variant still assembles, unsigned, so a
-fresh clone is never blocked on secrets — and `packageReleaseArtifacts` names
-those artifacts `-unsigned` so nobody mistakes them for distributable ones.
+fresh clone is never blocked on secrets — and the packaging tasks name those
+artifacts `-unsigned` so nobody mistakes them for distributable ones. Verify the
+real thing before publishing: `apksigner verify --verbose --print-certs
+release/EARTH-<version>-release.apk` must report `Verifies`.
 
 ## Ads
 
@@ -165,7 +170,7 @@ imports are `java.math`, `kotlin.math`, `kotlin.random` and
 ## Tests
 
 ```bash
-./gradlew test                 # 216 JVM tests, a few seconds
+./gradlew test                 # 220 JVM tests, a few seconds
 ./gradlew connectedAndroidTest # instrumented; needs a device or emulator
 ```
 
