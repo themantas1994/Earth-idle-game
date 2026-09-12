@@ -30,6 +30,18 @@ val releaseKeyPassword = signingValue("keyPassword", "EARTH_KEY_PASSWORD")
 val hasReleaseSigning =
     releaseStoreFile != null && releaseStorePassword != null && releaseKeyAlias != null && releaseKeyPassword != null
 
+/**
+ * The single source of truth for the shipped version.
+ *
+ * `earthVersionCode` is Play's identity for a build: it must increase by at
+ * least one for every upload, ever, and can never be reused or reduced.
+ * `earthVersionName` is what the player sees and follows semantic versioning.
+ * The release artifact names are derived from the latter, so a build cannot be
+ * filed under a version it does not carry. See docs/wiki/Release-Process.md.
+ */
+val earthVersionCode = 1
+val earthVersionName = "1.0.0"
+
 android {
     namespace = "com.earthgame.idle"
     compileSdk = 37
@@ -40,8 +52,8 @@ android {
         // and covers ~98% of active devices.
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = earthVersionCode
+        versionName = earthVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -88,6 +100,11 @@ android {
 
     buildFeatures {
         compose = true
+        // BuildConfig.DEBUG is what the consent flow uses to decide whether to
+        // force UMP's EEA debug geography, and BuildConfig.VERSION_NAME is what
+        // the About screen shows. Which AdMob identifiers a build uses is not
+        // decided here — that is a resource overlay, see res/values/ads.xml.
+        buildConfig = true
     }
 
     packaging {
@@ -102,6 +119,14 @@ android {
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
+            all {
+                // `ProductionAdConfigTest` reads the release source set's
+                // ads.xml directly — a unit test runs against the *debug*
+                // resources, so the production identifiers are not otherwise
+                // reachable from one, and they are exactly the thing that must
+                // not drift unnoticed.
+                it.systemProperty("earth.projectDir", projectDir.absolutePath)
+            }
         }
     }
 
@@ -175,4 +200,90 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+}
+
+/**
+ * Ships `THIRD_PARTY_NOTICES.txt` inside the app.
+ *
+ * The file at the repository root is the single copy; it is generated into the
+ * asset directory at build time rather than duplicated into `src/main/assets`,
+ * because two copies of a legal notice drift and one of them is then wrong.
+ * Assets rather than `res/raw` so resource shrinking has no opinion about it.
+ */
+abstract class BundleNoticesTask : DefaultTask() {
+
+    @get:InputFile
+    abstract val notices: RegularFileProperty
+
+    @get:OutputDirectory
+    abstract val outputDirectory: DirectoryProperty
+
+    @TaskAction
+    fun bundle() {
+        val target = outputDirectory.get().asFile
+        target.mkdirs()
+        notices.get().asFile.copyTo(target.resolve("third_party_notices.txt"), overwrite = true)
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        val bundleNotices = tasks.register<BundleNoticesTask>(
+            "bundle${variant.name.replaceFirstChar(Char::titlecase)}Notices",
+        ) {
+            description = "Copies THIRD_PARTY_NOTICES.txt into the ${variant.name} assets."
+            notices.set(rootProject.layout.projectDirectory.file("THIRD_PARTY_NOTICES.txt"))
+        }
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            bundleNotices,
+            BundleNoticesTask::outputDirectory,
+        )
+    }
+}
+
+/**
+ * Collects the release artifacts under `release/` with the names a GitHub
+ * release and a Play upload are filed under.
+ *
+ * `release/` is git-ignored: a 20 MB binary in a repository is a mistake that
+ * is painful to undo, and the artifacts are reproducible from a tag. The task
+ * only ever copies what the build just produced, and it refuses to pretend a
+ * missing artifact exists.
+ */
+val packageReleaseArtifacts by tasks.registering {
+    group = "distribution"
+    description = "Copies the release APK and AAB into release/ as EARTH-<version>-release.*"
+    dependsOn("assembleRelease", "bundleRelease")
+
+    val apkDir = layout.buildDirectory.dir("outputs/apk/release")
+    val bundleDir = layout.buildDirectory.dir("outputs/bundle/release")
+    val destination = rootProject.layout.projectDirectory.dir("release")
+    val version = earthVersionName
+    // An artifact nobody can install must not be named as though they can. AGP
+    // says so in the APK's filename but not the bundle's, so the signing
+    // configuration decides it for both.
+    val suffix = if (hasReleaseSigning) "" else "-unsigned"
+
+    doLast {
+        val target = destination.asFile.apply { mkdirs() }
+        var copied = 0
+        listOf("apk" to apkDir, "aab" to bundleDir).forEach { (extension, source) ->
+            source.get().asFile.listFiles()
+                ?.filter { it.isFile && it.extension == extension }
+                .orEmpty()
+                .forEach { artifact ->
+                    val copy = target.resolve("EARTH-$version-release$suffix.$extension")
+                    artifact.copyTo(copy, overwrite = true)
+                    copied++
+                    logger.lifecycle("Release artifact: ${copy.relativeTo(rootProject.projectDir)}")
+                }
+        }
+        check(copied > 0) { "No release artifacts were produced under ${apkDir.get()} or ${bundleDir.get()}." }
+        if (!hasReleaseSigning) {
+            logger.lifecycle(
+                "These artifacts are UNSIGNED: no keystore was configured. " +
+                    "See docs/RELEASE-SIGNING.md before distributing them.",
+            )
+        }
+    }
 }

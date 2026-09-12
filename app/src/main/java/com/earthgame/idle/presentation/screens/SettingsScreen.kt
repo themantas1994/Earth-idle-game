@@ -49,6 +49,7 @@ fun SettingsScreen(
     onUpdateSettings: ((Settings) -> Settings) -> Unit,
     adPrivacyAvailable: Boolean,
     onOpenAdPrivacy: () -> Unit,
+    onOpenAbout: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
@@ -132,9 +133,10 @@ fun SettingsScreen(
         }
 
         // AdMob expects players who were shown a consent message to be able to
-        // come back and change it. Only players who got one have a form to
-        // reopen, so the row is hidden everywhere else rather than offering a
-        // button that fails.
+        // come back and change it, for as long as the app shows ads — not only
+        // the first time. Only players who got a message have a form to reopen,
+        // so the row is hidden everywhere else rather than offering a button
+        // that fails; About repeats it for the same reason.
         if (adPrivacyAvailable) {
             item { SectionLabel("Privacy") }
             item {
@@ -145,8 +147,22 @@ fun SettingsScreen(
                             .fillMaxWidth()
                             .heightIn(min = Dimens.MinTouchTarget),
                     ) {
-                        Text("Ad Privacy Choices")
+                        Text("Manage advertising privacy")
                     }
+                }
+            }
+        }
+
+        item { SectionLabel("About") }
+        item {
+            GameCard {
+                OutlinedButton(
+                    onClick = onOpenAbout,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = Dimens.MinTouchTarget),
+                ) {
+                    Text("About EARTH")
                 }
             }
         }

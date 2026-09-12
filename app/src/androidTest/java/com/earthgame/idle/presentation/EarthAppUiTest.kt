@@ -65,7 +65,6 @@ class EarthAppUiTest {
                     uiState = GameUiState(state = state, derived = derived, loaded = true),
                     windowWidthSizeClass = WindowWidthSizeClass.Compact,
                     monetization = null,
-                    adsPersonalized = false,
                     onBuyTechnology = onBuy,
                     onBuyPrestigeUpgrade = {},
                     onResetEarth = {},
@@ -105,7 +104,7 @@ class EarthAppUiTest {
         setContent()
         // Nine tabs have to fit on a phone, so each is labelled with its full
         // name for accessibility — which is also how they are found here.
-        for (destination in Destination.entries) {
+        for (destination in Destination.navigationEntries) {
             compose.onNodeWithContentDescription(destination.title).performClick()
             compose.waitForIdle()
         }

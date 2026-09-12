@@ -16,7 +16,7 @@ the part that is specific to *this* codebase — the things a first change tends
 ```bash
 git clone https://github.com/themantas1994/Earth-idle-game.git
 cd Earth-idle-game
-./gradlew test        # 205 tests, should pass on a clean clone
+./gradlew test        # 215 tests, should pass on a clean clone
 ```
 
 Needs **JDK 21** and an Android SDK with `platforms;android-37` and `build-tools;37.0.0`. See
@@ -29,7 +29,7 @@ a change that breaks it will be asked to change.
 
 **The one rule that catches everyone:** `domain/` has **no Android dependency at all** — no
 `android.*`, no `androidx.*`, no `kotlinx.coroutines`. Its only non-project imports are
-`java.math`, `kotlin.math`, `kotlin.random` and `kotlinx.serialization.json`. That is what lets 205
+`java.math`, `kotlin.math`, `kotlin.random` and `kotlinx.serialization.json`. That is what lets 215
 tests run on the JVM in seconds instead of needing a device.
 
 ```bash

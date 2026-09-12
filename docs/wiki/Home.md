@@ -57,6 +57,25 @@ Pure Kotlin, no Android. This is where the game actually is.
 | [Advertising](Advertising.md) | The one banner, consent, and what is deliberately absent |
 | [Accessibility](Accessibility.md) | Semantics, touch targets, font scaling, reduced motion |
 
+## Release and distribution
+
+| | |
+| :-- | :-- |
+| [Release process](Release-Process.md) | Versioning, signing, artifacts, the checklist |
+| [Release signing](../RELEASE-SIGNING.md) | Keystores, CI signing, Play App Signing, what must never be committed |
+| [Google Play](Google-Play.md) | What the build satisfies, what Play Console needs |
+| [Licensing](Licensing.md) | The project's licence, the dependencies', the artwork's |
+| [Privacy](Privacy.md) | Consent architecture, player controls, keeping the policy true |
+| **[Release blockers](../RELEASE_BLOCKERS.md)** | Everything outstanding, classified by severity |
+
+| Working document | |
+| :-- | :-- |
+| [Privacy policy](../PRIVACY_POLICY.md) | The published policy |
+| [Third-party licences](../THIRD_PARTY_LICENSES.md) | The dependency audit |
+| [Google Play Data Safety](../GOOGLE_PLAY_DATA_SAFETY.md) | Prepared answers for the form |
+| [Google Play release checklist](../GOOGLE_PLAY_RELEASE_CHECKLIST.md) | Item by item, with evidence |
+| [Production QA checklist](../PRODUCTION_QA_CHECKLIST.md) | What to walk on a device before publishing |
+
 ## Engineering
 
 | | |
@@ -64,7 +83,6 @@ Pure Kotlin, no Android. This is where the game actually is.
 | [Testing](Testing.md) | The suites, how to run them, how to add cases |
 | [Reference parity](Reference-Parity.md) | The TypeScript oracle, the fixtures, and the contract between them |
 | [Build system](Build-System.md) | Toolchain, Gradle layout, variants, R8, CI |
-| [Release process](Release-Process.md) | Versioning, signing, AAB, and the release checklist |
 | [Performance](Performance.md) | Where the time goes, what was measured, how to measure again |
 | [Security and privacy](Security-and-Privacy.md) | Threat surface, permissions, what leaves the device (almost nothing) |
 
@@ -98,7 +116,7 @@ flowchart TD
 - **The live path and the offline path are the same code.** A 250 ms tick and an 8-hour
   catch-up call the same function; the gas integration is closed-form, so they agree exactly.
 - **`domain/` has no Android dependency at all.** That is enforced socially, documented in
-  [Architecture](Architecture.md), and is the reason 205 tests run on the JVM in seconds.
+  [Architecture](Architecture.md), and is the reason 215 tests run on the JVM in seconds.
 
 ---
 
@@ -119,7 +137,9 @@ Update the relevant page in the same change that touches the code:
 | Achievements, challenges, events, milestones | [Achievements and challenges](Achievements-and-Challenges.md), [Random events](Random-Events.md), README feature table |
 | Layer boundaries or dependency direction | [Architecture](Architecture.md) |
 | The Gradle build, dependencies or variants | [Build system](Build-System.md) |
-| Manifest, permissions, SDK levels, lifecycle | [Android platform](Android-Platform.md), [Security and privacy](Security-and-Privacy.md) |
+| Manifest, permissions, SDK levels, lifecycle | [Android platform](Android-Platform.md), [Security and privacy](Security-and-Privacy.md), [Privacy](Privacy.md) |
+| A dependency added, removed or upgraded | `python3 scripts/third-party-notices.py`, then [Third-party licences](../THIRD_PARTY_LICENSES.md) and [Data safety](../GOOGLE_PLAY_DATA_SAFETY.md) |
+| Ads or the consent flow | [Advertising](Advertising.md), [Privacy](Privacy.md), [Privacy policy](../PRIVACY_POLICY.md) |
 | Anything a player sees or feels | [FAQ](FAQ.md), README |
 
 **A count in prose is a claim.** If you add a technology, the "99 technologies" in the README

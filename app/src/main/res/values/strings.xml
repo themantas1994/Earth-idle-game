@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EARTH</string>
+
+    <!--
+      Shown on the About screen. Both are public project URLs, not credentials.
+    -->
+    <string name="repository_url" translatable="false">https://github.com/themantas1994/Earth-idle-game</string>
+    <string name="privacy_policy_url" translatable="false">https://github.com/themantas1994/Earth-idle-game/blob/main/docs/PRIVACY_POLICY.md</string>
+
+    <!--
+      The project's own licence, as it actually stands.
+
+      The repository carries no LICENSE file, so default copyright applies and
+      the app must not claim otherwise. Choosing a licence is the repository
+      owner's decision and nobody else's — see docs/RELEASE_BLOCKERS.md. When
+      one is added, replace this string with its name (for example
+      "MIT License") and nothing else here needs to change.
+    -->
+    <string name="project_license">No licence declared — all rights reserved</string>
 </resources>

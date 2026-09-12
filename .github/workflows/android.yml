@@ -43,18 +43,50 @@ jobs:
       - name: Lint
         run: ./gradlew lintDebug lintRelease --stacktrace
 
+      # A stale notices file is a stale in-app licence screen. The generator
+      # reads the real resolved classpath, so regenerating it here is also a
+      # check that no dependency arrived without attribution.
+      - name: Third-party notices are current
+        run: |
+          python3 scripts/third-party-notices.py
+          git diff --exit-code -- THIRD_PARTY_NOTICES.txt || {
+            echo "::error::THIRD_PARTY_NOTICES.txt is out of date. Run: python3 scripts/third-party-notices.py"
+            exit 1
+          }
+
       - name: Debug APK
         run: ./gradlew assembleDebug --stacktrace
 
-      # Unsigned unless a keystore is configured in repository secrets; the
-      # build deliberately still produces an artifact either way, so a fork
-      # without secrets is not blocked.
-      - name: Release bundle
+      # The keystore cannot live in a secret as a file, so it travels as
+      # base64 and is written to the runner for the length of the job. Nothing
+      # is echoed, and the file is deleted in `Remove keystore` below whatever
+      # happens. See docs/RELEASE-SIGNING.md.
+      - name: Decode release keystore
+        env:
+          EARTH_KEYSTORE_BASE64: ${{ secrets.EARTH_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$EARTH_KEYSTORE_BASE64" ]; then
+            echo "No keystore secret configured; the release build will be unsigned."
+            exit 0
+          fi
+          printf '%s' "$EARTH_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/earth-release.jks"
+          echo "EARTH_KEYSTORE=$RUNNER_TEMP/earth-release.jks" >> "$GITHUB_ENV"
+
+      # Unsigned unless the four signing secrets are configured; the build
+      # deliberately still produces artifacts either way, so a pull request
+      # from a fork is not blocked.
+      - name: Release APK and bundle
         env:
           EARTH_KEYSTORE_PASSWORD: ${{ secrets.EARTH_KEYSTORE_PASSWORD }}
           EARTH_KEY_ALIAS: ${{ secrets.EARTH_KEY_ALIAS }}
           EARTH_KEY_PASSWORD: ${{ secrets.EARTH_KEY_PASSWORD }}
-        run: ./gradlew bundleRelease --stacktrace
+        run: ./gradlew packageReleaseArtifacts --stacktrace
+
+      # Before the upload step, so a keystore can never be globbed into an
+      # artifact — and outside the release directory for the same reason.
+      - name: Remove keystore
+        if: always()
+        run: rm -f "$RUNNER_TEMP/earth-release.jks"
 
       - name: Upload artifacts
         if: always()
@@ -64,6 +96,7 @@ jobs:
           if-no-files-found: warn
           path: |
             app/build/outputs/apk/debug/*.apk
-            app/build/outputs/bundle/release/*.aab
+            release/EARTH-*.apk
+            release/EARTH-*.aab
             app/build/reports/lint-results-*.html
             app/build/reports/tests/**

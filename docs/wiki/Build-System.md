@@ -37,7 +37,7 @@ build file.**
 ./gradlew assembleDebug            # debug APK, standard debug key
 ./gradlew assembleRelease          # release APK
 ./gradlew bundleRelease            # Play bundle (AAB)
-./gradlew test                     # JVM unit tests (205)
+./gradlew test                     # JVM unit tests (215)
 ./gradlew lintDebug lintRelease
 ./gradlew connectedAndroidTest     # instrumented; needs a device or emulator
 
@@ -62,7 +62,10 @@ Outputs under `app/build/`:
 | `applicationId` | `com.earthgame.idle.debug` | `com.earthgame.idle` |
 | `versionName` | `1.0.0-debug` | `1.0.0` |
 | Minify / shrink | off | **on** (R8 + resource shrinking) |
+| `BuildConfig.DEBUG` | `true` | `false` |
+| AdMob app ID | Google's public sample | the configured live app ID |
 | Ad unit | Google's public test unit | the configured live unit |
+| UMP debug geography | forced to EEA | off |
 | Signing | standard debug key | the configured keystore, or unsigned |
 
 The `.debug` suffix means a debug build installs **alongside** a release build rather than replacing
@@ -134,7 +137,6 @@ org.gradle.caching=true
 org.gradle.configuration-cache=false
 android.useAndroidX=true
 android.nonTransitiveRClass=true
-android.defaults.buildfeatures.buildconfig=false
 kotlin.code.style=official
 ```
 
@@ -142,8 +144,20 @@ The configuration cache is **off**: Kotlin's build-tools classpath does not seri
 it on this AGP/KGP pair. The build is fast enough without it, and this is worth revisiting on the
 next toolchain bump.
 
-`buildconfig=false` means no `BuildConfig` class is generated — nothing needs it, and the ad code
-determines debuggability from `ApplicationInfo.FLAG_DEBUGGABLE` instead.
+`android.defaults.buildfeatures.buildconfig` used to be here, set to `false`. AGP 9 removed the
+option and warns about it; the module now opts in explicitly with `buildConfig = true` in
+`buildFeatures`, because `BuildConfig.DEBUG` gates the UMP debug geography and
+`BuildConfig.VERSION_NAME` is what the About screen shows. **Which AdMob identifiers a build uses
+is not decided there** — that is a resource overlay, see [Advertising](Advertising.md).
+
+## Generated sources
+
+Two things in `app/build.gradle.kts` produce files the build then consumes:
+
+| | |
+| :-- | :-- |
+| `BundleNoticesTask` | Copies `THIRD_PARTY_NOTICES.txt` from the repository root into the variant's assets, wired through `variant.sources.assets.addGeneratedSourceDirectory` so task ordering is AGP's problem rather than a `dependsOn` guess. One committed copy, no drift — see [Licensing](Licensing.md). |
+| `packageReleaseArtifacts` | Runs `assembleRelease` and `bundleRelease` and collects both into `release/` as `EARTH-<version>-release.{apk,aab}`, suffixed `-unsigned` when no keystore is configured. `release/` is git-ignored. |
 
 ## CI
 
@@ -153,16 +167,25 @@ Ubuntu, JDK 21 (Temurin), `gradle/actions/setup-gradle` with the cache read-only
 1. `python3 scripts/check-docs-links.py` — every relative Markdown link and anchor
 2. `./gradlew testDebugUnitTest --stacktrace`
 3. `./gradlew lintDebug lintRelease --stacktrace`
-4. `./gradlew assembleDebug --stacktrace`
-5. `./gradlew bundleRelease --stacktrace`
+4. `python3 scripts/third-party-notices.py`, then `git diff --exit-code -- THIRD_PARTY_NOTICES.txt`
+5. `./gradlew assembleDebug --stacktrace`
+6. Decode `EARTH_KEYSTORE_BASE64` into `$RUNNER_TEMP`, if the secret exists
+7. `./gradlew packageReleaseArtifacts --stacktrace`
+8. Delete the keystore — `if: always()`, and **before** the upload step so it can never be globbed
+   into an artifact
 
-Artifacts (APK, AAB, lint reports, test reports) are uploaded on every run, `if: always()`.
+Artifacts (debug APK, release APK and AAB, lint reports, test reports) are uploaded on every run,
+`if: always()`.
 
-Release signing secrets are **optional**: without them the bundle is still produced, unsigned, so a
-fork without secrets is not blocked. There is no `connectedAndroidTest` step — GitHub's standard
-runners have no KVM, so no emulator can boot; that is why the UI and DataStore tests also run under
-Robolectric.
+Step 4 fails the build if a dependency changed without the notices being regenerated — a stale
+notices file is a stale in-app licence screen.
+
+Release signing secrets are **optional**: without them the artifacts are still produced, unsigned,
+so a pull request from a fork is not blocked. See [Release signing](../RELEASE-SIGNING.md).
+
+There is no `connectedAndroidTest` step — GitHub's standard runners have no KVM, so no emulator can
+boot; that is why the UI and DataStore tests also run under Robolectric.
 
 ---
 
-**Next:** [Release process](Release-Process.md) · [Testing](Testing.md) · [Troubleshooting](Troubleshooting.md)
+**Next:** [Release process](Release-Process.md) · [Release signing](../RELEASE-SIGNING.md) · [Testing](Testing.md) · [Troubleshooting](Troubleshooting.md)

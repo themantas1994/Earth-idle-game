@@ -4,17 +4,22 @@
 
   Both values are public identifiers, not secrets: they ship inside every APK
   and are visible to anyone who unzips one. Nothing here is a key, and no key
-  belongs here — see ANDROID.md > "Ads".
+  belongs here — see docs/wiki/Security-and-Privacy.md.
 
-  Debug builds ignore both of these and request Google's public test units
-  instead (see MonetizationConfig). AdMob counts impressions and clicks a
-  developer generates on their own live unit as invalid traffic, and that gets
-  accounts suspended, so a live unit is only ever requested from a
-  non-debuggable build.
+  These values are what a *release* build uses. The debug variant overlays this
+  file with Google's public sample identifiers (app/src/debug/res/values/ads.xml)
+  so a developer build can never spend an impression on the live account.
 -->
 <resources>
     <!-- Read by the Mobile Ads SDK from the manifest at startup. -->
     <string name="admob_application_id" translatable="false">ca-app-pub-6872627319793193~7208922044</string>
     <!-- The anchored bottom banner. There are no interstitials and no rewarded ads. -->
     <string name="admob_banner_unit_id" translatable="false">ca-app-pub-6872627319793193/5213314092</string>
+
+    <!--
+      Overridden only by the debug overlay, and only to force UMP's EEA debug
+      geography on a physical test device. Empty here means "no test devices",
+      which is the only correct value for a production build.
+    -->
+    <string name="ump_test_device_hashed_id" translatable="false"></string>
 </resources>

@@ -109,7 +109,14 @@ Other recomposition discipline in the codebase:
 | 🎯 **Challenges** | The active challenge and its goal; the 8 available, with rewards |
 | 🏆 **Achievements** | All 32, locked and unlocked |
 | 📊 **Statistics** | Lifetime stats, climate records, total gas produced |
-| ⚙️ **Settings** | Number format, theme, reduced animations, sound, music, vibration, confirm-reset, offline progress, ad privacy, delete save |
+| ⚙️ **Settings** | Number format, theme, reduced animations, sound, music, vibration, confirm-reset, offline progress, advertising privacy, About |
+
+Two further destinations sit outside the tab bar, reached from Settings:
+
+| Destination | Shows |
+| :-- | :-- |
+| ℹ️ **About** | Version, version code, package, the project's licence, the third-party notices, the privacy policy, advertising privacy, the repository link |
+| 📄 **Open Source Licenses** | `THIRD_PARTY_NOTICES.txt`, read from the app's assets off the main thread and rendered a paragraph at a time |
 
 The header is persistent: which Earth this is, temperature, habitability, status — and, on every
 tab but Home, the resource balances, because every other tab asks the player to spend and having

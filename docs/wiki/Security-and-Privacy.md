@@ -18,6 +18,8 @@ That is the complete list.
 
 ## Permissions
 
+The app's own manifest declares three:
+
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -30,12 +32,33 @@ That is the complete list.
 | `ACCESS_NETWORK_STATE` | The ad SDK | Yes, same |
 | `VIBRATE` | Two haptic pulses | Yes; `AndroidHaptics` already degrades to a no-op |
 
-`play-services-ads` **merges `com.google.android.gms.permission.AD_ID` into the final manifest.** It
-is not declared in the source manifest but it *is* in the shipped app, and the Play Console
-data-safety form has to declare it.
+**The shipped app has more than three, and the Play data-safety form must be filled in against the
+merged list rather than this one.** `play-services-ads` and the libraries it depends on contribute:
 
-No location, no camera, no microphone, no contacts, no storage, no notifications, no foreground
-service, no exact alarms, no `QUERY_ALL_PACKAGES`.
+| | Merged in by | For |
+| :-- | :-- | :-- |
+| `com.google.android.gms.permission.AD_ID` | Mobile Ads SDK | The advertising ID |
+| `ACCESS_ADSERVICES_AD_ID` | Mobile Ads SDK | Privacy Sandbox |
+| `ACCESS_ADSERVICES_ATTRIBUTION` | Mobile Ads SDK | Privacy Sandbox |
+| `ACCESS_ADSERVICES_TOPICS` | Mobile Ads SDK | Privacy Sandbox |
+| `WAKE_LOCK` | WorkManager, via the ad SDK | Background scheduling **this app never uses** |
+| `FOREGROUND_SERVICE` | WorkManager, via the ad SDK | The same |
+| `…DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` | AndroidX | Internal receiver protection |
+
+```bash
+./gradlew assembleRelease
+$ANDROID_HOME/build-tools/<version>/aapt2 dump badging \
+  app/build/outputs/apk/release/app-release*.apk | grep uses-permission
+```
+
+The same libraries add components the app never touches: `androidx.work` and `androidx.room`
+services and receivers, `com.google.android.gms.ads.AdActivity`, `OutOfContextTestingActivity` and
+`HsdpShimActivity`. They come with the ad SDK and cannot be removed short of dropping ads — but
+they belong in an honest description of what ships.
+
+No location, no camera, no microphone, no contacts, no storage, no notifications, no exact alarms,
+no `QUERY_ALL_PACKAGES`. **Nothing the app itself declares is a foreground service** — that
+permission arrives with WorkManager, and no code in this repository starts one.
 
 ## The save
 
@@ -63,11 +86,11 @@ icon."**
 
 | | |
 | :-- | :-- |
-| **WebView** | None. Not in the manifest, not in a dependency, not anywhere. This was a WebView app once; nothing of that remains. |
+| **WebView** | None of the app's own. `androidx.webkit` and `androidx.browser` arrive transitively with the ad SDK, which uses them for ad content and the consent form; no code in this repository instantiates one. This was a WebView app once; nothing of that remains. |
 | **Cleartext traffic** | Not enabled. `usesCleartextTraffic` is unset, so the API-28+ default (cleartext blocked) applies, and there is no network security config overriding it. |
 | **Dynamic code loading** | None. No `DexClassLoader`, no reflection, no JS engine, no plugin mechanism. |
 | **Deserialization** | Only the app's own save, parsed with `kotlinx.serialization.json` into `JsonObject` — a data tree, never reflective type instantiation. Nothing in a save can name a class. |
-| **Intents sent out** | None. Nothing in the app calls `startActivity` with an implicit intent. |
+| **Intents sent out** | Two, both from the About screen and both `ACTION_VIEW` on a committed `https://` URL — the repository and the privacy policy. Each is wrapped so a device with no browser is a no-op rather than a crash. Nothing else in the app calls `startActivity`. |
 
 ## The save is untrusted input
 
@@ -103,9 +126,9 @@ live ad unit sends them your impressions and can get both accounts flagged.
 
 | | |
 | :-- | :-- |
-| **Test ad units** | Chosen from `ApplicationInfo.FLAG_DEBUGGABLE` at runtime, so a release build cannot request them and a debug build cannot request the live one. |
-| **EEA consent debug geography** | Forced only when debuggable, so the consent flow can be exercised outside the EEA. |
-| **Logging** | Only `Log.w` on ad-SDK and save-IO failures. No game state, no save content, no identifiers. Nothing sensitive is logged at any level. |
+| **Test ad units** | A **resource overlay**, not a runtime branch: `app/src/debug/res/values/ads.xml` replaces both the app ID and the banner unit at resource-merge time, so a debug build cannot reach the live AdMob account at all. `ProductionAdConfigTest` asserts both sides, and that no sample identifier is in the release resources. |
+| **EEA consent debug geography** | Forced only under `BuildConfig.DEBUG`. The optional test-device hashed ID it needs on physical hardware is empty in the release resources, and asserted empty by `ProductionAdConfigTest`. |
+| **Logging** | Nine call sites, all `Log.w`, all on failures already recovered from — ad-SDK and save-IO. No game state, no save content, no consent details, no identifiers, at any level in any variant. |
 | `ui-tooling` | `debugImplementation` — the preview renderer is not in the release build. |
 
 ## What the Play data-safety form should say
@@ -118,6 +141,9 @@ live ad unit sends them your impressions and can get both accounts flagged.
 | Encrypted in transit | Yes (the SDK's own traffic) |
 | Deletion request mechanism | Not applicable — the app stores nothing off-device |
 | Contains ads | **Yes** |
+
+The full form, answer by answer and with the reasoning behind each, is
+[Google Play Data Safety](../GOOGLE_PLAY_DATA_SAFETY.md).
 
 ## For a reviewer
 
@@ -139,4 +165,4 @@ grep -rhn "^import" app/src/main/java/com/earthgame/idle/domain | sort -u
 
 ---
 
-**Next:** [Advertising](Advertising.md) · [Save system](Save-System.md) · [Android platform](Android-Platform.md)
+**Next:** [Privacy](Privacy.md) · [Advertising](Advertising.md) · [Licensing](Licensing.md) · [Save system](Save-System.md)

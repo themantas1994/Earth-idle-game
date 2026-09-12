@@ -60,7 +60,7 @@ fun SideNav(
             .padding(vertical = 8.dp, horizontal = 6.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        for (destination in Destination.entries) {
+        for (destination in Destination.navigationEntries) {
             val selected = destination == current
             Row(
                 modifier = Modifier

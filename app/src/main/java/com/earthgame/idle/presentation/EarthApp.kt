@@ -46,10 +46,12 @@ import com.earthgame.idle.presentation.components.SideNav
 import com.earthgame.idle.presentation.components.TutorialBanner
 import com.earthgame.idle.presentation.components.UninhabitableDialog
 import com.earthgame.idle.presentation.navigation.Destination
+import com.earthgame.idle.presentation.screens.AboutScreen
 import com.earthgame.idle.presentation.screens.AchievementsScreen
 import com.earthgame.idle.presentation.screens.AtmosphereScreen
 import com.earthgame.idle.presentation.screens.ChallengesScreen
 import com.earthgame.idle.presentation.screens.HomeScreen
+import com.earthgame.idle.presentation.screens.LicensesScreen
 import com.earthgame.idle.presentation.screens.PrestigeScreen
 import com.earthgame.idle.presentation.screens.ProductionScreen
 import com.earthgame.idle.presentation.screens.SettingsScreen
@@ -83,7 +85,6 @@ fun EarthApp(
     uiState: GameUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     monetization: MonetizationController?,
-    adsPersonalized: Boolean,
     onBuyTechnology: (String, BuyQuantity) -> Unit,
     onBuyPrestigeUpgrade: (String) -> Unit,
     onResetEarth: () -> Unit,
@@ -152,7 +153,7 @@ fun EarthApp(
                 GameHeader(
                     state = state,
                     derived = uiState.derived,
-                    showResources = current != Destination.HOME,
+                    showResources = current != Destination.HOME && current.inNavigation,
                 )
 
                 TutorialBanner(
@@ -257,6 +258,20 @@ fun EarthApp(
                             onUpdateSettings = onUpdateSettings,
                             adPrivacyAvailable = monetization?.privacyOptionsAvailable == true,
                             onOpenAdPrivacy = { monetization?.showPrivacyOptions() },
+                            onOpenAbout = { navigate(Destination.ABOUT) },
+                            contentPadding = contentPadding,
+                            modifier = contentModifier,
+                        )
+
+                        Destination.ABOUT -> AboutScreen(
+                            adPrivacyAvailable = monetization?.privacyOptionsAvailable == true,
+                            onOpenAdPrivacy = { monetization?.showPrivacyOptions() },
+                            onOpenLicenses = { navigate(Destination.LICENSES) },
+                            contentPadding = contentPadding,
+                            modifier = contentModifier,
+                        )
+
+                        Destination.LICENSES -> LicensesScreen(
                             contentPadding = contentPadding,
                             modifier = contentModifier,
                         )
@@ -269,7 +284,6 @@ fun EarthApp(
                 // click.
                 BannerAd(
                     controller = monetization,
-                    personalized = adsPersonalized,
                     modifier = Modifier.padding(bottom = 6.dp),
                 )
 

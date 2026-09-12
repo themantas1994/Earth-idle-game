@@ -20,18 +20,21 @@ import com.google.android.gms.ads.AdView
 /**
  * The bottom banner.
  *
+ * Nothing is requested until the consent flow has settled and reported that an
+ * ad request is permitted — [MonetizationController.canRequestAds] is Compose
+ * state, so this composable simply does nothing until it flips.
+ *
  * It occupies no space at all until an ad actually loads: a device where
- * nothing fills, or a player with no network, loses no screen to an empty
- * strip. The ad view is destroyed with the composable, so it cannot leak the
- * activity.
+ * nothing fills, a player with no network, and a player who declined consent
+ * all lose no screen to an empty strip. The ad view is destroyed with the
+ * composable, so it cannot leak the activity.
  */
 @Composable
 fun BannerAd(
     controller: MonetizationController?,
-    personalized: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    if (controller == null) return
+    if (controller == null || !controller.canRequestAds) return
 
     // The adaptive banner is sized against the real window width, which is what
     // `containerSize` reports — `Configuration.screenWidthDp` rounds to the
@@ -41,9 +44,7 @@ fun BannerAd(
     val widthDp = with(density) { containerWidthPx.toDp() }.value.toInt().coerceAtLeast(1)
     var loaded by remember { mutableStateOf(false) }
 
-    val adView: AdView? = remember(widthDp, personalized) {
-        controller.createBannerView(widthDp, personalized)
-    }
+    val adView: AdView? = remember(widthDp) { controller.createBannerView(widthDp) }
 
     DisposableEffect(adView) {
         adView?.adListener = object : AdListener() {
