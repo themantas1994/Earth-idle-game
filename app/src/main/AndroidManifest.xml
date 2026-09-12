@@ -36,10 +36,14 @@
 
         <!--
           The Mobile Ads SDK reads its app ID from the manifest, not from code,
-          and crashes at startup if it is missing. Overriding it for a real
-          account is a one-line change documented in ANDROID.md; the value here
-          is Google's public sample app ID, which is safe to ship and to build
-          against.
+          and crashes at startup if it is missing.
+
+          This resolves at resource-merge time, so which account a build reports
+          to is decided by the variant and not by any runtime branch: release
+          takes the live app ID from res/values/ads.xml, debug takes Google's
+          public sample one from src/debug/res/values/ads.xml. Neither is a
+          secret — both ship inside every APK. `ProductionAdConfigTest` asserts
+          both sides; see docs/wiki/Advertising.md.
         -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

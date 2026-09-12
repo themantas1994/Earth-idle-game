@@ -109,11 +109,18 @@ requests and for nothing else.
 | `VIBRATE` | A short pulse on a purchase; a heavier one when a planet ends | Yes |
 | `com.google.android.gms.permission.AD_ID` | Access to the advertising ID | Added by the Google Mobile Ads SDK |
 | `ACCESS_ADSERVICES_AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION`, `ACCESS_ADSERVICES_TOPICS` | Android Privacy Sandbox advertising APIs | Added by the Google Mobile Ads SDK |
-| `WAKE_LOCK`, `FOREGROUND_SERVICE` | Background scheduling used internally by libraries the advertising SDK depends on | Added by those libraries |
+| `WAKE_LOCK`, `FOREGROUND_SERVICE` | Background scheduling used internally by libraries the advertising SDK depends on. The app itself schedules no background work and runs no foreground service | Added by those libraries |
+| `com.earthgame.idle.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` | A private, signature-level permission Android's own support libraries use to keep their internal broadcasts unreachable by other apps | Added by those libraries |
 
 There is **no** access to location, camera, microphone, contacts, calendar,
-photos, files, SMS, call logs or notifications, and no query of the other apps
-installed on the device.
+photos, files, SMS, call logs or notifications.
+
+**App visibility.** The advertising SDK and the browser library it uses declare a
+narrow `<queries>` list, which lets them find an app that can open a web page
+(for an advertisement's landing page, and for the consent form), and the Play
+Store by name. The application cannot enumerate the apps installed on your
+device — it does not hold `QUERY_ALL_PACKAGES` — and it does not read, record or
+transmit any list of them.
 
 ---
 

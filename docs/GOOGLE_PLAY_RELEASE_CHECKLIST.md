@@ -17,6 +17,20 @@ EARTH audited against Google Play's requirements, with each item marked by
 
 Legend: ✅ verified from the build · ⬜ publisher action · ⚠️ blocker
 
+**The two categories are not interchangeable.** ✅ means *automated or
+code-verifiable* — a command in this repository produced the evidence, and CI
+re-runs it. ⬜ means *manual Play Console or AdMob work* that no build can do,
+no test can cover and no green pipeline implies. A repository can only ever
+finish the first column.
+
+> [!CAUTION]
+> **Play Store publication readiness requires the ⬜ column to be complete too.**
+> Every technical row below currently passes. Six items in
+> [Release blockers](RELEASE_BLOCKERS.md) are still open — a licence, a signing
+> key, a privacy contact, the icon's provenance, the AdMob consent message, and a
+> QA pass on physical hardware — and four of those six are on this page. **This
+> app is not ready to publish**, and a green CI run does not change that.
+
 ---
 
 ## Technical requirements
@@ -34,10 +48,12 @@ Legend: ✅ verified from the build · ⬜ publisher action · ⚠️ blocker
 | ✅ | No `android:debuggable="true"` in the release build | Attribute absent | `aapt2 dump xmltree` |
 | ✅ | App label set and not a placeholder | `EARTH` | `aapt2 dump badging` → `application-label:'EARTH'` |
 | ✅ | Launcher icon present at every density, with an adaptive icon | `mipmap-{m,h,xh,xxh,xxxh}dpi` + `mipmap-anydpi-v26` with background, foreground and monochrome layers | `app/src/main/res/mipmap-*` |
-| ✅ | Exactly one exported component | `MainActivity`, launcher intent filter only; no exported services, receivers or providers | merged manifest |
+| ✅ | One exported component of this app's own; the rest are platform libraries' | `MainActivity` (launcher intent filter) is all this repository declares. The merged manifest also exports WorkManager's `SystemJobService` (`BIND_JOB_SERVICE`), its `DiagnosticsReceiver` and `ProfileInstallReceiver` (both `DUMP`) — system-only gates, all from the ad SDK's dependencies. Full inventory in [Security and privacy](wiki/Security-and-Privacy.md#attack-surface) | `apkanalyzer manifest print` on the release APK |
+| ✅ | No broad package-visibility permission | No `QUERY_ALL_PACKAGES`. A narrow `<queries>` list (https `VIEW`, `CustomTabsService`, calendar `INSERT`, `sms`, `DIAL`, `com.android.vending`) is merged in by `androidx.browser` and the ad SDK | merged manifest |
 | ✅ | Minified and shrunk release build that still works | R8 on, resource shrinking on, 6,312 classes in the release dex; UMP and Mobile Ads classes retained (198 of 224 `consent_sdk` classes kept, the rest unreachable) | `mapping.txt`, `apkanalyzer dex packages` |
 | ⬜ | **Signed with an upload key, enrolled in Play App Signing** | No keystore exists | [Release signing](RELEASE-SIGNING.md) |
 | ⬜ | Pre-launch report reviewed after the first internal-testing upload | — | Play Console |
+| ⚠️ | **The release build has run on a physical device** | Never. No environment that has built this project has had an emulator or KVM, and `release` is the only minified variant — so R8's output has never been executed | [Final device QA](FINAL_DEVICE_QA.md), [C6](RELEASE_BLOCKERS.md#c6-the-release-build-has-never-run-on-a-physical-device) |
 
 `minSdk = 24` is a choice, not a requirement — Play has no minimum.
 
@@ -57,7 +73,7 @@ Legend: ✅ verified from the build · ⬜ publisher action · ⚠️ blocker
 | ⬜ | **Data safety form submitted** | Prepared, not submitted | [Data safety](GOOGLE_PLAY_DATA_SAFETY.md) |
 | ⬜ | **Content rating questionnaire** completed | — | Play Console |
 | ⬜ | **Target audience and content** set to 13+, not child-directed | Consistent with the app having no age gate | [Privacy policy §11](PRIVACY_POLICY.md#11-children) |
-| ⬜ | **AdMob consent message created** under *Privacy & messaging* | The UMP form is loaded from the AdMob console, not bundled in the app. Without it, the flow reports that ads may not be requested and no banner appears in the EEA/UK. | AdMob console |
+| ⚠️ | **AdMob consent message created *and published*** under *Privacy & messaging → GDPR* | **The single console-side dependency this app cannot satisfy, detect or simulate.** The UMP SDK downloads the message at runtime from the AdMob account; nothing can be bundled. With no published message, UMP reports `NOT_REQUIRED`, `canRequestAds()` returns **true**, and the banner is requested in the EEA **with no consent message ever shown** — or UMP errors and no ad is ever requested. The app is correct in both cases; only one of them is shippable. A saved-but-unpublished message does not serve. | [C5](RELEASE_BLOCKERS.md#c5-no-consent-message-exists-in-the-admob-console), AdMob console |
 | ⬜ | AdMob app linked to the Play listing | | AdMob console |
 | ⬜ | Account deletion policy | Not applicable — no accounts | |
 
@@ -100,8 +116,19 @@ python3 scripts/third-party-notices.py --check
 - [ ] `earthVersionName` set
 - [ ] [Production QA checklist](PRODUCTION_QA_CHECKLIST.md) walked on a real device
 - [ ] Data safety form re-checked if any dependency changed
-- [ ] Release notes written
+- [ ] Release notes written — [template](RELEASE_NOTES_TEMPLATE.md)
+- [ ] [Final device QA](FINAL_DEVICE_QA.md) re-walked on the new build
 - [ ] Staged rollout rather than 100% on day one
+
+---
+
+## Where this leaves the app
+
+| | |
+| :-- | :-- |
+| **Automated / code-verifiable** | **Complete.** Every ✅ row above was re-checked against a full build of the current tree: 216 unit tests, `lintDebug` and `lintRelease` at zero issues, release APK and AAB built and inspected with `aapt2`, `apkanalyzer`, `zipalign` and `bundletool`, and `THIRD_PARTY_NOTICES.txt` regenerating byte-identically |
+| **Manual Play Console / AdMob / legal** | **Not started, and not startable from here.** Store listing, screenshots, content rating, target audience, Data Safety submission, privacy-policy URL, ads declaration, Play App Signing enrolment, and the AdMob consent message |
+| **Verdict** | **Technically ready to build; not ready to publish.** The gap is entirely owner action — see [Release blockers](RELEASE_BLOCKERS.md) |
 
 ---
 

@@ -196,13 +196,19 @@ class MonetizationController(private val activity: Activity) {
     }
 
     /**
-     * Builds the anchored adaptive banner.
+     * Builds the anchored adaptive banner, without requesting anything yet.
      *
      * Adaptive banners size themselves to the device width, which is what
      * Google recommends over the fixed 320x50. The "large" variant is the
      * current API — the older fixed-height anchored sizes are deprecated.
      * Returns null if the view cannot be created at all, or if consent does not
      * permit an ad request, both of which the composable renders as no banner.
+     *
+     * Constructing and requesting are deliberately separate calls. The request
+     * is a side effect, and a composable that made one while computing its own
+     * state would fire it before the listener that reads the outcome is
+     * attached — and again for a composition that is then abandoned. See
+     * [loadBanner] and `BannerAd`.
      */
     fun createBannerView(widthDp: Int): AdView? {
         if (!canRequestAds) return null
@@ -210,9 +216,22 @@ class MonetizationController(private val activity: Activity) {
             AdView(activity).apply {
                 adUnitId = MonetizationConfig.bannerUnitId(activity)
                 setAdSize(AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, widthDp))
-                loadAd(AdRequest.Builder().build())
             }
         }.onFailure { Log.w(TAG, "Banner creation failed", it) }.getOrNull()
+    }
+
+    /**
+     * Requests an ad into a view [createBannerView] built.
+     *
+     * Re-checks consent rather than trusting the view's existence: the flag can
+     * only have moved against requesting between construction and this call,
+     * and a request made after it did is the failure this whole class exists to
+     * prevent. A throw from the SDK is swallowed — no ad is worth a crash.
+     */
+    fun loadBanner(adView: AdView) {
+        if (!canRequestAds) return
+        runCatching { adView.loadAd(AdRequest.Builder().build()) }
+            .onFailure { Log.w(TAG, "Banner request failed", it) }
     }
 
     private companion object {

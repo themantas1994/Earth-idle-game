@@ -16,7 +16,7 @@ the part that is specific to *this* codebase — the things a first change tends
 ```bash
 git clone https://github.com/themantas1994/Earth-idle-game.git
 cd Earth-idle-game
-./gradlew test        # 215 tests, should pass on a clean clone
+./gradlew test        # 216 tests, should pass on a clean clone
 ```
 
 Needs **JDK 21** and an Android SDK with `platforms;android-37` and `build-tools;37.0.0`. See

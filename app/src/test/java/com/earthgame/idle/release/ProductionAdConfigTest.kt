@@ -86,6 +86,24 @@ class ProductionAdConfigTest {
     }
 
     @Test
+    fun noReleaseOverlayCanShadowTheProductionIdentifiers() {
+        // Every other test here reads src/main, because that is where the
+        // production values live and where the release variant takes them from.
+        // A `src/release/res` overlay would silently win over all of it at
+        // resource-merge time, and every assertion above would still pass while
+        // the shipped APK carried something else entirely. The design is that no
+        // such overlay exists — so assert that, rather than assert around it.
+        val releaseOverlay = File(projectDir, "src/release/res")
+        assertTrue(
+            "src/release/res exists. A release resource overlay would override " +
+                "src/main/res/values/ads.xml in the shipped build, and nothing else " +
+                "in this test suite would notice. Production identifiers belong in " +
+                "src/main and nowhere else — see docs/wiki/Advertising.md.",
+            !releaseOverlay.exists(),
+        )
+    }
+
+    @Test
     fun releaseRegistersNoUmpTestDevice() {
         // A test device hashed ID in a release build forces UMP's debug
         // geography for whoever holds that device, which is not a decision a

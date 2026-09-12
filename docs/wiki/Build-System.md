@@ -37,7 +37,7 @@ build file.**
 ./gradlew assembleDebug            # debug APK, standard debug key
 ./gradlew assembleRelease          # release APK
 ./gradlew bundleRelease            # Play bundle (AAB)
-./gradlew test                     # JVM unit tests (215)
+./gradlew test                     # JVM unit tests (216)
 ./gradlew lintDebug lintRelease
 ./gradlew connectedAndroidTest     # instrumented; needs a device or emulator
 

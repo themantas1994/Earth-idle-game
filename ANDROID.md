@@ -165,7 +165,7 @@ imports are `java.math`, `kotlin.math`, `kotlin.random` and
 ## Tests
 
 ```bash
-./gradlew test                 # 215 JVM tests, a few seconds
+./gradlew test                 # 216 JVM tests, a few seconds
 ./gradlew connectedAndroidTest # instrumented; needs a device or emulator
 ```
 

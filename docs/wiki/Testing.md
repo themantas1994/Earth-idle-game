@@ -5,7 +5,7 @@
 ## Running everything
 
 ```bash
-./gradlew test                    # 215 JVM tests, ~30 s cold, seconds warm
+./gradlew test                    # 216 JVM tests, ~30 s cold, seconds warm
 ./gradlew lintDebug lintRelease   # Android lint, both variants
 ./gradlew connectedAndroidTest    # instrumented; needs a device or emulator
 

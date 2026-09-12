@@ -75,6 +75,8 @@ Pure Kotlin, no Android. This is where the game actually is.
 | [Google Play Data Safety](../GOOGLE_PLAY_DATA_SAFETY.md) | Prepared answers for the form |
 | [Google Play release checklist](../GOOGLE_PLAY_RELEASE_CHECKLIST.md) | Item by item, with evidence |
 | [Production QA checklist](../PRODUCTION_QA_CHECKLIST.md) | What to walk on a device before publishing |
+| **[Final device QA](../FINAL_DEVICE_QA.md)** | The one pass no build can do for you — 43 steps on real hardware |
+| [Release notes template](../RELEASE_NOTES_TEMPLATE.md) | Drafts for the GitHub release and Play's "What's new" |
 
 ## Engineering
 
@@ -116,7 +118,7 @@ flowchart TD
 - **The live path and the offline path are the same code.** A 250 ms tick and an 8-hour
   catch-up call the same function; the gas integration is closed-form, so they agree exactly.
 - **`domain/` has no Android dependency at all.** That is enforced socially, documented in
-  [Architecture](Architecture.md), and is the reason 215 tests run on the JVM in seconds.
+  [Architecture](Architecture.md), and is the reason 216 tests run on the JVM in seconds.
 
 ---
 
