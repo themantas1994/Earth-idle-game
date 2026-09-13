@@ -38,6 +38,8 @@ Pure Kotlin, no Android. This is where the game actually is.
 | [Prestige system](Prestige-System.md) | Earth Points, the payout formula, the 11 permanent upgrades |
 | [Achievements and challenges](Achievements-and-Challenges.md) | 32 achievements, 8 challenges, how each is checked |
 | [Random events](Random-Events.md) | 13 events, eligibility, weighted rolls, and the milestone news feed |
+| [Events](Events.md) | The three kinds of event, the one feed they share, and how they reach the globe |
+| [Storm system](Storm-System.md) | Storms as simulation entities: formation, movement, intensity, effects, offline behaviour |
 | [Offline progression](Offline-Progression.md) | Absences, the cap, clock anomalies, the lifecycle that drives it |
 
 ## Persistence
@@ -52,6 +54,8 @@ Pure Kotlin, no Android. This is where the game actually is.
 | | |
 | :-- | :-- |
 | [UI architecture](UI-Architecture.md) | ViewModel, `StateFlow`, recomposition, the nine screens |
+| [Home screen](Home-Screen.md) | The 3D Earth, the overlay picker, the layout, and the graphics settings |
+| [Environmental visualization](Environmental-Visualization.md) | The renderer, why not SceneView or Filament, the generated texture, the fallback |
 | [Navigation](Navigation.md) | The explicit destination stack, and why not `NavHost` |
 | [Android platform](Android-Platform.md) | Manifest, SDK levels, lifecycle, permissions, backup |
 | [Audio and haptics](Audio-and-Haptics.md) | The platform adapters, and the state the audio layer is in |

@@ -95,6 +95,7 @@ class MainActivity : ComponentActivity() {
                     onDismissEventToast = viewModel::dismissEventToast,
                     onDismissMilestoneToast = viewModel::dismissMilestoneToast,
                     onDismissOwnershipToast = viewModel::dismissOwnershipToast,
+                        onDismissStormToast = viewModel::dismissStormToast,
                     onDismissSaveWarnings = viewModel::dismissSaveWarnings,
                     // Back from Home leaves the game, rather than unwinding into
                     // an empty stack.

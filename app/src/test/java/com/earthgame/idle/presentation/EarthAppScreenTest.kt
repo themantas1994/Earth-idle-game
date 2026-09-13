@@ -5,10 +5,12 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -24,6 +26,9 @@ import com.earthgame.idle.domain.model.GasId
 import com.earthgame.idle.domain.model.ResourceId
 import com.earthgame.idle.domain.model.ThemePreference
 import com.earthgame.idle.domain.model.createNewGame
+import com.earthgame.idle.domain.storms.Storm
+import com.earthgame.idle.domain.storms.StormField
+import com.earthgame.idle.domain.storms.StormType
 import com.earthgame.idle.presentation.navigation.Destination
 import com.earthgame.idle.presentation.theme.EarthTheme
 import org.junit.Assert.assertFalse
@@ -95,6 +100,7 @@ class EarthAppScreenTest {
                     onDismissEventToast = {},
                     onDismissMilestoneToast = {},
                     onDismissOwnershipToast = {},
+                    onDismissStormToast = {},
                     onDismissSaveWarnings = {},
                     onExit = onExit,
                 )
@@ -129,11 +135,100 @@ class EarthAppScreenTest {
     @Test
     fun homeRendersLivePlanetaryData() {
         setContent()
+        // The globe is the top of the screen now, so everything below it is a
+        // scroll away — see `scrollContentTo`.
+        compose.onNodeWithText("🌀 Active Phenomena").assertIsDisplayed()
+        scrollContentTo("🌍 Environment")
+        compose.onNodeWithText("🌍 Environment").assertIsDisplayed()
+        scrollContentTo("🎯 Objective")
         compose.onNodeWithText("🎯 Objective").assertIsDisplayed()
+        scrollContentTo("🌡️ Planetary Status")
         compose.onNodeWithText("🌡️ Planetary Status").assertIsDisplayed()
+        scrollContentTo("⚙️ Economy")
         compose.onNodeWithText("⚙️ Economy").assertIsDisplayed()
         scrollContentTo("📰 World News")
         compose.onNodeWithText("📰 World News").assertIsDisplayed()
+    }
+
+    /** A planet with one live hurricane on it, for the storm interactions. */
+    private fun stormyState(): GameState = playableState().copy(
+        storms = StormField(
+            storms = listOf(
+                Storm(
+                    id = "storm-101",
+                    type = StormType.HURRICANE,
+                    name = "Iris",
+                    latitudeDeg = 18.0,
+                    longitudeDeg = -62.0,
+                    intensity = 0.62,
+                    targetIntensity = 0.68,
+                    peakIntensity = 0.62,
+                    ageSeconds = 200.0,
+                    lifetimeSeconds = 540.0,
+                    headingDeg = 315.0,
+                    speedDegPerSecond = 0.022,
+                    formedAtStep = 101L,
+                ),
+            ),
+            stepsElapsed = 140L,
+        ),
+    )
+
+    @Test
+    fun homeAnnouncesAnActiveStormAndWhatItIsCosting() {
+        setContent(state = stormyState())
+
+        compose.onNodeWithText("1 ACTIVE STORM").assertIsDisplayed()
+        // The combined drag, after stacking and the caps, printed as a number
+        // rather than implied by the size of the spiral on the globe. A
+        // hurricane hits several branches as well as the global rate, so there
+        // is a row for each.
+        scrollContentTo("Weather drag, all production")
+        compose.onNodeWithText("Weather drag, all production").assertIsDisplayed()
+        scrollContentTo("Weather drag, Electricity")
+        compose.onNodeWithText("Weather drag, Electricity").assertIsDisplayed()
+    }
+
+    @Test
+    fun tappingAStormOpensItsCardWithItsEffects() {
+        setContent(state = stormyState())
+
+        // Reachable without touching the globe at all, which is the whole point
+        // of the chips — a screen-reader user gets the same route.
+        compose.onNodeWithContentDescription("Focus on Hurricane Iris", substring = true)
+            .performClick()
+        compose.waitForIdle()
+
+        scrollContentTo("Hurricane Iris")
+        compose.onNodeWithText("Hurricane Iris").assertIsDisplayed()
+        compose.onNodeWithText("Duration remaining", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("All production", substring = true).assertIsDisplayed()
+
+        // ...and it closes again without leaving the screen.
+        compose.onNodeWithContentDescription("Close the storm card").performClick()
+        compose.waitForIdle()
+        compose.onAllNodesWithText("Duration remaining", substring = true).assertCountEquals(0)
+    }
+
+    @Test
+    fun aCalmPlanetIsNotGivenAnAlarmingIndicator() {
+        setContent()
+        compose.onNodeWithText("No storms", substring = true).assertIsDisplayed()
+        compose.onAllNodesWithText("ACTIVE STORM", substring = true).assertCountEquals(0)
+    }
+
+    @Test
+    fun homeShowsTheGlobeAndItsOverlays() {
+        setContent()
+        // The globe itself is a rendering surface with nothing readable in it,
+        // so what a screen reader — and this test — sees is the description
+        // beside it and the overlay controls under it.
+        compose.onNodeWithContentDescription("Interactive globe", substring = true)
+            .assertIsDisplayed()
+        compose.onNodeWithContentDescription("Temperature overlay", substring = true)
+            .assertIsDisplayed()
+        compose.onNodeWithContentDescription("Storms overlay", substring = true)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -145,6 +240,7 @@ class EarthAppScreenTest {
             navigateTo(destination)
         }
         navigateTo(Destination.HOME)
+        scrollContentTo("🎯 Objective")
         compose.onNodeWithText("🎯 Objective").assertIsDisplayed()
     }
 
@@ -192,6 +288,7 @@ class EarthAppScreenTest {
         assertFalse("back from Settings must not leave the app", exited)
         pressBack()
         assertFalse("back from Atmosphere must not leave the app", exited)
+        scrollContentTo("🎯 Objective")
         compose.onNodeWithText("🎯 Objective").assertIsDisplayed()
 
         pressBack()
@@ -240,6 +337,7 @@ class EarthAppScreenTest {
 
         compose.onNodeWithText("WELCOME TO EARTH").assertIsDisplayed()
         // It is a banner, not a modal: the game underneath is still reachable.
+        scrollContentTo("🎯 Objective")
         compose.onNodeWithText("🎯 Objective").assertIsDisplayed()
     }
 
@@ -252,6 +350,7 @@ class EarthAppScreenTest {
             navigateTo(destination)
         }
         navigateTo(Destination.HOME)
+        scrollContentTo("🎯 Objective")
         compose.onNodeWithText("🎯 Objective").assertIsDisplayed()
     }
 
@@ -269,6 +368,7 @@ class EarthAppScreenTest {
         compose.onNodeWithContentDescription("Earth age").assertIsDisplayed()
         compose.onAllNodesWithText("12y 4m 0d").onFirst().assertIsDisplayed()
 
+        scrollContentTo("Earth Age")
         compose.onNodeWithText("Earth Age").assertIsDisplayed()
     }
 
@@ -300,7 +400,11 @@ class EarthAppScreenTest {
         // one would be testing a configuration that cannot occur.
         setContent(widthSizeClass = WindowWidthSizeClass.Expanded)
         // The rail shows full names rather than the phone bar's abbreviations.
-        compose.onNodeWithText("Atmosphere").assertIsDisplayed()
+        // Scoped to the rail: "Atmosphere" is also a readout on Home now.
+        compose.onNodeWithTag(SideNavTestTag)
+            .onChildren()
+            .filterToOne(hasText("Atmosphere"))
+            .assertIsDisplayed()
 
         // The rail scrolls too, so the last destinations need reaching.
         compose.onNodeWithTag(SideNavTestTag)
