@@ -213,7 +213,7 @@ fun computeCivLevel(techOwned: Map<String, Int>): Int {
 data class SimulationStepResult(val state: GameState, val productionRates: ProductionRates)
 
 /**
- * Advances the whole simulation by [dtSeconds] of in-game time.
+ * Advances the whole simulation by [dtSeconds] of **real** time.
  *
  * This is the single source of truth for how gases, resources, temperature and
  * habitability evolve, used identically for live 250 ms ticks and for offline
@@ -221,6 +221,12 @@ data class SimulationStepResult(val state: GameState, val productionRates: Produ
  * closed-form (see `integrateGasConcentration`), which is what makes one call
  * with `dt = 8 hours` produce the same numbers as 115,200 calls with
  * `dt = 0.25 s`.
+ *
+ * It is also the only thing that ages the planet: every real second simulated
+ * here advances [GameState.gameAgeSeconds] by [GAME_SECONDS_PER_REAL_SECOND],
+ * and that simulated age is the clock the atmosphere's half-lives decay on.
+ * Because this function is the sole path, the offline catch-up gets the
+ * ageing — and the decay — for free and cannot drift from a live session.
  */
 fun simulateStep(
     state: GameState,
@@ -272,6 +278,7 @@ fun simulateStep(
     }
 
     val newAtmosphere = atmosphere.build()
+    val gameSecondsElapsed = gameSecondsFor(dtSeconds)
 
     val resources = state.resources.toBuilder()
     for (resource in RESOURCE_LIST) {
@@ -298,6 +305,7 @@ fun simulateStep(
     val totalGrossRate = rates.gasGrossKgPerS.sum()
 
     val newState = state.copy(
+        gameAgeSeconds = state.gameAgeSeconds + gameSecondsElapsed,
         atmosphere = newAtmosphere,
         resources = resources.build(),
         seaLevelRiseMeters = newSeaLevel,
@@ -315,6 +323,7 @@ fun simulateStep(
         ),
         lifetimeStats = state.lifetimeStats.copy(
             totalPlayTimeSeconds = state.lifetimeStats.totalPlayTimeSeconds + dtSeconds,
+            totalSimulatedSeconds = state.lifetimeStats.totalSimulatedSeconds + gameSecondsElapsed,
             totalGasProducedKg = lifetimeGasTotals.build(),
             highestTemperatureC = max(state.lifetimeStats.highestTemperatureC, newTemp),
             highestCo2Ppm = max(state.lifetimeStats.highestCo2Ppm, co2Ppm),

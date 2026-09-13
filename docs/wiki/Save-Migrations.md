@@ -2,7 +2,7 @@
 
 [← Documentation home](Home.md)
 
-`domain/save/Migrations.kt`. Current `SAVE_VERSION` is **3**.
+`domain/save/Migrations.kt`. Current `SAVE_VERSION` is **4**.
 
 Each step moves a save one version forward, and they run in order, so a save written by any
 released version reaches the current shape by falling through the chain. The version numbers and
@@ -14,6 +14,7 @@ fun migrate(state: GameState): GameState {
     var migrated = state
     if (migrated.saveVersion < 2) migrated = migrateV1ToV2(migrated)
     if (migrated.saveVersion < 3) migrated = migrateV2ToV3(migrated)
+    if (migrated.saveVersion < 4) migrated = migrateV3ToV4(migrated)
     return if (migrated.saveVersion >= SAVE_VERSION) migrated
            else migrated.copy(saveVersion = SAVE_VERSION)
 }
@@ -58,6 +59,34 @@ deliberately a generous one: erring toward giving a player too much is the kinde
 Rather than delete it, it now grants +40% production per level, so levels already bought keep
 paying — and it is cheaper than it was, so nobody overpaid. No migration code is needed for this;
 it is a data change that a v2 save picks up for free.
+
+## v3 → v4: the Earth got an age
+
+v4 added `gameAgeSeconds` — the simulated time this planet has been running for, and the clock
+every gas [half-life](Atmospheric-Half-Life.md) now decays on — plus its lifetime counterpart
+`LifetimeStats.totalSimulatedSeconds`.
+
+**The current Earth starts at age zero.** A v3 save records when the run began in wall-clock terms
+(`runStartedAt`) but not how much of that wall clock was actually *simulated*: an absence past the
+[offline cap](Offline-Progression.md#the-cap) banks only the cap, and a player with offline
+progress switched off banks none of it. So `lastTickAt - runStartedAt` would routinely credit an
+Earth with centuries it never lived through — and under the new decay those centuries would
+retroactively drain its atmosphere the instant the save loaded. There is no honest reconstruction,
+so nothing is invented.
+
+**The lifetime total is migrated exactly**, because a reliable figure for it does exist.
+`totalPlayTimeSeconds` is not wall-clock time: `simulateStep` advances it by precisely the `dt` it
+simulated, live and offline alike, and that is the same `dt` that now also advances the simulated
+clock. Converting it is arithmetic on a number the save already holds, not a guess.
+
+```kotlin
+gameAgeSeconds = 0.0
+totalSimulatedSeconds = totalPlayTimeSeconds * GAME_SECONDS_PER_REAL_SECOND
+```
+
+Nothing else in the save is touched, and in particular v3's economy fix-ups must not run a second
+time — `SaveMigrationTest` and `SaveParityTest.the v3 migration gives the Earth an age without
+inventing one` both assert that.
 
 ## Saves from a newer build
 

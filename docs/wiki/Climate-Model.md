@@ -47,7 +47,7 @@ gas's native unit. The baseline is assumed to be a natural steady state (equal n
 and removal) and is not simulated — only the anthropogenic perturbation is. That keeps the
 numbers meaningful (extra == 0 at game start) without modelling pre-industrial gas cycles.
 
-| Gas | Unit | Baseline | kg per unit | Lifetime (yr) | Forcing response |
+| Gas | Unit | Baseline | kg per unit | Half-life (yr) | Forcing response |
 | :-- | :-- | --: | --: | --: | :-- |
 | CO₂ | ppm | 280 | 2 × 10¹² | 120 | `5.35 · ln(C / C₀)` |
 | CH₄ | ppb | 700 | 2.75 × 10⁹ | 12 | `0.036 · (√C − √C₀)` |
@@ -70,23 +70,39 @@ part of its band.
   out-heat every fire, furnace and engine in the run combined. Scaled so f-gases stay a nasty
   late-game accelerant rather than the whole apocalypse.
 
-O₃ can go **negative** — CFC technologies deplete it below baseline, producing negative forcing
-and unlocking the "Ozone Hole" achievement at −50 DU. `ClimateParityTest` covers it.
+`computeForcing` handles a **negative** O₃ excess correctly — CFC technologies deplete ozone, and
+below baseline the forcing term goes negative — and `ClimateParityTest` covers that arithmetic.
+But the integration clamps every gas at zero excess, so in play O₃ bottoms out *at* its 300 DU
+baseline and never goes below it. The "Ozone Hole" achievement, which wants −50 DU, is therefore
+unreachable. That predates the half-life work and is left alone here: letting ozone go negative
+would be a balance change, not a bug fix. See the [codebase audit](../CODEBASE_AUDIT.md).
 
 ### Natural removal
 
 ```kotlin
-fun naturalRemovalRateConstant(gas) = 1.0 / (gas.lifetimeYears * 365.25 * 24 * 3600)
+fun naturalRemovalRateConstant(gas) =
+    ln(2.0) / (gas.halfLifeYears * REAL_SECONDS_PER_GAME_YEAR)
 ```
 
-A first-order per-second removal fraction — the reciprocal of the mean atmospheric lifetime.
+A first-order per-second decay constant, `λ = ln 2 / H`, so a stock left alone follows
+`C(t) = C₀ × 2^(−t/H)` exactly: 1,000 with a 120-year half-life is 500 after 120 simulated years.
+
+The half-lives are counted in **simulated** years, not real ones — one real second of simulation
+is one simulated day, so CO₂'s 120 years is 12.2 real hours. Dividing by
+`REAL_SECONDS_PER_GAME_YEAR` rather than by a year of real seconds is the whole of that
+conversion, and it happens once, here. Water vapour is the documented exception: it is a feedback
+rather than a stock and keeps its real-clock relaxation rate.
+
+[**Atmospheric half-life**](Atmospheric-Half-Life.md) is the full page on this — the equation,
+the two clocks, how production competes with decay, the offline behaviour and the numerical
+edges.
 
 ## Gas integration
 
 The exact analytic solution to first-order decay toward an equilibrium:
 
 ```
-dE/dt = production − k·E        with k = removalRateConstant × sinkEfficiency
+dE/dt = production − k·E        with k = (ln 2 / halfLife) × sinkEfficiency
 
 E(t + Δt) = E(t)·e^(−kΔt) + (production/k)·(1 − e^(−kΔt))
 ```
@@ -209,7 +225,7 @@ so one collapsed factor ends the run` asserts it.
 
 | Test | Covers |
 | :-- | :-- |
-| `ClimateParityTest` | 11 cases against the reference: sink efficiency and its floor, lifetimes and removal constants, **3,240 gas integrations** across every gas × production rate × removal state × sink efficiency × step size from 250 ms to a day, per-gas and total forcing, negative O₃ forcing, temperature including the super-linear tail, water vapour, all five habitability factors, sea level |
+| `ClimateParityTest` | 13 cases against the reference: sink efficiency and its floor, half-lives and decay constants, the half-life law against the integrator, the simulated clock, **3,240 gas integrations** across every gas × production rate × removal state × sink efficiency × step size from 250 ms to a day, per-gas and total forcing, negative O₃ forcing, temperature including the super-linear tail, water vapour, all five habitability factors, sea level |
 | `SimulationParityTest` | Step-size independence, determinism, a 95-step scripted playthrough to collapse |
 
 ## Changing a formula

@@ -36,6 +36,25 @@ with offline progress switched off would bank the entire accumulated absence the
 switched it back on. `OfflineParityTest.the clock always advances, even when nothing is simulated`
 guards it.
 
+## The planet ages while you are away
+
+Because the whole absence goes through `simulateStep`, the Earth's
+[simulated age](Atmospheric-Half-Life.md#the-two-clocks) advances with it — and so does the
+[half-life decay](Atmospheric-Half-Life.md) that runs on that age. Three consequences:
+
+- **`simulatedSeconds`, not `awaySeconds`, is what ages the planet.** An absence past the cap
+  ages the Earth by the cap. A player with offline progress switched off comes back to a planet
+  that has not aged at all, with its atmosphere exactly as they left it.
+- **Gas can go down while you are away.** At 86,400 simulated seconds per real second, CO₂'s
+  120-year half-life is 12.2 real hours — about one offline cap. An Earth left overnight with
+  nothing emitting comes back with roughly half its excess CO₂ gone. This is the intended
+  pressure, and the welcome-back summary names the elapsed simulated age so the number is
+  explicable rather than alarming.
+- **It still costs one calculation.** Decay is resolved inside the same closed-form step as
+  production, so ageing an eight-hour absence is not a loop and cannot drift from live play.
+  `GameAgeTest.offline and live play age the Earth and its atmosphere identically` asserts both
+  halves at once.
+
 ## The cap
 
 | | |

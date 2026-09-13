@@ -42,7 +42,7 @@ Terms the game and the codebase use, in one place. Game terms first.
 | **`MultiplierContribution`** | A transient multiplier layer — an event or a challenge reward. |
 | **`GameUiState`** | `GameState` + `DerivedState` + the transient UI slots. The single `StateFlow` value. |
 | **`LoadResult`** | `Empty` / `Loaded` / `RecoveredFromBackup` / `Corrupted`. Provenance matters to the UI. |
-| **`SAVE_VERSION`** | The save format version (currently 3). Unrelated to `versionCode`. |
+| **`SAVE_VERSION`** | The save format version (currently 4). Unrelated to `versionCode`. |
 | **`stateLock`** | The lock serialising the tick against player actions in the ViewModel. |
 | **`ladderTier(tier)`** | The compressed tier used by every cost and production curve above the knee. |
 | **Nominalized wallet** | Balances restated in the units the cost curves use, so affordability maths need not know the prestige discount. |

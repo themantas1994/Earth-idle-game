@@ -1,5 +1,6 @@
 import { Decimal, D } from './bignum';
 import { GameState, SAVE_VERSION } from './gameState';
+import { GAME_SECONDS_PER_REAL_SECOND } from './gameTime';
 
 export const SAVE_KEY = 'earth-idle-save';
 export const BACKUP_SAVE_KEY = `${SAVE_KEY}.backup`;
@@ -157,6 +158,36 @@ function migrate(state: GameState): GameState {
         totalEarthPointsEarned: migrated.lifetimeStats.totalEarthPointsEarned.div(PRESTIGE_RESCALE),
       },
       saveVersion: 3,
+    };
+  }
+
+  if (migrated.saveVersion < 4) {
+    // v4 gave the Earth an age: `gameAgeSeconds`, the simulated time this
+    // planet has been running for, and the clock every gas half-life now
+    // decays on.
+    //
+    // **The current Earth starts at age zero.** A v3 save records when the run
+    // began in wall-clock terms (`runStartedAt`) but not how much of that wall
+    // clock was actually simulated — an absence past the offline cap is banked
+    // at the cap, and a player with offline progress switched off banks none
+    // of it — so `lastTickAt - runStartedAt` would routinely credit an Earth
+    // with centuries it never lived through, and with the decay those
+    // centuries would retroactively drain its atmosphere. There is no honest
+    // reconstruction, so nothing is invented.
+    //
+    // The lifetime total is a different matter and is migrated exactly.
+    // `totalPlayTimeSeconds` is not wall-clock time: `simulateStep` advances
+    // it by precisely the `dt` it simulated, live and offline alike, which is
+    // the same `dt` that now also advances the simulated clock.
+    migrated = {
+      ...migrated,
+      gameAgeSeconds: 0,
+      lifetimeStats: {
+        ...migrated.lifetimeStats,
+        totalSimulatedSeconds:
+          (migrated.lifetimeStats.totalPlayTimeSeconds ?? 0) * GAME_SECONDS_PER_REAL_SECOND,
+      },
+      saveVersion: 4,
     };
   }
 

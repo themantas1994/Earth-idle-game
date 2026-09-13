@@ -113,6 +113,7 @@ object SaveSerialization {
         put("runStartedAt", JsonPrimitive(state.runStartedAt))
         put("lastTickAt", JsonPrimitive(state.lastTickAt))
         put("createdAt", JsonPrimitive(state.createdAt))
+        put("gameAgeSeconds", JsonPrimitive(state.gameAgeSeconds))
 
         put("resources", encodeResourceAmounts(state.resources))
         put("atmosphere", encodeGasAmounts(state.atmosphere))
@@ -163,6 +164,7 @@ object SaveSerialization {
             "lifetimeStats",
             buildJsonObject {
                 put("totalPlayTimeSeconds", JsonPrimitive(state.lifetimeStats.totalPlayTimeSeconds))
+                put("totalSimulatedSeconds", JsonPrimitive(state.lifetimeStats.totalSimulatedSeconds))
                 put("totalResets", JsonPrimitive(state.lifetimeStats.totalResets))
                 put("totalGasProducedKg", encodeGasAmounts(state.lifetimeStats.totalGasProducedKg))
                 put("highestTemperatureC", JsonPrimitive(state.lifetimeStats.highestTemperatureC))
@@ -387,6 +389,8 @@ object SaveSerialization {
             runStartedAt = runStartedAt,
             lastTickAt = root["lastTickAt"].asLongOr(fallbackNow),
             createdAt = root["createdAt"].asLongOr(fallbackNow),
+            // Absent in v3 and earlier; migrateV3ToV4 fills it in.
+            gameAgeSeconds = root["gameAgeSeconds"].asDoubleOr(0.0).coerceAtLeast(0.0),
 
             resources = decodeResourceAmounts(root["resources"]),
             atmosphere = decodeGasAmounts(root["atmosphere"]),
@@ -423,6 +427,8 @@ object SaveSerialization {
 
             lifetimeStats = LifetimeStats(
                 totalPlayTimeSeconds = lifetimeJson?.get("totalPlayTimeSeconds").asDoubleOr(0.0),
+                totalSimulatedSeconds = lifetimeJson?.get("totalSimulatedSeconds").asDoubleOr(0.0)
+                    .coerceAtLeast(0.0),
                 totalResets = lifetimeJson?.get("totalResets").asIntOr(0),
                 totalGasProducedKg = decodeGasAmounts(lifetimeJson?.get("totalGasProducedKg")),
                 highestTemperatureC = lifetimeJson?.get("highestTemperatureC").asDoubleOr(0.0),

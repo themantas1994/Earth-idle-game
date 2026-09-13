@@ -33,24 +33,24 @@ of diffs and reviews.
 | File | What it pins down |
 | :-- | :-- |
 | `decimal.json` | 24 operands from 1e-400 to 1e1000: every unary op, all 576 binary pairs, 104 `pow` cases, the save-triple round trip |
-| `format.json` | 36 values × 4 notations × 2 precisions, plus durations, temperatures and percentages — compared as **strings** |
+| `format.json` | 36 values × 4 notations × 2 precisions, plus durations, simulated ages, temperatures and percentages — compared as **strings** |
 | `technologies.json` | All 99 technologies, every field, plus the tier curves at 45 tiers |
 | `economy.json` | Quoted and bulk prices, buy-max affordability including the exact geometric-series boundary, the prestige discount, the ownership ladder |
-| `climate.json` | 3,240 gas integrations across every gas × production rate × removal state × sink efficiency × step size from 250 ms to a day; forcing, temperature, ocean chemistry, all five habitability factors |
+| `climate.json` | 3,240 gas integrations across every gas × production rate × removal state × sink efficiency × step size from 250 ms to a day; the half-life law and the simulated clock's constants; forcing, temperature, ocean chemistry, all five habitability factors |
 | `prestige.json` | The upgrade table and cost ladders, nine ownership combinations including everything maxed, the speed term, payouts for gas totals from 0 to 1e120 |
 | `content.json` | The achievement, challenge, event, milestone, gas and resource tables — including each challenge's **computed** technology lockout set |
 | `events.json` | Every eligibility state × draw, so a seeded roll picks the same event |
 | `simulation.json` | A **95-step scripted playthrough** from a fresh game to collapse and through a prestige reset, comparing every simulation value at every step |
 | `stepIndependence.json` | One hour in one step versus 14,400 quarter-second ticks |
 | `offline.json` | Absences from 0 to a week, with and without the cap upgrades, enabled and disabled |
-| `save.json` | Saves the reference actually wrote, plus the v1→v2→v3 migration results |
+| `save.json` | Saves the reference actually wrote, plus the v1→v2→v3→v4 migration results |
 
 ## Regenerating
 
 ```bash
 cd tools/ts-reference
 npm install
-npx vitest run       # the reference's own 198 tests — run these first
+npx vitest run       # the reference's own 216 tests — run these first
 npm run fixtures     # rewrites app/src/test/resources/parity/*.json
 cd ../.. && ./gradlew test
 ```

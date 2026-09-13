@@ -32,6 +32,7 @@ Pure Kotlin, no Android. This is where the game actually is.
 | [GameDecimal](GameDecimal.md) | The arbitrary-scale number type, and why `Double` is not enough |
 | [Simulation](Simulation.md) | Production rates, multiplier folding, the per-tick order of operations |
 | [Climate model](Climate-Model.md) | Gases, forcing, temperature, sea level, habitability — every formula |
+| [Atmospheric half-life](Atmospheric-Half-Life.md) | The simulated calendar, gas decay, and how production competes with it |
 | [Economy and production](Economy-and-Production.md) | Pricing, the price-stability invariant, buy-max, ownership bonuses |
 | [Technology system](Technology-System.md) | The 99-node tree, tiers, the scaling curves, choice groups |
 | [Prestige system](Prestige-System.md) | Earth Points, the payout formula, the 11 permanent upgrades |
@@ -135,7 +136,7 @@ Update the relevant page in the same change that touches the code:
 | :-- | :-- |
 | `GameState` or any persisted field | [Game state](Game-State.md), [Save system](Save-System.md) |
 | The save format or `SAVE_VERSION` | [Save system](Save-System.md), [Save migrations](Save-Migrations.md) |
-| Simulation or climate formulas | [Simulation](Simulation.md), [Climate model](Climate-Model.md) |
+| Simulation or climate formulas | [Simulation](Simulation.md), [Climate model](Climate-Model.md), [Atmospheric half-life](Atmospheric-Half-Life.md) |
 | `Constants.kt` / `BALANCE` | [Economy and production](Economy-and-Production.md), [Technology system](Technology-System.md) |
 | The technology tree (count, tiers, requirements) | [Technology system](Technology-System.md), README feature table |
 | Achievements, challenges, events, milestones | [Achievements and challenges](Achievements-and-Challenges.md), [Random events](Random-Events.md), README feature table |

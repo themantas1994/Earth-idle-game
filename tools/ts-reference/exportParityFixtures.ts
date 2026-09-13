@@ -14,9 +14,16 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { Decimal, D } from './engine/bignum';
-import { formatNumber, formatDuration, formatTemperature, formatPercent, NumberFormatMode } from './engine/format';
+import { formatNumber, formatDuration, formatGameAge, formatTemperature, formatPercent, NumberFormatMode } from './engine/format';
 import { ALL_TECHNOLOGIES, TECH_BY_ID, maxAffordableQuantity, bulkPurchaseCost, nextPurchaseCost } from './engine/technologies';
-import { GAS_LIST, GasId, naturalRemovalRateConstant } from './engine/gases';
+import { GAS_LIST, GasId, halfLifeFractionRemaining, naturalRemovalRateConstant } from './engine/gases';
+import {
+  GAME_SECONDS_PER_REAL_SECOND,
+  GAME_SECONDS_PER_YEAR,
+  REAL_SECONDS_PER_GAME_YEAR,
+  gameSecondsFor,
+  gameYearsToSeconds,
+} from './engine/gameTime';
 import { RESOURCE_LIST, ResourceId } from './engine/resources';
 import {
   computeSinkEfficiency,
@@ -171,7 +178,12 @@ function formatFixture() {
   const percents = [0, 0.0001, 0.125, 0.5, 0.99994, 1]
     .map((f) => ({ fraction: f, out1: formatPercent(f), out3: formatPercent(f, 3) }));
 
-  return { numbers, durations, temperatures, percents };
+  const ages = [
+    0, 1, 86_399, 86_400, 2_629_800, 5_259_600, 31_557_600, 63_115_200,
+    389_263_500, 3.15576e11, 3.15576e14,
+  ].map((s) => ({ gameSeconds: s, out: formatGameAge(s), outScientific: formatGameAge(s, 'scientific') }));
+
+  return { numbers, durations, temperatures, percents, ages };
 }
 
 // ----------------------------------------------------------- technologies ---
@@ -302,7 +314,42 @@ function economyFixture() {
 function climateFixture() {
   const sink = [-5, 0, 0.5, 1, 5, 15, 50, 500, 5000].map((t) => ({ tempC: t, efficiency: computeSinkEfficiency(t) }));
 
-  const removalRates = GAS_LIST.map((g) => ({ gas: g.id, k: naturalRemovalRateConstant(g), massPerUnit: g.massPerUnit, lifetimeYears: g.lifetimeYears }));
+  const removalRates = GAS_LIST.map((g) => ({
+    gas: g.id,
+    k: naturalRemovalRateConstant(g),
+    massPerUnit: g.massPerUnit,
+    halfLifeYears: g.halfLifeYears,
+    decaysOnSimulatedClock: g.decaysOnSimulatedClock,
+  }));
+
+  // The half-life law on its own, and the same law reached through the
+  // integrator with no production — the two have to agree, and 1,000 at a
+  // 120-year half-life has to read 500 / 250 / 125 at 120 / 240 / 360
+  // simulated years.
+  const halfLife: unknown[] = [];
+  for (const halfLifeYears of [0.03, 0.06, 12, 114, 120, 3200]) {
+    for (const elapsedYears of [0, 1, 60, 120, 240, 360, 1200, 100_000]) {
+      const dtGameSeconds = gameYearsToSeconds(elapsedYears);
+      const k = Math.LN2 / (halfLifeYears * REAL_SECONDS_PER_GAME_YEAR);
+      halfLife.push({
+        halfLifeYears,
+        elapsedYears,
+        dtGameSeconds,
+        fractionRemaining: halfLifeFractionRemaining(halfLifeYears, dtGameSeconds),
+        // The same elapsed span expressed in the real seconds the integrator takes.
+        integrated: dec(
+          integrateGasConcentration(D('1000'), Decimal.ZERO, k, 1, Decimal.ZERO, elapsedYears * REAL_SECONDS_PER_GAME_YEAR),
+        ),
+      });
+    }
+  }
+
+  const clock = {
+    gameSecondsPerYear: GAME_SECONDS_PER_YEAR,
+    gameSecondsPerRealSecond: GAME_SECONDS_PER_REAL_SECOND,
+    realSecondsPerGameYear: REAL_SECONDS_PER_GAME_YEAR,
+    gameSecondsFor: [0, 0.25, 1, 300, 3600, 43200].map((s) => ({ realSeconds: s, gameSeconds: gameSecondsFor(s) })),
+  };
 
   const integration: unknown[] = [];
   for (const gas of GAS_LIST) {
@@ -388,7 +435,7 @@ function climateFixture() {
     }
   }
 
-  return { sink, removalRates, integration, forcing, negativeOzone, temperature, waterVapor, habitability, seaLevel };
+  return { sink, removalRates, halfLife, clock, integration, forcing, negativeOzone, temperature, waterVapor, habitability, seaLevel };
 }
 
 // -------------------------------------------------------------- prestige ---
@@ -509,7 +556,8 @@ function contentFixture() {
     })),
     gases: GAS_LIST.map((g) => ({
       id: g.id, name: g.name, formula: g.formula, unit: g.unit, baseline: g.baseline,
-      massPerUnit: g.massPerUnit, lifetimeYears: g.lifetimeYears, directlyEmitted: g.directlyEmitted,
+      massPerUnit: g.massPerUnit, halfLifeYears: g.halfLifeYears,
+      decaysOnSimulatedClock: g.decaysOnSimulatedClock, directlyEmitted: g.directlyEmitted,
     })),
     resources: RESOURCE_LIST.map((r) => ({ id: r.id, name: r.name, shortName: r.shortName, description: r.description })),
   };
@@ -562,6 +610,7 @@ function snapshot(state: GameState, label: string) {
   const rates = computeProductionRates(state.techOwned, multipliers);
   return {
     label,
+    gameAgeSeconds: state.gameAgeSeconds,
     techOwned: state.techOwned,
     resources: decMap(state.resources),
     atmosphere: decMap(state.atmosphere),
@@ -584,6 +633,7 @@ function snapshot(state: GameState, label: string) {
     },
     lifetimeStats: {
       totalPlayTimeSeconds: state.lifetimeStats.totalPlayTimeSeconds,
+      totalSimulatedSeconds: state.lifetimeStats.totalSimulatedSeconds,
       totalGasProducedKg: decMap(state.lifetimeStats.totalGasProducedKg),
       highestTemperatureC: state.lifetimeStats.highestTemperatureC,
       highestCo2Ppm: state.lifetimeStats.highestCo2Ppm,
@@ -825,8 +875,14 @@ function stepIndependenceFixture() {
   for (let i = 0; i < 14400; i++) stepped = simulateStep(stepped, 0.25, noPrestige).state;
 
   return {
-    oneShot: { atmosphere: decMap(oneShot.atmosphere), resources: decMap(oneShot.resources), temperatureAnomalyC: oneShot.temperatureAnomalyC },
-    stepped: { atmosphere: decMap(stepped.atmosphere), resources: decMap(stepped.resources), temperatureAnomalyC: stepped.temperatureAnomalyC },
+    oneShot: {
+      atmosphere: decMap(oneShot.atmosphere), resources: decMap(oneShot.resources),
+      temperatureAnomalyC: oneShot.temperatureAnomalyC, gameAgeSeconds: oneShot.gameAgeSeconds,
+    },
+    stepped: {
+      atmosphere: decMap(stepped.atmosphere), resources: decMap(stepped.resources),
+      temperatureAnomalyC: stepped.temperatureAnomalyC, gameAgeSeconds: stepped.gameAgeSeconds,
+    },
   };
 }
 
@@ -852,6 +908,7 @@ function offlineFixture() {
           cappedByLimit: result.cappedByLimit,
           offlineCapSeconds: result.offlineCapSeconds,
           lastTickAt: result.state.lastTickAt,
+          gameAgeSeconds: result.state.gameAgeSeconds,
           resources: decMap(result.state.resources),
           atmosphere: decMap(result.state.atmosphere),
           temperatureAnomalyC: result.state.temperatureAnomalyC,
@@ -872,6 +929,7 @@ function saveFixture() {
   const state: GameState = {
     ...createNewGame(1_700_000_000_000),
     runNumber: 4,
+    gameAgeSeconds: 4_567_890.5,
     techOwned: { natural_fire: 17, controlled_fire: 9, cooking: 1, coal_mining: 123 },
     resources: {
       energy: D('1.2345e42'), research: D('9.87e17'), coal: D('1000'),
@@ -897,6 +955,7 @@ function saveFixture() {
   state.lifetimeStats.totalEarthPointsEarned = D('1e11');
   state.lifetimeStats.fastestResetSeconds = 12345.5;
   state.lifetimeStats.totalResets = 4;
+  state.lifetimeStats.totalSimulatedSeconds = 9_876_543.25;
   state.settings = { ...state.settings, numberFormat: 'scientific', darkMode: 'dark', vibrationEnabled: false };
 
   const serialized = serializeGameState(state);
@@ -916,14 +975,26 @@ function saveFixture() {
   v2.saveVersion = 2;
   const v2Json = JSON.stringify(v2);
 
+  // A v3 save: written before the Earth had an age, so the field is absent
+  // entirely rather than zero. `totalPlayTimeSeconds` is present and is what
+  // the lifetime simulated total is derived from.
+  const v3 = JSON.parse(serialized);
+  v3.saveVersion = 3;
+  delete v3.gameAgeSeconds;
+  delete v3.lifetimeStats.totalSimulatedSeconds;
+  v3.lifetimeStats.totalPlayTimeSeconds = 7200;
+  const v3Json = JSON.stringify(v3);
+
   const roundTripped = deserializeGameState(serialized)!;
   const migratedV1 = deserializeGameState(v1Json)!;
   const migratedV2 = deserializeGameState(v2Json)!;
+  const migratedV3 = deserializeGameState(v3Json)!;
 
   return {
-    v3Json: serialized,
+    v4Json: serialized,
     v1Json,
     v2Json,
+    v3Json,
     roundTripped: {
       saveVersion: roundTripped.saveVersion,
       resources: decMap(roundTripped.resources),
@@ -935,6 +1006,8 @@ function saveFixture() {
       activeEvents: roundTripped.activeEvents,
       tutorial: roundTripped.tutorial,
       seaLevelRiseMeters: roundTripped.seaLevelRiseMeters,
+      gameAgeSeconds: roundTripped.gameAgeSeconds,
+      lifetimeTotalSimulatedSeconds: roundTripped.lifetimeStats.totalSimulatedSeconds,
       lifetimeFastestResetSeconds: roundTripped.lifetimeStats.fastestResetSeconds,
     },
     migratedFromV1: {
@@ -950,8 +1023,20 @@ function saveFixture() {
       saveVersion: migratedV2.saveVersion,
       earthPoints: dec(migratedV2.prestige.earthPoints),
       totalEarthPointsEarned: dec(migratedV2.lifetimeStats.totalEarthPointsEarned),
+      gameAgeSeconds: migratedV2.gameAgeSeconds,
+      totalSimulatedSeconds: migratedV2.lifetimeStats.totalSimulatedSeconds,
     },
-    corrupt: ['', '{', 'null', '[]', '{"saveVersion":3}', '{"saveVersion":"x","runNumber":0,"resources":{},"atmosphere":{},"techOwned":{},"prestige":{}}'],
+    migratedFromV3: {
+      saveVersion: migratedV3.saveVersion,
+      // No honest reconstruction exists for the current Earth, so it starts at zero...
+      gameAgeSeconds: migratedV3.gameAgeSeconds,
+      // ...while the lifetime total is derived exactly from simulated play time.
+      totalSimulatedSeconds: migratedV3.lifetimeStats.totalSimulatedSeconds,
+      totalPlayTimeSeconds: migratedV3.lifetimeStats.totalPlayTimeSeconds,
+      // Untouched by this migration: v3's economy fix-ups must not run again.
+      earthPoints: dec(migratedV3.prestige.earthPoints),
+    },
+    corrupt: ['', '{', 'null', '[]', '{"saveVersion":4}', '{"saveVersion":"x","runNumber":0,"resources":{},"atmosphere":{},"techOwned":{},"prestige":{}}'],
   };
 }
 

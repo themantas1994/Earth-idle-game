@@ -8,6 +8,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 0,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -196,6 +197,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 0,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -384,6 +386,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 5000,
+      "gameAgeSeconds": 432000,
       "resources": {
         "energy": {
           "s": 1,
@@ -431,10 +434,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 1.1183635811098998,
+          "m": 1.1183194015619458,
           "e": -8,
           "finite": true,
-          "str": "1.1183635811e-8"
+          "str": "1.1183194016e-8"
         },
         "ch4": {
           "s": 0,
@@ -472,7 +475,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 1.7095183479040437e-10,
+      "temperatureAnomalyC": 1.7094518224142733e-10,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -562,7 +565,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 1.7095183479040437e-10
+      "temperatureAfterC": 1.7094518224142733e-10
     },
     {
       "prestige": "none",
@@ -572,6 +575,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 5000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -760,6 +764,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 300000,
+      "gameAgeSeconds": 25920000,
       "resources": {
         "energy": {
           "s": 1,
@@ -807,10 +812,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 6.710181430235939,
+          "m": 6.694289168788105,
           "e": -7,
           "finite": true,
-          "str": "6.7101814302e-7"
+          "str": "6.6942891688e-7"
         },
         "ch4": {
           "s": 0,
@@ -848,7 +853,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 1.025743528429861e-8,
+      "temperatureAnomalyC": 1.0233140997490243e-8,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -938,7 +943,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 1.025743528429861e-8
+      "temperatureAfterC": 1.0233140997490243e-8
     },
     {
       "prestige": "none",
@@ -948,6 +953,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 300000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -1136,6 +1142,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 3600000,
+      "gameAgeSeconds": 311040000,
       "resources": {
         "energy": {
           "s": 1,
@@ -1183,10 +1190,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 8.052214208624662,
+          "m": 7.827292237308242,
           "e": -6,
           "finite": true,
-          "str": "8.0522142086e-6"
+          "str": "7.8272922373e-6"
         },
         "ch4": {
           "s": 0,
@@ -1224,7 +1231,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 1.2309653867371042e-7,
+      "temperatureAnomalyC": 1.1965796937014293e-7,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -1314,7 +1321,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 1.2309653867371042e-7
+      "temperatureAfterC": 1.1965796937014293e-7
     },
     {
       "prestige": "none",
@@ -1324,6 +1331,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 3600000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -1512,6 +1520,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 43200000,
+      "gameAgeSeconds": 3732480000,
       "resources": {
         "energy": {
           "s": 1,
@@ -1559,10 +1568,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 9.662606529347254,
+          "m": 7.000975787954937,
           "e": -5,
           "finite": true,
-          "str": "9.6626065293e-5"
+          "str": "7.0009757880e-5"
         },
         "ch4": {
           "s": 0,
@@ -1600,7 +1609,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.0000014773616860074687,
+      "temperatureAnomalyC": 0.0000010703843155841812,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -1690,7 +1699,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.0000014773616860074687
+      "temperatureAfterC": 0.0000010703843155841812
     },
     {
       "prestige": "none",
@@ -1700,6 +1709,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 43200,
       "lastTickAt": 43200000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -1888,6 +1898,7 @@
       "cappedByLimit": true,
       "offlineCapSeconds": 43200,
       "lastTickAt": 43201000,
+      "gameAgeSeconds": 3732480000,
       "resources": {
         "energy": {
           "s": 1,
@@ -1935,10 +1946,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 9.662606529347254,
+          "m": 7.000975787954937,
           "e": -5,
           "finite": true,
-          "str": "9.6626065293e-5"
+          "str": "7.0009757880e-5"
         },
         "ch4": {
           "s": 0,
@@ -1976,7 +1987,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.0000014773616860074687,
+      "temperatureAnomalyC": 0.0000010703843155841812,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -2066,7 +2077,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.0000014773616860074687
+      "temperatureAfterC": 0.0000010703843155841812
     },
     {
       "prestige": "none",
@@ -2076,6 +2087,7 @@
       "cappedByLimit": true,
       "offlineCapSeconds": 43200,
       "lastTickAt": 43201000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -2264,6 +2276,7 @@
       "cappedByLimit": true,
       "offlineCapSeconds": 43200,
       "lastTickAt": 86400000,
+      "gameAgeSeconds": 3732480000,
       "resources": {
         "energy": {
           "s": 1,
@@ -2311,10 +2324,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 9.662606529347254,
+          "m": 7.000975787954937,
           "e": -5,
           "finite": true,
-          "str": "9.6626065293e-5"
+          "str": "7.0009757880e-5"
         },
         "ch4": {
           "s": 0,
@@ -2352,7 +2365,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.0000014773616860074687,
+      "temperatureAnomalyC": 0.0000010703843155841812,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -2442,7 +2455,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.0000014773616860074687
+      "temperatureAfterC": 0.0000010703843155841812
     },
     {
       "prestige": "none",
@@ -2452,6 +2465,7 @@
       "cappedByLimit": true,
       "offlineCapSeconds": 43200,
       "lastTickAt": 86400000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -2640,6 +2654,7 @@
       "cappedByLimit": true,
       "offlineCapSeconds": 43200,
       "lastTickAt": 604800000,
+      "gameAgeSeconds": 3732480000,
       "resources": {
         "energy": {
           "s": 1,
@@ -2687,10 +2702,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 9.662606529347254,
+          "m": 7.000975787954937,
           "e": -5,
           "finite": true,
-          "str": "9.6626065293e-5"
+          "str": "7.0009757880e-5"
         },
         "ch4": {
           "s": 0,
@@ -2728,7 +2743,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.0000014773616860074687,
+      "temperatureAnomalyC": 0.0000010703843155841812,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -2818,7 +2833,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.0000014773616860074687
+      "temperatureAfterC": 0.0000010703843155841812
     },
     {
       "prestige": "none",
@@ -2828,6 +2843,7 @@
       "cappedByLimit": true,
       "offlineCapSeconds": 43200,
       "lastTickAt": 604800000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -3016,6 +3032,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 0,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -3204,6 +3221,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 0,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -3392,6 +3410,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 5000,
+      "gameAgeSeconds": 432000,
       "resources": {
         "energy": {
           "s": 1,
@@ -3439,10 +3458,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 1.1183635811098998,
+          "m": 1.1183194015619458,
           "e": -8,
           "finite": true,
-          "str": "1.1183635811e-8"
+          "str": "1.1183194016e-8"
         },
         "ch4": {
           "s": 0,
@@ -3480,7 +3499,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 1.7095183479040437e-10,
+      "temperatureAnomalyC": 1.7094518224142733e-10,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -3570,7 +3589,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 1.7095183479040437e-10
+      "temperatureAfterC": 1.7094518224142733e-10
     },
     {
       "prestige": "extended",
@@ -3580,6 +3599,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 5000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -3768,6 +3788,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 300000,
+      "gameAgeSeconds": 25920000,
       "resources": {
         "energy": {
           "s": 1,
@@ -3815,10 +3836,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 6.710181430235939,
+          "m": 6.694289168788105,
           "e": -7,
           "finite": true,
-          "str": "6.7101814302e-7"
+          "str": "6.6942891688e-7"
         },
         "ch4": {
           "s": 0,
@@ -3856,7 +3877,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 1.025743528429861e-8,
+      "temperatureAnomalyC": 1.0233140997490243e-8,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -3946,7 +3967,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 1.025743528429861e-8
+      "temperatureAfterC": 1.0233140997490243e-8
     },
     {
       "prestige": "extended",
@@ -3956,6 +3977,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 300000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -4144,6 +4166,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 3600000,
+      "gameAgeSeconds": 311040000,
       "resources": {
         "energy": {
           "s": 1,
@@ -4191,10 +4214,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 8.052214208624662,
+          "m": 7.827292237308242,
           "e": -6,
           "finite": true,
-          "str": "8.0522142086e-6"
+          "str": "7.8272922373e-6"
         },
         "ch4": {
           "s": 0,
@@ -4232,7 +4255,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 1.2309653867371042e-7,
+      "temperatureAnomalyC": 1.1965796937014293e-7,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -4322,7 +4345,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 1.2309653867371042e-7
+      "temperatureAfterC": 1.1965796937014293e-7
     },
     {
       "prestige": "extended",
@@ -4332,6 +4355,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 3600000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -4520,6 +4544,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 43200000,
+      "gameAgeSeconds": 3732480000,
       "resources": {
         "energy": {
           "s": 1,
@@ -4567,10 +4592,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 9.662606529347254,
+          "m": 7.000975787954937,
           "e": -5,
           "finite": true,
-          "str": "9.6626065293e-5"
+          "str": "7.0009757880e-5"
         },
         "ch4": {
           "s": 0,
@@ -4608,7 +4633,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.0000014773616860074687,
+      "temperatureAnomalyC": 0.0000010703843155841812,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -4698,7 +4723,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.0000014773616860074687
+      "temperatureAfterC": 0.0000010703843155841812
     },
     {
       "prestige": "extended",
@@ -4708,6 +4733,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 43200000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -4896,6 +4922,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 43201000,
+      "gameAgeSeconds": 3732566400,
       "resources": {
         "energy": {
           "s": 1,
@@ -4943,10 +4970,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 9.662830199467997,
+          "m": 7.001088743229479,
           "e": -5,
           "finite": true,
-          "str": "9.6628301995e-5"
+          "str": "7.0010887432e-5"
         },
         "ch4": {
           "s": 0,
@@ -4984,7 +5011,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.0000014773958871798548,
+      "temperatureAnomalyC": 0.0000010704015866801346,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -5074,7 +5101,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.0000014773958871798548
+      "temperatureAfterC": 0.0000010704015866801346
     },
     {
       "prestige": "extended",
@@ -5084,6 +5111,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 43201000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -5272,6 +5300,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 86400000,
+      "gameAgeSeconds": 7464960000,
       "resources": {
         "energy": {
           "s": 1,
@@ -5319,10 +5348,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 1.932510283104449,
+          "m": 1.0536513710480717,
           "e": -4,
           "finite": true,
-          "str": "1.9325102831e-4"
+          "str": "1.0536513710e-4"
         },
         "ch4": {
           "s": 0,
@@ -5360,7 +5389,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.00000295490561866034,
+      "temperatureAnomalyC": 0.0000016109896665346816,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -5450,7 +5479,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.00000295490561866034
+      "temperatureAfterC": 0.0000016109896665346816
     },
     {
       "prestige": "extended",
@@ -5460,6 +5489,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 86400000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,
@@ -5648,6 +5678,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 604800000,
+      "gameAgeSeconds": 52254720000,
       "resources": {
         "energy": {
           "s": 1,
@@ -5695,10 +5726,10 @@
       "atmosphere": {
         "co2": {
           "s": 1,
-          "m": 1.3526646115653582,
-          "e": -3,
+          "m": 1.4142577231158646,
+          "e": -4,
           "finite": true,
-          "str": "1.3526646116e-3"
+          "str": "1.4142577231e-4"
         },
         "ch4": {
           "s": 0,
@@ -5736,7 +5767,7 @@
           "str": "0.0000000000e+0"
         }
       },
-      "temperatureAnomalyC": 0.000020689210745664214,
+      "temperatureAnomalyC": 0.0000021624013379545235,
       "gasGeneratedKg": {
         "co2": {
           "s": 1,
@@ -5826,7 +5857,7 @@
         }
       },
       "temperatureBeforeC": 0,
-      "temperatureAfterC": 0.000020689210745664214
+      "temperatureAfterC": 0.0000021624013379545235
     },
     {
       "prestige": "extended",
@@ -5836,6 +5867,7 @@
       "cappedByLimit": false,
       "offlineCapSeconds": 691200,
       "lastTickAt": 604800000,
+      "gameAgeSeconds": 0,
       "resources": {
         "energy": {
           "s": 0,

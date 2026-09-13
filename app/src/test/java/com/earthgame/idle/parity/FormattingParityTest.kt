@@ -3,6 +3,7 @@ package com.earthgame.idle.parity
 import com.earthgame.idle.domain.engine.gd
 import com.earthgame.idle.domain.formatting.NumberFormatMode
 import com.earthgame.idle.domain.formatting.formatDuration
+import com.earthgame.idle.domain.formatting.formatGameAge
 import com.earthgame.idle.domain.formatting.formatNumber
 import com.earthgame.idle.domain.formatting.formatPercent
 import com.earthgame.idle.domain.formatting.formatTemperature
@@ -47,6 +48,20 @@ class FormattingParityTest {
             val o = case.jsonObject
             val seconds = o.getDouble("seconds")
             assertEquals("formatDuration($seconds)", o.getString("out"), formatDuration(seconds))
+        }
+    }
+
+    @Test
+    fun `simulated ages match the reference`() {
+        for (case in Fixtures.obj("format").getValue("ages").jsonArray) {
+            val o = case.jsonObject
+            val seconds = o.getDouble("gameSeconds")
+            assertEquals("formatGameAge($seconds)", o.getString("out"), formatGameAge(seconds))
+            assertEquals(
+                "formatGameAge($seconds, scientific)",
+                o.getString("outScientific"),
+                formatGameAge(seconds, NumberFormatMode.SCIENTIFIC),
+            )
         }
     }
 

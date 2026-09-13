@@ -43,7 +43,7 @@ data class AchievementContext(
 | :-- | :-- |
 | Technology milestones (9) | First Spark, Rise of Agriculture, Industrial Revolution, Let There Be Light, Fossil Fever, Digital Age, Into the Absurd |
 | Climate records (7) | Carbon Age (1,000 ppm), Hot (+5 °C), Very Hot (+10), Scorching (+25), Apocalyptic Heat (+50), Rising Tides (50 m), Acid Ocean (pH ≤ 7) |
-| Consequences (3) | Oops (first collapse), Mass Extinction (biodiversity ≤ 10%), Ozone Hole (O₃ below −50 DU) |
+| Consequences (3) | Oops (first collapse), Mass Extinction (biodiversity ≤ 10%), Ozone Hole (O₃ below −50 DU — **unreachable**, see [Climate model](Climate-Model.md#natural-removal)) |
 | Scale (4) | Industrial Monster (100 of one generator), Economies of Scale (×32 ownership bonus), Bigger Than Earth (1e18 of any resource), Hearth Keeper (50 Natural Fires) |
 | Prestige (4) | New Beginning, Again?, Serial Destroyer (10 resets), Wealthy Civilization (1e6 EP) |
 | Speed (2) | Faster This Time, Civilization Speedrun (under 12 h) |

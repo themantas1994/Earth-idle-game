@@ -23,7 +23,9 @@ import com.earthgame.idle.domain.engine.OfflineProgressResult
 import com.earthgame.idle.domain.engine.PRESTIGE_CURRENCY_NAME
 import com.earthgame.idle.domain.engine.RUN_LABEL
 import com.earthgame.idle.domain.formatting.NumberFormatMode
+import com.earthgame.idle.domain.engine.gameSecondsFor
 import com.earthgame.idle.domain.formatting.formatDuration
+import com.earthgame.idle.domain.formatting.formatGameAge
 import com.earthgame.idle.domain.formatting.formatNumber
 import com.earthgame.idle.domain.formatting.formatTemperature
 import com.earthgame.idle.domain.model.GAS_LIST
@@ -67,6 +69,12 @@ fun OfflineProgressDialog(
                             append(" (capped at ${formatDuration(summary.offlineCapSeconds)} of progress)")
                         }
                         append(".")
+                        // What the planet experienced, which is the number that
+                        // explains a gas total that went *down* while away.
+                        val simulated = gameSecondsFor(summary.simulatedSeconds)
+                        if (simulated > 0) {
+                            append(" Earth aged ${formatGameAge(simulated, format)}.")
+                        }
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = colors.textDim,

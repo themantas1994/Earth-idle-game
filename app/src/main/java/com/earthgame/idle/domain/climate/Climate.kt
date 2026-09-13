@@ -46,11 +46,21 @@ fun computeSinkEfficiency(tempAnomalyC: Double): Double {
  * a stepped simulation loop. `SimulationParityTest` checks that property
  * directly.
  *
+ * The decay term is the gas's half-life. `k` arrives as `ln 2 / halfLife`
+ * already converted to real seconds (see
+ * [com.earthgame.idle.domain.model.naturalRemovalRateConstant]), so with no
+ * production this reduces exactly to `E × 2^(-t/H)`: 1,000 with a 120-year
+ * half-life is 500 after 120 simulated years. With production it is the same
+ * curve approached from either side of the equilibrium `production/k`, which
+ * is what turns "emit and the gas piles up forever" into "emit fast enough to
+ * outrun decay, or watch it drain".
+ *
  * @param extraConcentration current concentration above baseline, in the gas's native unit
- * @param productionPerSecond emission rate, in the gas's native unit per second
- * @param removalRateConstant natural per-second removal fraction (1 / lifetime)
+ * @param productionPerSecond emission rate, in the gas's native unit per real second
+ * @param removalRateConstant natural decay constant λ, per real second
  * @param sinkEfficiency multiplier in (0,1] representing weakened sinks under warming
  * @param extraRemovalPerSecond engineered removal (e.g. Direct Air Capture), native unit/s
+ * @param dtSeconds elapsed real time
  */
 fun integrateGasConcentration(
     extraConcentration: GameDecimal,

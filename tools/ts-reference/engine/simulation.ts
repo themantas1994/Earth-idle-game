@@ -20,6 +20,7 @@ import {
 import { GameState, GasTotals } from './gameState';
 import { PrestigeMultipliers } from './prestige';
 import { ownershipMultiplier } from './ownership';
+import { gameSecondsFor } from './gameTime';
 
 /** Aggregated, ready-to-apply multiplier bundle for one simulation step. */
 export interface EffectiveMultipliers {
@@ -200,10 +201,14 @@ export interface SimulationStepResult {
 }
 
 /**
- * Advances the whole simulation by `dtSeconds` of in-game time. This is the
+ * Advances the whole simulation by `dtSeconds` of **real** time. This is the
  * single source of truth for how gases, resources, temperature, and
  * habitability evolve — used identically for live 250ms ticks and for
  * coarse-stepped offline catch-up, so both paths are guaranteed consistent.
+ *
+ * It is also the only thing that ages the planet: every real second simulated
+ * here advances `gameAgeSeconds` by `GAME_SECONDS_PER_REAL_SECOND`, and that
+ * simulated age is the clock the atmosphere's half-lives decay on.
  */
 export function simulateStep(
   state: GameState,
@@ -278,9 +283,11 @@ export function simulateStep(
   });
 
   const totalGrossRate = GAS_LIST.reduce((sum, g) => sum.add(rates.gasGrossKgPerS[g.id]), Decimal.ZERO);
+  const gameSecondsElapsed = gameSecondsFor(dtSeconds);
 
   const newState: GameState = {
     ...state,
+    gameAgeSeconds: state.gameAgeSeconds + gameSecondsElapsed,
     atmosphere: newAtmosphere,
     resources: newResources,
     seaLevelRiseMeters: newSeaLevel,
@@ -300,6 +307,7 @@ export function simulateStep(
     lifetimeStats: {
       ...state.lifetimeStats,
       totalPlayTimeSeconds: state.lifetimeStats.totalPlayTimeSeconds + dtSeconds,
+      totalSimulatedSeconds: state.lifetimeStats.totalSimulatedSeconds + gameSecondsElapsed,
       totalGasProducedKg: lifetimeGasProducedKg,
       highestTemperatureC: Math.max(state.lifetimeStats.highestTemperatureC, newTemp),
       highestCo2Ppm: Math.max(state.lifetimeStats.highestCo2Ppm, co2Ppm),

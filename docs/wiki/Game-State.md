@@ -19,11 +19,32 @@ between frames, and makes "what did eight hours do?" answerable by subtracting t
 
 | Field | Type | Notes |
 | :-- | :-- | :-- |
-| `saveVersion` | `Int` | Defaults to `SAVE_VERSION` (currently **3**). See [Save migrations](Save-Migrations.md). |
+| `saveVersion` | `Int` | Defaults to `SAVE_VERSION` (currently **4**). See [Save migrations](Save-Migrations.md). |
 | `runNumber` | `Int` | 0 = "EARTH", 1 = "EARTH 1", … Incremented by `startNewRun`. |
 | `runStartedAt` | `Long` | Wall-clock ms. Drives run duration and the prestige speed term. |
 | `lastTickAt` | `Long` | Wall-clock ms of the last simulated tick. **The whole offline mechanism is this field.** |
 | `createdAt` | `Long` | First ever launch. Never reset. |
+| `gameAgeSeconds` | `Double` | **Simulated** seconds: how old *this Earth* is. See below. |
+
+#### `gameAgeSeconds`
+
+The planet's own age, not the player's time at the controls — the two clocks are laid out in
+[Atmospheric half-life](Atmospheric-Half-Life.md#the-two-clocks). It is advanced by
+`simulateStep` and by nothing else, at `GAME_SECONDS_PER_REAL_SECOND` (86,400 — one simulated
+day) per real second of simulation, which gives it three properties worth relying on:
+
+- It counts time the world was **actually simulated for**. It does not move while the app merely
+  exists in the background, and it never reads the install date, the device uptime or the wall
+  clock directly.
+- Because `simulateStep` is the single path, [offline catch-up](Offline-Progression.md) ages the
+  planet for free and cannot drift from a live session. An absence longer than the offline cap
+  ages it by the cap, not by the absence.
+- It is the clock every gas half-life decays against, so it is load-bearing rather than
+  decorative: a wrong age is a wrong atmosphere.
+
+A [prestige reset](Prestige-System.md) returns it to zero.
+`LifetimeStats.totalSimulatedSeconds` keeps the running total across every Earth and is never
+reset. Shown in the header as `AGE`, on Home as "Earth Age", and on Statistics as both.
 
 ### Economy
 
@@ -53,7 +74,7 @@ between frames, and makes "what did eight hours do?" answerable by subtracting t
 | Field | Type | Notes |
 | :-- | :-- | :-- |
 | `runStats` | `RunStats` | Per-run peaks: forcing, temperature, CO₂ ppm, gas production rate, and total gas produced. Reset every run; feeds the [prestige payout](Prestige-System.md). |
-| `lifetimeStats` | `LifetimeStats` | Never reset. Play time, resets, records, fastest/longest run, technologies purchased, total Earth Points earned. |
+| `lifetimeStats` | `LifetimeStats` | Never reset. Play time, **total simulated time**, resets, records, fastest/longest run, technologies purchased, total Earth Points earned. |
 | `prestige` | `PrestigeState` | `earthPoints` and `upgradesOwned`. Survives every reset. |
 | `achievementsUnlocked` | `Map<String, Boolean>` | Only `true` entries are stored. Permanent. |
 | `challenges` | `ChallengeState` | `activeId` plus the permanent `completed` map. |
@@ -78,6 +99,7 @@ progress or leak per-run state into a fresh Earth.
 | `settings` | `temperatureAnomalyC`, `forcing`, `habitability`, `oceanPh` |
 | `tutorial` | `runStats` |
 | `createdAt` | `activeEvents`, `milestonesTriggered`, `newsFeed` |
+| `lifetimeStats.totalSimulatedSeconds` | `gameAgeSeconds` → 0 (a new planet starts at age zero) |
 | | `collapsed` → false |
 | | `runNumber` → +1, `runStartedAt`/`lastTickAt` → now |
 

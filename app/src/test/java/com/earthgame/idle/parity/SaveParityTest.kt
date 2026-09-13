@@ -38,8 +38,8 @@ class SaveParityTest {
 
     @Test
     fun `a save written by the reference implementation loads`() {
-        val state = SaveSerialization.deserialize(fixture.getString("v3Json"), now)
-        assertNotNull("the reference's v3 save should load", state)
+        val state = SaveSerialization.deserialize(fixture.getString("v4Json"), now)
+        assertNotNull("the reference's v4 save should load", state)
         state!!
 
         val expected = fixture.getValue("roundTripped").jsonObject
@@ -72,6 +72,12 @@ class SaveParityTest {
         assertEquals("vibrationEnabled", settings.getBoolean("vibrationEnabled"), state.settings.vibrationEnabled)
 
         assertDoubleNear("seaLevelRiseMeters", expected.getDouble("seaLevelRiseMeters"), state.seaLevelRiseMeters)
+        assertDoubleNear("gameAgeSeconds", expected.getDouble("gameAgeSeconds"), state.gameAgeSeconds)
+        assertDoubleNear(
+            "lifetime totalSimulatedSeconds",
+            expected.getDouble("lifetimeTotalSimulatedSeconds"),
+            state.lifetimeStats.totalSimulatedSeconds,
+        )
         assertDoubleNear(
             "lifetime fastestResetSeconds",
             expected.getDouble("lifetimeFastestResetSeconds"),
@@ -130,6 +136,40 @@ class SaveParityTest {
             "rescaled lifetime Earth Points",
             expected.getValue("totalEarthPointsEarned").asGameDecimal(),
             state.lifetimeStats.totalEarthPointsEarned,
+        )
+    }
+
+    @Test
+    fun `the v3 migration gives the Earth an age without inventing one`() {
+        val state = SaveSerialization.deserialize(fixture.getString("v3Json"), now)
+        assertNotNull("a v3 save should still load", state)
+        state!!
+
+        val expected = fixture.getValue("migratedFromV3").jsonObject
+        assertEquals("migrated version", expected.getInt("saveVersion"), state.saveVersion)
+
+        // The current Earth cannot be reconstructed, so it starts at zero
+        // rather than being credited with centuries it never simulated.
+        assertDoubleNear("gameAgeSeconds", expected.getDouble("gameAgeSeconds"), state.gameAgeSeconds)
+        assertEquals("a migrated Earth starts at age zero", 0.0, state.gameAgeSeconds, 0.0)
+
+        // The lifetime total is derived exactly from simulated play time.
+        assertDoubleNear(
+            "totalSimulatedSeconds",
+            expected.getDouble("totalSimulatedSeconds"),
+            state.lifetimeStats.totalSimulatedSeconds,
+        )
+        assertDoubleNear(
+            "totalPlayTimeSeconds is untouched",
+            expected.getDouble("totalPlayTimeSeconds"),
+            state.lifetimeStats.totalPlayTimeSeconds,
+        )
+
+        // v3's economy fix-ups must not run a second time.
+        assertDecimalNear(
+            "Earth Points untouched",
+            expected.getValue("earthPoints").asGameDecimal(),
+            state.prestige.earthPoints,
         )
     }
 

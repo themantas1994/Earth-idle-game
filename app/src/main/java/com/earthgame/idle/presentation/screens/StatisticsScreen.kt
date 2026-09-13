@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.earthgame.idle.domain.formatting.formatDuration
+import com.earthgame.idle.domain.formatting.formatGameAge
 import com.earthgame.idle.domain.formatting.formatNumber
 import com.earthgame.idle.domain.formatting.formatTemperature
 import com.earthgame.idle.domain.model.GAS_LIST
@@ -37,6 +38,9 @@ fun StatisticsScreen(
                 StatRow("Current Earth", "#${state.runNumber}")
                 StatRow("Total Resets", formatNumber(lifetime.totalResets, format))
                 StatRow("Total Play Time", formatDuration(lifetime.totalPlayTimeSeconds))
+                // Simulated time across every Earth, which a prestige never
+                // clears — unlike the current Earth's age below.
+                StatRow("Total Simulated Time", formatGameAge(lifetime.totalSimulatedSeconds, format))
                 StatRow("Longest Run", formatDuration(lifetime.longestRunSeconds))
                 StatRow(
                     "Fastest Reset",
@@ -65,6 +69,7 @@ fun StatisticsScreen(
         item { SectionLabel("This Earth") }
         item {
             GameCard {
+                StatRow("Earth Age", formatGameAge(state.gameAgeSeconds, format))
                 StatRow("Peak Temperature", formatTemperature(state.runStats.peakTemperatureC))
                 StatRow("Peak CO₂", "${formatNumber(state.runStats.peakCo2Ppm, format)} ppm")
                 StatRow(

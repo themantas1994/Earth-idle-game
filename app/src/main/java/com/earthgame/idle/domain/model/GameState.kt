@@ -20,6 +20,13 @@ data class RunStats(
 /** Stats that persist forever across resets, shown on the Statistics screen. */
 data class LifetimeStats(
     val totalPlayTimeSeconds: Double = 0.0,
+    /**
+     * Simulated time across every Earth ever played, in simulated seconds.
+     *
+     * The lifetime counterpart of [GameState.gameAgeSeconds], which resets with
+     * each new Earth. Kept here precisely so a prestige never destroys it.
+     */
+    val totalSimulatedSeconds: Double = 0.0,
     val totalResets: Int = 0,
     val totalGasProducedKg: GasAmounts = GasAmounts.ZERO,
     val highestTemperatureC: Double = 0.0,
@@ -110,6 +117,23 @@ data class GameState(
     val lastTickAt: Long,
     val createdAt: Long,
 
+    /**
+     * How old this Earth is, in **simulated** seconds — the planet's own age,
+     * not the player's time at the controls.
+     *
+     * Advanced by [com.earthgame.idle.domain.engine.simulateStep] alone, live
+     * ticks and offline catch-up alike, at
+     * [com.earthgame.idle.domain.engine.GAME_SECONDS_PER_REAL_SECOND] per real
+     * second of simulation. It is therefore a count of time the world was
+     * actually simulated for: it does not advance while the app merely exists,
+     * and an absence longer than the offline cap ages the planet by the cap,
+     * not by the absence. Reset to zero by [startNewRun]; the lifetime total
+     * lives on in [LifetimeStats.totalSimulatedSeconds].
+     *
+     * This is the clock every gas half-life runs on.
+     */
+    val gameAgeSeconds: Double = 0.0,
+
     val resources: ResourceAmounts = ResourceAmounts.ZERO,
     val atmosphere: AtmosphereState = createInitialAtmosphere(),
     val seaLevelRiseMeters: Double = 0.0,
@@ -144,7 +168,7 @@ data class GameState(
     val collapsed: Boolean = false,
 )
 
-const val SAVE_VERSION = 3
+const val SAVE_VERSION = 4
 
 /**
  * Technologies every run starts with already owned. Natural Fire predates any
@@ -172,12 +196,16 @@ fun createNewGame(now: Long): GameState = GameState(
  * Starts a fresh run after a reset, preserving exactly what carries between
  * Earths: prestige, achievements, challenge completions, lifetime stats,
  * settings and tutorial progress. Everything else — resources, atmosphere,
- * technology, per-run stats, news, events — starts over.
+ * technology, per-run stats, the Earth's age, news, events — starts over.
  */
 fun startNewRun(previous: GameState, now: Long): GameState = previous.copy(
     runNumber = previous.runNumber + 1,
     runStartedAt = now,
     lastTickAt = now,
+
+    // A new Earth is a new planet: age zero, with only the prestige bonuses
+    // carried over. The lifetime simulated total in lifetimeStats is untouched.
+    gameAgeSeconds = 0.0,
 
     resources = ResourceAmounts.ZERO,
     atmosphere = createInitialAtmosphere(),

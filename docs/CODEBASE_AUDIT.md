@@ -387,6 +387,17 @@ vapour than the target alone implies. **This matches the reference exactly** and
 late-game temperature curve, so changing it would be a rebalance. Documented in
 [Climate model](wiki/Climate-Model.md).
 
+**8. The "Ozone Hole" achievement is unreachable.** It fires at an O₃ excess below −50 DU, but
+`integrateGasConcentration` clamps every gas at zero excess, so ozone bottoms out *at* its 300 DU
+baseline and the condition can never be met — CFC technologies apply their depletion through
+`gasRemovalPerUnit`, which the clamp then floors. `computeForcing` itself handles a negative excess
+correctly and `ClimateParityTest` covers that arithmetic; only the reachability is the problem.
+Found while documenting the [half-life decay](wiki/Atmospheric-Half-Life.md#what-decays--and-what-must-not),
+whose whole design depends on that clamp keeping the Earth's baseline atmosphere intact. Lifting it
+for one gas is a **balance change** and an owner decision: it would need a per-gas floor rather than
+a blanket zero, mirrored in the reference, with fixtures regenerated.
+[Climate model](wiki/Climate-Model.md#natural-removal) now states the behaviour accurately.
+
 ### Verification gaps
 
 **7. Nothing has been run on physical hardware or an emulator.** This environment has no KVM. What

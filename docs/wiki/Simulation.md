@@ -3,7 +3,7 @@
 [← Documentation home](Home.md)
 
 `domain/engine/Simulation.kt`. The physics: one function, `simulateStep`, that advances the whole
-world by `dt` seconds.
+world by `dt` seconds of **real** time.
 
 ```kotlin
 fun simulateStep(
@@ -13,6 +13,12 @@ fun simulateStep(
     extraMultipliers: List<MultiplierContribution> = emptyList(),
 ): SimulationStepResult
 ```
+
+It is also the only thing that ages the planet: each call adds
+`dt × GAME_SECONDS_PER_REAL_SECOND` to `GameState.gameAgeSeconds`, the
+[simulated calendar](Atmospheric-Half-Life.md#the-two-clocks) the atmosphere's half-lives decay
+against. Production rates and `dt` stay in real seconds; the conversion happens once, in the gas
+decay constant.
 
 Pure. Deterministic. No clock, no I/O, no randomness, no Android. The same inputs always give
 the same outputs — `SimulationParityTest.the simulation is deterministic` asserts it, and
@@ -48,13 +54,16 @@ Exact, and load-bearing — several steps read a value the previous one has not 
 2. **Sum production.** `computeProductionRates(techOwned, multipliers)` walks every owned
    *generator*, accumulating gross gas, engineered removal and resources into builders.
 3. **Sink efficiency** from the **current** (pre-step) temperature anomaly.
-4. **Per gas:** convert kg/s to native-unit/s by dividing by `massPerUnit`, then integrate. H₂O
+4. **Per gas:** convert kg/s to native-unit/s by dividing by `massPerUnit`, then integrate —
+   [natural half-life decay](Atmospheric-Half-Life.md), continuous production and engineered
+   removal all resolved together in one closed-form step, never as a sequence of passes. H₂O
    substitutes an equilibrium target derived from the previous anomaly instead of a production
    rate. Directly-emitted gases add `gross × dt` to the run and lifetime totals.
 5. **Accumulate resources:** `balance += rate × dt`.
 6. **Recompute climate** from the *new* atmosphere: forcing → temperature → sea level (using the
    mean of the old and new anomaly over the interval) → ocean pH → the five habitability factors.
-7. **Update peaks** (run and lifetime) and `totalPlayTimeSeconds`.
+7. **Update peaks** (run and lifetime), `totalPlayTimeSeconds`, and the simulated clock —
+   `gameAgeSeconds` and `lifetimeStats.totalSimulatedSeconds`.
 8. **Latch `collapsed`** if `habitability.fraction <= 0.0001`. Once set it stays set.
 
 Steps 3 and 4's use of the *pre-step* temperature is what keeps the model stable without having

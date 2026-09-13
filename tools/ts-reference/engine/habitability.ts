@@ -1,4 +1,5 @@
 import { HABITABILITY } from './constants';
+import { GAME_SECONDS_PER_YEAR } from './gameTime';
 
 /**
  * Habitability is deliberately not a linear function of temperature alone.
@@ -40,8 +41,17 @@ export function seaLevelFactor(seaLevelRiseMeters: number): number {
 }
 
 /** Sea level rise accumulates with sustained warming exposure over time (integral of temperature). */
+/**
+ * Deliberately still on the **real** clock. `seaLevelPerDegreeYear` is not a
+ * physical rate: it was pre-scaled by about 1e5 precisely so a run's worth of
+ * real seconds produces a meaningful rise, which is the same scaling the
+ * simulated calendar now states explicitly. Running it on simulated years
+ * *and* leaving the constant alone would apply that scaling twice; rescaling
+ * the constant to compensate would be a change with no behavioural effect. So
+ * the year here is a real one, and the only shared thing is its length.
+ */
 export function integrateSeaLevelRise(currentMeters: number, tempAnomalyC: number, dtSeconds: number): number {
-  const dtYears = dtSeconds / (365.25 * 24 * 3600);
+  const dtYears = dtSeconds / GAME_SECONDS_PER_YEAR;
   const rise = HABITABILITY.seaLevelPerDegreeYear * Math.max(0, tempAnomalyC) * dtYears;
   return currentMeters + rise;
 }

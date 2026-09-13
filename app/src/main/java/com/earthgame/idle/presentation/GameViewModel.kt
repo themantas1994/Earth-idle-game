@@ -107,8 +107,35 @@ class GameViewModel(
     /** Serializes the tick against player actions — see "Threading" above. */
     private val stateLock = Any()
 
+    /**
+     * Guards the two loop jobs.
+     *
+     * They are written from whichever thread `start()`'s load coroutine landed
+     * on and read from the main thread that delivers the lifecycle callbacks,
+     * so without a happens-before between the two, `stopLoops` can read a stale
+     * `null` for a job that has already been started and cancel nothing. The
+     * result is a backgrounded game that keeps ticking and autosaving for as
+     * long as the app sits there — exactly what `onEnterBackground` exists to
+     * prevent. `GameViewModelConcurrencyTest.backgrounding stops both loops`
+     * catches it intermittently; instrumenting the two calls shows `startLoops`
+     * landing first and `stopLoops` still seeing `tickJob == null` a
+     * millisecond later.
+     *
+     * A lock rather than `@Volatile` because `onEnterForeground` does a
+     * check-then-act (`if (tickJob == null) startLoops()`), which volatility
+     * alone would not make atomic. It is only ever held across job
+     * creation and cancellation — never across a state mutation — so it cannot
+     * interleave with [stateLock].
+     */
+    private val loopLock = Any()
+
+    /** Guarded by [loopLock]. */
     private var tickJob: Job? = null
+
+    /** Guarded by [loopLock]. */
     private var autosaveJob: Job? = null
+
+    @Volatile
     private var started = false
 
     /** Loads the save, settles any absence since it was written, and starts the loop. */
@@ -160,7 +187,7 @@ class GameViewModel(
         }
     }
 
-    private fun startLoops() {
+    private fun startLoops() = synchronized(loopLock) {
         tickJob?.cancel()
         tickJob = viewModelScope.launch(simulationDispatcher) {
             while (isActive) {
@@ -178,7 +205,7 @@ class GameViewModel(
         }
     }
 
-    private fun stopLoops() {
+    private fun stopLoops() = synchronized(loopLock) {
         tickJob?.cancel()
         tickJob = null
         autosaveJob?.cancel()
@@ -383,7 +410,7 @@ class GameViewModel(
         // thread like every other one, even though it is a single closed-form
         // call rather than a replayed loop.
         if (_uiState.value.loaded) viewModelScope.launch(simulationDispatcher) { tick() }
-        if (tickJob == null) startLoops()
+        synchronized(loopLock) { if (tickJob == null) startLoops() }
     }
 
     fun saveNow() {

@@ -1,5 +1,6 @@
 package com.earthgame.idle.domain.climate
 
+import com.earthgame.idle.domain.engine.GAME_SECONDS_PER_YEAR
 import com.earthgame.idle.domain.engine.HABITABILITY
 import kotlin.math.exp
 import kotlin.math.max
@@ -59,9 +60,21 @@ fun oceanAcidityFactor(ph: Double): Double {
 fun seaLevelFactor(seaLevelRiseMeters: Double): Double =
     clamp01(1.0 - seaLevelRiseMeters / HABITABILITY.seaLevelCollapseMeters)
 
-/** Sea level rise accumulates with sustained warming exposure over time (the integral of temperature). */
+/**
+ * Sea level rise accumulates with sustained warming exposure over time (the
+ * integral of temperature).
+ *
+ * Deliberately still on the **real** clock. `seaLevelPerDegreeYear` is not a
+ * physical rate: it was pre-scaled by about 10^5 precisely so that a run's
+ * worth of real seconds produces a meaningful rise, which is the same scaling
+ * the simulated calendar now states explicitly. Running it on simulated years
+ * *and* leaving the constant alone would apply that scaling twice and drown
+ * the planet in minutes; rescaling the constant to compensate would be a
+ * change with no behavioural effect. So the year here is a real one, and the
+ * only shared thing is the length of a year.
+ */
 fun integrateSeaLevelRise(currentMeters: Double, tempAnomalyC: Double, dtSeconds: Double): Double {
-    val dtYears = dtSeconds / (365.25 * 24 * 3600)
+    val dtYears = dtSeconds / GAME_SECONDS_PER_YEAR
     val rise = HABITABILITY.seaLevelPerDegreeYear * max(0.0, tempAnomalyC) * dtYears
     return currentMeters + rise
 }
