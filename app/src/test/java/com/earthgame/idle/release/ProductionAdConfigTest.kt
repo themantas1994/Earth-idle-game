@@ -130,7 +130,104 @@ class ProductionAdConfigTest {
         )
     }
 
+    /**
+     * Every source set whose contents reach an installable APK.
+     *
+     * Test sources are deliberately excluded: they are not shipped, and this
+     * file itself has to name the very identifiers the two scans below look
+     * for.
+     */
+    private fun shippedSources(vararg extensions: String): List<File> =
+        listOf("main", "debug", "release")
+            .map { File(projectDir, "src/$it") }
+            .filter { it.isDirectory }
+            .flatMap { sourceSet ->
+                sourceSet.walkTopDown().filter { it.isFile && it.extension in extensions }
+            }
+
+    @Test
+    fun noShippedSourceFileHardcodesAnAdMobIdentifier() {
+        // The overlay only isolates the variants because the identifiers exist
+        // in exactly one kind of place. A literal `ca-app-pub-…` in Kotlin — the
+        // runtime branch H3 was about — resolves the same in every variant and
+        // silently defeats the whole design, while every assertion above still
+        // passes. So assert that code never carries one.
+        val offenders = shippedSources("kt", "java")
+            .filter { it.readText().contains(ADMOB_UNIT_PREFIX) }
+            .map { it.relativeTo(projectDir).path }
+        assertTrue(
+            "AdMob identifiers must live only in res/values/ads.xml, never in code — " +
+                "a literal in a source file is variant-blind. Found in: $offenders",
+            offenders.isEmpty(),
+        )
+    }
+
+    @Test
+    fun googlesSampleIdentifiersAppearOnlyInTheDebugOverlay() {
+        // The mirror of the test above: a sample unit that leaks out of
+        // src/debug is a release build earning nothing for the live account.
+        val debugSourceSet = File(projectDir, "src/debug")
+        val offenders = shippedSources("kt", "java", "xml")
+            .filterNot { it.startsWith(debugSourceSet) }
+            .filter { it.readText().contains(GOOGLE_SAMPLE_PUBLISHER) }
+            .map { it.relativeTo(projectDir).path }
+        assertTrue(
+            "Google's sample AdMob publisher ID belongs in src/debug and nowhere else. " +
+                "Found in: $offenders",
+            offenders.isEmpty(),
+        )
+    }
+
+    @Test
+    fun theReleaseBuildTypeMinifiesShrinksAndStaysNonDebuggable() {
+        // Every test in this repository runs against the *debug* variant, so
+        // nothing else here can observe the release build type at all. These
+        // three settings are what make the shipped APK a production artifact
+        // rather than a debug one under a different name, and losing any of
+        // them is a silent regression: the build still succeeds.
+        val buildScript = File(projectDir, "build.gradle.kts").readText()
+        val releaseBlock = requireNotNull(
+            Regex("""\n        release \{(.*?)\n        \}""", RegexOption.DOT_MATCHES_ALL)
+                .find(buildScript),
+        ) { "No `release { }` build type in app/build.gradle.kts" }.groupValues[1]
+
+        assertTrue(
+            "The release build type must keep R8 enabled: an unminified release APK ships " +
+                "the whole unused classpath and every original name.",
+            releaseBlock.contains("isMinifyEnabled = true"),
+        )
+        assertTrue(
+            "The release build type must keep resource shrinking enabled.",
+            releaseBlock.contains("isShrinkResources = true"),
+        )
+        assertTrue(
+            "The release build type must not be debuggable. A debuggable release APK lets " +
+                "anyone attach a debugger to the shipped app.",
+            !releaseBlock.contains("isDebuggable = true"),
+        )
+        assertTrue(
+            "The release build type must keep the project's ProGuard rules: without them R8 " +
+                "strips the kotlinx.serialization hooks the save format is read through.",
+            releaseBlock.contains("proguard-rules.pro"),
+        )
+    }
+
+    @Test
+    fun theDebugVariantInstallsUnderItsOwnApplicationId() {
+        // `.debug` is what lets a developer build sit next to the released one
+        // on the same device, and it is also why a debug build can never
+        // overwrite a player's save or be mistaken for the release APK.
+        val buildScript = File(projectDir, "build.gradle.kts").readText()
+        assertTrue(
+            "The debug build type must keep applicationIdSuffix = \".debug\".",
+            buildScript.contains("""applicationIdSuffix = ".debug""""),
+        )
+    }
+
     private companion object {
         const val GOOGLE_SAMPLE_PUBLISHER = "ca-app-pub-3940256099942544"
+
+        /** The shared prefix of every AdMob app ID and ad unit ID. */
+        const val ADMOB_UNIT_PREFIX = "ca-app-pub-"
     }
 }

@@ -45,12 +45,12 @@ alone; the name is for humans.
 `keystore.properties`, but that is a safety net rather than the rule — key material lives outside
 the repository entirely.
 
-The full procedure, including CI and Play App Signing, is
+The full procedure, written for GitHub distribution, is
 **[Release signing](../RELEASE-SIGNING.md)**. The short version:
 
 ```bash
-keytool -genkeypair -v -keystore earth-release.jks \
-  -keyalg RSA -keysize 2048 -validity 10000 -alias earth
+keytool -genkeypair -v -keystore earth-release-key.jks \
+  -keyalg RSA -keysize 4096 -validity 10000 -alias earth-release
 ```
 
 Supply it three ways, checked in this order: `keystore.properties` at the repository root, Gradle
@@ -58,9 +58,11 @@ properties, then the `EARTH_KEYSTORE` / `EARTH_KEYSTORE_PASSWORD` / `EARTH_KEY_A
 `EARTH_KEY_PASSWORD` environment variables.
 
 > [!CAUTION]
-> **Back up the keystore and its passwords somewhere you will still have them in ten years.**
-> Losing the upload key for a published app means a Play support process. Losing it before
-> enrolling in Play App Signing means you cannot update the app at all.
+> **Back up the keystore and its passwords somewhere you will still have them in ten years, and
+> sign every future release with the same key.** EARTH is distributed as a self-signed APK, so
+> this key *is* the app signing key — nobody else holds a copy. Losing it means you can never
+> update the app again: players would have to uninstall, which deletes their save. See
+> [Release signing §4](../RELEASE-SIGNING.md#4-back-up-the-keystore).
 
 When nothing is configured the release variant still assembles, **unsigned**, so a fresh clone is
 never blocked on secrets — and the artifacts are named `-unsigned` so nobody mistakes them for
@@ -68,19 +70,30 @@ distributable ones.
 
 ## Building
 
+The release target is a **signed APK on GitHub Releases**:
+
 ```bash
-./gradlew packageReleaseArtifacts
+./gradlew clean packageReleaseApk
 ```
 
-That runs `assembleRelease` and `bundleRelease` and collects both into `release/`:
+That runs `assembleRelease` and collects the results into `release/`:
 
 | Artifact | Path | For |
 | :-- | :-- | :-- |
-| Release APK | `release/EARTH-<version>-release.apk` | GitHub releases, sideloading |
-| Play bundle | `release/EARTH-<version>-release.aab` | Play Store uploads |
+| Release APK | `release/EARTH-<version>-release.apk` | **The GitHub release. What a player installs** |
+| R8 mapping | `release/EARTH-<version>-release-mapping.txt` | Reading crash reports. Keep it; do not attach it |
+| Checksums | `release/SHA256SUMS.txt` | So a download can be verified |
 
-`release/` is git-ignored. A 20 MB binary in a repository is painful to undo, and both artifacts
-are reproducible from a tag.
+`./gradlew packageReleaseArtifacts` does the same and additionally builds the AAB
+(`release/EARTH-<version>-release.aab`). A player cannot install an AAB and a GitHub release does
+not need one, so it is only worth the extra R8 pass if Play is also in play — see
+[Google Play](Google-Play.md).
+
+Each task clears this version's previous artifacts from `release/` before it writes, so a signed
+build never sits next to a stale `-unsigned` one.
+
+`release/` is git-ignored. A 20 MB binary in a repository is painful to undo, and every artifact
+is reproducible from a tag.
 
 The underlying outputs stay where AGP puts them (`app/build/outputs/apk/release/`,
 `app/build/outputs/bundle/release/`) if you want them there.
@@ -89,7 +102,7 @@ The underlying outputs stay where AGP puts them (`app/build/outputs/apk/release/
 
 **Before tagging**
 
-- [ ] `./gradlew test` — all 216 pass
+- [ ] `./gradlew test` — all 220 pass
 - [ ] `./gradlew lintDebug lintRelease` — zero issues
 - [ ] `python3 scripts/third-party-notices.py --check` — every shipped module is attributed
 - [ ] `./gradlew connectedAndroidTest` on a real device, or an explicit note that it was not run
@@ -103,10 +116,16 @@ The underlying outputs stay where AGP puts them (`app/build/outputs/apk/release/
 - [ ] Wiki pages updated for anything that moved
 - [ ] `grep -rn "TODO\|FIXME" app/src/main` reviewed
 - [ ] **A licence file exists** — see [Licensing](Licensing.md)
-- [ ] [Release blockers](../RELEASE_BLOCKERS.md) has no open CRITICAL items
+- [ ] [Release blockers](../RELEASE_BLOCKERS.md) has no open [technical blocker](../RELEASE_BLOCKERS.md#technical-blockers),
+      and every [owner requirement](../RELEASE_BLOCKERS.md#owner--distribution-requirements) marked
+      *blocking* is closed
+- [ ] `apksigner verify --print-certs` on the built APK reports `Verifies`, with the same
+      certificate digest as every previous release
 
-**Play-specific, first time only** — the full list is
-[Google Play release checklist](../GOOGLE_PLAY_RELEASE_CHECKLIST.md):
+**Not required for a GitHub release.** These are Play-only, kept for if Play is ever added; the
+full list is [Google Play release checklist](../GOOGLE_PLAY_RELEASE_CHECKLIST.md). The one
+exception is the AdMob consent message, which is an AdMob-console matter rather than a Play one and
+[applies either way](../RELEASE_BLOCKERS.md#o5-no-consent-message-exists-in-the-admob-console):
 
 - [ ] Enrol in Play App Signing
 - [ ] **Data safety form** submitted, from [the prepared answers](../GOOGLE_PLAY_DATA_SAFETY.md)
@@ -123,13 +142,15 @@ git tag -a v1.0.0 -m "EARTH 1.0.0"
 git push origin v1.0.0
 ```
 
-Then create a GitHub release for the tag, attach the **signed APK** and `SHA256SUMS` so players can
-sideload it and check what they downloaded, and update the README's "no published release yet" note.
-[Release notes template](../RELEASE_NOTES_TEMPLATE.md) is the draft to start from.
+Then create a GitHub release for the tag, attach the **signed APK** and `SHA256SUMS.txt` so players can
+install it and check what they downloaded, and update the README's "no published release yet" note.
+[GitHub release template](../GITHUB_RELEASE_TEMPLATE.md) is the page to copy, including the
+installation instructions a sideloading player needs;
+[Release notes template](../RELEASE_NOTES_TEMPLATE.md) is the longer draft behind it.
 
 **Keep the R8 mapping** with every release. Without it a crash report from a minified build is
-unreadable. `packageReleaseArtifacts` now writes it to `release/EARTH-<version>-release-mapping.txt`
-alongside the artifacts, and a `SHA256SUMS` covering all three; the original stays where AGP put it
+unreadable. Both packaging tasks write it to `release/EARTH-<version>-release-mapping.txt`
+alongside the artifacts, with a `SHA256SUMS.txt` covering everything produced; the original stays where AGP put it
 at `app/build/outputs/mapping/release/mapping.txt`. Keep the mapping, but do not attach it to a
 public release.
 

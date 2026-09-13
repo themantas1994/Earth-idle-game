@@ -99,6 +99,6 @@ jobs:
             release/EARTH-*.apk
             release/EARTH-*.aab
             release/EARTH-*-mapping.txt
-            release/SHA256SUMS
+            release/SHA256SUMS.txt
             app/build/reports/lint-results-*.html
             app/build/reports/tests/**

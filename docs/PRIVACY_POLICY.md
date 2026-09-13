@@ -2,13 +2,26 @@
 
 **Application:** EARTH (`com.earthgame.idle`)
 **Version this describes:** 1.0.0
-**Last updated:** *[DATE — set when this is first published]*
+**Last updated:** *[OWNER ACTION REQUIRED — DATE, set when this is first published]*
 
 > [!IMPORTANT]
-> **Placeholders marked `[…]` must be filled in before publication.** A privacy
-> policy has to name a real contact; this repository records none, and inventing
-> one would be worse than leaving the gap visible. See
-> [Release blockers](RELEASE_BLOCKERS.md).
+> **OWNER ACTION REQUIRED**
+>
+> **Three values in this policy are placeholders and must be filled in before the
+> app is published:** the data controller's name (§2, §14), the contact address
+> (§2, §14), and the "Last updated" date above.
+>
+> They are **not** filled in because this repository records no legal entity and no
+> contact address, and inventing either would be worse than leaving the gap
+> visible. Only the owner can supply them. Tracked as
+> [O3](RELEASE_BLOCKERS.md#o3-the-privacy-policy-contains-placeholders).
+>
+> A privacy notice naming no controller and offering no contact does not satisfy
+> GDPR Articles 13–14. That is true regardless of how the app is distributed:
+> EARTH is published as a signed APK on GitHub Releases rather than through a
+> store, which removes the store's requirement for a policy URL but not the legal
+> requirement for the policy itself. The app links to this file from
+> **Settings → About**, so it is the app's actual published privacy notice.
 >
 > This document is an accurate technical description of what the application
 > does, written from its source code. **It is not legal advice**, and it has not
@@ -38,8 +51,8 @@ crash reporting.
 
 | | |
 | :-- | :-- |
-| Data controller | *[NAME OR LEGAL ENTITY OF THE PUBLISHER]* |
-| Contact | *[CONTACT EMAIL ADDRESS]* |
+| Data controller | *[OWNER ACTION REQUIRED — NAME OR LEGAL ENTITY OF THE PUBLISHER]* |
+| Contact | *[OWNER ACTION REQUIRED — CONTACT EMAIL ADDRESS]* |
 | Source code | https://github.com/themantas1994/Earth-idle-game |
 
 For anything relating to the advertisement itself, Google acts as a separate
@@ -249,16 +262,21 @@ at runtime.
 ## 13. Changes to this policy
 
 Material changes will be published in this file in the repository, with the
-"Last updated" date changed, and — where required — surfaced in the app or in the
-store listing before the change takes effect.
+"Last updated" date changed, and — where required — surfaced in the app or on the
+[GitHub release page](GITHUB_RELEASE_TEMPLATE.md) before the change takes effect.
+The app is distributed as a signed APK on GitHub Releases, so the repository is
+the authoritative copy of this policy and the app links to it directly.
 
 ---
 
 ## 14. Contact
 
-*[CONTACT EMAIL ADDRESS]*
+> **OWNER ACTION REQUIRED.** Both values below are placeholders. See the notice at
+> the top of this policy.
 
-*[NAME OR LEGAL ENTITY OF THE PUBLISHER]*
+*[OWNER ACTION REQUIRED — CONTACT EMAIL ADDRESS]*
+
+*[OWNER ACTION REQUIRED — NAME OR LEGAL ENTITY OF THE PUBLISHER]*
 
 Source: https://github.com/themantas1994/Earth-idle-game
 

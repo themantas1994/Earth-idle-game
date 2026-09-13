@@ -9,7 +9,7 @@ Nothing below tests what it needs to unless the artifact under test is the one
 being shipped.
 
 ```bash
-./gradlew packageReleaseArtifacts
+./gradlew packageReleaseApk
 adb install -r release/EARTH-<version>-release.apk
 ```
 

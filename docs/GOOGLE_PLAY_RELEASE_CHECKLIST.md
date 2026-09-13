@@ -53,7 +53,7 @@ finish the first column.
 | ✅ | Minified and shrunk release build that still works | R8 on, resource shrinking on, 6,312 classes in the release dex; UMP and Mobile Ads classes retained (198 of 224 `consent_sdk` classes kept, the rest unreachable) | `mapping.txt`, `apkanalyzer dex packages` |
 | ⬜ | **Signed with an upload key, enrolled in Play App Signing** | No keystore exists | [Release signing](RELEASE-SIGNING.md) |
 | ⬜ | Pre-launch report reviewed after the first internal-testing upload | — | Play Console |
-| ⚠️ | **The release build has run on a physical device** | Never. No environment that has built this project has had an emulator or KVM, and `release` is the only minified variant — so R8's output has never been executed | [Final device QA](FINAL_DEVICE_QA.md), [C6](RELEASE_BLOCKERS.md#c6-the-release-build-has-never-run-on-a-physical-device) |
+| ⚠️ | **The release build has run on a physical device** | Never. No environment that has built this project has had an emulator or KVM, and `release` is the only minified variant — so R8's output has never been executed | [Final device QA](FINAL_DEVICE_QA.md), [O6](RELEASE_BLOCKERS.md#o6-the-release-build-has-never-run-on-a-physical-device) |
 
 `minSdk = 24` is a choice, not a requirement — Play has no minimum.
 
@@ -73,7 +73,7 @@ finish the first column.
 | ⬜ | **Data safety form submitted** | Prepared, not submitted | [Data safety](GOOGLE_PLAY_DATA_SAFETY.md) |
 | ⬜ | **Content rating questionnaire** completed | — | Play Console |
 | ⬜ | **Target audience and content** set to 13+, not child-directed | Consistent with the app having no age gate | [Privacy policy §11](PRIVACY_POLICY.md#11-children) |
-| ⚠️ | **AdMob consent message created *and published*** under *Privacy & messaging → GDPR* | **The single console-side dependency this app cannot satisfy, detect or simulate.** The UMP SDK downloads the message at runtime from the AdMob account; nothing can be bundled. With no published message, UMP reports `NOT_REQUIRED`, `canRequestAds()` returns **true**, and the banner is requested in the EEA **with no consent message ever shown** — or UMP errors and no ad is ever requested. The app is correct in both cases; only one of them is shippable. A saved-but-unpublished message does not serve. | [C5](RELEASE_BLOCKERS.md#c5-no-consent-message-exists-in-the-admob-console), AdMob console |
+| ⚠️ | **AdMob consent message created *and published*** under *Privacy & messaging → GDPR* | **The single console-side dependency this app cannot satisfy, detect or simulate.** The UMP SDK downloads the message at runtime from the AdMob account; nothing can be bundled. With no published message, UMP reports `NOT_REQUIRED`, `canRequestAds()` returns **true**, and the banner is requested in the EEA **with no consent message ever shown** — or UMP errors and no ad is ever requested. The app is correct in both cases; only one of them is shippable. A saved-but-unpublished message does not serve. | [O5](RELEASE_BLOCKERS.md#o5-no-consent-message-exists-in-the-admob-console), AdMob console |
 | ⬜ | AdMob app linked to the Play listing | | AdMob console |
 | ⬜ | Account deletion policy | Not applicable — no accounts | |
 
@@ -126,7 +126,7 @@ python3 scripts/third-party-notices.py --check
 
 | | |
 | :-- | :-- |
-| **Automated / code-verifiable** | **Complete.** Every ✅ row above was re-checked against a full build of the current tree: 216 unit tests, `lintDebug` and `lintRelease` at zero issues, release APK and AAB built and inspected with `aapt2`, `apkanalyzer`, `zipalign` and `bundletool`, and `THIRD_PARTY_NOTICES.txt` regenerating byte-identically |
+| **Automated / code-verifiable** | **Complete.** Every ✅ row above was re-checked against a full build of the current tree: 220 unit tests, `lintDebug` and `lintRelease` at zero issues, release APK and AAB built and inspected with `aapt2`, `apkanalyzer`, `zipalign` and `bundletool`, and `THIRD_PARTY_NOTICES.txt` regenerating byte-identically |
 | **Manual Play Console / AdMob / legal** | **Not started, and not startable from here.** Store listing, screenshots, content rating, target audience, Data Safety submission, privacy-policy URL, ads declaration, Play App Signing enrolment, and the AdMob consent message |
 | **Verdict** | **Technically ready to build; not ready to publish.** The gap is entirely owner action — see [Release blockers](RELEASE_BLOCKERS.md) |
 

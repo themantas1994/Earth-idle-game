@@ -8,7 +8,7 @@
 [![Platform](https://img.shields.io/badge/platform-Android%207.0%2B-3DDC84?logo=android&logoColor=white)](#getting-started)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Tests](https://img.shields.io/badge/tests-216%20passing-brightgreen)](#for-developers)
+[![Tests](https://img.shields.io/badge/tests-220%20passing-brightgreen)](#for-developers)
 
 *Incremental · Civilization simulator · Climate strategy · Fully offline*
 
@@ -118,16 +118,18 @@ devices.
 
 | | |
 | :-- | :-- |
-| **Google Play** | Not published yet |
-| **GitHub Releases** | Not published yet — [the releases page](https://github.com/themantas1994/Earth-idle-game/releases) is empty |
+| **GitHub Releases** | The intended channel — a signed APK you download and install. [The releases page](https://github.com/themantas1994/Earth-idle-game/releases) is still empty |
+| **Google Play** | Not published, and not planned for the first release |
 | **Build it yourself** | One command, below |
 
 > [!IMPORTANT]
-> **There is no published release yet**, and the repository is not yet ready for one: it carries
-> no licence file, and no signing key exists, so the release build produces *unsigned* artifacts.
-> [docs/RELEASE_BLOCKERS.md](docs/RELEASE_BLOCKERS.md) is the honest list of what is outstanding.
-> Watch the repository to hear about the first release. Until then, building it yourself is the
-> way to play it, and it takes one command.
+> **There is no published release yet.** The app builds, tests and packages a production APK, but
+> two things must come from the repository owner before one can be published: a **licence file**,
+> and a **signing key** (without one the release build produces *unsigned* artifacts, which Android
+> will not install).
+> [docs/RELEASE_BLOCKERS.md](docs/RELEASE_BLOCKERS.md) is the honest list of what is outstanding —
+> no technical blockers, four owner actions. Watch the repository to hear about the first release.
+> Until then, building it yourself is the way to play it, and it takes one command.
 
 ```bash
 git clone https://github.com/themantas1994/Earth-idle-game.git
@@ -137,7 +139,7 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 ```
 
 You need **JDK 21** and an **Android SDK** with `platforms;android-37.0` and
-`build-tools;36.0.0` — point `ANDROID_HOME` at it, or put `sdk.dir=/path/to/sdk` in a
+`build-tools;37.0.0` — point `ANDROID_HOME` at it, or put `sdk.dir=/path/to/sdk` in a
 `local.properties` file at the repository root. Android Studio has all of this already; open
 the repository root and press Run.
 
@@ -320,10 +322,10 @@ exponent itself a `Double`, and the save format persists the exact triple rather
 rounded number.
 
 ```bash
-./gradlew test                    # 216 JVM tests, seconds
+./gradlew test                    # 220 JVM tests, seconds
 ./gradlew lintDebug lintRelease   # Android lint, both variants
 ./gradlew assembleDebug           # debug APK
-./gradlew bundleRelease           # Play bundle
+./gradlew packageReleaseApk       # signed release APK + checksums, into release/
 ```
 
 The suite is mostly **parity tests**: the original TypeScript engine's answers were captured
