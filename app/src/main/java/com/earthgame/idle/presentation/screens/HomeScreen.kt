@@ -1,7 +1,6 @@
 package com.earthgame.idle.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.earthgame.idle.domain.engine.DerivedState
+import com.earthgame.idle.domain.engine.GameDecimal
 import com.earthgame.idle.domain.events.RANDOM_EVENT_BY_ID
 import com.earthgame.idle.domain.formatting.formatFixed
 import com.earthgame.idle.domain.formatting.formatGameAge
@@ -22,30 +22,60 @@ import com.earthgame.idle.domain.formatting.formatNumber
 import com.earthgame.idle.domain.formatting.formatPercent
 import com.earthgame.idle.domain.formatting.formatRate
 import com.earthgame.idle.domain.model.GAS_LIST
-import com.earthgame.idle.domain.engine.GameDecimal
 import com.earthgame.idle.domain.model.GameState
 import com.earthgame.idle.domain.model.RESOURCE_LIST
 import com.earthgame.idle.domain.technologies.ALL_TECHNOLOGIES
 import com.earthgame.idle.domain.technologies.TECH_BY_ID
+import com.earthgame.idle.domain.technologies.TechBranch
 import com.earthgame.idle.domain.technologies.TechKind
 import com.earthgame.idle.domain.technologies.isTechAvailable
 import com.earthgame.idle.presentation.components.CardTitle
 import com.earthgame.idle.presentation.components.EmptyHint
 import com.earthgame.idle.presentation.components.GameCard
+import com.earthgame.idle.presentation.components.GlobeCard
 import com.earthgame.idle.presentation.components.ProgressBar
 import com.earthgame.idle.presentation.components.StatRow
+import com.earthgame.idle.presentation.components.StormDetailCard
+import com.earthgame.idle.presentation.components.StormImpactRows
+import com.earthgame.idle.presentation.components.StormStatusStrip
 import com.earthgame.idle.presentation.navigation.Destination
 import com.earthgame.idle.presentation.theme.Dimens
 import com.earthgame.idle.presentation.theme.gameColors
+import com.earthgame.idle.presentation.visualization.EnvironmentOverlay
+import com.earthgame.idle.presentation.visualization.EnvironmentalVisualizationState
+import kotlin.math.min
 
 /**
- * The dashboard: what to do next, how the planet is doing, what the economy is
- * earning, and the latest world news.
+ * Home: a live 3D visualization of the planet the simulation is running, with
+ * the numbers that explain it directly beneath.
+ *
+ * ## What the globe is, and is not
+ *
+ * It is a **view**. Every value it draws — temperature, humidity, wind, gas
+ * concentrations, storms, events, the planet's rotation — arrives as an
+ * [EnvironmentalVisualizationState] built from `GameState` by
+ * `environmentalVisualizationOf`. Nothing is computed for the globe's benefit
+ * and nothing flows back from it. If the renderer fails, or the device has no
+ * 3D at all, the flat fallback draws the same state and the screen below it is
+ * unchanged.
+ *
+ * ## Layout
+ *
+ * Top to bottom: the globe, the overlay picker and legend, whatever is
+ * currently happening to the planet, then the compact status the game has
+ * always shown — objective, planetary status, economy, momentum, emissions,
+ * news. The globe is the focus; it is never the whole screen, and nothing that
+ * was on Home before has been taken away to make room for it.
  */
 @Composable
 fun HomeScreen(
     state: GameState,
     derived: DerivedState,
+    environment: EnvironmentalVisualizationState,
+    overlay: EnvironmentOverlay,
+    onOverlayChange: (EnvironmentOverlay) -> Unit,
+    selectedStormId: String?,
+    onStormSelected: (String?) -> Unit,
     onNavigate: (Destination) -> Unit,
     onResetEarth: () -> Unit,
     contentPadding: androidx.compose.foundation.layout.PaddingValues,
@@ -85,19 +115,115 @@ fun HomeScreen(
         }
     }
 
+    // The night side lights up as the civilization grows. A cheap, readable
+    // proxy: the tech tree's own progress index, flattened so the last tiers
+    // do not wash the planet out.
+    val nightLights = remember(derived.civLevel) {
+        min(1.0, derived.civLevel / 120.0).toFloat()
+    }
+
+    val selectedStorm = environment.storms.firstOrNull { it.id == selectedStormId }
+    val stormDrag = derived.storms
+
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(Dimens.CardSpacing),
     ) {
-        item {
+        item(key = "globe") {
+            GlobeCard(
+                environment = environment,
+                overlay = overlay,
+                onOverlayChange = onOverlayChange,
+                quality = state.settings.graphicsQuality,
+                reducedMotion = state.settings.reducedAnimations,
+                nightLights = nightLights,
+                focusStormId = selectedStormId,
+                onStormSelected = onStormSelected,
+            )
+        }
+
+        item(key = "phenomena") {
+            GameCard {
+                CardTitle("🌀 Active Phenomena")
+                StormStatusStrip(
+                    environment = environment,
+                    selectedStormId = selectedStormId,
+                    onSelectStorm = onStormSelected,
+                )
+                StormImpactRows(
+                    globalPenalty = stormDrag.globalPenalty,
+                    branchPenalties = TechBranch.entries
+                        .mapNotNull { branch ->
+                            val penalty = stormDrag.branchPenalty(branch)
+                            if (penalty > 0.0005) branch.displayName to penalty else null
+                        }
+                        .sortedByDescending { it.second },
+                )
+
+                for (event in environment.events) {
+                    StatRow(
+                        label = "${event.icon} ${event.label}",
+                        value = "active",
+                        valueColor = if (event.isNegative) colors.danger else colors.good,
+                    )
+                }
+                if (environment.events.isEmpty() && environment.storms.isEmpty()) {
+                    Text(
+                        text = "Nothing is happening to the planet right now. " +
+                            "Storms begin to form once it warms.",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = colors.textFaint,
+                    )
+                }
+            }
+        }
+
+        if (selectedStorm != null) {
+            item(key = "storm-detail") {
+                StormDetailCard(
+                    storm = selectedStorm,
+                    onDismiss = { onStormSelected(null) },
+                )
+            }
+        }
+
+        item(key = "environment") {
+            GameCard {
+                CardTitle("🌍 Environment")
+                StatRow(
+                    "Temperature",
+                    "+${formatFixed(state.temperatureAnomalyC, 2)} °C",
+                    valueColor = colors.forHabitability(state.habitability.fraction),
+                )
+                StatRow("Humidity", formatPercent(environment.humidity.toDouble(), 0))
+                StatRow("Wind", formatPercent(environment.windStrength.toDouble(), 0))
+                StatRow("Atmosphere", describeAtmosphere(environment.atmosphericOpacity))
+                StatRow(
+                    "Storms",
+                    when (environment.storms.size) {
+                        0 -> "None active"
+                        1 -> "1 active"
+                        else -> "${environment.storms.size} active"
+                    },
+                    valueColor = if (environment.storms.isEmpty()) colors.textDim else colors.warning,
+                )
+                StatRow(
+                    "Habitability",
+                    formatPercent(state.habitability.fraction),
+                    valueColor = habitabilityColor,
+                )
+            }
+        }
+
+        item(key = "objective") {
             GameCard(onClick = { onNavigate(objectiveScreen) }) {
                 CardTitle("🎯 Objective")
                 Text(objective, style = MaterialTheme.typography.bodySmall, color = colors.textDim)
             }
         }
 
-        item {
+        item(key = "status") {
             GameCard {
                 CardTitle("🌡️ Planetary Status")
                 // Simulated time, not time played: this is how long this Earth
@@ -117,7 +243,7 @@ fun HomeScreen(
             }
         }
 
-        item {
+        item(key = "economy") {
             GameCard {
                 CardTitle("⚙️ Economy")
                 if (visibleResources.isEmpty()) {
@@ -133,7 +259,7 @@ fun HomeScreen(
             }
         }
 
-        item {
+        item(key = "momentum") {
             GameCard {
                 CardTitle("🚀 Momentum")
                 StatRow(
@@ -159,14 +285,14 @@ fun HomeScreen(
                     text = "Every multiplier you own compounds into this number, and nothing " +
                         "ever takes it away. Prices never move either — what a technology " +
                         "costs the first time you see it is what it costs whenever you come " +
-                        "back for it.",
+                        "back for it. Storms are the one exception, and only while they last.",
                     style = MaterialTheme.typography.labelSmall,
                     color = colors.textFaint,
                 )
             }
         }
 
-        item {
+        item(key = "gases") {
             GameCard {
                 CardTitle("☁️ Major Greenhouse Gases")
                 val emitting = GAS_LIST.filter {
@@ -185,9 +311,9 @@ fun HomeScreen(
             }
         }
 
-        item { NewsFeedCard(state = state, limit = 4) }
+        item(key = "news") { NewsFeedCard(state = state, limit = 4) }
 
-        item {
+        item(key = "reset") {
             Button(
                 onClick = onResetEarth,
                 enabled = state.collapsed,
@@ -208,4 +334,13 @@ fun HomeScreen(
             }
         }
     }
+}
+
+/** The atmosphere in one word, so the readout is not only a colour on the globe. */
+private fun describeAtmosphere(opacity: Float): String = when {
+    opacity < 0.08f -> "Pristine"
+    opacity < 0.25f -> "Thickening"
+    opacity < 0.5f -> "Elevated"
+    opacity < 0.75f -> "Heavy"
+    else -> "Choked"
 }

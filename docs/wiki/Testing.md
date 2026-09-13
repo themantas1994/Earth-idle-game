@@ -69,6 +69,25 @@ Properties that must hold whatever the reference does.
 | `SaveMigrationTest` | 15 | The chain, idempotence, future-version saves, hostile save content, and v3 → v4 giving the Earth an age without inventing one |
 | `BalanceInvariantsTest` | 8 | The pacing relationships the prose in `Constants.kt` claims about itself |
 
+### Storms and visualization — 44 cases
+
+The whole weather system, and everything about *what the globe is told to draw*,
+answered without a GPU. That is the point of the architecture as much as of the
+tests: storms are domain code and the renderer only draws what they say.
+
+| Class | Cases | Covers |
+| :-- | --: | :-- |
+| `StormSimulationTest` | 17 | The formation floor and the pressure curve, category eligibility, the active cap, seed determinism, one-long-step vs 14,400-short-step equivalence, the carry accumulator, the intensity profile, movement and dissipation, unique naming, bulletins, the spoken summary |
+| `StormEffectsTest` | 12 | Per-storm penalties, diminishing returns, the global and per-branch caps, order independence, the offline average, and that storms only ever scale production |
+| `StormLifecycleTest` | 9 | Live ticks, offline resolution, **the clear-skies parity guarantee**, save/reload continuity, prestige reset, and the news feed |
+| `StormBalanceTest` | 3 | Long runs at six warming stages, printing the frequency/severity/drag table on every run, plus the worst climate in the game never crippling production |
+| `EnvironmentalVisualizationTest` | 15 | Every value the globe draws traced back to the state it came from, the visual ceilings saturating, storms reaching the globe at their simulated coordinates, event placement, and the rotation running on the simulated clock rather than the device's |
+
+The most important of these is the negative one: `StormLifecycleTest` asserts that
+a player who leaves under clear skies is settled **bit-for-bit** as they were
+before storms existed, which is what keeps the offline path's reference parity
+intact.
+
 ### Acceptance — 13 cases
 
 `GameAcceptanceTest` plays the game headlessly, in the order a player experiences it: a new game
@@ -86,7 +105,7 @@ These are the tests that would catch "the game is unplayable" as opposed to "a f
 | :-- | :-- | :-- |
 | `GameViewModelTest` | JVM + virtual time | Loading, tick cadence, autosave, background/foreground, the cap, backup fallback, corruption, haptics and audio gating |
 | `GameViewModelConcurrencyTest` | JVM + **real threads** | The tick racing the player. One deterministic forced interleaving plus two invariant stress tests |
-| `EarthAppScreenTest` | **Robolectric** | The whole Compose UI: nine destinations, Back unwinding, a purchase reaching the game, disjoint shopping lists, every Settings toggle, the reset gate, the tutorial, light theme, the wide layout, the Earth's age on the header and on Home, and Metals never reading as Steel |
+| `EarthAppScreenTest` | **Robolectric** | The whole Compose UI: nine destinations, Back unwinding, a purchase reaching the game, disjoint shopping lists, every Settings toggle, the reset gate, the tutorial, light theme, the wide layout, the Earth's age on the header and on Home, Metals never reading as Steel, and the Home globe's description and overlay controls. Robolectric has no GL context, so these run against the **2D fallback globe** — which is deliberate coverage of the path a device without OpenGL takes |
 | `GameHeaderTest` | **Robolectric** | The header's resource strip at pinned widths: the overflow affordance appears only when something is out of view, says so to a screen reader, still scrolls, and recedes at the end |
 | `AboutScreenTest` | **Robolectric** | About and the licence notices: reachable from Settings, showing the real build, stating the project's licence rather than assuming one, Back unwinding Licenses → About → Settings, and the bundled notices asset being real |
 | `ProductionAdConfigTest` | JVM | The shipped AdMob identifiers, read from `ads.xml` in both source sets: the production values are exactly the account's, the debug overlay is Google's sample, no sample identifier is in the release resources, and the app ID is declared exactly once per variant |

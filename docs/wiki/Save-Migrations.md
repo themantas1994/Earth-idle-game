@@ -88,6 +88,36 @@ Nothing else in the save is touched, and in particular v3's economy fix-ups must
 time — `SaveMigrationTest` and `SaveParityTest.the v3 migration gives the Earth an age without
 inventing one` both assert that.
 
+## v4 → v5: the planet got weather
+
+`SAVE_VERSION` 5 added [storms](Storm-System.md): a list of live storm entities,
+the two counters that make their timeline reproducible, and the Earth's weather
+seed.
+
+**A returning player's Earth starts with clear skies.** A v4 save records nothing
+about weather, and there is no honest way to reconstruct what storms a run
+"should" have had — the timeline depends on a seed that did not exist and on a
+step count that was never kept. So nothing is invented: the storm field starts
+empty at step zero, the Earth gets the seed it would have been given at creation
+(`deriveStormSeed(createdAt, runNumber)`), and the next warm spell produces its
+first storm exactly the way a fresh run would.
+
+Nothing else in the save is touched, and nothing is owed. Storms take a slice off
+production while they run and nothing at all once they are gone, so an Earth that
+arrives without any has not lost anything it had.
+
+Two details worth knowing if you are adding a field like this:
+
+- **The seed is stored as a string.** A JSON number decodes through a `Double`,
+  which cannot hold a 19-digit `Long` exactly. A seed that comes back off disk a
+  few bits different is a reloaded Earth with different weather from the one that
+  was saved, which `SaveMigrationTest` now asserts against directly.
+- **A zero seed is repaired on every load**, not only at v4 → v5. A seed of zero
+  collapses the per-step mixing and would give every such planet the same
+  forecast, so `migrate` derives one whenever it finds one.
+
+---
+
 ## Saves from a newer build
 
 A save whose `saveVersion` is **greater** than `SAVE_VERSION` keeps its own version number rather

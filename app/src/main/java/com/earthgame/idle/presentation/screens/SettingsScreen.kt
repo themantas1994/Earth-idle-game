@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.earthgame.idle.domain.formatting.NumberFormatMode
 import com.earthgame.idle.domain.model.GameState
+import com.earthgame.idle.domain.model.GraphicsQuality
 import com.earthgame.idle.domain.model.Settings
 import com.earthgame.idle.domain.model.ThemePreference
 import com.earthgame.idle.presentation.components.GameCard
@@ -36,6 +37,8 @@ private val FORMAT_OPTIONS = listOf(
     NumberFormatMode.ENGINEERING to "Engineering (1.20e+6)",
     NumberFormatMode.FULL to "Full (1,200,000)",
 )
+
+private val GRAPHICS_OPTIONS = GraphicsQuality.entries
 
 private val THEME_OPTIONS = listOf(
     ThemePreference.SYSTEM to "Follow system",
@@ -88,6 +91,26 @@ fun SettingsScreen(
                     description = "Progress bars jump to their value instead of easing.",
                     checked = settings.reducedAnimations,
                     onChange = { value -> onUpdateSettings { it.copy(reducedAnimations = value) } },
+                )
+            }
+        }
+
+        item { SectionLabel("Globe Quality") }
+        item {
+            GameCard {
+                for (quality in GRAPHICS_OPTIONS) {
+                    ChoiceRow(
+                        label = "${quality.displayName} — ${quality.description}",
+                        selected = settings.graphicsQuality == quality,
+                        onSelect = { onUpdateSettings { it.copy(graphicsQuality = quality) } },
+                    )
+                }
+                Text(
+                    text = "How much work the Home screen's globe does. Nothing here changes the " +
+                        "simulation: the same storms form and cost the same production at every " +
+                        "setting, and every value the globe draws is also printed beside it.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = gameColors.textFaint,
                 )
             }
         }

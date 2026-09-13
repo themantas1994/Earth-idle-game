@@ -14,7 +14,9 @@ import com.earthgame.idle.domain.engine.OwnershipMilestone
 import com.earthgame.idle.domain.engine.SIMULATION
 import com.earthgame.idle.domain.engine.StepEvents
 import com.earthgame.idle.domain.engine.computeDerived
+import com.earthgame.idle.domain.engine.toNewsBulletin
 import com.earthgame.idle.domain.model.GameState
+import com.earthgame.idle.domain.model.NewsBulletin
 import com.earthgame.idle.domain.model.Settings
 import com.earthgame.idle.domain.model.createNewGame
 import com.earthgame.idle.platform.audio.GameAudio
@@ -44,6 +46,8 @@ data class GameUiState(
     val activeEventToast: String? = null,
     val activeMilestoneToast: String? = null,
     val activeOwnershipToast: OwnershipMilestone? = null,
+    /** The last major storm development, shown once as a banner. */
+    val activeStormToast: NewsBulletin? = null,
     /** Set when the primary save was unreadable and the backup was used. */
     val recoveredFromBackup: Boolean = false,
     /** Set when both save slots were unreadable and a new game was started. */
@@ -246,6 +250,10 @@ class GameViewModel(
         activeMilestoneToast = events.firedMilestones.lastOrNull() ?: activeMilestoneToast,
         activeEventToast = events.startedEventId ?: activeEventToast,
         activeOwnershipToast = events.ownershipMilestone ?: activeOwnershipToast,
+        // Only the one development worth interrupting for. A warm planet
+        // produces several storm bulletins a minute and a banner for each
+        // would be a weather ticker, not a notification.
+        activeStormToast = events.majorStormBulletin?.toNewsBulletin() ?: activeStormToast,
     )
 
     // ------------------------------------------------- atomic state changes --
@@ -385,6 +393,7 @@ class GameViewModel(
     fun dismissEventToast() = updateUi { it.copy(activeEventToast = null) }
     fun dismissMilestoneToast() = updateUi { it.copy(activeMilestoneToast = null) }
     fun dismissOwnershipToast() = updateUi { it.copy(activeOwnershipToast = null) }
+    fun dismissStormToast() = updateUi { it.copy(activeStormToast = null) }
     fun dismissSaveWarnings() = updateUi { it.copy(recoveredFromBackup = false, saveWasCorrupted = false) }
 
     // ----------------------------------------------------------- lifecycle --

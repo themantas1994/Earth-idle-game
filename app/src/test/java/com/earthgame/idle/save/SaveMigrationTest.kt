@@ -11,6 +11,9 @@ import com.earthgame.idle.domain.model.resourceOf
 import com.earthgame.idle.domain.model.SAVE_VERSION
 import com.earthgame.idle.domain.model.createInitialRunStats
 import com.earthgame.idle.domain.model.createNewGame
+import com.earthgame.idle.domain.storms.Storm
+import com.earthgame.idle.domain.storms.StormField
+import com.earthgame.idle.domain.storms.StormType
 import com.earthgame.idle.domain.save.SaveSerialization
 import com.earthgame.idle.domain.save.migrate
 import org.junit.Assert.assertEquals
@@ -285,10 +288,44 @@ class SaveMigrationTest {
             prestige = PrestigeState(gd("9.87654321e42"), mapOf("atmospheric_momentum" to 12)),
             runStats = createInitialRunStats(now).copy(peakTemperatureC = 612.5),
             achievementsUnlocked = mapOf("oops" to true),
+            // Live weather, mid-life, so the round trip covers the parts of a
+            // storm the player never sees but the simulation cannot continue
+            // without: its target intensity, its remaining life, and the step
+            // it formed on.
+            storms = StormField(
+                storms = listOf(
+                    Storm(
+                        id = "storm-412",
+                        type = StormType.HURRICANE,
+                        name = "Iris",
+                        latitudeDeg = 18.25,
+                        longitudeDeg = -62.5,
+                        intensity = 0.61,
+                        targetIntensity = 0.68,
+                        peakIntensity = 0.61,
+                        ageSeconds = 190.0,
+                        lifetimeSeconds = 540.0,
+                        headingDeg = 312.5,
+                        speedDegPerSecond = 0.022,
+                        formedAtStep = 412L,
+                    ),
+                ),
+                stepsElapsed = 603L,
+                carrySeconds = 2.5,
+            ),
         )
 
         val loaded = decodeOrNull(serialized(rich))
 
         assertEquals(rich, loaded)
+    }
+
+    @Test
+    fun `a storm seed survives the round trip bit for bit`() {
+        // A 19-digit seed does not fit in a Double. If it were stored as a JSON
+        // number it would come back a few bits different and the reloaded Earth
+        // would get different weather from the one that was saved.
+        val seeded = createNewGame(now).copy(stormSeed = -2210746743261616867L)
+        assertEquals(seeded.stormSeed, decodeOrNull(serialized(seeded))!!.stormSeed)
     }
 }

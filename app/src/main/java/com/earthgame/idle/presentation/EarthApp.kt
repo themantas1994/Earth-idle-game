@@ -43,6 +43,7 @@ import com.earthgame.idle.presentation.components.OfflineProgressDialog
 import com.earthgame.idle.presentation.components.OwnershipToast
 import com.earthgame.idle.presentation.components.SaveWarningDialog
 import com.earthgame.idle.presentation.components.SideNav
+import com.earthgame.idle.presentation.components.StormToast
 import com.earthgame.idle.presentation.components.TutorialBanner
 import com.earthgame.idle.presentation.components.UninhabitableDialog
 import com.earthgame.idle.presentation.navigation.Destination
@@ -59,6 +60,8 @@ import com.earthgame.idle.presentation.screens.StatisticsScreen
 import com.earthgame.idle.presentation.screens.TechnologyScreen
 import com.earthgame.idle.presentation.theme.Dimens
 import com.earthgame.idle.presentation.theme.gameColors
+import com.earthgame.idle.presentation.visualization.EnvironmentOverlay
+import com.earthgame.idle.presentation.visualization.environmentalVisualizationOf
 
 /**
  * The app shell: header, current screen, navigation, and everything that
@@ -99,6 +102,7 @@ fun EarthApp(
     onDismissEventToast: () -> Unit,
     onDismissMilestoneToast: () -> Unit,
     onDismissOwnershipToast: () -> Unit,
+    onDismissStormToast: () -> Unit,
     onDismissSaveWarnings: () -> Unit,
     onExit: () -> Unit,
 ) {
@@ -113,6 +117,29 @@ fun EarthApp(
     var buyQuantity by rememberSaveable { mutableStateOf(BuyQuantity.MAX) }
     var techBranchFilter by rememberSaveable { mutableStateOf<TechBranch?>(null) }
     var confirmingReset by remember { mutableStateOf(false) }
+
+    // Which environmental view the globe is showing, and which storm the
+    // player has opened. Both survive a rotation; neither is game state, so
+    // neither goes anywhere near the save.
+    var overlayRoute by rememberSaveable { mutableStateOf(EnvironmentOverlay.DEFAULT.id) }
+    var selectedStormId by rememberSaveable { mutableStateOf<String?>(null) }
+    val overlay = EnvironmentOverlay.fromId(overlayRoute)
+
+    // The globe's snapshot of the world, rebuilt only when the world changes.
+    //
+    // Keyed on the state and the derived bundle rather than on a clock, and
+    // timed by `lastTickAt` — the simulation's own notion of now — so nothing
+    // here ever reads the device clock and a paused game produces a still
+    // globe rather than one that drifts on by itself.
+    val environment = remember(state, uiState.derived) {
+        environmentalVisualizationOf(state, uiState.derived, state.lastTickAt)
+    }
+
+    // A storm that has dissipated cannot stay selected, or the card would
+    // outlive the thing it describes. Derived rather than cleared, so nothing
+    // writes state during composition: the stale id simply stops resolving, and
+    // the next tap overwrites it.
+    val activeStormId = selectedStormId?.takeIf { id -> environment.storms.any { it.id == id } }
 
     fun navigate(destination: Destination) {
         if (destination == current) return
@@ -191,6 +218,11 @@ fun EarthApp(
                         Destination.HOME -> HomeScreen(
                             state = state,
                             derived = uiState.derived,
+                            environment = environment,
+                            overlay = overlay,
+                            onOverlayChange = { overlayRoute = it.id },
+                            selectedStormId = activeStormId,
+                            onStormSelected = { selectedStormId = it },
                             onNavigate = ::navigate,
                             onResetEarth = {
                                 if (state.settings.confirmReset) confirmingReset = true else onResetEarth()
@@ -307,6 +339,7 @@ fun EarthApp(
             MilestoneToast(uiState.activeMilestoneToast, onDismissMilestoneToast)
             EventToast(uiState.activeEventToast, onDismissEventToast)
             OwnershipToast(uiState.activeOwnershipToast, onDismissOwnershipToast)
+            StormToast(uiState.activeStormToast, onDismissStormToast)
         }
     }
 

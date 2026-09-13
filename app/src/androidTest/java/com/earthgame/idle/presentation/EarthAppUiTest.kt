@@ -79,6 +79,7 @@ class EarthAppUiTest {
                     onDismissEventToast = {},
                     onDismissMilestoneToast = {},
                     onDismissOwnershipToast = {},
+                    onDismissStormToast = {},
                     onDismissSaveWarnings = {},
                     onExit = onExit,
                 )

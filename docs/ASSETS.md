@@ -15,7 +15,8 @@ where that is nothing, it says so.
 ## The complete inventory
 
 EARTH ships remarkably few assets. The simulation is code, the UI is Compose, and
-there are no textures, sprites, fonts or audio files at all.
+there are no bundled textures, sprites, fonts or audio files at all — the Earth
+the Home screen draws is **generated in code at runtime**, not shipped.
 
 | Asset | Files | Status |
 | :-- | :-- | :-- |
@@ -25,8 +26,51 @@ there are no textures, sprites, fonts or audio files at all.
 | Theme and colour tokens | `app/src/main/res/values/colors.xml`, `themes.xml`, `values-night/themes.xml` | Authored in this repository |
 | Backup rules | `app/src/main/res/xml/backup_rules.xml`, `data_extraction_rules.xml` | Authored in this repository |
 | Third-party notices | `THIRD_PARTY_NOTICES.txt`, bundled into assets at build time | Generated from the resolved classpath by `scripts/third-party-notices.py`; each notice is its own author's, reproduced as their licence requires |
+| Earth surface and cloud textures | Generated at runtime by `EarthSurface` in `presentation/globe/EarthTexture.kt` | Authored in this repository — see below |
 | Sound and music | **None.** `SoundPoolAudio` is wired but no audio file is bundled | Nothing to license |
 | Fonts | **None.** The UI uses the platform's default typeface | Nothing to license |
+
+---
+
+## The Earth surface texture
+
+**Status: authored in this repository. Nothing to license, and nothing to
+attribute.**
+
+The globe on the [Home screen](wiki/Home-Screen.md) is drawn with a texture that
+is **generated in code**, every time the app starts. No image file is bundled,
+and none is downloaded.
+
+### What is authored
+
+`EarthSurface.CONTINENTS` in
+`app/src/main/java/com/earthgame/idle/presentation/globe/EarthTexture.kt`: coarse
+outlines of the landmasses, as closed rings of `(longitude, latitude)` in
+degrees. They were written for this project by eye against a world map, and they
+are as coarse as they look — Africa is forty points, Australia eighteen. The
+intent is that the planet reads as Earth at a glance, and no more than that.
+
+No third-party dataset was consulted or copied. Natural Earth, GSHHG, OpenStreetMap
+and every other coastline dataset are absent from this repository, and none of
+them was used to produce these numbers.
+
+### What is generated
+
+Everything else. The outlines are rasterised at 288 × 144, blurred, and roughened
+with integer value noise into a 1024 × 512 colour map — biome bands by latitude,
+relief, polar ice, ocean depth. The cloud layer is a separate 512 × 256 alpha map
+from the same noise. Both are stylised rather than photographic, which is both the
+look the rest of the game has and the only honest thing to claim for outlines
+this coarse.
+
+### Why it is generated rather than shipped
+
+An Earth texture is exactly the kind of asset whose licensing quietly goes
+unrecorded — which is the problem the section below documents — and the usual
+sources (NASA Blue Marble mirrors, stock libraries, "free" texture sites) each
+carry terms that have to be checked and recorded before anything can be
+published. Generating it removes the question entirely, and costs a few kilobytes
+of Kotlin instead of a few megabytes of PNG.
 
 ---
 

@@ -99,6 +99,7 @@ progress or leak per-run state into a fresh Earth.
 | `settings` | `temperatureAnomalyC`, `forcing`, `habitability`, `oceanPh` |
 | `tutorial` | `runStats` |
 | `createdAt` | `activeEvents`, `milestonesTriggered`, `newsFeed` |
+| | `storms` → empty, `stormSeed` → a new one for the new Earth |
 | `lifetimeStats.totalSimulatedSeconds` | `gameAgeSeconds` → 0 (a new planet starts at age zero) |
 | | `collapsed` → false |
 | | `runNumber` → +1, `runStartedAt`/`lastTickAt` → now |
@@ -108,6 +109,25 @@ progress or leak per-run state into a fresh Earth.
 
 `GameLoopTest.resetting a dead Earth banks points and preserves exactly what should carry`
 asserts the whole table.
+
+## The weather
+
+```kotlin
+val storms: StormField = StormField.EMPTY,
+val stormSeed: Long = 0L,
+```
+
+`StormField` holds the live storms plus the two counters that make their timeline
+reproducible — the whole-steps-elapsed index the per-step random draw is anchored
+to, and the simulated seconds not yet consumed by a whole step. `stormSeed` is
+the Earth's own weather seed, fixed when it begins and never changed while it
+runs, so the same planet always gets the same storms through a save, a reload and
+an absence.
+
+Both are advanced in exactly one place, `advanceStormsFor` in
+`domain/engine/StormEngine.kt`, which the live tick and the offline catch-up both
+go through. Neither is ever written by the renderer. See
+[Storm system](Storm-System.md).
 
 ## Starting technologies
 

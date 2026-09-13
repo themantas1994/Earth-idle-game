@@ -120,6 +120,10 @@ the rest are waiting in the feed on the Home screen.
 | `GameLoopTest` | Seeded reproducibility, the challenge pause, the three-at-once cap, pruning, headlines firing once per run |
 | `OfflineLifecycleTest` | No rolls offline; expired events pruned by an absence that outlasted them |
 
+> For how random events, milestone headlines and storm bulletins fit together —
+> they share one feed and one banner — see [Events](Events.md). For the weather
+> system that writes the third kind, see [Storm system](Storm-System.md).
+
 ---
 
 **Next:** [Achievements and challenges](Achievements-and-Challenges.md) · [Game engine](Game-Engine.md)

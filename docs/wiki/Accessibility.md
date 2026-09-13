@@ -123,6 +123,35 @@ Toasts float over the content rather than displacing it, so a headline arriving 
 moves the button out from under a thumb — which matters most for someone with a motor impairment,
 for whom a moved target is a mis-tap rather than an annoyance.
 
+## The 3D globe
+
+A rendering surface is opaque to a screen reader, so the
+[Home screen's globe](Home-Screen.md) is built on the rule that **it is never the
+only way to understand the game**.
+
+| What a sighted player sees | What is also available as text |
+| :-- | :-- |
+| The planet, tinted by the selected overlay | A spoken description of the globe: overlay, temperature, humidity, wind, habitability, storm count, running events, and how to interact with it |
+| The overlay's colour ramp | The ramp's ends in words (`Cool` → `Extreme`), plus the current reading printed underneath |
+| A storm's spiral, its size and its brightness | Its category, its severity **as a word**, its position, its time remaining, and its production penalties as percentages |
+| The atmospheric halo thickening | "Atmosphere: Elevated" in the Environment card |
+| Storm markers on the globe | A row of storm chips, each a labelled button that focuses and opens the same card |
+
+The `GLSurfaceView` itself is removed from the semantics tree
+(`clearAndSetSemantics {}`), so TalkBack gets the description once rather than
+landing on an opaque surface with nothing in it. Selecting a storm never requires
+touching the globe: the chips do the same thing.
+
+Colour alone never carries a gameplay effect. Storm severity is a word before it
+is a colour, and every penalty is a number before it is a size.
+
+The **Minimal** graphics setting and the existing **Reduced Animations** setting
+both stop the globe animating — the first by choice of quality, the second
+because the player asked for less motion anywhere in the app. Neither changes the
+simulation.
+
+---
+
 ## What has not been done
 
 Stated plainly rather than implied:

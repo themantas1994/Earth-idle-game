@@ -43,7 +43,14 @@ class SaveParityTest {
         state!!
 
         val expected = fixture.getValue("roundTripped").jsonObject
-        assertEquals("saveVersion", expected.getInt("saveVersion"), state.saveVersion)
+        // The reference implementation's chain ends at v4. This build has
+        // versions it never had, so a reference save is migrated past the
+        // version it was written at — every *value* below still has to match.
+        assertEquals("saveVersion", SAVE_VERSION, state.saveVersion)
+        assertTrue(
+            "the fixture must still be the v4 save the reference wrote",
+            expected.getInt("saveVersion") <= SAVE_VERSION,
+        )
 
         for ((key, value) in expected.getValue("resources").jsonObject) {
             val resource = ResourceId.entries.first { it.id == key }
@@ -99,7 +106,6 @@ class SaveParityTest {
 
         val expected = fixture.getValue("migratedFromV1").jsonObject
         assertEquals("migrated to current version", SAVE_VERSION, state.saveVersion)
-        assertEquals("migrated to the reference's version", expected.getInt("saveVersion"), state.saveVersion)
 
         // A v1 save can be missing the only unconditional source of Energy.
         assertEquals("Natural Fire granted", expected.getInt("naturalFireOwned"), state.techOwned["natural_fire"])
@@ -126,7 +132,7 @@ class SaveParityTest {
         state!!
 
         val expected = fixture.getValue("migratedFromV2").jsonObject
-        assertEquals("migrated version", expected.getInt("saveVersion"), state.saveVersion)
+        assertEquals("migrated version", SAVE_VERSION, state.saveVersion)
         assertDecimalNear(
             "rescaled Earth Points",
             expected.getValue("earthPoints").asGameDecimal(),
@@ -146,7 +152,7 @@ class SaveParityTest {
         state!!
 
         val expected = fixture.getValue("migratedFromV3").jsonObject
-        assertEquals("migrated version", expected.getInt("saveVersion"), state.saveVersion)
+        assertEquals("migrated version", SAVE_VERSION, state.saveVersion)
 
         // The current Earth cannot be reconstructed, so it starts at zero
         // rather than being credited with centuries it never simulated.
