@@ -1,497 +1,561 @@
-# Codebase audit
+# EARTH Codebase Audit
 
-**Date:** 2026-09-10
-**Scope:** the entire repository — Gradle configuration, manifest, R8, all source, resources, tests,
-documentation, the TypeScript reference, CI and repository metadata.
-**Baseline:** commit `654346e`, 142 JVM tests passing.
-**After:** 205 JVM tests passing, zero lint issues in both variants, release bundle building.
+## Audit Date
 
-This document separates **FIXED** from **REMAINING**. Nothing is listed as fixed unless the code
-actually changed and a build or test confirmed it.
+2026-09-13, against `main` at commit `8a77ed3582b95ed239c5c8a2c947160642191002`
+(merge of PR #15, "Turn the economy into a producer/processor production
+chain"). This supersedes the audit section previously embedded in this file
+(dated against an earlier, pre-production-chain commit); that content is
+folded into the findings below where it is still accurate, and dropped
+where it has been superseded.
 
-> [!NOTE]
-> **This is a point-in-time record of the 2026-09-10 audit, not a live document.** The
-> release-preparation work that followed changed several of the things described here — notably
-> how debug and release ad configuration are separated, the consent flow, and the test count.
-> For the current state, read [Release blockers](RELEASE_BLOCKERS.md),
-> [Advertising](wiki/Advertising.md) and [Privacy](wiki/Privacy.md).
+## Repository State
 
----
+- 39 commits total (24 non-merge, 15 merge commits — one per pull request,
+  #1 through #15). Single contributor pair: `themantas1994` (repository
+  owner) and `Claude` (agent commits), collaborating entirely through PRs
+  from `claude/*` branches into `main`.
+- Working tree is clean at HEAD; CI (`.github/workflows/android.yml`, run
+  #19) is green on this exact commit (`conclusion: success`, verified via
+  the GitHub Actions API).
+- No uncommitted local changes; `local.properties` (SDK path) and the
+  Gradle/Kotlin caches are present locally but correctly gitignored and not
+  tracked.
 
-## Architecture assessment
+## Executive Summary
 
-**The architecture is sound and needs no restructuring.** That is the headline, and it is worth
-stating plainly because the audit went looking for the opposite.
+EARTH is a native Android idle/incremental game (Kotlin + Jetpack Compose)
+simulating civilization growth against a greenhouse-gas/climate model. It
+began as a web app (React + Capacitor, commit `5652899`) and was fully
+rewritten to native Kotlin over commits `9b92ba4`..`3c9c0c6` (2026-09-08).
+The original TypeScript engine is kept, frozen, as a golden-fixture oracle
+(`tools/ts-reference/`) and confirmed **not** wired into the Gradle build.
 
-| | |
+The domain layer (`app/src/main/java/.../domain/`, ~21k LOC) is verified
+free of any Android, Compose, or presentation-layer import — a real,
+enforced architectural boundary, not just a stated intention. All 424 unit
+tests pass; lint is clean on both variants; `assembleDebug`,
+`assembleRelease`, and `bundleRelease` all succeed. This is a
+well-engineered, heavily self-documented codebase — the code comments
+routinely explain *why*, including the history of bugs found and fixed in
+prior audit passes.
+
+**The most significant unresolved issue is not technical: there is still no
+LICENSE file**, first flagged in commit `0f52c5c` (2026-09-10) and still
+absent as of this audit (2026-09-13), while the README's own tagline and
+footer describe the project as "open source." The README's License section
+is self-aware of this and does not overstate it, but the contradiction is
+project-facing and legally live. A second real, if minor, finding
+originates in the most recent PR's own new UI code: an accessibility
+misuse (`contentDescription` set to a debug tag string) that is also dead
+code — introduced and never exercised by any test.
+
+No secrets, credentials, or private keys were found anywhere in the
+repository or its full git history. No web-runtime remnants (React,
+Capacitor, WebView) exist in the shipped Android path. No analytics or
+crash-reporting SDK is present; the only third-party SDK is Google Mobile
+Ads (banner-only) plus its required UMP consent library.
+
+## Architecture
+
+Four layers, verified by import-direction grep across the whole
+`app/src/main/java/com/earthgame/idle/` tree:
+
+| Layer | Package | Verified property |
+| :-- | :-- | :-- |
+| Domain | `domain/` | **Zero** imports of `android.*`, `androidx.*`, `com.earthgame.idle.presentation.*`, or `com.earthgame.idle.data.*` anywhere in ~21k LOC. Pure Kotlin, testable on a bare JVM. |
+| Data | `data/repository/`, `data/persistence/` | `repository/SaveRepository` is an Android-free interface; `persistence/DataStoreSaveRepository` is the sole Android-dependent implementation. |
+| Platform | `platform/audio`, `platform/haptics`, `platform/ads` | Android-dependent by necessity (SoundPool, Vibrator, AdMob). One class (`MonetizationController`) reaches into `androidx.compose.runtime.mutableStateOf` directly rather than exposing a plain `StateFlow` — see Finding L-2. |
+| Presentation | `presentation/` | Compose UI, ViewModel, navigation. Reads domain state; the presentation layer's screens contain **no** independent business-rule calculations — the composables that reference `GameDecimal`/`computeProductionRates`/etc. (`ProductionScreen.kt`, `HomeScreen.kt`, `AtmosphereScreen.kt`) only *call* domain functions to render their results, never reimplement logic. |
+
+Navigation is a hand-rolled `Destination` enum (11 entries: 9 tabs + About +
+Licenses) with a manual back-stack in `EarthApp.kt`, not Navigation Compose
+— confirmed: `androidx.navigation` does not appear in `build.gradle.kts` or
+the version catalogue. This is a deliberate, documented choice (removed in
+commit `a3e1a0e` as an unused dependency after being present at scaffold
+time — actually never wired to real navigation to begin with).
+
+No singleton holds *mutable* global state outside two legitimate, narrowly-
+scoped exceptions: `MonetizationController` (an activity-owned class, not a
+Kotlin `object`, holding ad-consent state) and `GameViewModel`'s
+`stateLock`/`loopLock`-guarded fields (see Concurrency, below). Objects such
+as `ProductionGraph`, `SaveSerialization`, `EconomyDiagnostics`, and the
+`BALANCE`/`CLIMATE`/`OWNERSHIP_BONUS` constant tables are stateless or hold
+only immutable, once-computed derived data.
+
+## Domain / Game Engine
+
+`domain/engine/` — `GameLoop.kt` (session layer: absences, event rolls,
+milestones, achievements, challenges, purchases, prestige resets) sits above
+`Simulation.kt` (`simulateStep`, the "physics"). The separation is real:
+`simulateStep` is a pure function of `(GameState, dtSeconds, prestige,
+multipliers) -> SimulationStepResult`, called identically from the live tick
+path and the offline catch-up path — verified by reading both call sites in
+`GameLoop.advance` and `Offline.computeOfflineProgress`.
+
+**Determinism**: `GameLoop` takes an injected `kotlin.random.Random`, not a
+global source, so a seeded run reproduces its event/storm sequence exactly.
+Storms advance on discrete 5-second steps keyed by `(runSeed, stepIndex)`
+through a SplitMix64-style stream (`StormSimulation.kt`), not wall-clock
+time, so live ticking and offline catch-up produce the identical storm
+timeline — this is directly asserted by `StormSimulationTest`'s "one long
+step vs many short steps" case, which passed. Production maths
+(`computeProductionRates`) is a pure function of `(techOwned, multipliers)`
+with no hidden dependence on execution order, UI frame rate, or device
+speed: verified independently by `ResourceFlowTest.the answer does not
+depend on the order the consumers are defined in`, which builds two
+identically-valued but differently-ordered consumer lists and asserts
+equal results (test passed).
+
+**One documented, deliberate non-determinism-adjacent behaviour**: water
+vapour (H2O) is a one-step-lagged feedback term rather than an
+accumulating stock, matching the TypeScript reference's own behaviour
+exactly (both were audited and confirmed to share this trait, per commit
+`79b3bf7`). It affects no banked or scored value.
+
+## Economy
+
+The economy graph was rebuilt in the most recent PR (`ca209b5`,
+2026-09-13) from a flat list of resource-producing "generators" into an
+explicit producer/processor graph. Verified by independent parsing of the
+technology source files (not by reading the PR's own prose):
+
+- **157 technologies** total (`grep -c '^\s*id = "'` across all
+  `*Technologies.kt` files, cross-checked by a from-scratch paren-balanced
+  Python parser — both give 157).
+- Kind breakdown: **78 `GENERATOR`** (producers), **26 `CONSUMER`**
+  (processors), **28 `MULTIPLIER`**, **23 `UNLOCK`**, **2 `CHOICE`**.
+  `78 + 26 + 28 + 23 + 2 = 157`.
+- **16 branches** (`TechBranch` enum), matching the per-branch technology
+  count exactly (10+13+7+7+16+8+11+12+7+9+10+12+5+10+8+12 = 157).
+- **Zero duplicate technology IDs** across all 17 branch data files.
+- **15 resources** (`ResourceId` enum): the original 6
+  (Energy/Research/Coal/Oil/Steel/Concrete) plus 9 appended for the
+  production chain (Iron/Copper/Uranium/RareEarths/Fuel/Chemicals/
+  Electronics/AdvancedMaterials/LaunchCapacity). The original six are never
+  reordered — new entries are appended, which matters because
+  `ResourceAmounts` is ordinal-indexed and a save's balances are keyed by
+  enum position.
+
+Full producer, consumer and resource inventories are in
+[docs/ECONOMY_AUDIT.md](ECONOMY_AUDIT.md). Full technology inventory
+(all 157, field by field) is in
+[docs/TECHNOLOGY_AUDIT.md](TECHNOLOGY_AUDIT.md).
+
+### Graph integrity (independently re-derived, not read from prior claims)
+
+A from-scratch Python re-implementation of the resource-dependency graph
+(built directly from the parsed technology data, not from
+`domain/production/EconomyValidation.kt`'s own logic) found:
+
+| Check | Result |
 | :-- | :-- |
-| **Layering** | `domain/` → `data/`/`platform/` → `presentation/`, pointing inward. Verified: `domain/`'s only non-project imports are `java.math`, `kotlin.math`, `kotlin.random` and `kotlinx.serialization.json`. No Android, no Compose, no coroutines. |
-| **Purity** | `simulateStep(state, dt)` is pure, deterministic, and step-size independent — the last of which is a genuinely strong design decision, not a claim. It is what makes offline progress one calculation and eliminates the need for a background service. |
-| **Abstraction** | Proportionate. Three platform adapters behind interfaces, one repository interface, and no DI framework for three dependencies. Nothing abstract exists without a caller that needs it. |
-| **Presentation/domain separation** | Clean. The session *rules* (absences, event rolls, milestone firing, challenge settlement) live in `domain/engine/GameLoop.kt`; only coroutines, lifecycle and `StateFlow` plumbing are in the ViewModel. That split is why those rules are covered by fast JVM tests. |
-| **Data-driven content** | 157 technologies, 32 achievements, 8 challenges, 13 events and 39 headlines are all data. Adding content needs no engine change. |
-| **Comment quality** | Unusually high, and load-bearing — the maths *is* the product, and most comments explain a decision rather than restating code. Three were stale (see below); the rest were checked against the code and were accurate. |
+| Resources with no producer at all | **None.** All 15 resources have at least one producer. |
+| Resources with no consumer at all | **2**: `RESEARCH` and `CONCRETE`. Both are explicitly documented as intentional dead ends (`ResourceDefinition.deadEndReason`) — Research is spent on the tech tree, Concrete is spent on construction costs. |
+| Resource-to-resource cycles | **8**, all confirmed anchored (see below). |
+| Consumers whose rated output exceeds rated input (flow-positive) | **None** — every one of the 26 consumers produces `<=` as many units/second as it consumes, at rated capacity, which is the property that keeps a cyclic economy from being free resources. |
 
-**No inappropriate dependencies, no presentation logic in domain, no persistence in UI, no platform
-assumptions in pure Kotlin, no god classes.** The largest engine file is 483 lines
-(`SaveSerialization.kt`, which is inherently long-form) and the largest function is `simulateStep` at
-~90 lines of clearly-sequenced steps.
+**Cycle anchoring** (independently verified): a cycle is only safe if at
+least one step of it has a processor whose *inputs cannot be satisfied
+entirely from resources internal to the cycle*. All 8 discovered cycles
+were checked against this rule using a from-scratch implementation
+(distinct from `EconomyValidation.kt`'s own `checkCycles`) and all 8 pass.
+Example: `energy -> steel -> advanced_materials -> energy` is anchored
+because `steel_mill` (the `energy -> steel` step) also requires `IRON`,
+which the cycle does not produce.
 
-**Dead code:** none found. Every public declaration has a caller; every technology is reachable from
-the starting fire (asserted by a test); every branch is populated. The one deliberate stub is the
-audio layer, documented as such.
+`domain/production/EconomyValidation.kt`'s own `validateEconomy()` (15
+rules: unsupplied inputs, dead-end resources, orphaned technologies,
+self-sustaining loops, tier inversions, an impossible starting economy,
+etc.) is exercised by `EconomyValidationTest` (12 tests, all passing) and
+is also run at app startup in debug builds (`EarthApplication.onCreate` ->
+`assertEconomyIsPlayable`), throwing in debug if the graph is ever broken
+and only logging in release. This is a real, load-bearing safety net, not
+a documentation claim.
 
----
+**Two grandfathered tier inversions** exist and are explicitly allow-listed
+in `EconomyValidationTest` rather than silently tolerated: `concrete`
+(tier 11) requires `cement_production` (tier 12), and
+`industrial_chemistry` (tier 11) requires `chemical_industry` (tier 15).
+Both predate the production-chain PR and are pinned by reference-parity
+fixtures, so fixing them would break parity with the frozen TypeScript
+oracle. This is a known, accepted, and tested trade-off — not an
+oversight.
 
-## FIXED
+## Producers
 
-### Critical
+78 producers (`TechKind.GENERATOR`) — full table in
+[docs/ECONOMY_AUDIT.md](ECONOMY_AUDIT.md#producers-78). 4 of the 78 produce no
+`ResourceId` output at all and exist purely to emit or remove a gas:
+`rice_cultivation` (CH4/N2O), `cfcs` (fluorinated, removes O3), `hfcs`
+(fluorinated), `industrial_fluorinated_gases` (fluorinated). This is
+intentional — they model real-world sources/effects that are gameplay-
+relevant through the climate model rather than the resource economy — but
+it means "producer" is a slightly broader category than "resource
+producer"; a future glossary update could make this distinction explicit
+(currently implicit).
 
-#### 1. A backwards device clock froze the game indefinitely
+## Consumers
 
-`GameLoop.advance` early-returned on `elapsedMs <= 0` without touching `lastTickAt`. A clock moved
-backwards — a manual change, a time-zone edit, an NTP correction — left `lastTickAt` in the future, so
-**every subsequent tick did nothing until the wall clock caught back up.** For a one-hour correction
-that is an hour of watching a dead planet with no production and no explanation.
+26 processors (`TechKind.CONSUMER`), spanning refining (4), power
+generation (6), metallurgy/materials (7), electronics (4), and space
+industry (5). Every one of the 26 declares at least one input and at
+least one resource output — verified by direct parsing, not by trusting
+`EconomyValidationTest`'s own assertion of the same fact (both agree).
+14 of the 26 have a single input resource; 12 have two or three
+(multi-input processors whose utilization is bounded by their scarcest
+input via a max-min-fair solver in `domain/production/ResourceFlow.kt`).
 
-Now the tick **re-anchors**: nothing is simulated (no resource un-produced, no gas un-emitted) but
-`lastTickAt` is set to `nowMs`, so the game resumes immediately.
+## Resources
 
-> This changed an existing test's expectation. `time never runs backwards` asserted the state was
-> *completely* unchanged; it is now `a backwards clock re-anchors the tick instead of rewinding the
-> world`, plus a new `the game keeps running after the clock is moved backwards`. The original
-> intent — nothing may be un-produced — is still asserted.
+15 total; 4 classes (`RAW`, `PROCESSED`, `ADVANCED`, `ENERGY`) plus
+`SPECIAL` for Research. Every resource class has at least one member
+(`RAW`: 6, `PROCESSED`: 4, `ADVANCED`: 3, `ENERGY`: 1, `SPECIAL`: 1 = 15).
 
-*Files:* `domain/engine/GameLoop.kt`, `GameLoopTest.kt`, `OfflineLifecycleTest.kt`
+## Technology Tree
 
-#### 2. A race between the tick and the player silently discarded purchases
+157 technologies, 16 branches, tiers 0–39. Reachability: an independent
+breadth-first closure from `STARTING_TECH_IDS = ["natural_fire"]` over the
+`requires` graph reaches all 157 (re-derived independently in Python,
+matching `TechnologyParityTest`'s own reachability assertion which also
+passed). No orphaned or permanently-unreachable technology exists.
+`TechnologyRegistry.kt`'s concatenation order (11 original branches, then
+5 new ones, sorted stably by tier) keeps the reference implementation's 99
+technologies in their original relative order, which `TechnologyParityTest`
+asserts directly against the frozen TypeScript engine's own fixture.
 
-The tick ran on `Dispatchers.Default`; player actions arrived on the main thread. Both did
-*read `_uiState.value` → compute → write*, with the write as a `MutableStateFlow.update` whose
-lambda rebuilt from a snapshot taken **before** the compute.
+## Milestones
 
-Interleaved, one side's work is erased. A purchase settled against a state the tick had since
-replaced would undo itself — the technology un-bought and the resources refunded — or, in the other
-order, a tick's simulated progress would roll back.
+The ownership milestone ladder (`domain/engine/Ownership.kt`) replaced a
+flat "every 10th copy" rule with a progressively-widening one. Independently
+re-derived in Python from the English specification in the code's own doc
+comment (not copied from the Kotlin), then cross-checked against the
+passing `MilestoneLadderTest` suite (15/15 passing):
 
-Every transition now runs as a read-compute-write under a `stateLock`, through a single
-`mutate { current -> Transition(next, carried) }` helper. Side effects (haptics, audio, saving)
-deliberately happen *outside* the lock, on what the transition carried out. The critical section is
-one tick's work, so the main thread is never held for a visible frame.
+| Owned | Next milestone | Units required |
+| --: | --: | --: |
+| 10 | 20 | 10 |
+| 20 | 30 | 10 |
+| 50 | 60 | 10 |
+| 96 | 100 | 4 |
+| 100 | **111** | 11 |
+| 101 | 111 | 10 |
+| 110 | 111 | 1 |
+| 111 | **122** | 11 |
+| 190 | **199** | 9 |
+| 199 | 200 | 1 |
+| 200 | **212** | 12 |
+| 300 | 313 | 13 |
+| 1000 | 1020 | 20 |
+| 3000 | 3040 | 40 |
 
-> **Verified by experiment, not by reasoning.**
-> `GameViewModelConcurrencyTest.aTickLandingInsideAPurchaseIsSerializedNotLost` forces the exact
-> interleaving with a clock that blocks inside the purchase's critical section, and records **every
-> state the ViewModel publishes** so a transient rollback cannot be repaired by a later tick before
-> the assertion sees it. Reverting `mutate` to the unsynchronized form makes it fail
-> (`a tick was rolled back by a purchase: lastTickAt 1700000001000 then 1700000000000`); restoring
-> the lock makes it pass.
->
-> Two invariant stress tests were also written first and are kept — but they did **not** reproduce
-> the bug, because the natural window is a fraction of a percent of each 250 ms tick. They are a
-> regression net, not a reproduction, and are labelled as such in the test.
+Formula: `step(owned) = 10 + 1 * (owned // 100)`, with the rule that a
+milestone never crosses a block-of-100 boundary (so 100, 200, 300, … are
+always exact milestones). This is a genuine logarithmic-*feeling*
+progression (linear step growth per 100-unit block, not exponential),
+matching the design brief's intent.
 
-*Files:* `presentation/GameViewModel.kt`, `GameViewModelConcurrencyTest.kt` (new)
+**Note on a documented divergence from a plausible reading of the original
+design brief**: a brief describing this feature gave the worked example
+"owning 190, next milestone 200, buys 10" — but the shipped algorithm
+(190 → 199, buys 9) is what the block-boundary rule in the code's own
+specification produces, and it is internally consistent (100→111,
+111→122, …, 199→200 is the correct 11-unit-step sequence through the
+100–200 block). The shipped behavior matches its own documented formula
+exactly; it is the *example in a hypothetical brief*, not the code, that
+would have been wrong to follow literally. This is flagged for
+transparency, not as a defect.
 
-#### 3. A corrupt DataStore file crash-looped the app on launch
+## Buy System
 
-`load()` called `context.saveDataStore.data.first()` with no corruption handler and no `IOException`
-catch. DataStore throws `CorruptionException` from every read and write **for the life of the
-process** when the file itself will not parse — so a torn write at the filesystem level meant the app
-crashed on launch, every launch, permanently. For a game whose entire state is that one file, that is
-the worst available failure.
+Five modes (`presentation/GameViewModel.kt`, `BuyQuantity` enum): `ONE`,
+`TEN`, `HUNDRED`, `NEXT`, `MAX`. `NEXT.resolveQuantity(owned)` returns
+`getUnitsToNextMilestone(owned)` (exactly the milestone-ladder gap above);
+`NEXT.requiresFullQuantity` is `true`, which is threaded through
+`purchaseTechnology(..., requireFullQuantity = true)` in `Economy.kt` — a
+partial purchase (affording, say, 8 of the 9 needed units) fails the
+transaction atomically rather than silently buying 8. Verified both by
+reading the code and by `NextPurchaseTest` (13/13 passing), including
+`a partial next purchase changes nothing at all` and `the quote never
+offers a purchase the engine would refuse`.
 
-Added `ReplaceFileCorruptionHandler`, which resets the file instead, plus a process-wide flag so the
-next `load()` reports `Corrupted` rather than `Empty` — the player is *told* a new game was started
-rather than silently handed one. `IOException` is now caught separately on read, write and clear,
-covering a full disk or a revoked volume.
+## Prestige
 
-*Files:* `data/persistence/DataStoreSaveRepository.kt`
+11 permanent upgrades (`PRESTIGE_UPGRADES` in `Prestige.kt`), independently
+counted. Verified the offline-cap-related claim in the README ("up to 8
+days with prestige"): `BASE_OFFLINE_CAP_SECONDS = 12h`; two upgrades grant
+`offlineCapMultiplier = 2.0` per level — `extended_endurance` (maxLevel 3)
+and `automated_industry` (maxLevel 1) — multiplying to `2^3 * 2^1 = 16`.
+`12h * 16 = 192h = 8 days` exactly. The claim is accurate.
 
-#### 4. Loading a save from a newer build could halve a player's Earth Points twice
+## Climate Simulation
 
-`migrate()` ended with `if (saveVersion == SAVE_VERSION) it else copy(saveVersion = SAVE_VERSION)`,
-which **stamped a future version down**. A player who ran a newer build and then a downgrade would
-have their save marked v3; upgrading again re-ran `migrateV2ToV3`, dividing banked Earth Points by
-250,000 **a second time**.
+Six gases (`GasId`: CO2, CH4, N2O, H2O, O3, FLUORINATED), each with its own
+atmospheric half-life, decaying against the planet's own simulated age
+(`gameAgeSeconds`, one real second = one simulated day) rather than
+wall-clock time — a genuine bug fix from commit `dd56350`
+(2026-09-13): before that change, half-lives in years were run against
+*real* seconds, so CO2's 120-year half-life removed roughly 0.007% of
+excess CO2 over a 3-day run instead of a meaningful fraction. Verified by
+`AtmosphericHalfLifeTest` (19/19 passing), which checks the decay law
+through the actual production integrator at one/two/three half-lives.
 
-`migrate` now preserves a higher version. Fields the older build does not know are still dropped on
-write (unavoidable on a downgrade); corrupting the ones it does know is not.
+## Offline Progression
 
-*Files:* `domain/save/Migrations.kt`, `SaveMigrationTest.kt` (new)
+Offline catch-up is a single closed-form calculation
+(`Offline.computeOfflineProgress`), not a stepped replay loop, made
+possible because `simulateStep`'s gas integration is step-size
+independent (asserted directly by `SimulationParityTest.step size
+independence`). This property was extended, not reworked, for the new
+production-chain economy: since ownership counts (and therefore
+utilization ratios) are constant across an offline gap — nothing is
+purchased while the player is away — a bottlenecked, multi-input processor
+chain produces the same total as it would live, verified by
+`ProductionChainLifecycleTest.a bottlenecked chain produces the same
+amount offline as it does live` (compares one 6-hour step against 360
+stepped 60-second calls, agreeing to 1e-9 relative tolerance; test
+passed).
 
-### Significant
+## Persistence
 
-#### 5. Non-finite values in a save permanently broke the run
+`SAVE_VERSION = 6`. **Every field of `GameState`** is round-tripped through
+`SaveSerialization.encode`/`decode` — verified by exhaustively listing
+every top-level `put(...)` call in `encode()` (69 keys/sub-keys) against
+every field declared in `data class GameState` and its nested state
+classes; no field was found to be silently dropped. `GameDecimal` values
+are stored as an exact `{sign, mantissa, exponent}` triple rather than a
+JSON number, avoiding the `1.8e308` Double ceiling. The storm seed is
+stored as a string specifically because a 19-digit `Long` through a JSON
+number loses precision (documented and tested:
+`SaveMigrationTest`/`SaveParityTest`).
 
-JSON has no `Infinity` literal, but `1e999` is a legal token that parses to one. A single infinite
-temperature or forcing turned every downstream value into `NaN` for the rest of the run — a save that
-is structurally valid and permanently unplayable, with no error and no recovery.
+Migration chain: `v1→v2→v3→v4→v5→v6`, each gated by `if
+(migrated.saveVersion < N)`, applied in strict order. A save from a
+*newer* build than the running one keeps its own version number rather
+than being stamped down (preventing a double-application of a rescale on
+a later downgrade/upgrade cycle — this exact bug was found and fixed in
+commit `4b21e0d`). Full per-field persistence table in
+[docs/FEATURE_INVENTORY.md](FEATURE_INVENTORY.md).
 
-`asDoubleOr` and `asDoubleOrNull` now reject non-finite values in favour of the field default.
-Nothing the encoder writes is ever non-finite, so this can only reject damage.
+## Android
 
-#### 6. Negative owned counts from a save reached the cost curves
+- `applicationId` `com.earthgame.idle`; `minSdk` 24, `targetSdk`/`compileSdk`
+  37; `versionCode` 1, `versionName` 1.0.0. Matches `ANDROID.md` exactly.
+- **No web-runtime remnants**: zero references to React, React Native,
+  WebView, Capacitor, or any JS runtime anywhere under `app/`; no
+  `package.json` outside the intentionally-isolated `tools/ts-reference/`
+  (whose own `package.json` states "Not part of the shipped app," and which
+  is confirmed absent from every Gradle build file).
+- App declares exactly one `Activity` (`MainActivity`, exported, launcher
+  intent-filter) and one `Application` subclass (`EarthApplication`) in its
+  own manifest. The app's own Kotlin code registers **no**
+  `BroadcastReceiver`, `Service`, or `ContentProvider` of its own (grep
+  confirmed).
+- The **merged** release manifest (freshly built and inspected, not read
+  from prior documentation) carries, from transitively-included libraries:
+  **6 activities**, **5 services**, **9 receivers**, **2 providers** — all
+  from Google Mobile Ads and AndroidX WorkManager/Startup/Profileinstaller.
+  Every exported non-launcher component (`SystemJobService`,
+  `DiagnosticsReceiver`, `ProfileInstallReceiver`) requires a permission
+  (`BIND_JOB_SERVICE` or `android.permission.DUMP`) that an ordinary
+  third-party app cannot hold, so none is practically exploitable by
+  another app on the device.
+- Permissions in the app's own manifest: `INTERNET`, `ACCESS_NETWORK_STATE`,
+  `VIBRATE`. The merged manifest adds `AD_ID` and three
+  `ACCESS_ADSERVICES_*` permissions (from `play-services-ads`), `WAKE_LOCK`
+  and `FOREGROUND_SERVICE` (from WorkManager, transitively via AndroidX
+  Startup — not used by any app code), and a self-declared
+  `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` signature permission (an
+  Android 13+ requirement surfaced by a transitive dependency, not
+  something the app's own code registers a receiver against).
+- A `<queries>` block (browsable HTTPS, `CustomTabsService`, MRAID intents,
+  `com.android.vending`) comes entirely from the ads SDK. This is
+  filtered package-visibility, not `QUERY_ALL_PACKAGES`.
 
-`decodeIntMap` accepted any integer. A hand-edited or damaged `techOwned` of `-5` flowed into
-ownership bonuses and cost curves as a real number. Counts below 1 are now dropped — absent and zero
-already mean the same thing everywhere in the engine. `tutorial.step` is clamped non-negative.
+## Jetpack Compose
 
-*Files (5, 6):* `domain/save/SaveSerialization.kt`, `SaveMigrationTest.kt`
+Domain value types (`GameState`, `GameDecimal`, `Technology`, etc.) cannot
+carry `@Immutable` without pulling `androidx.compose.runtime` into the
+domain layer, which would violate the project's own architectural rule.
+Instead they are declared stable via `compose-stability.conf` (referenced
+from `app/build.gradle.kts`'s `composeCompiler { stabilityConfigurationFiles
+... }`), a documented and measured trade-off (commit `a3e1a0e`: 43→68
+effectively-stable classes, 3202→3230 arguments compared by value).
 
-#### 7. The compact number notation printed 1e69 as "1B", indistinguishable from 1e9
+Screen-level composables cache expensive derived lists (`GENERATOR_
+TECHNOLOGIES.groupBy { ... }` etc.) behind `remember(state.techOwned)`
+rather than recomputing on every 250 ms tick — verified in
+`ProductionScreen.kt`. `ALL_TECHNOLOGIES`/`GENERATOR_TECHNOLOGIES`/
+`CONSUMER_TECHNOLOGIES`/`RESEARCH_TECHNOLOGIES` are top-level `val`s
+computed exactly once at class-load, not per-frame.
 
-The alphabetic suffix fallback past `Vg` (1e63) started at a **single** letter, colliding with the
-named short-scale suffixes: 1e69 → `B` (billions), 1e96 → `K` (thousands), 1e102 → `M`, 1e123 → `T`.
-A run passes through both magnitudes of each pair, so a player genuinely could not tell 1e9 from 1e69
-on the only screen that shows it.
+**Finding (new, from the most recent PR)**: `TechCard.kt`'s new processor-
+detail block sets `Modifier.semantics { contentDescription =
+CONSUMER_DETAIL_TAG }` on the expandable detail `Column`, where
+`CONSUMER_DETAIL_TAG = "consumer-detail"` is a plain string intended as a
+test hook. This is the wrong API for that purpose: `contentDescription` is
+read aloud by TalkBack, so a screen-reader user landing on that column
+would hear the literal string "consumer-detail" rather than any
+meaningful content. The correct primitive is `Modifier.testTag(...)`,
+which does not affect the spoken accessibility tree. Compounding this,
+`CONSUMER_DETAIL_TAG` is **never referenced by any test** (`grep -rn
+CONSUMER_DETAIL_TAG app/src` finds only its declaration and this one use
+site) — it is simultaneously dead code and a live accessibility defect.
+Severity: LOW (the column is only reached by expanding a processor's
+detail view, and its content is otherwise properly labelled), but real
+and concretely verified.
 
-The fallback now starts at two letters (`AA`, `AB`, …). Every named suffix is a single letter or mixed
-case, so no all-caps pair can collide.
+## Performance
 
-This was a **shared bug with the reference implementation**, so it was fixed in *both* engines and
-`format.json` regenerated — parity holds. `FormattingParityTest` now asserts no suffix repeats across
-0…1e900.
+No O(n²) or worse pattern was found in the hot paths. `computeProductionRates`
+iterates the 157-entry technology list once per call (not per-consumer),
+and the resource-flow solver (`ResourceFlow.kt`) is bounded to
+`PRODUCTION.maxSolverRounds = 12` fixed-point iterations over at most 26
+consumers and 15 resources — a worst case in the low thousands of
+arithmetic operations per tick, at 4 ticks/second, which is trivial for a
+modern mobile CPU. No benchmark was run to produce a measured frame-time
+figure in this audit; commit `a3e1a0e`'s own Compose-compiler-report
+numbers (cited above) are the only measured performance data in the
+repository, and they are cited as historical record, not re-verified
+here.
 
-*Files:* `domain/formatting/NumberFormatting.kt`, `tools/ts-reference/engine/format.ts`,
-`FormattingParityTest.kt`, `parity/format.json`
+## Security
 
-#### 8. Autosave kept writing every 15 seconds while the app was backgrounded
+No secrets, private keys, passwords, or API tokens were found in the
+working tree or anywhere in the full git history (`git log --all
+--diff-filter=A --name-only` for keystore/secret/password filenames
+returns nothing). `keystore.properties` and `*.jks`/`*.keystore` are
+gitignored and were never committed. CI decodes a keystore from a GitHub
+Actions secret to a runner temp file and deletes it unconditionally
+(`if: always()`) before uploading any artifact. The workflow correctly
+uses the `pull_request` trigger (not `pull_request_target`), so GitHub
+does not expose repository secrets to a fork's pull request build — the
+comment in the workflow acknowledging "a pull request from a fork is not
+blocked" is consistent with this being a safe, understood trade-off (an
+unsigned build), not an oversight.
 
-`onEnterBackground` cancelled the tick but not the autosave. With the tick stopped there was nothing
-new to write, so it rewrote an identical save every fifteen seconds for as long as the app sat in the
-background — pure wasted I/O and wakeups. Both loops now stop, via a `stopLoops()` that `onCleared`
-also calls.
+AdMob's publisher ID (`ca-app-pub-6872627319793193`) and banner unit ID
+appear in `app/src/main/res/values/ads.xml` in plaintext. **These are not
+credentials** — AdMob's own architecture requires these IDs to ship inside
+every APK; the actual trust boundary is server-side at Google. They are
+correctly isolated from the debug build via a resource overlay
+(`app/src/debug/res/values/ads.xml`, Google's public sample IDs), verified
+by `ProductionAdConfigTest` (10/10 passing), which also asserts no AdMob
+identifier appears as a literal in any Kotlin/Java source file.
 
-#### 9. The offline catch-up ran on the main thread
+## Privacy
 
-`onEnterForeground` called `tick()` synchronously from a lifecycle callback — so the whole absence
-settlement, plus a `computeDerived`, ran on the main thread, contradicting the class's own documented
-threading contract. It is now dispatched to the simulation dispatcher like every other step.
+No analytics or crash-reporting SDK exists anywhere in the dependency
+graph (`grep -riE "firebase|crashlytics|analytics|mixpanel|sentry|
+bugsnag"` across build files returns nothing). The only network-capable
+component is Google Mobile Ads (banner ad) plus the User Messaging
+Platform (UMP) consent library, gated behind `canRequestAds` — verified:
+`MobileAds.initialize` and the banner's `loadAd` are both behind that
+flag, which is only set `true` after the UMP consent flow completes and
+reports a permitting outcome (commit `31dee75` fixed a real prior defect
+where the flag was fetched but not actually used to gate initialization).
+The published privacy policy (`docs/PRIVACY_POLICY.md`) still contains
+**three unfilled `OWNER ACTION REQUIRED` placeholders**: publish date,
+data-controller legal entity name, and contact email — unresolved since
+commit `de4146e` (2026-09-12) and still open in this audit.
 
-*Files (8, 9):* `presentation/GameViewModel.kt`
+## Dependencies
 
-#### 10. Two challenge rewards advertised bonuses their effects did not grant
+Full inventory in [docs/TECHNICAL_DEBT.md](TECHNICAL_DEBT.md#dependency-inventory).
+15 production/test libraries via one version catalogue
+(`gradle/libs.versions.toml`); no dependency was found declared but wholly
+unreferenced except `androidx.compose.ui.tooling.preview`, which the
+build file's own comment already discloses is unused pending the first
+`@Preview` (confirmed: zero `@Preview` annotations exist in the codebase).
+`androidx.window` is pulled in transitively by
+`material3-window-size-class` and is likewise disclosed as unused by the
+build file's own comment.
 
-- **No Oil** promised "+20% Transportation branch production" for an effect that is a +5% *global*
-  multiplier.
-- **Speedrun** promised "+15% Earth Points from every future prestige" for an effect of
-  `globalProductionMultiplier = 1.0` — literally nothing.
+## Testing
 
-The **effects are the shipped balance and were left untouched**; the text was wrong, so the text was
-corrected — in both engines, with `content.json` regenerated. Implementing Speedrun's promise would
-have required a new `PrestigeUpgradeEffect` field and would have been a balance change, not a fix; it
-is listed under REMAINING with the proposal.
+**424 unit tests across 37 suites, 0 failures, 0 errors, 0 skipped**
+(freshly executed for this audit: `./gradlew testDebugUnitTest
+--rerun-tasks`, `BUILD SUCCESSFUL`). Plus 3 instrumented-test files
+(`app/src/androidTest/`) that were not executed in this audit (no
+hardware-accelerated emulator is available in this environment — the same
+limitation every prior audit in this repository's history has recorded).
+Full per-suite breakdown, coverage gaps, and weak-assertion notes in
+[docs/TECHNICAL_DEBT.md](TECHNICAL_DEBT.md#test-coverage-gaps).
 
-*Files:* `domain/challenges/Challenges.kt`, `tools/ts-reference/engine/challenges.ts`,
-`parity/content.json`
+## Documentation
 
-### Documentation accuracy
+56 Markdown files (`README.md`, `ANDROID.md`, `docs/*.md`, `docs/wiki/*.md`);
+`scripts/check-docs-links.py` (dependency-free, runs first in CI) reports
+"all internal links resolve" — re-run for this audit, still true.
+`scripts/third-party-notices.py --check` confirms all 149 release-classpath
+modules are covered in `THIRD_PARTY_NOTICES.txt` — re-run for this audit,
+still true. README numeric claims (technology/resource/gas/achievement/
+challenge/event/milestone counts, offline cap figures) were independently
+re-derived from source in this audit and all match. One stale figure was
+found: `docs/RELEASE_BLOCKERS.md` still cites "220 unit tests" from an
+earlier audit pass; the actual count is now 424. Direction and
+conclusions in that document are otherwise unaffected.
 
-#### 11. Three comments named test classes that do not exist
+## Git History
 
-`Ownership.kt` cited `BalanceTest`, `Constants.kt` cited `BalanceParityTest`, and `Migrations.kt`
-cited `SaveMigrationTest` — **none existed.** Two claimed coverage of relationships nothing asserted.
+Full commit-by-commit history is reconstructed in [CHANGELOG.md](../CHANGELOG.md)
+directly from `git log`, not summarized from memory. Six major phases are
+visible: (1) web prototype, (2) Capacitor Android wrapper + balance pass,
+(3) full native Kotlin/Compose rewrite with parity fixtures, (4)
+post-rewrite bug-fix and documentation pass, (5) production-release
+hardening (ads/consent/signing/legal), (6) atmospheric half-life
+correctness fix + live 3D globe/storms + the production-chain economy
+rewrite (most recent).
 
-Both gaps were closed by writing the tests rather than deleting the claims:
-`BalanceInvariantsTest` (8 cases) and `SaveMigrationTest` (12 cases). The comments now name real
-classes.
+## Critical Findings
 
-#### 12. `Fixtures.kt` told contributors to run a script that does not exist
-
-Its error message said `npm run parity:fixtures`; the actual script is `npm run fixtures`. Anyone
-hitting a missing fixture would have run a failing command. Corrected.
-
-#### 13. `gradlew.bat` was permanently dirty in every clone
-
-The committed blob carried CRLF while `.gitattributes` declares `gradlew.bat text eol=crlf`, so
-`git status` showed it modified on a fresh checkout with no local change. Renormalized in the index;
-the working tree still checks out as CRLF, as intended.
-
----
-
-## Performance findings
-
-| Finding | Outcome |
+| ID | Finding |
 | :-- | :-- |
-| **No accidental O(n²) anywhere** in the tick path. The two candidates are both already closed-form: buy-max inverts a geometric series with a logarithm (bounded to ≤4 exact corrections for float error), and ownership thresholds crossed are computed arithmetically rather than by walking units. | No change needed |
-| **Per-gas/per-resource containers are flat arrays indexed by enum ordinal**, not hash maps, with mutable builders — a deliberate divergence from the reference's `Record<>` maps, correctly motivated. | No change needed |
-| **`checkAchievements` allocates its result list lazily**, so 32 false predicates cost nothing on the overwhelming majority of ticks. | No change needed |
-| **An 8-hour absence is one `simulateStep`, not 115,200.** The largest performance decision in the codebase, and it is architectural. | No change needed |
-| **Autosave while backgrounded** | Fixed (#8) |
-| **Compose skippability** — `GameState`, `GameDecimal`, `Technology` and the amount containers were all inferred *unstable* (Maps/Lists are interfaces; the containers hold a private array), so equal-valued arguments were compared by reference identity rather than by value. | Fixed, see below |
+| C-1 | No LICENSE file exists in the repository, while the README describes the project as "open source" in its tagline (line 5) and footer (line 434). Under default copyright, no one may legally redistribute or modify the source. The README's own License section (lines 395–403) discloses this, but the contradiction is live and unresolved since 2026-09-10. **Owner action required.** |
+| C-2 | No production signing key exists (previously documented as O2 in `docs/RELEASE_BLOCKERS.md`, still open). Both release artifacts this audit built are unsigned. **Owner action required — not a code defect.** |
+| C-3 | Privacy policy (`docs/PRIVACY_POLICY.md`) still contains 3 unfilled legal placeholders (date, data-controller entity, contact email). Publishing with these as-is would be a materially incomplete privacy disclosure. **Owner action required.** |
 
-### Compose stability, measured honestly
+## High Priority Findings
 
-Annotating the types `@Immutable` would put `androidx.compose.runtime` into `domain/`, breaking the
-one architectural rule the project is built on. They are declared stable from the outside instead, via
-`app/compose-stability.conf` and the Compose compiler's `stabilityConfigurationFiles`.
-
-Measured with the compiler's own reports (`-Pearth.composeReports=true`):
-
-| | Before | After |
-| :-- | --: | --: |
-| Effectively stable classes | 43 / 80 | **68 / 80** |
-| Arguments compared by value | 3,202 | **3,230** |
-| Skippable composables | 152 / 201 | 152 / 201 |
-
-> **The skippable count did not change**, because strong skipping is on by default in Kotlin 2.x and
-> already made those composables skippable using reference identity. The real gain is narrower: 25
-> more classes and 28 more arguments now compare by *value*, so an equal-valued but
-> newly-allocated argument can actually skip. This is a modest improvement and is not presented as
-> more than that.
-
-A `-Pearth.composeReports=true` flag was added to the build so the measurement is repeatable.
-
----
-
-## Security findings
-
-**No security issues found.** Every claim below was verified with a grep, not assumed:
-
-| Checked | Result |
+| ID | Finding |
 | :-- | :-- |
-| Committed secrets, keys, tokens, keystores | **None.** `.gitignore` covers `*.jks`, `*.keystore`, `keystore.properties`. Signing comes from Gradle properties, env vars or a git-ignored file. |
-| AdMob identifiers in `res/values/ads.xml` | Present and **correctly so** — public identifiers that ship in every APK, documented as not being secrets. |
-| Network call sites | `grep -rn "HttpURLConnection\|OkHttp\|Retrofit\|URLConnection\|Socket\|WebView" app/src/main` → **nothing.** The only network traffic is the ad SDK's. |
-| WebView remnants | **None.** This was a WebView app once; nothing remains. |
-| Cleartext traffic | Not enabled, no network security config overriding the API-28+ default. |
-| Exported components | **One:** `MainActivity` with the launcher filter. No services, receivers, providers or deep links. |
-| Permissions | Three (`INTERNET`, `ACCESS_NETWORK_STATE`, `VIBRATE`), all justified, all removable with ads. `AD_ID` is merged in by `play-services-ads` and must be declared on Play. |
-| Logging | Nine `Log.w` calls, all in the ad adapter and the save repository, none logging game state, save content or identifiers. |
-| Debug behaviour leaking to release | Test ad units and the EEA debug geography are both gated on `ApplicationInfo.FLAG_DEBUGGABLE` at runtime; `ui-tooling` is `debugImplementation`. |
-| Dynamic code loading / reflection | **None.** |
-| Deserialization | The app's own save only, into a `JsonObject` data tree — never reflective type instantiation. Nothing in a save can name a class. |
-| Analytics / telemetry / tracking | **None.** |
+| H-1 | No AdMob consent message exists in the AdMob console (previously O5, still unverifiable from this repository — requires the owner's AdMob account). Until one exists, EEA/UK users see a banner with no consent message ever shown. |
+| H-2 | The release build has never been run on a physical device (previously O6, still true — no emulator/hardware in any environment this project has been audited from). R8's minified output has never been executed. |
+| H-3 | Launcher icon provenance is unrecorded (previously O4) — the bitmaps carry no source metadata and no attribution was invented. |
 
-The one hostile-input surface is a modified save file. It was hardened (#5, #6) and is documented in
-[Security and privacy](wiki/Security-and-Privacy.md).
+## Medium Priority Findings
 
----
-
-## Dependency audit
-
-Every dependency was checked for actual use. Four were unused:
-
-| Removed | Why |
+| ID | Finding |
 | :-- | :-- |
-| `androidx.navigation:navigation-compose` | **Zero references.** The app uses [an explicit destination stack](wiki/Navigation.md). |
-| `androidx.lifecycle:lifecycle-viewmodel-compose` | Unused; the `viewModels()` delegate comes from `activity-compose`. |
-| `androidx.window:window` | No direct use; transitive through `material3-window-size-class`. |
-| `androidx.test.espresso:espresso-core` | Unused; the instrumented tests use Compose test rules. |
-| A duplicate `debugImplementation(compose-ui-test-manifest)` | Declared twice. |
+| M-1 | `TechCard.kt` sets `contentDescription` (spoken by TalkBack) to a debug-only tag string (`"consumer-detail"`) on the processor detail column, and the tag is never referenced by any test. Should use `Modifier.testTag(...)` instead, or be removed if genuinely unused. See Compose section above. |
+| M-2 | `docs/RELEASE_BLOCKERS.md` cites a stale test count (220; actual is 424). Low-cost documentation drift, easily corrected. |
+| M-3 | No dedicated component-level test exists for the new processor status card (utilization %, limiting-resource text, expand/collapse) — coverage is indirect, through `EarthAppScreenTest`'s broader screen assertions and the domain-level `ResourceFlowTest`. A focused Compose test for `TechCard`'s processor block would close a real gap. |
 
-> **Honest impact:** the release APK went from **3,733,335 to 3,733,287 bytes — 48 bytes.** R8 was
-> already stripping the unused code. The benefit is a shorter list to keep current and audit, **not
-> size.** Reported this way deliberately, because "removed four dependencies" reads like a size win
-> and was not one.
+## Low Priority Findings
 
-`ui-tooling-preview` is **kept** despite nothing declaring an `@Preview`, so adding the first preview
-is not also a build-file change. It is annotated as such in the build file.
-
-Nothing was updated: every version in the catalogue is current for this toolchain, the build is
-green, and updating without a reason is churn. No dependency was removed merely for being unfamiliar.
-
----
-
-## Testing findings
-
-**142 → 205 JVM tests**, all passing. The existing suite was strong — the parity approach in
-particular is better verification than most projects have — but four areas claimed coverage they did
-not have.
-
-| Added | Cases | Closes |
-| :-- | --: | :-- |
-| `SaveMigrationTest` | 12 | The class three comments referenced and that did not exist. The chain end to end, **idempotence**, future-version saves, infinite values, negative counts, structureless input, a minimal save, unknown fields, a full round trip. |
-| `GameDecimalEdgeCaseTest` | 20 | Invariants independent of the reference: normalization across every operand pair, canonical zero, total ordering, saturation, **formatting purity** (formatting must not mutate a live gameplay value), no NaN reachable, parse forms. |
-| `OfflineLifecycleTest` | 18 | Every lifecycle event and clock anomaly a real device produces — gap granularity, the cap and repeat absences, backwards clocks, future and missing timestamps, absurd elapsed time, cold start after process death, first launch, opting out, challenges surviving an absence, no events rolled offline. |
-| `BalanceInvariantsTest` | 8 | The pacing relationships the prose in `Constants.kt` and `Ownership.kt` asserts *about itself* and nothing checked: `r > 1`, gas growth under resource growth, research under generator cost, the ownership bonus under the price of the span that earns it, ladder continuity and monotonicity past the knee. |
-| `GameViewModelConcurrencyTest` | 4 | The tick racing the player. One deterministic forced interleaving that **fails against the pre-fix code**, plus two invariant stress tests. |
-| `GameLoopTest` | +1 | The game resumes after a backwards clock. |
-| `FormattingParityTest` | +1 assertion | No compact suffix repeats across 0…1e900. |
-
-### A note on test honesty
-
-Two of the stress tests in `GameViewModelConcurrencyTest` were written believing they would reproduce
-the race. **They did not** — the natural window is too small. Rather than leave a comment claiming
-they do, the test's documentation says exactly what each one is for, and a deterministic test was
-written afterwards to actually prove the bug and the fix. A test whose docs overstate it is worse
-than no test.
-
----
-
-## Documentation changes
-
-| | |
+| ID | Finding |
 | :-- | :-- |
-| `README.md` | **Rewritten for players.** Opens with what the game is, how it plays, what makes it different, how offline progression works, and an accurate feature table. FAQ, privacy section, verified install instructions, and links into the wiki. Every count was read out of the source. |
-| `docs/wiki/` | **31 new pages.** All 29 required, plus `Accessibility.md`. |
-| `docs/DEVELOPER_OVERVIEW.md` | New. The five-minute orientation. |
-| `docs/CODEBASE_AUDIT.md` | This file. |
-| `docs/GITHUB-METADATA.md` | New. Recommended description, topics, licence and repository settings — explicitly marked as **not applied**. |
-| `docs/MIGRATION.md` | Kept. Still accurate as the port's historical record; two figures refreshed. |
-| `ANDROID.md` | Kept, with the stale test count corrected. Now largely superseded by [Build system](wiki/Build-System.md) and [Release process](wiki/Release-Process.md); both link back. |
+| L-1 | `ProductionChainLifecycleTest.kt` contains 3 unnecessary non-null assertions (`!!`) on values the compiler already knows are non-null, following a signature change to `SaveSerialization.decode` (now returns non-nullable `GameState`). Confirmed by Kotlin compiler warnings during this audit's own test run. Harmless, but should be cleaned up. |
+| L-2 | `MonetizationController` (a platform-layer class) uses `androidx.compose.runtime.mutableStateOf` directly rather than exposing a plain `StateFlow`, coupling a non-UI controller class to the Compose runtime. Deliberate and documented in its own comment; a `StateFlow`-based alternative would be marginally cleaner architecturally but is not a defect. |
+| L-3 | `createAndroidComposeRule` (v1) is deprecated by AndroidX in favour of a v2 API; 3 test files still use it. Already tracked as non-blocking (M6) in `docs/RELEASE_BLOCKERS.md`. |
+| L-4 | `androidx.compose.ui.tooling.preview` and (transitively) `androidx.window` are declared dependencies with zero current call sites. Both are disclosed as intentional in the build file's own comments. |
 
-**Every count, constant, formula, path and command in the documentation was read out of the source or
-executed.** Where a claim could not be verified — hardware behaviour, frame timings, screen-reader
-output — the documentation says so rather than implying otherwise.
+## Technical Debt
 
----
+Full detail in [docs/TECHNICAL_DEBT.md](TECHNICAL_DEBT.md).
 
-## REMAINING
+## Recommended Future Work
 
-Nothing here is a regression. Each is either a deliberate non-goal, a decision that belongs to the
-repository owner, or work that needs a device.
+In priority order — see also the "Recommended priority order" in the final
+chat response for this audit:
 
-### Blocking a genuine open-source release
-
-**1. There is no licence file.** The default applies — all rights reserved — so nobody may legally
-copy, modify or redistribute the source, and a contribution cannot be accepted under defined terms.
-Choosing a licence is the owner's decision, so none was added. **This is the single most important
-outstanding item.** See [GITHUB-METADATA.md](GITHUB-METADATA.md).
-
-**2. Repository metadata is empty** — no description, no topics, no homepage, and an enabled but
-empty wiki tab. The session's tooling can read metadata but not write it, so nothing was changed.
-Exact recommended values are in [GITHUB-METADATA.md](GITHUB-METADATA.md).
-
-### Gameplay quirks, documented rather than changed
-
-**3. The Speedrun challenge grants no reward.** Its effect is `globalProductionMultiplier = 1.0`.
-Its text now says so honestly, but a challenge with no reward is poor design. Implementing the
-original intent needs a new field:
-
-```kotlin
-// PrestigeUpgradeEffect
-val earthPointsMultiplier: Double? = null
-// PrestigeMultipliers: fold as earthPoints *= it.pow(level)
-// calculatePrestigeGain: multiply the result by prestige.earthPointsMultiplier
-```
-
-That is a **balance change** (+15% EP for anyone who completes it), so it is an owner decision.
-Mirror it in the reference and regenerate fixtures.
-
-**4. The Zero Emissions goal text mentions an unenforced ceiling.** "…while total gross gas
-production stays under 1e6 kg/s" is not checked anywhere; the constraint is expressed through the
-disabled-technology list. The text is pinned by `ContentParityTest`, so correcting it means changing
-both engines and regenerating — a small, safe change, but a gameplay-text one.
-
-**5. `PrestigeAccumulator` ignores `level` for `startingResources`.** Every other effect field is
-raised to the power of, or multiplied by, the level; this one adds the flat amount once. Unobservable
-today (every upgrade granting starting resources has `maxLevel = 1`) and would silently under-grant
-the moment a repeatable one is added.
-
-**6. Sink efficiency inflates the water-vapour equilibrium.** The H₂O target is fed in as
-`equilibrium × k_raw` while the integrator divides by `k_raw × sinkEfficiency`, so the effective
-equilibrium is `target / sinkEfficiency` — a hotter planet holds proportionally *more* feedback water
-vapour than the target alone implies. **This matches the reference exactly** and contributes to the
-late-game temperature curve, so changing it would be a rebalance. Documented in
-[Climate model](wiki/Climate-Model.md).
-
-**8. The "Ozone Hole" achievement is unreachable.** It fires at an O₃ excess below −50 DU, but
-`integrateGasConcentration` clamps every gas at zero excess, so ozone bottoms out *at* its 300 DU
-baseline and the condition can never be met — CFC technologies apply their depletion through
-`gasRemovalPerUnit`, which the clamp then floors. `computeForcing` itself handles a negative excess
-correctly and `ClimateParityTest` covers that arithmetic; only the reachability is the problem.
-Found while documenting the [half-life decay](wiki/Atmospheric-Half-Life.md#what-decays--and-what-must-not),
-whose whole design depends on that clamp keeping the Earth's baseline atmosphere intact. Lifting it
-for one gas is a **balance change** and an owner decision: it would need a per-gas floor rather than
-a blanket zero, mirrored in the reference, with fixtures regenerated.
-[Climate model](wiki/Climate-Model.md#natural-removal) now states the behaviour accurately.
-
-### Verification gaps
-
-**7. Nothing has been run on physical hardware or an emulator.** This environment has no KVM. What
-*was* run: `test` (205 passing), `lintDebug`, `lintRelease`, `assembleDebug`, `assembleRelease`,
-`bundleRelease`, `assembleDebugAndroidTest` (the instrumented suite compiles and packages), and the
-reference's own 198 tests. What was **not**: `connectedAndroidTest`. Unverified by execution: the
-vibrator, `SoundPool`, the Mobile Ads SDK and its consent form, frame timings, jank, allocation
-rates, startup time, and TalkBack.
-
-**8. No performance benchmarks exist.** The performance reasoning is architectural and the Compose
-figures come from the compiler, but nobody has profiled a tick. A JMH-style benchmark over
-`simulateStep` at a late-game state would be cheap — the function is pure and needs no device.
-
-**9. Accessibility is correct by construction but unverified.** Semantics merging, hidden decoration,
-48 dp targets and reduced-motion support are all in place and covered by `EarthAppScreenTest`, but no
-screen reader has read a screen and no contrast ratio has been measured against WCAG AA. Also known:
-the bottom bar's 9 sp labels across nine columns will clip at the largest font scales (the icon and
-the content description still identify the tab).
-
-### Technical debt
-
-**10. The layering rule is not enforced automatically.** `domain/` having no Android dependency is the
-project's load-bearing rule and is currently maintained by convention and review. A Konsist-style
-test, a lint rule, or splitting `domain/` into its own pure-Kotlin Gradle module would make it
-mechanical. The module split is the strongest option and the most disruptive.
-
-**11. The Gradle configuration cache is disabled**, because Kotlin's build-tools classpath does not
-serialise cleanly into it on this AGP/KGP pair. Worth retrying on the next toolchain bump.
-
-**12. No audio assets ship.** The settings, the plumbing and the seam are all real; every `Sound` has
-a `null` resource. The same state the original build was in. Adding a raw resource and pointing a
-`Sound` at it is the whole change — see [Audio and haptics](wiki/Audio-and-Haptics.md).
-
-**13. No screenshots exist anywhere in the repository** (only launcher icons). The README shows none
-deliberately: a fabricated screenshot of an app nobody has run would be worse than none.
-
-**14. `proguard-rules.pro`'s serialization rules are currently belt-and-braces.** The save format is
-hand-written `JsonObject` building rather than `@Serializable` classes, so nothing needs them today.
-They are correct, cost nothing, and become load-bearing the moment anyone adds a `@Serializable`
-model.
-
-**15. Clock-forward exploitation is undefended, deliberately.** Jumping the device clock forward grants
-up to one capped absence. A single-player offline game with no leaderboard has no competitive surface,
-and a monotonic elapsed-time source would mis-measure real absences across reboots — a worse bug than
-the exploit.
-
-**16. `EarthAppScreenTest` uses a deprecated `createAndroidComposeRule`.** The compiler suggests the
-`junit4.v2` variant, which switches from `UnconfinedTestDispatcher` to `StandardTestDispatcher` and
-would need explicit synchronisation in the tests. Migrate deliberately, not incidentally.
-
----
-
-## Recommended next steps
-
-In order.
-
-1. **Add a licence.** Everything else about presenting this as open source is blocked on it.
-2. **Set the repository description and topics** — [GITHUB-METADATA.md](GITHUB-METADATA.md) has the
-   exact strings.
-3. **Build the debug APK and play it on a real phone.** First purchase, a background/resume cycle to
-   watch offline progress land, a collapse and a reset. That closes most of gap 7 in an hour, and it
-   is the only thing that can.
-4. **Run `connectedAndroidTest`** on that device.
-5. **Populate the GitHub Wiki from `docs/wiki/`, or turn the wiki tab off.** An empty wiki next to 31
-   pages of documentation is a dead end for anyone who clicks it.
-6. **Publish a release** — a tag, a GitHub release, and a signed APK attached. See
-   [Release process](wiki/Release-Process.md). No amount of README work substitutes for a
-   downloadable build.
-7. **Add screenshots** from step 3 to the README.
-8. **Decide on the Speedrun reward** (item 3) and the Zero Emissions text (item 4).
-9. **Add root `CONTRIBUTING.md` and issue templates** pointing at the wiki. Device model and Android
-   version are the two things every bug report needs.
-10. **Enforce the layering mechanically** (item 10) — a Konsist test is an afternoon; the module split
-    is a weekend.
-11. **Add a `simulateStep` benchmark** (item 8) at a late-game state, so future formula changes have a
-    performance baseline.
-12. **Run TalkBack over every screen** and measure the contrast ratios (item 9).
-
----
-
-## Validation performed
-
-| Command | Result |
-| :-- | :-- |
-| `./gradlew testDebugUnitTest` | ✅ **205 tests, 0 failures** |
-| `./gradlew lintDebug` | ✅ **0 issues** |
-| `./gradlew lintRelease` | ✅ **0 issues** |
-| `./gradlew assembleDebug` | ✅ |
-| `./gradlew assembleRelease` | ✅ unsigned APK, 3,733,287 bytes |
-| `./gradlew bundleRelease` | ✅ AAB produced |
-| `./gradlew assembleDebugAndroidTest` | ✅ the instrumented suite compiles and packages |
-| `npx vitest run` (reference) | ✅ **198 tests, 0 failures** |
-| `npm run fixtures` (reference) | ✅ regenerated; only `format.json` and `content.json` changed, both intentionally |
-| `./gradlew connectedAndroidTest` | ❌ **NOT RUN** — no KVM in this environment, so no emulator can boot and no device is attached |
-
-The Android SDK (platform 37, build-tools 37.0.0) was installed in this environment specifically so
-these builds could actually be executed rather than reasoned about.
+1. Resolve the three CRITICAL owner-action items (license, signing key,
+   privacy-policy placeholders) — none require code changes.
+2. Fix the `contentDescription`/`testTag` misuse in `TechCard.kt` (M-1) —
+   small, isolated, no behavior change to sighted users.
+3. Clean up the three unnecessary `!!` assertions (L-1) — trivial.
+4. Add a focused Compose test for the processor status card (M-3).
+5. Correct the stale test count in `docs/RELEASE_BLOCKERS.md` (M-2).
+6. When ready, run the release build on a physical device (H-2) and obtain
+   AdMob console consent-message configuration (H-1) before any public
+   distribution.
