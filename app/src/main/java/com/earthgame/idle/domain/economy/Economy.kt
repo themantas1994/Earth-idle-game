@@ -86,6 +86,13 @@ const val BUY_MAX_QUANTITY = Int.MAX_VALUE
  * Buys up to [requestedQuantity] more units of a technology. Fails atomically:
  * either the affordable quantity (capped at what was requested) is purchased
  * and paid for in one step, or nothing changes.
+ *
+ * With [requireFullQuantity] set, a partial purchase is a failure rather than a
+ * smaller purchase: the caller asked for a specific number of units and getting
+ * fewer would not be the thing it asked for. That is what the **NEXT** buy mode
+ * uses — buying four units toward a milestone ten away spends the money and
+ * delivers none of the reward, so the button stays disabled instead. See
+ * `NextPurchase.kt`.
  */
 fun purchaseTechnology(
     state: GameState,
@@ -93,6 +100,7 @@ fun purchaseTechnology(
     requestedQuantity: Int,
     prestige: PrestigeMultipliers,
     disabledTechIds: Set<String> = emptySet(),
+    requireFullQuantity: Boolean = false,
 ): PurchaseResult {
     val tech = TECH_BY_ID[techId] ?: return PurchaseResult.failed(state)
     if (techId in disabledTechIds) return PurchaseResult.failed(state)
@@ -106,6 +114,7 @@ fun purchaseTechnology(
     val cappedQuantity = min(requestedQuantity, roomLeft)
     val quantity = maxAffordableQuantity(tech, owned, scaledAvailable, cappedQuantity)
     if (quantity <= 0) return PurchaseResult.failed(state)
+    if (requireFullQuantity && quantity < cappedQuantity) return PurchaseResult.failed(state)
 
     val totalCost = bulkPurchaseCost(tech, owned, quantity)
     val resources = state.resources.toBuilder()

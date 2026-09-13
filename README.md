@@ -50,23 +50,38 @@ The loop takes about thirty seconds to learn and several days to finish.
 | :-- | :-- |
 | **1. Burn something** | Your Natural Fire produces Energy on its own. It never stops. |
 | **2. Research** | Spend Energy and Research on the **Technology** tab to unlock what comes next. |
-| **3. Build** | Buy generators on the **Production** tab. More copies, more output. |
+| **3. Build** | Buy **producers** on the **Production** tab — mines, wells, generators. More copies, more output. |
+| **3b. Process** | Then buy **processors**: a refinery that turns Oil into Fuel, a mill that turns Iron Ore and Energy into Metals. They only run as fast as you can feed them. |
 | **4. Watch the sky** | The **Home** tab is a live 3D Earth. Switch overlays to see temperature, humidity, wind or the greenhouse blanket thicken — and the storms that start forming once it warms. |
 | **5. Collapse** | Habitability hits zero. The Earth is finished — and so is the run. |
 | **6. Prestige** | Bank Earth Points, spend them on permanent upgrades, start EARTH 2. |
 | **7. Go faster** | Repeat. Every civilization is quicker and dirtier than the last. |
 
-Two rules make it different from most idle games:
+Four rules make it different from most idle games:
 
 🔒 **Prices never rise.** The price you were quoted is the price you pay, however large your
 civilization grows. The *only* thing that makes something more expensive is you, buying more
 of that exact thing. No hidden complexity tax, no re-pricing of what you were already saving
 toward — the countdown on a button is a promise, not an estimate.
 
-⚡ **Every tenth copy doubles its output.** Each generator keeps its own progress track, so
-going deep on one building pays off visibly — and it is spaced so branching out into new
-technology still wins in the long run. Depth is a satisfying detour, not a replacement for
-the tech tree.
+🏭 **Half the economy has to be fed.** Producers pull raw material out of the planet. Processors
+*transform* it: oil into fuel, fuel into power, iron and power into metals, metals and chemicals
+into the materials a fusion reactor is built from. A processor runs at the rate of whichever input
+it is shortest of, so its card tells you exactly what it is waiting for — *"73%, short of Oil"* —
+and the fix is always to go and build more of that one thing. **Produce → process → hit a
+bottleneck → expand → unlock the next stage** is the whole game.
+
+⚡ **Milestones double a building's output, and they spread out as you go deeper.** The first ten
+copies of anything earn a doubling, then every ten up to a hundred. After that the spacing widens —
+eleven at a time through the second hundred, twelve through the third, and so on — so a building you
+have gone really deep on still rewards you, without turning into a conveyor belt of identical
+prizes. Round numbers are always milestones: 100, 200, 300.
+
+🎯 **The NEXT button does the arithmetic for you.** Alongside ×1, ×10, ×100 and Max there is
+**Next**, which buys *exactly* enough copies to reach that building's next milestone — no more, and
+never a partial one. It shows the number and the target up front (**`Next ×11 → 111`**), and if you
+cannot afford the whole thing it stays disabled and tells you how far short you are rather than
+quietly spending your money on nothing.
 
 ---
 
@@ -96,7 +111,8 @@ There is no punishment for closing the app and no advantage to leaving it open.
 
 | | |
 | :-- | :-- |
-| 🔬 **99 technologies** | Across 11 branches, from Controlled Fire to a Matrioshka Brain. 68 are repeatable generators, 31 are research nodes — including a mutually exclusive Coal-vs-Nuclear decision you only get to make once per Earth. |
+| 🔬 **157 technologies** | Across 16 branches, from Controlled Fire to a Dyson Swarm. 78 are producers and 26 are processors that consume what the producers make; the remaining 53 are research nodes — including a mutually exclusive Coal-vs-Nuclear decision you only get to make once per Earth. |
+| ⛓️ **15 resources on a real production graph** | Coal, Oil, Iron Ore, Copper, Uranium and Rare Earths come out of the ground. Refined Fuel, Chemicals, Metals and Concrete are made from them. Electronics, Advanced Materials and Launch Capacity are made from *those*. Every resource has a purpose and every factory has a supply line you can see, with a flow panel showing what is being produced, what is being eaten and what is left over. |
 | ☁️ **6 greenhouse gases** | CO₂, CH₄, N₂O, H₂O, O₃ and an aggregate fluorinated bucket. Each has its own atmospheric **half-life**, forcing curve and display unit, and they interact — water vapour is modelled as a feedback that the *other* gases drive. Gas decays away on the simulated calendar, so emissions have to outrun it rather than simply pile up. |
 | 🕰️ **A planet with an age** | Each Earth tracks its own simulated age — one real second is one simulated day, so an evening is a few decades and a full run is centuries. The header shows it, and it is the clock the atmosphere's half-lives decay against: leave an Earth untended and its greenhouse gases drain away. |
 | 🌡️ **A 5-factor habitability model** | Temperature, ocean acidity, sea level, agriculture and biodiversity, **multiplied** together — so any single one of them collapsing ends the run, even while the others look fine. |

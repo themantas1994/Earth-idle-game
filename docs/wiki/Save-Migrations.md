@@ -2,7 +2,7 @@
 
 [← Documentation home](Home.md)
 
-`domain/save/Migrations.kt`. Current `SAVE_VERSION` is **4**.
+`domain/save/Migrations.kt`. Current `SAVE_VERSION` is **6**.
 
 Each step moves a save one version forward, and they run in order, so a save written by any
 released version reaches the current shape by falling through the chain. The version numbers and
@@ -119,6 +119,34 @@ Two details worth knowing if you are adding a field like this:
 ---
 
 ## Saves from a newer build
+
+## v5 → v6: the production-chain economy
+
+`SAVE_VERSION` 6 is the [production chains](Economy-and-Production.md): nine new resources,
+processors that consume a flow rather than only a price, and a milestone ladder that spreads out
+with depth.
+
+**Nothing in a v5 save is wrong, so nothing in it is changed.** The migration exists to record the
+format change and to state, in one place, why each part of the new economy needs no fix-up:
+
+- **The new resources** — Iron Ore, Copper, Uranium, Rare Earths, Refined Fuel, Chemicals,
+  Electronics, Advanced Materials and Launch Capacity — are **appended** to `ResourceId`, never
+  inserted, and `ResourceAmounts` is indexed by ordinal. Every balance a v5 save holds stays in its
+  own slot and the new ones decode as zero. A returning player's Coal is still their Coal.
+- **Processor ownership** is ordinary technology ownership. A v5 save simply owns none of them,
+  which is exactly what a player who has not researched them should own.
+- **Milestone state is not stored.** A building's ownership bonus has always been *derived* from how
+  many of it you own, so the new ladder applies itself on load with nothing to convert. A building
+  already past 100 units earns its *next* milestone a little further out than it would have — the
+  intended effect of the change — and no reward already granted is taken back, because the
+  multiplier is recomputed from the count rather than banked.
+- **Prestige, achievements, challenges and news** are untouched: none of them reference a resource
+  or a building that changed meaning.
+
+A v5 save therefore loads into the new economy with its run intact, and the first processor it meets
+is one it has yet to research.
+`ProductionChainLifecycleTest.a save written before the production chains loads with its run intact`
+asserts all of it.
 
 A save whose `saveVersion` is **greater** than `SAVE_VERSION` keeps its own version number rather
 than being stamped down.

@@ -251,7 +251,7 @@ data class GameState(
     val collapsed: Boolean = false,
 )
 
-const val SAVE_VERSION = 5
+const val SAVE_VERSION = 6
 
 /**
  * Technologies every run starts with already owned. Natural Fire predates any

@@ -335,14 +335,30 @@ class GameLoop(private val random: Random = Random.Default) {
         )
     }
 
-    /** Buys technology, counting the purchase and reporting any ownership threshold crossed. */
+    /**
+     * Buys technology, counting the purchase and reporting any ownership
+     * milestone crossed.
+     *
+     * [requireFullQuantity] makes the purchase all-or-nothing, which is what the
+     * NEXT buy mode needs: it asked for the exact number of units that reaches a
+     * milestone, and fewer than that is not a smaller version of what it asked
+     * for.
+     */
     fun purchase(
         state: GameState,
         techId: String,
         quantity: Int,
         derived: DerivedState,
+        requireFullQuantity: Boolean = false,
     ): StepResult {
-        val result = purchaseTechnology(state, techId, quantity, derived.prestige, derived.disabledTechIds)
+        val result = purchaseTechnology(
+            state,
+            techId,
+            quantity,
+            derived.prestige,
+            derived.disabledTechIds,
+            requireFullQuantity,
+        )
         if (!result.success) return StepResult(state, StepEvents())
 
         val before = state.techOwned[techId] ?: 0

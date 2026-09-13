@@ -29,6 +29,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.math.pow
 
 /**
  * Pricing, bulk costs, affordability and the ownership bonus ladder, against
@@ -37,6 +38,12 @@ import org.junit.Test
  * of that exact thing.**
  */
 class EconomyParityTest {
+
+    /**
+     * The first ownership count at which this build's milestone ladder stops
+     * agreeing with the reference implementation's fixed every-ten ladder.
+     */
+    private val FIRST_DIVERGENT_OWNERSHIP = 100
 
     private val fixture = Fixtures.obj("economy")
     private val noPrestige = PrestigeMultipliers.NONE
@@ -137,26 +144,66 @@ class EconomyParityTest {
         }
     }
 
+    /**
+     * The ownership ladder, over the range where it is still the reference's.
+     *
+     * The reference puts a milestone on every tenth unit forever. This build
+     * replaces that with a **progressively spaced** ladder: identical over the
+     * first hundred units of any building, and deliberately wider after that
+     * — 11 apart through the second hundred, 12 through the third, and so on.
+     * See `domain/engine/Ownership.kt` and
+     * `docs/wiki/Economy-and-Production.md`.
+     *
+     * The divergence is therefore exact and known: everything below
+     * [FIRST_DIVERGENT_OWNERSHIP] must still match the reference to the digit,
+     * and the cases above it are asserted *against the new ladder* in
+     * [the ladder diverges from the reference exactly where it is documented to],
+     * so neither half can drift unnoticed.
+     */
     @Test
-    fun `ownership bonuses match the reference`() {
+    fun `ownership bonuses match the reference below the documented divergence`() {
+        var covered = 0
         for (case in fixture.getValue("ownership").jsonArray) {
             val o = case.jsonObject
             val owned = o.getInt("owned")
+            if (owned >= FIRST_DIVERGENT_OWNERSHIP) continue
+            covered++
             assertDoubleNear("ownershipMultiplier($owned)", o.getDouble("multiplier"), ownershipMultiplier(owned))
             assertDoubleNear("ownershipProgress($owned)", o.getDouble("progress"), ownershipProgress(owned))
             assertEquals("nextOwnershipMilestone($owned)", o.getInt("nextMilestone"), nextOwnershipMilestone(owned))
         }
+        assertTrue("the shared range must still be exercised", covered >= 8)
 
         for (case in fixture.getValue("ownershipCrossings").jsonArray) {
             val o = case.jsonObject
             val before = o.getInt("before")
             val after = o.getInt("after")
+            if (after > FIRST_DIVERGENT_OWNERSHIP) continue
             assertEquals(
                 "ownershipMilestonesCrossed($before, $after)",
                 o.getValue("crossed").jsonArray.map { it.jsonPrimitive.int },
                 ownershipMilestonesCrossed(before, after),
             )
         }
+    }
+
+    @Test
+    fun `the ladder diverges from the reference exactly where it is documented to`() {
+        // Below 100 owned, identical to the reference.
+        assertEquals(10, nextOwnershipMilestone(0))
+        assertEquals(100, nextOwnershipMilestone(96))
+
+        // At 100 the spacing widens for the first time: the reference says 110.
+        assertEquals(111, nextOwnershipMilestone(100))
+        assertEquals(212, nextOwnershipMilestone(200))
+
+        // And the multiplier is correspondingly a little softer at depth, which
+        // is the intended effect of sparser milestones.
+        assertEquals(1024.0, ownershipMultiplier(100), 0.0)
+        assertTrue(
+            "the new ladder must pay less at 1,000 owned than the old every-ten ladder did",
+            ownershipMultiplier(1_000) < 2.0.pow(100),
+        )
     }
 
     // --- The pricing invariant, checked directly ---

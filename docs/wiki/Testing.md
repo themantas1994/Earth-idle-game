@@ -46,8 +46,8 @@ fixtures; the Kotlin tests assert against those rather than against a re-reading
 | :-- | --: | :-- |
 | `GameDecimalParityTest` | 10 | 24 operands from 1e-400 to 1e1000, all 576 binary pairs, 104 `pow` cases, the save triple |
 | `FormattingParityTest` | 6 | 36 values × 4 notations × 2 precisions as **strings**, plus durations, simulated ages, temperatures, percentages, and suffix uniqueness to 1e900 |
-| `TechnologyParityTest` | 10 | All 99 technologies field by field, the tier curves at 45 tiers, and the graph properties: no cycles, everything reachable, screens disjoint |
-| `EconomyParityTest` | 13 | Quoted and bulk prices, buy-max including the exact geometric boundary, the discount, the ownership ladder, and five separate assertions of the price-stability invariant |
+| `TechnologyParityTest` | 11 | The reference's 99 technologies field by field and in order, the tier curves at 45 tiers, and the graph properties: no cycles, everything reachable, screens disjoint |
+| `EconomyParityTest` | 14 | Quoted and bulk prices, buy-max including the exact geometric boundary, the discount, the ownership ladder over the range it still shares with the reference, the documented divergence above it, and five separate assertions of the price-stability invariant |
 | `ClimateParityTest` | 13 | **3,240 gas integrations**, the half-life law against the integrator, the simulated clock's constants, forcing per gas and total, temperature, ocean chemistry, all five habitability factors, sea level |
 | `PrestigeParityTest` | 6 | The upgrade table, nine ownership combinations, the speed term, payouts for totals from 0 to 1e120 |
 | `ContentParityTest` | 7 | The achievement, challenge, event, milestone, gas and resource tables — including each challenge's **computed** lockout set |
@@ -67,7 +67,14 @@ Properties that must hold whatever the reference does.
 | `AtmosphericHalfLifeTest` | 19 | 1,000 → 500 → 250 → 125 at one, two and three half-lives; the law against the integrator for every gas; production above, below and exactly at the decay rate; step-size independence; NaN/infinity/negative guards at extreme spans |
 | `GameAgeTest` | 18 | What ages the Earth and what does not: live ticks, offline catch-up, the cap, offline switched off, prestige reset, the lifetime total, save round-trip, very large ages, formatting |
 | `SaveMigrationTest` | 15 | The chain, idempotence, future-version saves, hostile save content, and v3 → v4 giving the Earth an age without inventing one |
-| `BalanceInvariantsTest` | 8 | The pacing relationships the prose in `Constants.kt` claims about itself |
+| `BalanceInvariantsTest` | 10 | The pacing relationships the prose in `Constants.kt` claims about itself, including that milestone spacing only ever widens and never becomes so wide that a deep building stops rewarding |
+| `EconomyValidationTest` | 12 | The [economy graph as a graph](Economy-and-Production.md#validation): producers and processors disjoint, every input supplied, every resource used or documented as a dead end, no self-sustaining loop, no processor unlockable before its supply, no tier inversions, and the counts the wiki quotes |
+| `ResourceFlowTest` | 15 | The bottleneck engine as arithmetic: full and partial utilization, multi-input scarcity, fair sharing between competitors, slack reclaimed from a consumer limited elsewhere, order independence, chained starvation, the 90% claim cap, no negative net rate, values past a Double, and that a loop cannot amplify supply |
+| `MilestoneLadderTest` | 15 | The progressive ladder: each block's exact sequence, the spacing formula, every worked example, the count agreeing with a walk of the rungs, progress, crossings, and nonsense inputs |
+| `NextPurchaseTest` | 13 | The NEXT buy mode: the quantity, the exact price against the same geometric series every other mode uses, the discount, all-or-nothing behaviour, and that the quote never offers a purchase the engine would refuse |
+| `ProductionChainLifecycleTest` | 9 | Chains end to end: offline equals live for a bottlenecked and a multi-input chain, no balance falls across an absence, prestige raises output without raising intake, and a pre-chains save loads with its run intact |
+| `EconomyBalanceSimulationTest` | 12 | A **played game**: a bot ticks and buys on a cadence for up to three simulated days, and the run is checked for stalls, for a chain coming online, for a processed resource reaching the wallet, and for the first processor being genuinely short of its ore |
+| `EconomyDiagramTest` | 2 | That the wiki's economy diagram still names every processor and every resource the game contains |
 
 ### Storms and visualization — 44 cases
 
@@ -92,7 +99,7 @@ intact.
 
 `GameAcceptanceTest` plays the game headlessly, in the order a player experiences it: a new game
 starts playable → resources accrue with no input → the first purchase is affordable within a minute
-→ buying raises production and production raises the climate → ownership bonuses land every tenth
+→ buying raises production and production raises the climate → ownership milestones land every tenth
 copy → a heated planet collapses → achievements and headlines fire → prestige banks points and
 starts a faster Earth → a save survives closing the app → a corrupted save falls back → settings
 persist → late-game values never overflow → a challenge restricts and pays out.

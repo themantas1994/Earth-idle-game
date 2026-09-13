@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.earthgame.idle.domain.engine.DerivedState
 import com.earthgame.idle.domain.engine.computeDerived
@@ -122,7 +123,11 @@ class EarthAppUiTest {
         compose.waitForIdle()
 
         compose.onNodeWithText("Natural Fire").assertIsDisplayed()
-        compose.onAllNodesWithText("Buy", substring = true).onFirst().performClick()
+        // The resource-flow panel sits above the first card, so the button has
+        // to be scrolled to before it can be tapped.
+        compose.onAllNodesWithText("Buy", substring = true).onFirst()
+            .performScrollTo()
+            .performClick()
         compose.waitForIdle()
 
         assertTrue("a tap should reach the game", purchases.isNotEmpty())

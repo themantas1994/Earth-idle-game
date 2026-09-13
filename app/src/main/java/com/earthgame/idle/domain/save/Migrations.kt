@@ -48,6 +48,10 @@ fun migrate(state: GameState): GameState {
         migrated = migrateV4ToV5(migrated)
     }
 
+    if (migrated.saveVersion < 6) {
+        migrated = migrateV5ToV6(migrated)
+    }
+
     // A v5 save written before this build knew about weather — or one whose
     // seed field was damaged — would run every storm step against a seed of
     // zero, which collapses the per-step mixing and gives every such planet the
@@ -174,3 +178,34 @@ private fun migrateV4ToV5(state: GameState): GameState = state.copy(
     stormSeed = deriveStormSeed(state.createdAt, state.runNumber),
     saveVersion = 5,
 )
+
+/**
+ * v6 is the production-chain economy: nine new resources, processors that
+ * consume a flow rather than only a price, and a milestone ladder that spreads
+ * out with depth.
+ *
+ * **Nothing in a v5 save is wrong, so nothing in it is changed.** The migration
+ * exists to record the format change and to state, in one place, why each part
+ * of the new economy needs no fix-up:
+ *
+ * - **The new resources** (Iron Ore, Copper, Uranium, Rare Earths, Refined
+ *   Fuel, Chemicals, Electronics, Advanced Materials, Launch Capacity) are
+ *   appended to the enum, never inserted, and `ResourceAmounts` is indexed by
+ *   ordinal — so every balance a v5 save holds stays in its own slot and the
+ *   new ones decode as zero. A returning player's Coal is still their Coal.
+ * - **Processor ownership** is ordinary technology ownership: a v5 save simply
+ *   owns none of them, which is exactly what a player who has not researched
+ *   them should own.
+ * - **Milestone state is not stored.** A building's ownership bonus has always
+ *   been *derived* from how many of it you own, so the new ladder applies
+ *   itself on load with nothing to convert. A building already past 100 units
+ *   earns its next milestone a little further out than it would have — that is
+ *   the intended effect of the change, and no reward already granted is taken
+ *   back, since the multiplier is recomputed from the count rather than banked.
+ * - **Prestige, achievements, challenges and news** are untouched: none of them
+ *   reference a resource or a building that changed meaning.
+ *
+ * A v5 save therefore loads into the new economy with its run intact, and the
+ * first processor it meets is one it has yet to research.
+ */
+private fun migrateV5ToV6(state: GameState): GameState = state.copy(saveVersion = 6)

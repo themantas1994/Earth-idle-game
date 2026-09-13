@@ -14,7 +14,14 @@ enum class TechBranch(val id: String, val displayName: String, val icon: String)
     CHEMISTRY("chemistry", "Chemical Industry", "🧪"),
     GLOBALIZATION("globalization", "Globalization", "🌐"),
     DIGITAL("digital", "Digital Civilization", "💻"),
-    ENDGAME("endgame", "Endgame", "🚀");
+    ENDGAME("endgame", "Endgame", "🚀"),
+
+    // --- Branches added with the production-chain economy. ---
+    MINING("mining", "Mining & Extraction", "⛏️"),
+    MATERIALS("materials", "Materials & Metallurgy", "🧱"),
+    NUCLEAR("nuclear", "Nuclear", "☢️"),
+    ELECTRONICS("electronics", "Electronics & Computing", "🔌"),
+    SPACE("space", "Space Industry", "🛰️");
 
     companion object {
         fun fromId(id: String): TechBranch? = entries.firstOrNull { it.id == id }
@@ -24,8 +31,13 @@ enum class TechBranch(val id: String, val displayName: String, val icon: String)
 /**
  * - [UNLOCK]: one-time tree node, gates later technologies but produces
  *   nothing of its own (e.g. "Cooking").
- * - [GENERATOR]: repeatably purchasable, produces gas and/or resources per
- *   owned unit; cost scales with `costGrowth` per unit already owned.
+ * - [GENERATOR]: a **producer** — repeatably purchasable, takes no resource
+ *   input and produces gas and/or resources per owned unit; cost scales with
+ *   `costGrowth` per unit already owned. Everything it makes, it makes out of
+ *   the planet.
+ * - [CONSUMER]: a **processor** — repeatably purchasable like a generator, but
+ *   it consumes a per-unit *flow* of one or more resources and can only run at
+ *   the rate its scarcest input allows. See `domain/production/`.
  * - [MULTIPLIER]: one-time purchase that permanently scales production —
  *   globally, per-branch, per-gas or per-resource.
  * - [CHOICE]: one-time purchase mutually exclusive with siblings sharing a
@@ -35,7 +47,17 @@ enum class TechKind(val id: String) {
     UNLOCK("unlock"),
     GENERATOR("generator"),
     MULTIPLIER("multiplier"),
-    CHOICE("choice");
+    CHOICE("choice"),
+    CONSUMER("consumer");
+
+    /**
+     * Whether this kind is a *building*: something bought repeatedly that shows
+     * up on the Production screen and contributes to production rates. The
+     * simulation tests this rather than comparing against [GENERATOR], so
+     * producers and processors are handled by the same code path without either
+     * being the special case.
+     */
+    val isBuilding: Boolean get() = this == GENERATOR || this == CONSUMER
 
     companion object {
         fun fromId(id: String): TechKind? = entries.firstOrNull { it.id == id }
@@ -54,6 +76,14 @@ data class ResourceMultiplier(val resource: ResourceId, val multiplier: Double)
  * unlock may use neither.
  */
 data class TechEffect(
+    /**
+     * Resources consumed **per second per owned unit** when running at full
+     * capacity. Empty for a producer; non-empty exactly for a
+     * [TechKind.CONSUMER]. A processor whose inputs cannot all be supplied runs
+     * at reduced utilization rather than conjuring its output — see
+     * `domain/production/ResourceFlow.kt`.
+     */
+    val inputsPerUnit: Map<ResourceId, Double> = emptyMap(),
     val gasProductionPerUnit: Map<GasId, Double> = emptyMap(),
     val resourceProductionPerUnit: Map<ResourceId, Double> = emptyMap(),
     val gasRemovalPerUnit: Map<GasId, Double> = emptyMap(),
@@ -86,6 +116,12 @@ data class Technology(
     val choiceGroup: String? = null,
 ) {
     val isOneTime: Boolean get() = maxOwned == 1
+
+    /** Repeatably purchasable and part of the production economy. */
+    val isBuilding: Boolean get() = kind.isBuilding
+
+    /** A processor: it consumes a flow of resources to make its output. */
+    val isConsumer: Boolean get() = kind == TechKind.CONSUMER
 
     companion object {
         /**

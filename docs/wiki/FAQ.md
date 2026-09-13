@@ -60,15 +60,46 @@ civilization is affects any price.
 
 That is unusual for the genre and deliberate: a price you were quoted is a price you will pay.
 
-### What does "every 10th copy doubles output" mean?
+### What do the ownership milestones do?
 
-Each generator has its own little progress bar. Every tenth copy you own of it doubles **that
-building's** entire output, permanently, for the rest of the run — and it immediately starts
-counting toward the next one.
+Each building has its own little progress bar. Crossing a milestone doubles **that building's**
+entire output, permanently, for the rest of the run — and it immediately starts counting toward the
+next one.
+
+Milestones land every ten copies over the first hundred, then **spread out**: eleven at a time
+through the second hundred, twelve through the third, and so on. Round numbers are always
+milestones, so 100, 200 and 300 always pay. Going deeper stays rewarding without becoming a
+conveyor belt of identical prizes.
 
 It is worth going deep on a favourite building. It is not worth doing *instead* of unlocking new
 ones: across ten copies the price roughly quadruples while the bonus only doubles, so branching out
 still wins in the long run.
+
+### What does the NEXT buy mode do?
+
+It buys **exactly** enough copies to reach that building's next milestone — no more, and never a
+partial one. The button shows both numbers, so `Next ×11 → 111` means eleven copies, landing on a
+hundred and eleven.
+
+If you cannot afford the whole thing it stays disabled and tells you how far short you are, rather
+than spending your money on a milestone you would not reach. Use **Max** when you want to buy
+whatever you can afford.
+
+### Why is my refinery only running at 40%?
+
+Because it is short of something. A processor — a refinery, a mill, a power station — consumes a
+flow of resources and can only run as fast as its scarcest input arrives. The card names the input
+it is waiting for, and tapping it shows exactly how much it wants against how much the economy
+supplies.
+
+The fix is always the same: build more of whatever it is short of. That is the loop the chains
+exist for.
+
+### Can a factory drain my stockpile to nothing?
+
+No. Processors can never take more than 90% of what is being produced, so every resource always
+accumulates — you can always save up your way out of a shortage. A balance in this game never goes
+down on its own.
 
 ### What is that ×2 / ×4 / ×32 next to a building?
 
