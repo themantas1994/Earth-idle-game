@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.earthgame.idle.domain.engine.DerivedState
 import com.earthgame.idle.domain.events.RANDOM_EVENT_BY_ID
 import com.earthgame.idle.domain.formatting.formatFixed
+import com.earthgame.idle.domain.formatting.formatGameAge
 import com.earthgame.idle.domain.formatting.formatNumber
 import com.earthgame.idle.domain.formatting.formatPercent
 import com.earthgame.idle.domain.formatting.formatRate
@@ -99,6 +100,10 @@ fun HomeScreen(
         item {
             GameCard {
                 CardTitle("🌡️ Planetary Status")
+                // Simulated time, not time played: this is how long this Earth
+                // has existed, and the span its greenhouse gases have been
+                // decaying over.
+                StatRow("Earth Age", formatGameAge(state.gameAgeSeconds, format))
                 StatRow("Radiative Forcing", "+${formatFixed(state.forcing.total, 2)} W/m²")
                 StatRow(
                     "Habitability",

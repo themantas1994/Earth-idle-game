@@ -29,6 +29,12 @@ export interface RunStats {
 /** Stats that persist forever across resets, shown on the Statistics screen. */
 export interface LifetimeStats {
   totalPlayTimeSeconds: number;
+  /**
+   * Simulated time across every Earth ever played, in simulated seconds. The
+   * lifetime counterpart of `GameState.gameAgeSeconds`, which resets with each
+   * new Earth; kept here precisely so a prestige never destroys it.
+   */
+  totalSimulatedSeconds: number;
   totalResets: number;
   totalGasProducedKg: GasTotals;
   highestTemperatureC: number;
@@ -92,6 +98,22 @@ export interface GameState {
   lastTickAt: number;
   createdAt: number;
 
+  /**
+   * How old this Earth is, in **simulated** seconds — the planet's own age,
+   * not the player's time at the controls.
+   *
+   * Advanced by `simulateStep` alone, live ticks and offline catch-up alike,
+   * at `GAME_SECONDS_PER_REAL_SECOND` per real second of simulation. It is
+   * therefore a count of time the world was actually simulated for: it does
+   * not advance while the app merely exists, and an absence longer than the
+   * offline cap ages the planet by the cap, not by the absence. Reset to zero
+   * by `startNewRun`; the lifetime total lives on in
+   * `LifetimeStats.totalSimulatedSeconds`.
+   *
+   * This is the clock every gas half-life runs on.
+   */
+  gameAgeSeconds: number;
+
   resources: ResourceTotals;
   atmosphere: AtmosphereState;
   seaLevelRiseMeters: number;
@@ -137,7 +159,7 @@ export interface GameState {
   collapsed: boolean;
 }
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 /**
  * Technologies every run starts with already "owned". Natural Fire predates
@@ -167,6 +189,7 @@ export function createInitialRunStats(now: number): RunStats {
 export function createInitialLifetimeStats(): LifetimeStats {
   return {
     totalPlayTimeSeconds: 0,
+    totalSimulatedSeconds: 0,
     totalResets: 0,
     totalGasProducedKg: zeroGasTotals(),
     highestTemperatureC: 0,
@@ -185,6 +208,7 @@ export function createNewGame(now: number = Date.now()): GameState {
     runStartedAt: now,
     lastTickAt: now,
     createdAt: now,
+    gameAgeSeconds: 0,
 
     resources: zeroResourceTotals(),
     atmosphere: createInitialAtmosphere(),
@@ -238,6 +262,10 @@ export function startNewRun(previous: GameState, now: number = Date.now()): Game
     runNumber: previous.runNumber + 1,
     runStartedAt: now,
     lastTickAt: now,
+
+    // A new Earth is a new planet: age zero, with only the prestige bonuses
+    // carried over. The lifetime simulated total in lifetimeStats is untouched.
+    gameAgeSeconds: 0,
 
     resources: zeroResourceTotals(),
     atmosphere: createInitialAtmosphere(),

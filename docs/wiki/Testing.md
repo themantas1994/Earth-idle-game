@@ -5,14 +5,14 @@
 ## Running everything
 
 ```bash
-./gradlew test                    # 220 JVM tests, ~30 s cold, seconds warm
+./gradlew test                    # 275 JVM tests, ~30 s cold, seconds warm
 ./gradlew lintDebug lintRelease   # Android lint, both variants
 ./gradlew connectedAndroidTest    # instrumented; needs a device or emulator
 
 python3 scripts/check-docs-links.py   # every relative Markdown link and anchor
 
 cd tools/ts-reference
-npm install && npx vitest run     # the reference engine's own 198 tests
+npm install && npx vitest run     # the reference engine's own 216 tests
 npm run fixtures                  # regenerate the golden fixtures
 ```
 
@@ -21,11 +21,13 @@ npm run fixtures                  # regenerate the golden fixtures
 ```
 app/src/test/java/com/earthgame/idle/
   parity/          10 classes — agreement with the TypeScript reference
-  engine/          GameLoopTest, GameDecimalEdgeCaseTest, OfflineLifecycleTest
+  engine/          GameLoopTest, GameDecimalEdgeCaseTest, OfflineLifecycleTest,
+                   AtmosphericHalfLifeTest, GameAgeTest
   save/            SaveMigrationTest
   balance/         BalanceInvariantsTest
   acceptance/      GameAcceptanceTest — a headless player
-  presentation/    GameViewModelTest, GameViewModelConcurrencyTest, EarthAppScreenTest
+  presentation/    GameViewModelTest, GameViewModelConcurrencyTest, EarthAppScreenTest,
+                   GameHeaderTest
 
 app/src/androidTest/java/com/earthgame/idle/
   data/            DataStoreSaveRepositoryTest + DataStoreCorruption helper
@@ -34,7 +36,7 @@ app/src/androidTest/java/com/earthgame/idle/
 
 ## The suites
 
-### Parity — 80 cases
+### Parity — 83 cases
 
 The core of the suite. The original TypeScript engine was **run**, and its answers captured as JSON
 fixtures; the Kotlin tests assert against those rather than against a re-reading of its source. See
@@ -43,17 +45,17 @@ fixtures; the Kotlin tests assert against those rather than against a re-reading
 | Class | Cases | Pins down |
 | :-- | --: | :-- |
 | `GameDecimalParityTest` | 10 | 24 operands from 1e-400 to 1e1000, all 576 binary pairs, 104 `pow` cases, the save triple |
-| `FormattingParityTest` | 5 | 36 values × 4 notations × 2 precisions as **strings**, plus durations, temperatures, percentages, and suffix uniqueness to 1e900 |
+| `FormattingParityTest` | 6 | 36 values × 4 notations × 2 precisions as **strings**, plus durations, simulated ages, temperatures, percentages, and suffix uniqueness to 1e900 |
 | `TechnologyParityTest` | 10 | All 99 technologies field by field, the tier curves at 45 tiers, and the graph properties: no cycles, everything reachable, screens disjoint |
 | `EconomyParityTest` | 13 | Quoted and bulk prices, buy-max including the exact geometric boundary, the discount, the ownership ladder, and five separate assertions of the price-stability invariant |
-| `ClimateParityTest` | 11 | **3,240 gas integrations**, forcing per gas and total, temperature, ocean chemistry, all five habitability factors, sea level |
+| `ClimateParityTest` | 13 | **3,240 gas integrations**, the half-life law against the integrator, the simulated clock's constants, forcing per gas and total, temperature, ocean chemistry, all five habitability factors, sea level |
 | `PrestigeParityTest` | 6 | The upgrade table, nine ownership combinations, the speed term, payouts for totals from 0 to 1e120 |
 | `ContentParityTest` | 7 | The achievement, challenge, event, milestone, gas and resource tables — including each challenge's **computed** lockout set |
 | `EventsParityTest` | 5 | Every eligibility state × draw, multiplier composition, instant bursts |
 | `SimulationParityTest` | 5 | A **95-step scripted playthrough** to collapse and through a reset, compared value by value; step-size independence; determinism |
 | `OfflineParityTest` | 5 | Absences from 0 to a week, with and without cap upgrades, enabled and disabled |
 
-### Behaviour — 79 cases
+### Behaviour — 101 cases
 
 Properties that must hold whatever the reference does.
 
@@ -62,7 +64,9 @@ Properties that must hold whatever the reference does.
 | `GameLoopTest` | 21 | Ticks, absences, backwards clocks, seeded event reproducibility, the challenge pause, the 3-event cap, pruning, headlines, achievements, challenge settlement, purchasing, prestige, reset |
 | `GameDecimalEdgeCaseTest` | 20 | Normalization across every operand pair, canonical zero, total ordering, saturation, **formatting purity**, no NaN anywhere, parse forms |
 | `OfflineLifecycleTest` | 18 | Every lifecycle event and clock anomaly a real device produces |
-| `SaveMigrationTest` | 12 | The chain, idempotence, future-version saves, hostile save content |
+| `AtmosphericHalfLifeTest` | 19 | 1,000 → 500 → 250 → 125 at one, two and three half-lives; the law against the integrator for every gas; production above, below and exactly at the decay rate; step-size independence; NaN/infinity/negative guards at extreme spans |
+| `GameAgeTest` | 18 | What ages the Earth and what does not: live ticks, offline catch-up, the cap, offline switched off, prestige reset, the lifetime total, save round-trip, very large ages, formatting |
+| `SaveMigrationTest` | 15 | The chain, idempotence, future-version saves, hostile save content, and v3 → v4 giving the Earth an age without inventing one |
 | `BalanceInvariantsTest` | 8 | The pacing relationships the prose in `Constants.kt` claims about itself |
 
 ### Acceptance — 13 cases
@@ -76,13 +80,14 @@ persist → late-game values never overflow → a challenge restricts and pays o
 
 These are the tests that would catch "the game is unplayable" as opposed to "a formula moved".
 
-### Presentation — 28 cases
+### Presentation — 53 cases
 
 | Class | Runs under | Covers |
 | :-- | :-- | :-- |
 | `GameViewModelTest` | JVM + virtual time | Loading, tick cadence, autosave, background/foreground, the cap, backup fallback, corruption, haptics and audio gating |
 | `GameViewModelConcurrencyTest` | JVM + **real threads** | The tick racing the player. One deterministic forced interleaving plus two invariant stress tests |
-| `EarthAppScreenTest` | **Robolectric** | The whole Compose UI: nine destinations, Back unwinding, a purchase reaching the game, disjoint shopping lists, every Settings toggle, the reset gate, the tutorial, light theme, the wide layout |
+| `EarthAppScreenTest` | **Robolectric** | The whole Compose UI: nine destinations, Back unwinding, a purchase reaching the game, disjoint shopping lists, every Settings toggle, the reset gate, the tutorial, light theme, the wide layout, the Earth's age on the header and on Home, and Metals never reading as Steel |
+| `GameHeaderTest` | **Robolectric** | The header's resource strip at pinned widths: the overflow affordance appears only when something is out of view, says so to a screen reader, still scrolls, and recedes at the end |
 | `AboutScreenTest` | **Robolectric** | About and the licence notices: reachable from Settings, showing the real build, stating the project's licence rather than assuming one, Back unwinding Licenses → About → Settings, and the bundled notices asset being real |
 | `ProductionAdConfigTest` | JVM | The shipped AdMob identifiers, read from `ads.xml` in both source sets: the production values are exactly the account's, the debug overlay is Google's sample, no sample identifier is in the release resources, and the app ID is declared exactly once per variant |
 

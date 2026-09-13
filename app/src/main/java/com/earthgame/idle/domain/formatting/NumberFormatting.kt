@@ -1,5 +1,6 @@
 package com.earthgame.idle.domain.formatting
 
+import com.earthgame.idle.domain.engine.GAME_SECONDS_PER_YEAR
 import com.earthgame.idle.domain.engine.GameDecimal
 import com.earthgame.idle.domain.engine.formatExponent
 import com.earthgame.idle.domain.engine.gd
@@ -166,6 +167,42 @@ fun formatDuration(totalSeconds: Double): String {
     if (days == 0L && (hours > 0 || minutes > 0)) parts += "${minutes}m"
     if (days == 0L && hours == 0L) parts += "${seconds}s"
     return if (parts.isEmpty()) "0s" else parts.joinToString(" ")
+}
+
+/**
+ * Formats a simulated age as `"12y 4m 12d"`.
+ *
+ * This is the Earth's own age on the simulated calendar, not how long the
+ * player has been playing — see `GameTime.kt` for the two clocks. Months are
+ * 1/12 of a Julian year (30.4375 days) rather than calendar months: a planet
+ * has an age, not a calendar. Components above the largest non-zero one are
+ * dropped, so a brand-new Earth reads `"0d"` rather than `"0y 0m 0d"`, and
+ * past ten thousand years only the years are shown — by then the months are
+ * noise next to the leading figure, and the leading figure is what the player
+ * is watching.
+ */
+fun formatGameAge(gameAgeSeconds: Double, mode: NumberFormatMode = NumberFormatMode.COMPACT): String {
+    if (gameAgeSeconds.isNaN()) return "0d"
+    if (gameAgeSeconds.isInfinite()) return "∞"
+
+    // Decomposed from seconds rather than from whole days: a Julian year is
+    // 365.25 days, so flooring to days first loses the quarter and leaves an
+    // Earth that has run for exactly one year reading "11m 30d".
+    val secondsPerMonth = GAME_SECONDS_PER_YEAR / 12.0
+    val total = max(0.0, gameAgeSeconds)
+
+    val years = floor(total / GAME_SECONDS_PER_YEAR)
+    val afterYears = total - years * GAME_SECONDS_PER_YEAR
+    val months = floor(afterYears / secondsPerMonth)
+    val days = floor((afterYears - months * secondsPerMonth) / 86_400.0)
+
+    if (years >= 10_000) return "${formatNumber(gd(years), mode)}y"
+
+    val parts = mutableListOf<String>()
+    if (years > 0) parts += "${years.toLong()}y"
+    if (years > 0 || months > 0) parts += "${months.toLong()}m"
+    parts += "${days.toLong()}d"
+    return parts.joinToString(" ")
 }
 
 fun formatTemperature(celsius: Double, precision: Int = 2): String {

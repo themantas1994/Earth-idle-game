@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performScrollToNode
 import com.earthgame.idle.presentation.components.SideNavTestTag
 import com.earthgame.idle.domain.engine.DerivedState
 import com.earthgame.idle.domain.engine.computeDerived
+import com.earthgame.idle.domain.engine.gameYearsToSeconds
 import com.earthgame.idle.domain.engine.gd
 import com.earthgame.idle.domain.model.GameState
 import com.earthgame.idle.domain.model.GasId
@@ -252,6 +253,44 @@ class EarthAppScreenTest {
         }
         navigateTo(Destination.HOME)
         compose.onNodeWithText("🎯 Objective").assertIsDisplayed()
+    }
+
+    // ------------------------------------------------------- the Earth's age --
+
+    @Test
+    fun theHeaderAndHomeBothShowTheEarthsSimulatedAge() {
+        // 12 years and 4 months of simulated time — the planet's own age, which
+        // is not the same number as how long the player has been playing.
+        val aged = playableState().copy(
+            gameAgeSeconds = gameYearsToSeconds(12.0) + gameYearsToSeconds(4.0 / 12),
+        )
+        setContent(state = aged)
+
+        compose.onNodeWithContentDescription("Earth age").assertIsDisplayed()
+        compose.onAllNodesWithText("12y 4m 0d").onFirst().assertIsDisplayed()
+
+        compose.onNodeWithText("Earth Age").assertIsDisplayed()
+    }
+
+    @Test
+    fun aBrandNewEarthReadsAsAgeZero() {
+        setContent(state = playableState().copy(gameAgeSeconds = 0.0))
+        compose.onAllNodesWithText("0d").onFirst().assertIsDisplayed()
+    }
+
+    // ------------------------------------------------------------- resources --
+
+    @Test
+    fun theSteelResourceIsShownToThePlayerAsMetals() {
+        val withMetals = playableState().let {
+            it.copy(resources = it.resources.with(ResourceId.STEEL, gd(1234.0)))
+        }
+        setContent(state = withMetals)
+        navigateTo(Destination.PRODUCTION)
+
+        // The header chip names it, and nothing anywhere calls it Steel.
+        compose.onNodeWithContentDescription("Metals, 1.23K, 0 /s").assertIsDisplayed()
+        compose.onAllNodesWithText("STEEL").assertCountEquals(0)
     }
 
     @Test

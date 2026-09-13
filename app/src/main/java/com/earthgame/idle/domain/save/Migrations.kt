@@ -1,5 +1,6 @@
 package com.earthgame.idle.domain.save
 
+import com.earthgame.idle.domain.engine.GAME_SECONDS_PER_REAL_SECOND
 import com.earthgame.idle.domain.engine.GameDecimal
 import com.earthgame.idle.domain.engine.gd
 import com.earthgame.idle.domain.model.GameState
@@ -35,6 +36,10 @@ fun migrate(state: GameState): GameState {
 
     if (migrated.saveVersion < 3) {
         migrated = migrateV2ToV3(migrated)
+    }
+
+    if (migrated.saveVersion < 4) {
+        migrated = migrateV3ToV4(migrated)
     }
 
     return if (migrated.saveVersion >= SAVE_VERSION) migrated else migrated.copy(saveVersion = SAVE_VERSION)
@@ -104,3 +109,31 @@ private fun migrateV2ToV3(state: GameState): GameState {
         saveVersion = 3,
     )
 }
+
+/**
+ * v4 gave the Earth an age: `gameAgeSeconds`, the simulated time this planet
+ * has been running for, and the clock every gas half-life now decays on.
+ *
+ * **The current Earth starts at age zero.** A v3 save records when the run
+ * began in wall-clock terms (`runStartedAt`) but not how much of that wall
+ * clock was actually simulated — an absence past the offline cap is banked at
+ * the cap, and a player with offline progress switched off banks none of it —
+ * so `lastTickAt - runStartedAt` would routinely credit an Earth with
+ * centuries it never lived through, and with the decay those centuries would
+ * retroactively drain its atmosphere. There is no honest reconstruction, so
+ * nothing is invented: the planet keeps its atmosphere and starts ageing from
+ * here.
+ *
+ * The **lifetime** total is a different matter and is migrated exactly.
+ * `totalPlayTimeSeconds` is not wall-clock time: `simulateStep` advances it by
+ * precisely the `dt` it simulated, live and offline alike, which is the same
+ * `dt` that now also advances the simulated clock. Converting it is arithmetic
+ * on a figure the save already holds, not a guess.
+ */
+private fun migrateV3ToV4(state: GameState): GameState = state.copy(
+    gameAgeSeconds = 0.0,
+    lifetimeStats = state.lifetimeStats.copy(
+        totalSimulatedSeconds = state.lifetimeStats.totalPlayTimeSeconds * GAME_SECONDS_PER_REAL_SECOND,
+    ),
+    saveVersion = 4,
+)

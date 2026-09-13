@@ -1,4 +1,5 @@
 import { Decimal, D } from './bignum';
+import { GAME_SECONDS_PER_YEAR } from './gameTime';
 
 export type NumberFormatMode = 'compact' | 'scientific' | 'engineering' | 'full';
 
@@ -114,6 +115,40 @@ export function formatDuration(totalSeconds: number): string {
   if (days === 0 && (hours > 0 || minutes > 0)) parts.push(`${minutes}m`);
   if (days === 0 && hours === 0) parts.push(`${seconds}s`);
   return parts.join(' ') || '0s';
+}
+
+/**
+ * Formats a simulated age as `"12y 4m 12d"`.
+ *
+ * This is the Earth's own age on the simulated calendar, not how long the
+ * player has been playing — see `gameTime.ts` for the two clocks. Months are
+ * 1/12 of a Julian year (30.4375 days) rather than calendar months: a planet
+ * has an age, not a calendar. Components above the largest non-zero one are
+ * dropped, so a brand-new Earth reads `"0d"` rather than `"0y 0m 0d"`, and
+ * past ten thousand years only the years are shown.
+ */
+export function formatGameAge(gameAgeSeconds: number, mode: NumberFormatMode = 'compact'): string {
+  if (Number.isNaN(gameAgeSeconds)) return '0d';
+  if (!Number.isFinite(gameAgeSeconds)) return '∞';
+
+  // Decomposed from seconds rather than from whole days: a Julian year is
+  // 365.25 days, so flooring to days first loses the quarter and leaves an
+  // Earth that has run for exactly one year reading "11m 30d".
+  const secondsPerMonth = GAME_SECONDS_PER_YEAR / 12;
+  const total = Math.max(0, gameAgeSeconds);
+
+  const years = Math.floor(total / GAME_SECONDS_PER_YEAR);
+  const afterYears = total - years * GAME_SECONDS_PER_YEAR;
+  const months = Math.floor(afterYears / secondsPerMonth);
+  const days = Math.floor((afterYears - months * secondsPerMonth) / 86400);
+
+  if (years >= 10_000) return `${formatNumber(years, { mode })}y`;
+
+  const parts: string[] = [];
+  if (years > 0) parts.push(`${years}y`);
+  if (years > 0 || months > 0) parts.push(`${months}m`);
+  parts.push(`${days}d`);
+  return parts.join(' ');
 }
 
 export function formatTemperature(celsius: number, precision = 2): string {

@@ -55,6 +55,19 @@ That means **two threads produce state**: the tick, and the player tapping Buy.
 > every published state so a *transient* rollback cannot be repaired by a later tick before the
 > assertion sees it. It fails against an unsynchronized implementation.
 
+**The loop handles need the same treatment, for a different reason.** `tickJob` and `autosaveJob`
+are written from whichever thread `start()`'s load coroutine lands on and read from the main
+thread that delivers `onEnterBackground` / `onEnterForeground`. Without a happens-before between
+those two, `stopLoops` can read a stale `null` for a job that has already started and cancel
+nothing — leaving a backgrounded game ticking and autosaving for as long as the app sits there,
+which is exactly what `onEnterBackground` exists to prevent. They are therefore guarded by their
+own `loopLock`, held only across job creation and cancellation so it can never interleave with
+`stateLock`. A lock rather than `@Volatile`, because `onEnterForeground` does a check-then-act
+(`if (tickJob == null) startLoops()`) that volatility alone would not make atomic.
+`GameViewModelConcurrencyTest.backgrounding stops both loops and returning restarts them` is the
+test that catches it — intermittently, which is what a visibility bug looks like from the
+outside.
+
 ## Recomposition and stability
 
 `GameState` changes identity every tick, so the screen genuinely does recompose four times a
@@ -118,9 +131,44 @@ Two further destinations sit outside the tab bar, reached from Settings:
 | ℹ️ **About** | Version, version code, package, the project's licence, the third-party notices, the privacy policy, advertising privacy, the repository link |
 | 📄 **Open Source Licenses** | `THIRD_PARTY_NOTICES.txt`, read from the app's assets off the main thread and rendered a paragraph at a time |
 
-The header is persistent: which Earth this is, temperature, habitability, status — and, on every
-tab but Home, the resource balances, because every other tab asks the player to spend and having
-them only on Home meant bouncing back and forth to answer "can I afford this yet?".
+The header is persistent: which Earth this is, how old it is, temperature, habitability, status —
+and, on every tab but Home, the resource balances, because every other tab asks the player to
+spend and having them only on Home meant bouncing back and forth to answer "can I afford this
+yet?".
+
+**`AGE`** sits beside the Earth's name rather than among the live readouts, because it is a
+different kind of number: the planet's own
+[simulated age](Atmospheric-Half-Life.md#the-two-clocks), not how long the player has been
+playing. It reads `12y 4m 12d`, and it is the span every greenhouse gas has been decaying over.
+
+### The resource strip scrolls, and now says so
+
+Six balances do not fit a phone, and the strip has always scrolled — but the last chip ended
+flush with the screen edge, and a row that ends cleanly looks finished. Players were not finding
+the rest.
+
+A soft right-edge fade with a chevron now sits over the overflow, driven by the scroll state's own
+`maxValue`:
+
+- **Nothing is shown when nothing is out of view.** `maxValue` is zero exactly when the content
+  fits, so a tablet, a landscape phone or a run with two resources gets no affordance at all —
+  and an unmeasured row is treated as fitting, so the hint never flashes for a frame before
+  layout lands.
+- **It fades with the remaining travel** across the last quarter, rather than snapping off, so
+  arriving at the final chip does not leave a marker hanging over it and scrolling back brings it
+  with you. That fade is read in a `graphicsLayer` block — the draw phase — so tracking the
+  finger costs no recomposition; whether the affordance exists at all is a `derivedStateOf`
+  boolean, which flips twice in a full scroll rather than once a frame. Lint's
+  `FrequentlyChangingValue` catches the naive version of this.
+- **It draws only.** The fade and chevron are painted in an overlay sized with `matchParentSize`
+  and take no pointer input, so every pixel of the row stays scrollable and a vertical swipe
+  still reaches the page underneath.
+- **It is not an instruction.** No "swipe for more" label — the affordance is visual, and the
+  spoken label carries the same information for anyone who cannot see it.
+
+`GameHeaderTest` pins the header to an explicit width for each case, because whether a row
+overflows depends on measured text width and text under Robolectric measures narrower than on a
+device.
 
 Its background tint tracks `VisualEra` (`PRISTINE` < 0.5 °C, `INDUSTRIAL` < 3, `HOT` < 15,
 `EXTREME`, `COLLAPSED`), so a run reads as a slow slide from green to burning red without the

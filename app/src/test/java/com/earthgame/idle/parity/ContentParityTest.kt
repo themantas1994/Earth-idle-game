@@ -149,7 +149,12 @@ class ContentParityTest {
             assertEquals("${gas.id} unit", o.getString("unit"), gas.unit.label)
             assertDoubleNear("${gas.id} baseline", o.getDouble("baseline"), gas.baseline)
             assertDoubleNear("${gas.id} massPerUnit", o.getDouble("massPerUnit"), gas.massPerUnit)
-            assertDoubleNear("${gas.id} lifetimeYears", o.getDouble("lifetimeYears"), gas.lifetimeYears)
+            assertDoubleNear("${gas.id} halfLifeYears", o.getDouble("halfLifeYears"), gas.halfLifeYears)
+            assertEquals(
+                "${gas.id} decaysOnSimulatedClock",
+                o.getBoolean("decaysOnSimulatedClock"),
+                gas.decaysOnSimulatedClock,
+            )
             assertEquals("${gas.id} directlyEmitted", o.getBoolean("directlyEmitted"), gas.directlyEmitted)
         }
     }

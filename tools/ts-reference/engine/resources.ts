@@ -38,11 +38,14 @@ export const RESOURCES: Record<ResourceId, ResourceDefinition> = {
     shortName: 'Oil',
     description: 'A drilled material. Feeds fossil-fuel, petrochemical and transportation technologies.',
   },
+  // Player-facing name: Metals. The persisted id stays `steel` — it is what
+  // every save ever written contains, and renaming it would strand a player's
+  // balance for a cosmetic change.
   steel: {
     id: 'steel',
-    name: 'Steel',
-    shortName: 'Steel',
-    description: 'A refined material. Feeds construction and heavy-industry technologies.',
+    name: 'Metals',
+    shortName: 'Metals',
+    description: 'Refined metals — iron, steel, aluminium, copper. Feed construction and heavy-industry technologies.',
   },
   concrete: {
     id: 'concrete',

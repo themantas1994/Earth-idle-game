@@ -12,6 +12,13 @@ enum class ResourceId(val id: String) {
     RESEARCH("research"),
     COAL("coal"),
     OIL("oil"),
+
+    /**
+     * Player-facing name: **Metals**. The persisted id stays `"steel"` — it is
+     * what every save ever written contains, and renaming it would strand a
+     * player's balance for a cosmetic change. The enum constant keeps the id's
+     * spelling for the same reason: the two have to be read together.
+     */
     STEEL("steel"),
     CONCRETE("concrete");
 
@@ -45,8 +52,8 @@ val RESOURCES: Map<ResourceId, ResourceDefinition> = listOf(
         "A drilled material. Feeds fossil-fuel, petrochemical and transportation technologies.",
     ),
     ResourceDefinition(
-        ResourceId.STEEL, "Steel", "Steel",
-        "A refined material. Feeds construction and heavy-industry technologies.",
+        ResourceId.STEEL, "Metals", "Metals",
+        "Refined metals — iron, steel, aluminium, copper. Feed construction and heavy-industry technologies.",
     ),
     ResourceDefinition(
         ResourceId.CONCRETE, "Concrete", "Concrete",

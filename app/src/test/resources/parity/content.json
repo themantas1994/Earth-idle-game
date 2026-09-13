@@ -1044,7 +1044,8 @@
       "unit": "ppm",
       "baseline": 280,
       "massPerUnit": 2000000000000,
-      "lifetimeYears": 120,
+      "halfLifeYears": 120,
+      "decaysOnSimulatedClock": true,
       "directlyEmitted": true
     },
     {
@@ -1054,7 +1055,8 @@
       "unit": "ppb",
       "baseline": 700,
       "massPerUnit": 2750000000,
-      "lifetimeYears": 12,
+      "halfLifeYears": 12,
+      "decaysOnSimulatedClock": true,
       "directlyEmitted": true
     },
     {
@@ -1064,7 +1066,8 @@
       "unit": "ppb",
       "baseline": 270,
       "massPerUnit": 16000000000,
-      "lifetimeYears": 114,
+      "halfLifeYears": 114,
+      "decaysOnSimulatedClock": true,
       "directlyEmitted": true
     },
     {
@@ -1074,7 +1077,8 @@
       "unit": "ppm",
       "baseline": 0,
       "massPerUnit": 10000000000000,
-      "lifetimeYears": 0.03,
+      "halfLifeYears": 0.03,
+      "decaysOnSimulatedClock": false,
       "directlyEmitted": false
     },
     {
@@ -1084,7 +1088,8 @@
       "unit": "DU",
       "baseline": 300,
       "massPerUnit": 5000000000,
-      "lifetimeYears": 0.06,
+      "halfLifeYears": 0.06,
+      "decaysOnSimulatedClock": true,
       "directlyEmitted": true
     },
     {
@@ -1094,7 +1099,8 @@
       "unit": "ppt",
       "baseline": 0,
       "massPerUnit": 30000000,
-      "lifetimeYears": 3200,
+      "halfLifeYears": 3200,
+      "decaysOnSimulatedClock": true,
       "directlyEmitted": true
     }
   ],
@@ -1125,9 +1131,9 @@
     },
     {
       "id": "steel",
-      "name": "Steel",
-      "shortName": "Steel",
-      "description": "A refined material. Feeds construction and heavy-industry technologies."
+      "name": "Metals",
+      "shortName": "Metals",
+      "description": "Refined metals — iron, steel, aluminium, copper. Feed construction and heavy-industry technologies."
     },
     {
       "id": "concrete",

@@ -14,15 +14,22 @@ import com.earthgame.idle.domain.climate.integrateSeaLevelRise
 import com.earthgame.idle.domain.climate.oceanAcidityFactor
 import com.earthgame.idle.domain.climate.seaLevelFactor
 import com.earthgame.idle.domain.climate.temperatureFactor
+import com.earthgame.idle.domain.engine.GAME_SECONDS_PER_REAL_SECOND
+import com.earthgame.idle.domain.engine.GAME_SECONDS_PER_YEAR
+import com.earthgame.idle.domain.engine.GameDecimal
+import com.earthgame.idle.domain.engine.REAL_SECONDS_PER_GAME_YEAR
+import com.earthgame.idle.domain.engine.gameSecondsFor
 import com.earthgame.idle.domain.engine.gd
 import com.earthgame.idle.domain.model.GasAmounts
 import com.earthgame.idle.domain.model.GasId
 import com.earthgame.idle.domain.model.gasOf
+import com.earthgame.idle.domain.model.halfLifeFractionRemaining
 import com.earthgame.idle.domain.model.naturalRemovalRateConstant
 import kotlinx.serialization.json.double
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlin.math.ln
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -52,13 +59,69 @@ class ClimateParityTest {
     }
 
     @Test
-    fun `gas lifetimes and removal constants match the reference`() {
+    fun `gas half-lives and decay constants match the reference`() {
         for (case in fixture.getValue("removalRates").jsonArray) {
             val o = case.jsonObject
             val gas = gasOf(GasId.entries.first { it.id == o.getString("gas") })
-            assertDoubleNear("${gas.id} lifetime", o.getDouble("lifetimeYears"), gas.lifetimeYears)
+            assertDoubleNear("${gas.id} half-life", o.getDouble("halfLifeYears"), gas.halfLifeYears)
+            assertEquals(
+                "${gas.id} decaysOnSimulatedClock",
+                o.getBoolean("decaysOnSimulatedClock"),
+                gas.decaysOnSimulatedClock,
+            )
             assertDoubleNear("${gas.id} massPerUnit", o.getDouble("massPerUnit"), gas.massPerUnit)
             assertDoubleNear("${gas.id} k", o.getDouble("k"), naturalRemovalRateConstant(gas))
+        }
+    }
+
+    @Test
+    fun `the half-life law and the integrator agree with the reference`() {
+        for (case in fixture.getValue("halfLife").jsonArray) {
+            val o = case.jsonObject
+            val halfLife = o.getDouble("halfLifeYears")
+            val dtGameSeconds = o.getDouble("dtGameSeconds")
+            val elapsedYears = o.getDouble("elapsedYears")
+
+            assertDoubleNear(
+                "halfLifeFractionRemaining(H=$halfLife, ${elapsedYears}yr)",
+                o.getDouble("fractionRemaining"),
+                halfLifeFractionRemaining(halfLife, dtGameSeconds),
+            )
+
+            val k = ln(2.0) / (halfLife * REAL_SECONDS_PER_GAME_YEAR)
+            assertDecimalNear(
+                "decay of 1000 (H=$halfLife) over ${elapsedYears}yr",
+                o.getValue("integrated").asGameDecimal(),
+                integrateGasConcentration(
+                    gd(1000.0),
+                    GameDecimal.ZERO,
+                    k,
+                    1.0,
+                    GameDecimal.ZERO,
+                    elapsedYears * REAL_SECONDS_PER_GAME_YEAR,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `the simulated clock matches the reference`() {
+        val clock = fixture.getValue("clock").jsonObject
+        assertDoubleNear("GAME_SECONDS_PER_YEAR", clock.getDouble("gameSecondsPerYear"), GAME_SECONDS_PER_YEAR)
+        assertDoubleNear(
+            "GAME_SECONDS_PER_REAL_SECOND",
+            clock.getDouble("gameSecondsPerRealSecond"),
+            GAME_SECONDS_PER_REAL_SECOND,
+        )
+        assertDoubleNear(
+            "REAL_SECONDS_PER_GAME_YEAR",
+            clock.getDouble("realSecondsPerGameYear"),
+            REAL_SECONDS_PER_GAME_YEAR,
+        )
+        for (case in clock.getValue("gameSecondsFor").jsonArray) {
+            val o = case.jsonObject
+            val real = o.getDouble("realSeconds")
+            assertDoubleNear("gameSecondsFor($real)", o.getDouble("gameSeconds"), gameSecondsFor(real))
         }
     }
 

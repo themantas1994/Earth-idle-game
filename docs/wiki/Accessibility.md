@@ -16,6 +16,12 @@ TalkBack reads *"Habitability, 84%"* rather than announcing two unrelated fragme
 Row(modifier = Modifier.semantics(mergeDescendants = true) { contentDescription = spoken })
 ```
 
+**A scrollable strip says that it scrolls.** The header's resource row is labelled *"Resource
+balances, scroll sideways for more"* when its content overflows and plainly *"Resource balances"*
+when it does not — the same information the right-edge fade gives a sighted player, from the same
+`maxValue`, so neither affordance can be present without the other. The chips inside keep their
+own merged labels.
+
 **Decoration is hidden.** `DecorativeIcon` (the emoji on every card), `ColorDot` (the gas colour
 key) and `ProgressBar` all carry `clearAndSetSemantics { }`. A progress bar is a picture of a number
 that is already announced next to it; announcing it twice is noise, and announcing an emoji as

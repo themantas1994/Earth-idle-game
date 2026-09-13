@@ -1863,5 +1863,62 @@
       "out1": "100.0%",
       "out3": "100.000%"
     }
+  ],
+  "ages": [
+    {
+      "gameSeconds": 0,
+      "out": "0d",
+      "outScientific": "0d"
+    },
+    {
+      "gameSeconds": 1,
+      "out": "0d",
+      "outScientific": "0d"
+    },
+    {
+      "gameSeconds": 86399,
+      "out": "0d",
+      "outScientific": "0d"
+    },
+    {
+      "gameSeconds": 86400,
+      "out": "1d",
+      "outScientific": "1d"
+    },
+    {
+      "gameSeconds": 2629800,
+      "out": "1m 0d",
+      "outScientific": "1m 0d"
+    },
+    {
+      "gameSeconds": 5259600,
+      "out": "2m 0d",
+      "outScientific": "2m 0d"
+    },
+    {
+      "gameSeconds": 31557600,
+      "out": "1y 0m 0d",
+      "outScientific": "1y 0m 0d"
+    },
+    {
+      "gameSeconds": 63115200,
+      "out": "2y 0m 0d",
+      "outScientific": "2y 0m 0d"
+    },
+    {
+      "gameSeconds": 389263500,
+      "out": "12y 4m 0d",
+      "outScientific": "12y 4m 0d"
+    },
+    {
+      "gameSeconds": 315576000000,
+      "out": "10Ky",
+      "outScientific": "1.00e+4y"
+    },
+    {
+      "gameSeconds": 315576000000000,
+      "out": "10My",
+      "outScientific": "1.00e+7y"
+    }
   ]
 }

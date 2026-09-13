@@ -50,6 +50,13 @@ sequenceDiagram
     VM->>VM: publish one GameUiState
 ```
 
+Every path that simulates also advances the Earth's
+[simulated age](Atmospheric-Half-Life.md#the-two-clocks): `simulateStep` adds
+`dt × GAME_SECONDS_PER_REAL_SECOND` to `gameAgeSeconds`, and that age is the clock the
+atmosphere's half-lives decay on. Because `simulateStep` is the only thing that touches it, the
+live path and the offline path cannot drift apart, and a path that simulates nothing — the
+backwards-clock re-anchor, a zero-length tick — ages the planet by nothing.
+
 ## `advance(state, nowMs, derived)`
 
 The single entry point the ViewModel calls, four times a second and once on return from the

@@ -97,7 +97,8 @@ There is no punishment for closing the app and no advantage to leaving it open.
 | | |
 | :-- | :-- |
 | 🔬 **99 technologies** | Across 11 branches, from Controlled Fire to a Matrioshka Brain. 68 are repeatable generators, 31 are research nodes — including a mutually exclusive Coal-vs-Nuclear decision you only get to make once per Earth. |
-| ☁️ **6 greenhouse gases** | CO₂, CH₄, N₂O, H₂O, O₃ and an aggregate fluorinated bucket. Each has its own atmospheric lifetime, forcing curve and display unit, and they interact — water vapour is modelled as a feedback that the *other* gases drive. |
+| ☁️ **6 greenhouse gases** | CO₂, CH₄, N₂O, H₂O, O₃ and an aggregate fluorinated bucket. Each has its own atmospheric **half-life**, forcing curve and display unit, and they interact — water vapour is modelled as a feedback that the *other* gases drive. Gas decays away on the simulated calendar, so emissions have to outrun it rather than simply pile up. |
+| 🕰️ **A planet with an age** | Each Earth tracks its own simulated age — one real second is one simulated day, so an evening is a few decades and a full run is centuries. The header shows it, and it is the clock the atmosphere's half-lives decay against: leave an Earth untended and its greenhouse gases drain away. |
 | 🌡️ **A 5-factor habitability model** | Temperature, ocean acidity, sea level, agriculture and biodiversity, **multiplied** together — so any single one of them collapsing ends the run, even while the others look fine. |
 | ✨ **Prestige** | Earth Points and 11 permanent upgrades, scored on how *fast* the run was rather than only how it ended. Faster runs pay dramatically better. |
 | 🎯 **8 challenges** | Runs with a live restriction — no coal, never above +2 °C, never past the Iron Age — for a permanent reward. |

@@ -78,7 +78,10 @@ fun AtmosphereScreen(
                     if (removal.gt(GameDecimal.ZERO)) {
                         StatRow("Engineered Removal", formatRate(removal, "kg/s", format))
                     }
-                    StatRow("Natural Lifetime", "${formatNumber(gas.lifetimeYears, format)} yr")
+                    // Simulated years — the half-life is the span over which
+                    // an untended stock of this gas halves, which is the number
+                    // that decides whether emissions accumulate or drain.
+                    StatRow("Half-Life", "${formatNumber(gas.halfLifeYears, format)} yr")
                 } else {
                     StatRow("Source", "Warming feedback")
                 }

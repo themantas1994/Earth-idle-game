@@ -41,7 +41,7 @@ Six spendable currencies (`ResourceId`), distinct from the atmospheric gases:
 | **Energy** | The general economic currency. Most technologies are built with it. |
 | **Research** | Spent to unlock tree nodes. |
 | **Coal / Oil** | Mined and drilled materials, feeding industrial, power and petrochemical lines. |
-| **Steel / Concrete** | Refined and manufactured materials, feeding construction and heavy industry. |
+| **Metals / Concrete** | Refined and manufactured materials, feeding construction and heavy industry. Metals is persisted under the id `steel`, which predates the rename and is kept so existing saves keep their balance — see [Save migrations](Save-Migrations.md). |
 
 ## Pricing
 

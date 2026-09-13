@@ -86,7 +86,7 @@ Run before opening a PR:
 # 1. change app/src/main/java/com/earthgame/idle/domain/…
 # 2. change tools/ts-reference/engine/… identically
 cd tools/ts-reference && npm install
-npx vitest run          # the reference's own 198 tests
+npx vitest run          # the reference's own 216 tests
 npm run fixtures        # regenerates app/src/test/resources/parity/*.json
 cd ../.. && ./gradlew test
 git diff --stat app/src/test/resources/parity/    # only what you expected should move

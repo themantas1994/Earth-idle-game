@@ -43,7 +43,7 @@ after that. There is nothing to do to hurry it except produce more.
 ### What are the six resources?
 
 **Energy** is the general currency — most things are built with it. **Research** unlocks tree nodes.
-**Coal**, **Oil**, **Steel** and **Concrete** are materials that specific branches need. You will not
+**Coal**, **Oil**, **Metals** and **Concrete** are materials that specific branches need. You will not
 see one until something you own produces it.
 
 ### What is the difference between the Technology and Production tabs?
