@@ -5,6 +5,8 @@ import com.earthgame.idle.domain.engine.GameDecimal
 import com.earthgame.idle.domain.engine.gd
 import com.earthgame.idle.domain.model.GameState
 import com.earthgame.idle.domain.model.SAVE_VERSION
+import com.earthgame.idle.domain.storms.StormField
+import com.earthgame.idle.domain.storms.deriveStormSeed
 import kotlin.math.max
 
 /**
@@ -40,6 +42,19 @@ fun migrate(state: GameState): GameState {
 
     if (migrated.saveVersion < 4) {
         migrated = migrateV3ToV4(migrated)
+    }
+
+    if (migrated.saveVersion < 5) {
+        migrated = migrateV4ToV5(migrated)
+    }
+
+    // A v5 save written before this build knew about weather — or one whose
+    // seed field was damaged — would run every storm step against a seed of
+    // zero, which collapses the per-step mixing and gives every such planet the
+    // same forecast. Derived here rather than defaulted, so it is stable for a
+    // given Earth.
+    if (migrated.stormSeed == 0L) {
+        migrated = migrated.copy(stormSeed = deriveStormSeed(migrated.createdAt, migrated.runNumber))
     }
 
     return if (migrated.saveVersion >= SAVE_VERSION) migrated else migrated.copy(saveVersion = SAVE_VERSION)
@@ -136,4 +151,26 @@ private fun migrateV3ToV4(state: GameState): GameState = state.copy(
         totalSimulatedSeconds = state.lifetimeStats.totalPlayTimeSeconds * GAME_SECONDS_PER_REAL_SECOND,
     ),
     saveVersion = 4,
+)
+
+/**
+ * v5 gave the planet weather: storms, and the two counters that make their
+ * timeline reproducible.
+ *
+ * **A returning player's Earth starts with clear skies.** A v4 save records
+ * nothing about weather, and there is no honest way to reconstruct what storms
+ * a run "should" have had — the timeline depends on a seed that did not exist
+ * and on a step count that was never kept. So nothing is invented: the storm
+ * field starts empty at step zero, the Earth gets the seed it would have been
+ * given at creation, and the next warm spell produces its first storm the same
+ * way a fresh run would.
+ *
+ * Nothing else in the save is touched. Storms take a slice off production while
+ * they run and nothing at all once they are gone, so an Earth arriving without
+ * any is not owed a correction.
+ */
+private fun migrateV4ToV5(state: GameState): GameState = state.copy(
+    storms = StormField.EMPTY,
+    stormSeed = deriveStormSeed(state.createdAt, state.runNumber),
+    saveVersion = 5,
 )

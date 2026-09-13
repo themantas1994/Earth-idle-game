@@ -64,6 +64,7 @@ class AboutScreenTest {
                     onDismissEventToast = {},
                     onDismissMilestoneToast = {},
                     onDismissOwnershipToast = {},
+                    onDismissStormToast = {},
                     onDismissSaveWarnings = {},
                     onExit = {},
                 )

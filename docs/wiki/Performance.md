@@ -130,6 +130,32 @@ Crucially, formatting a value near 1e400 costs **the same** as formatting one ne
 is always in `[1, 10)`, so there is no digit expansion. `FULL` notation falls back to scientific
 above 1e100 precisely because full digit expansion would be both slow and unreadable.
 
+## The 3D globe
+
+Rendering is the one part of the app with a per-frame budget rather than a
+per-tick one. The rules it follows:
+
+| Rule | Why |
+| :-- | :-- |
+| The scene is never rebuilt on recomposition | `AndroidView`'s update block writes one immutable `GlobeScene` onto the renderer. A 250 ms tick costs a field write. |
+| Overlays are uniforms, not geometry | Switching view changes a handful of floats. |
+| One mesh serves three shells | Planet, clouds and atmosphere are the same sphere at different scales. |
+| One draw call for every marker | Storms, event pins and hundreds of wind particles are a single `GL_POINTS` pass. |
+| Particles are a fixed pool | Never more than the quality budget (220 / 90 / 0). No per-frame allocation. |
+| Textures are generated once | On the GL thread at startup, never on the main thread, never regenerated. |
+| No simulation on the render thread | The renderer reads a snapshot and computes nothing. |
+| The GL thread pauses with the lifecycle | `GLSurfaceView.onPause()` on `ON_PAUSE`, so nothing renders behind a locked screen. |
+
+The target is 30 fps on lower-end supported devices and 60 where the hardware
+allows. The quality setting is the battery control, and its Minimal level draws a
+still globe with no clouds, no particles and no animation.
+
+**No frame rate is claimed as measured.** No physical device or emulator was
+available where this was built. See
+[Environmental visualization](Environmental-Visualization.md#performance).
+
+---
+
 ## Startup
 
 - No work on the main thread before `setContent` beyond `enableEdgeToEdge()` and registering one

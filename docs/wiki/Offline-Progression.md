@@ -71,6 +71,34 @@ The cap is **per absence, not per day**: two eight-hour absences bank two eight-
 Only a *single* gap longer than the cap is truncated, and `cappedByLimit` is reported so the
 summary can say so.
 
+## The weather runs while you are away
+
+Storms are **simulated across the elapsed time**, not frozen and not skipped.
+`computeOfflineProgress` settles an absence in two passes:
+
+1. The storms that were **already running** when the player left are priced,
+   averaged across the window over their own intensity curves — the analytic
+   settlement an absence gets instead of a replayed frame loop. Production then
+   runs with that penalty folded in.
+2. Only then does the storm timeline advance, through the same fixed 5-second
+   steps a live session would have run. A storm can therefore form, intensify,
+   move across the globe and dissipate entirely while the app was closed, and the
+   welcome-back summary reports how many formed and how many are still running.
+
+A storm that forms *during* an absence costs nothing until the player is back. It
+is on the board when they return, doing exactly what the simulation says it
+should be, but the time they were not there is not billed to them — the same
+bargain the random events below already make.
+
+That also means **a player who left under clear skies is settled bit-for-bit as
+they were before storms existed**, which is what keeps this function numerically
+identical to the one the parity fixtures were captured from.
+`StormLifecycleTest` asserts both halves of it.
+
+See [Storm system](Storm-System.md#offline-behaviour) for the mechanism.
+
+---
+
 ## What a player is *not* given
 
 Purchases. Offline progress is exactly "what your civilization produced while nobody was

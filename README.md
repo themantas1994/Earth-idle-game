@@ -51,7 +51,7 @@ The loop takes about thirty seconds to learn and several days to finish.
 | **1. Burn something** | Your Natural Fire produces Energy on its own. It never stops. |
 | **2. Research** | Spend Energy and Research on the **Technology** tab to unlock what comes next. |
 | **3. Build** | Buy generators on the **Production** tab. More copies, more output. |
-| **4. Watch the sky** | The **Atmosphere** tab fills in with what you have done to it. |
+| **4. Watch the sky** | The **Home** tab is a live 3D Earth. Switch overlays to see temperature, humidity, wind or the greenhouse blanket thicken — and the storms that start forming once it warms. |
 | **5. Collapse** | Habitability hits zero. The Earth is finished — and so is the run. |
 | **6. Prestige** | Bank Earth Points, spend them on permanent upgrades, start EARTH 2. |
 | **7. Go faster** | Repeat. Every civilization is quicker and dirtier than the last. |
@@ -103,10 +103,12 @@ There is no punishment for closing the app and no advantage to leaving it open.
 | ✨ **Prestige** | Earth Points and 11 permanent upgrades, scored on how *fast* the run was rather than only how it ended. Faster runs pay dramatically better. |
 | 🎯 **8 challenges** | Runs with a live restriction — no coal, never above +2 °C, never past the Iron Age — for a permanent reward. |
 | 🏆 **32 achievements** | From "First Spark" to "Apocalyptic Heat". |
+| 🌍 **A 3D Earth you can turn** | Home is a live visualization of the actual simulation. Drag to rotate, pinch to zoom, and switch between atmosphere, temperature, humidity, wind, event and storm overlays. Day and night run on the planet's own simulated clock, not your phone's. |
+| 🌀 **Storms that cost you something** | Once the planet warms past +0.6 °C, storms start forming — tropical storms, hurricanes, severe atmospheric storms and superstorms. They move, intensify and dissipate on their own, they cut production while they last, and they keep running while the app is closed. They are a real simulation, not decoration: tap one to see exactly what it is costing. |
 | 🎲 **13 random events** | Short multiplier swings, deliberately skewed heavily positive: a negative event in an idle game is a tax on being away, and only two of the thirteen are one. |
 | 📰 **39 world-news headlines** | Deterministic, once per run, with no mechanical effect whatsoever. They exist so a multi-day run reads as a story of consequences instead of a rising number. |
 | ♾️ **Numbers without a ceiling** | A finished run passes 10⁴⁰⁰, which an ordinary double cannot even hold. Four notations to read them in: compact, scientific, engineering and full. |
-| 📱 **Built for a phone** | Portrait, one-handed, nine tabs, dark and light themes, and a tablet layout that uses the extra width as margin rather than stretching stat rows across it. |
+| 📱 **Built for a phone** | Portrait, one-handed, nine tabs, dark and light themes, and a tablet layout that uses the extra width as margin rather than stretching stat rows across it. Three globe-quality settings, and a 2D fallback so the game stays playable on a device that cannot render the 3D one. |
 
 ---
 
@@ -322,8 +324,13 @@ solution, so one call with `dt = 8 hours` produces the same numbers as 115,200 c
 exponent itself a `Double`, and the save format persists the exact triple rather than a
 rounded number.
 
+**The 3D globe is downstream of everything.** It is drawn against OpenGL ES 2.0 with no
+third-party dependency at all, its Earth texture is generated in code rather than shipped, and
+it reads an immutable snapshot of the simulation without ever writing to it. If it fails to
+start, a 2D fallback draws the same snapshot and the game is unaffected.
+
 ```bash
-./gradlew test                    # 220 JVM tests, seconds
+./gradlew test                    # 340 JVM tests, seconds
 ./gradlew lintDebug lintRelease   # Android lint, both variants
 ./gradlew assembleDebug           # debug APK
 ./gradlew packageReleaseApk       # signed release APK + checksums, into release/

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.earthgame.idle.domain.achievements.ACHIEVEMENT_BY_ID
 import com.earthgame.idle.domain.events.RANDOM_EVENT_BY_ID
 import com.earthgame.idle.domain.milestones.MILESTONE_BY_ID
+import com.earthgame.idle.domain.model.NewsBulletin
 import com.earthgame.idle.domain.technologies.TECH_BY_ID
 import com.earthgame.idle.presentation.theme.LocalReducedAnimations
 import com.earthgame.idle.presentation.theme.gameColors
@@ -172,5 +173,41 @@ fun OwnershipToast(
             style = MaterialTheme.typography.bodySmall,
             color = colors.accent,
         )
+    }
+}
+
+/**
+ * A storm headline.
+ *
+ * Storms write into the same world-news feed the milestones use, so this is
+ * the milestone toast's twin — the difference being that a storm's text is
+ * written when it happens rather than looked up, because it names a storm that
+ * did not exist until a moment ago.
+ *
+ * Only *major* developments reach here. A tropical storm quietly forming does
+ * not interrupt the player; a superstorm reaching severe does.
+ */
+@Composable
+fun StormToast(bulletin: NewsBulletin?, onDismiss: () -> Unit) {
+    val colors = gameColors
+    Toast(visible = bulletin != null, accent = colors.warning, onDismiss = onDismiss) {
+        bulletin ?: return@Toast
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            DecorativeIcon(bulletin.icon, 17.sp)
+            Spacer(Modifier.width(8.dp))
+            Column {
+                Text(
+                    bulletin.source,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = colors.warning,
+                )
+                Text(
+                    bulletin.headline,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = colors.text,
+                )
+            }
+        }
+        Text(bulletin.body, style = MaterialTheme.typography.bodySmall, color = colors.textDim)
     }
 }

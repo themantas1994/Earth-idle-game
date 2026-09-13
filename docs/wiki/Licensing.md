@@ -164,6 +164,28 @@ exists to prevent. See
 
 ---
 
+## The 3D globe added nothing
+
+Worth stating explicitly, because a 3D feature is normally where a dependency
+audit grows: the [Home screen's globe](Home-Screen.md) introduced **no new
+dependency and no new asset**.
+
+- It is drawn against `android.opengl`, which is the platform.
+- Its Earth and cloud textures are [generated in code](../ASSETS.md#the-earth-surface-texture)
+  from outlines authored in this repository, so there is nothing to attribute and
+  nothing whose provenance has to be established.
+- `THIRD_PARTY_NOTICES.txt` is unchanged, and `scripts/third-party-notices.py --check`
+  still resolves the same 149 modules.
+
+SceneView and Filament were both evaluated first and rejected — on artifact size,
+on a `uses-feature` that would have become a Play install filter, on an HTTP
+client arriving in an app that makes no network requests of its own, and on
+Filament's material compiler not being published to Maven. The reasoning, with
+the measured figures, is in
+[Environmental visualization](Environmental-Visualization.md#why-opengl-es-directly-and-not-sceneview-or-filament).
+
+---
+
 ## Adding a dependency
 
 1. Add it to `gradle/libs.versions.toml` and `app/build.gradle.kts`.

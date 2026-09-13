@@ -10,7 +10,9 @@ import com.earthgame.idle.domain.model.GameState
 import com.earthgame.idle.domain.model.GasAmounts
 import com.earthgame.idle.domain.model.GasDoubles
 import com.earthgame.idle.domain.model.GasId
+import com.earthgame.idle.domain.model.GraphicsQuality
 import com.earthgame.idle.domain.model.LifetimeStats
+import com.earthgame.idle.domain.model.NewsBulletin
 import com.earthgame.idle.domain.model.NewsItem
 import com.earthgame.idle.domain.model.PrestigeState
 import com.earthgame.idle.domain.model.ChallengeState
@@ -21,6 +23,9 @@ import com.earthgame.idle.domain.model.SAVE_VERSION
 import com.earthgame.idle.domain.model.Settings
 import com.earthgame.idle.domain.model.ThemePreference
 import com.earthgame.idle.domain.model.TutorialState
+import com.earthgame.idle.domain.storms.Storm
+import com.earthgame.idle.domain.storms.StormField
+import com.earthgame.idle.domain.storms.StormType
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -105,6 +110,30 @@ object SaveSerialization {
 
     private fun encodeBoolMap(map: Map<String, Boolean>): JsonObject = buildJsonObject {
         for ((key, value) in map) put(key, JsonPrimitive(value))
+    }
+
+    /**
+     * One storm, field for field.
+     *
+     * Everything the simulation needs to carry it forward is written out —
+     * including `targetIntensity`, `lifetimeSeconds` and `formedAtStep`, which
+     * the player never sees but without which a reloaded storm would restart
+     * its life curve or change its name.
+     */
+    private fun encodeStorm(storm: Storm): JsonObject = buildJsonObject {
+        put("id", JsonPrimitive(storm.id))
+        put("type", JsonPrimitive(storm.type.id))
+        put("name", JsonPrimitive(storm.name))
+        put("latitudeDeg", JsonPrimitive(storm.latitudeDeg))
+        put("longitudeDeg", JsonPrimitive(storm.longitudeDeg))
+        put("intensity", JsonPrimitive(storm.intensity))
+        put("targetIntensity", JsonPrimitive(storm.targetIntensity))
+        put("peakIntensity", JsonPrimitive(storm.peakIntensity))
+        put("ageSeconds", JsonPrimitive(storm.ageSeconds))
+        put("lifetimeSeconds", JsonPrimitive(storm.lifetimeSeconds))
+        put("headingDeg", JsonPrimitive(storm.headingDeg))
+        put("speedDegPerSecond", JsonPrimitive(storm.speedDegPerSecond))
+        put("formedAtStep", JsonPrimitive(storm.formedAtStep))
     }
 
     fun encode(state: GameState): JsonObject = buildJsonObject {
@@ -215,6 +244,26 @@ object SaveSerialization {
             },
         )
 
+        put(
+            "storms",
+            buildJsonObject {
+                // As a string, not a number. A JSON number decodes through a
+                // Double, which cannot hold a 19-digit Long exactly — and a
+                // seed that comes back off disk a few bits different is a
+                // reloaded Earth with different weather from the one that was
+                // saved. Everything else here is small enough not to care.
+                put("seed", JsonPrimitive(state.stormSeed.toString()))
+                put("stepsElapsed", JsonPrimitive(state.storms.stepsElapsed))
+                put("carrySeconds", JsonPrimitive(state.storms.carrySeconds))
+                put(
+                    "active",
+                    buildJsonArray {
+                        for (storm in state.storms.storms) add(encodeStorm(storm))
+                    },
+                )
+            },
+        )
+
         put("milestonesTriggered", encodeBoolMap(state.milestonesTriggered))
         put(
             "newsFeed",
@@ -225,6 +274,17 @@ object SaveSerialization {
                             put("milestoneId", JsonPrimitive(item.milestoneId))
                             put("at", JsonPrimitive(item.at))
                             put("runSeconds", JsonPrimitive(item.runSeconds))
+                            item.bulletin?.let { bulletin ->
+                                put(
+                                    "bulletin",
+                                    buildJsonObject {
+                                        put("headline", JsonPrimitive(bulletin.headline))
+                                        put("body", JsonPrimitive(bulletin.body))
+                                        put("source", JsonPrimitive(bulletin.source))
+                                        put("icon", JsonPrimitive(bulletin.icon))
+                                    },
+                                )
+                            }
                         },
                     )
                 }
@@ -242,6 +302,7 @@ object SaveSerialization {
                 put("darkMode", JsonPrimitive(state.settings.darkMode.id))
                 put("confirmReset", JsonPrimitive(state.settings.confirmReset))
                 put("offlineProgressEnabled", JsonPrimitive(state.settings.offlineProgressEnabled))
+                put("graphicsQuality", JsonPrimitive(state.settings.graphicsQuality.id))
             },
         )
 
@@ -283,6 +344,20 @@ object SaveSerialization {
 
     private fun JsonElement?.asLongOr(default: Long): Long =
         (this as? JsonPrimitive)?.content?.toDoubleOrNull()?.toLong() ?: default
+
+    /**
+     * A Long parsed without passing through a Double.
+     *
+     * [asLongOr] is right for timestamps — thirteen digits, exact in a Double,
+     * and tolerant of a value written as `1.7e12`. It is wrong for anything
+     * where every bit matters, because a 19-digit value loses its low bits on
+     * the way through. Falls back to the tolerant reading rather than to the
+     * default, so a value written as a number by an older build still loads.
+     */
+    private fun JsonElement?.asExactLongOr(default: Long): Long {
+        val primitive = this as? JsonPrimitive ?: return default
+        return primitive.content.toLongOrNull() ?: asLongOr(default)
+    }
 
     private fun JsonElement?.asIntOr(default: Int): Int =
         (this as? JsonPrimitive)?.content?.toDoubleOrNull()?.toInt() ?: default
@@ -353,6 +428,59 @@ object SaveSerialization {
     }
 
     /**
+     * A storm, or null when the record is unusable.
+     *
+     * An unknown category id decodes as null rather than as a default one: a
+     * storm whose type this build does not know has effects and visuals it
+     * cannot honour, and silently turning it into a tropical storm would be a
+     * worse lie than it simply having passed while the player was away.
+     */
+    private fun decodeStorm(element: JsonElement?): Storm? {
+        val o = element as? JsonObject ?: return null
+        val type = StormType.fromId(o["type"].asStringOrNull()) ?: return null
+        val lifetime = o["lifetimeSeconds"].asDoubleOr(0.0)
+        if (lifetime <= 0.0) return null
+
+        return Storm(
+            id = o["id"].asStringOrNull() ?: return null,
+            type = type,
+            name = o["name"].asStringOrNull() ?: "Unnamed",
+            latitudeDeg = o["latitudeDeg"].asDoubleOr(0.0).coerceIn(-90.0, 90.0),
+            longitudeDeg = o["longitudeDeg"].asDoubleOr(0.0).coerceIn(-180.0, 180.0),
+            intensity = o["intensity"].asDoubleOr(0.0).coerceIn(0.0, 1.0),
+            targetIntensity = o["targetIntensity"].asDoubleOr(0.0).coerceIn(0.0, 1.0),
+            peakIntensity = o["peakIntensity"].asDoubleOr(0.0).coerceIn(0.0, 1.0),
+            ageSeconds = o["ageSeconds"].asDoubleOr(0.0).coerceAtLeast(0.0),
+            lifetimeSeconds = lifetime,
+            headingDeg = o["headingDeg"].asDoubleOr(0.0),
+            speedDegPerSecond = o["speedDegPerSecond"].asDoubleOr(type.driftDegreesPerSecond),
+            formedAtStep = o["formedAtStep"].asLongOr(0L),
+        )
+    }
+
+    private fun decodeStormField(stormsJson: JsonObject?): StormField {
+        if (stormsJson == null) return StormField.EMPTY
+        return StormField(
+            storms = stormsJson.arr("active").orEmpty()
+                .mapNotNull(::decodeStorm)
+                .take(com.earthgame.idle.domain.engine.STORMS.MAX_ACTIVE),
+            stepsElapsed = stormsJson["stepsElapsed"].asLongOr(0L).coerceAtLeast(0L),
+            carrySeconds = stormsJson["carrySeconds"].asDoubleOr(0.0).coerceAtLeast(0.0),
+        )
+    }
+
+    private fun decodeNewsBulletin(element: JsonElement?): NewsBulletin? {
+        val o = element as? JsonObject ?: return null
+        val headline = o["headline"].asStringOrNull() ?: return null
+        return NewsBulletin(
+            headline = headline,
+            body = o["body"].asStringOrNull().orEmpty(),
+            source = o["source"].asStringOrNull().orEmpty(),
+            icon = o["icon"].asStringOrNull().orEmpty(),
+        )
+    }
+
+    /**
      * Structural sanity check run on every load. A save that fails this — from
      * disk corruption, a botched manual edit, or an incompatible future format
      * — is rejected rather than crashing the game or silently loading garbage,
@@ -377,6 +505,7 @@ object SaveSerialization {
         val challengesJson = root.obj("challenges")
         val settingsJson = root.obj("settings")
         val tutorialJson = root.obj("tutorial")
+        val stormsJson = root.obj("storms")
         val forcingJson = root.obj("forcing")
         val habitabilityJson = root.obj("habitability")
         val factorsJson = habitabilityJson?.obj("factors")
@@ -461,6 +590,11 @@ object SaveSerialization {
                 )
             },
 
+            storms = decodeStormField(stormsJson),
+            // Absent in v4 and earlier; migrateV4ToV5 derives one. A zero here
+            // would collapse the per-step mixing, so it is never left as read.
+            stormSeed = stormsJson?.get("seed").asExactLongOr(0L),
+
             milestonesTriggered = decodeBoolMap(root["milestonesTriggered"]),
             newsFeed = root.arr("newsFeed").orEmpty().mapNotNull { element ->
                 val o = element as? JsonObject ?: return@mapNotNull null
@@ -469,6 +603,7 @@ object SaveSerialization {
                     milestoneId = milestoneId,
                     at = o["at"].asLongOr(0),
                     runSeconds = o["runSeconds"].asDoubleOr(0.0),
+                    bulletin = decodeNewsBulletin(o["bulletin"]),
                 )
             },
 
@@ -481,6 +616,9 @@ object SaveSerialization {
                 darkMode = ThemePreference.fromId(settingsJson?.get("darkMode").asStringOrNull()),
                 confirmReset = settingsJson?.get("confirmReset").asBoolOr(true),
                 offlineProgressEnabled = settingsJson?.get("offlineProgressEnabled").asBoolOr(true),
+                graphicsQuality = GraphicsQuality.fromId(
+                    settingsJson?.get("graphicsQuality").asStringOrNull(),
+                ),
             ),
 
             tutorial = TutorialState(

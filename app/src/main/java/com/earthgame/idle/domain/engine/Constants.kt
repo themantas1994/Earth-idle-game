@@ -266,3 +266,158 @@ object PRESTIGE {
     const val minSpeedMultiplier = 0.25
     const val maxSpeedMultiplier = 64.0
 }
+
+/**
+ * The storm system's tuning curve, and the only place its numbers live.
+ *
+ * Storms are a **gameplay** simulation, not a weather forecast. Every value
+ * here was chosen for how a run feels — when storms start appearing, how often,
+ * and how much they are allowed to cost — not for meteorological realism. See
+ * `docs/wiki/Storm-System.md`.
+ *
+ * The shape the curve is tuned for:
+ *
+ * - **Early game** (under [FORMATION_TEMPERATURE_FLOOR_C] of warming): no
+ *   storms at all. A player who has just lit their first fire is never taxed.
+ * - **Moderate warming**: occasional tropical storms, individually survivable.
+ * - **High warming**: hurricanes and superstorms, frequent enough to be a
+ *   standing pressure on production.
+ * - **Extreme warming**: the formation curve saturates. It does *not* keep
+ *   climbing, and the penalty caps below mean a dying planet is still playable.
+ */
+object STORMS {
+
+    /**
+     * Real seconds of simulated time per storm step.
+     *
+     * Storms advance on a fixed step with a carry accumulator rather than on
+     * whatever `dt` the caller happened to pass, which is what makes a live
+     * 250 ms tick and a twelve-hour offline catch-up produce the *same* storm
+     * timeline: both execute the same whole steps, at the same step indices,
+     * against the same per-step random draw.
+     */
+    const val STEP_SECONDS = 5.0
+
+    /**
+     * Hard ceiling on concurrent storms. Bounds the penalty stack, the save
+     * size, and the number of things the globe has to draw.
+     */
+    const val MAX_ACTIVE = 6
+
+    /**
+     * Chance one storm forms in a single step, when formation pressure is at
+     * its maximum.
+     *
+     * Set against the storm lifetimes rather than picked: at this rate an
+     * extreme planet settles at roughly four concurrent storms, which is busy
+     * without reaching [MAX_ACTIVE] and leaving nothing in reserve for the
+     * genuinely worst case.
+     */
+    const val MAX_FORMATION_CHANCE_PER_STEP = 0.045
+
+    /** Below this much warming, no storm can form. The early game is deliberately calm. */
+    const val FORMATION_TEMPERATURE_FLOOR_C = 0.6
+
+    /**
+     * Sets how quickly the thermal term climbs above the floor.
+     *
+     * Read logarithmically, not linearly, because this game's temperature
+     * range is not a climate scientist's: a run opens around 0 °C of anomaly
+     * and an endgame planet reaches six figures. A linear ramp over any span
+     * wide enough to matter late would leave the whole interesting middle of
+     * the run pinned at one end of it. On a log scale the storm curve has
+     * something to say at +1 °C, at +8 °C and at +40 °C alike:
+     *
+     * | Warming | Roughly one storm every | Typically running at once |
+     * | --: | --: | --: |
+     * | +1 °C | 3 hours | 0 |
+     * | +3 °C | 15 minutes | well under 1 |
+     * | +8 °C | 4.5 minutes | 1 to 2 |
+     * | +20 °C | 2.5 minutes | 3 |
+     * | +60 °C and beyond | 2 minutes (saturated) | 4 |
+     */
+    const val FORMATION_TEMPERATURE_SCALE_C = 40.0
+
+    /** Below this humidity there is nothing for a storm to draw on. */
+    const val FORMATION_HUMIDITY_FLOOR = 0.52
+
+    /** Humidity above the floor at which the moisture term saturates. */
+    const val FORMATION_HUMIDITY_SPAN = 0.22
+
+    /** How much of formation pressure the moisture term accounts for; the rest is thermal. */
+    const val MOISTURE_SHARE = 0.6
+
+    /** Bends the pressure curve so early warming is gentler than late warming. */
+    const val PRESSURE_EXPONENT = 1.6
+
+    /**
+     * Each further storm in one penalty channel counts for this fraction of
+     * the one before it. Ten storms cannot add up to ten storms' worth of
+     * penalty — see `computeStormEffects`.
+     */
+    const val STACKING_FALLOFF = 0.55
+
+    /** Total global production penalty is never worse than this, whatever is running. */
+    const val MAX_GLOBAL_PENALTY = 0.35
+
+    /** Total penalty on any one technology branch is never worse than this. */
+    const val MAX_BRANCH_PENALTY = 0.45
+
+    /** A storm dragged past this latitude has run out of ocean and is torn apart. */
+    const val DISSIPATION_LATITUDE = 78.0
+
+    /**
+     * How strongly a storm is pulled toward its own pole, relative to the
+     * steering wind. The classic tropical track — west with the trades, then
+     * recurving poleward — falls out of this plus the zonal wind field.
+     */
+    const val POLEWARD_BIAS = 0.35
+
+    /**
+     * Ceiling on how many storm steps one catch-up may execute.
+     *
+     * The offline cap is twelve hours (8,640 steps) and the maxed prestige cap
+     * is well under this, so it is a guard against a corrupted timestamp
+     * rather than a limit any real absence reaches. Past it the remaining
+     * storms are simply aged out.
+     */
+    const val MAX_STEPS_PER_CATCH_UP = 40_000
+
+    /** Fraction of its life a storm spends spinning up before it holds at peak. */
+    const val SPIN_UP_FRACTION = 0.28
+
+    /** Fraction of its life after which a storm begins to wind down. */
+    const val DECAY_FROM_FRACTION = 0.62
+}
+
+/**
+ * The gameplay humidity and wind model.
+ *
+ * Neither is a meteorological field. Humidity is read off the water vapour the
+ * climate model already simulates; wind is a fixed three-cell zonal pattern
+ * whose strength tracks warming. Both exist so the globe has something honest
+ * to draw and the storm system has something real to form out of. See
+ * `docs/wiki/Environmental-Visualization.md`.
+ */
+object ENVIRONMENT {
+    /** Relative humidity of an unwarmed planet, 0..1. */
+    const val BASE_HUMIDITY = 0.52
+
+    /** How much humidity the water-vapour term can add on top of the base. */
+    const val HUMIDITY_RANGE = 0.34
+
+    /** Water vapour (ppm above baseline) at which the humidity term is half-saturated. */
+    const val HUMIDITY_HALF_SATURATION_PPM = 1_400.0
+
+    /** Wind strength, 0..1, of an unwarmed planet. */
+    const val BASE_WIND = 0.18
+
+    /** Wind strength added per degree of warming, before the cap. */
+    const val WIND_PER_DEGREE = 0.055
+
+    /** Wind strength added per W/m² of radiative forcing, before the cap. */
+    const val WIND_PER_FORCING = 0.02
+
+    /** Wind strength never exceeds this, so the streamlines stay readable. */
+    const val MAX_WIND = 1.0
+}

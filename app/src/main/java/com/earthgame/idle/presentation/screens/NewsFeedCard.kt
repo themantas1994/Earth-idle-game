@@ -42,7 +42,15 @@ fun NewsFeedCard(
         }
 
         for (item in items) {
-            val definition = MILESTONE_BY_ID[item.milestoneId] ?: continue
+            // A headline is either one of the milestone table's, looked up by
+            // id, or one a system wrote at the time — currently the storms,
+            // which name something the table could not have known about.
+            val milestone = MILESTONE_BY_ID[item.milestoneId]
+            val source = item.bulletin?.source ?: milestone?.source ?: continue
+            val icon = item.bulletin?.icon ?: milestone?.icon.orEmpty()
+            val headline = item.bulletin?.headline ?: milestone?.headline.orEmpty()
+            val body = item.bulletin?.body ?: milestone?.body.orEmpty()
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -50,17 +58,17 @@ fun NewsFeedCard(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
-                    text = "${definition.source} · ${formatDuration(item.runSeconds)} into this Earth",
+                    text = "$source · ${formatDuration(item.runSeconds)} into this Earth",
                     style = MaterialTheme.typography.labelSmall,
                     color = colors.textFaint,
                 )
                 Text(
-                    text = "${definition.icon} ${definition.headline}",
+                    text = "$icon $headline",
                     style = MaterialTheme.typography.titleSmall,
                     color = colors.text,
                 )
                 Text(
-                    text = definition.body,
+                    text = body,
                     style = MaterialTheme.typography.bodySmall,
                     color = colors.textDim,
                 )

@@ -26,6 +26,8 @@ import com.earthgame.idle.domain.prestige.PrestigeMultipliers
 import com.earthgame.idle.domain.prestige.calculatePrestigeGain
 import com.earthgame.idle.domain.prestige.computePrestigeMultipliers
 import com.earthgame.idle.domain.prestige.prestigeUpgradeCost
+import com.earthgame.idle.domain.storms.StormBulletin
+import com.earthgame.idle.domain.storms.StormEffectSummary
 import com.earthgame.idle.domain.technologies.TECH_BY_ID
 import kotlin.math.max
 import kotlin.math.min
@@ -45,6 +47,8 @@ data class DerivedState(
     val effective: EffectiveMultipliers,
     val productionRates: ProductionRates,
     val disabledTechIds: Set<String>,
+    /** What the live storms are costing, already capped and de-stacked. */
+    val storms: StormEffectSummary = StormEffectSummary.NONE,
 ) {
     companion object {
         val EMPTY = DerivedState(
@@ -61,7 +65,14 @@ fun computeDerived(state: GameState, nowMs: Long): DerivedState {
     val challengeRewards = computeChallengeRewardEffects(state.challenges.completed)
     val prestige = computePrestigeMultipliers(state.prestige.upgradesOwned, challengeRewards)
     val eventMultipliers = computeActiveEventMultipliers(state.activeEvents, nowMs)
-    val effective = computeEffectiveMultipliers(state.techOwned, prestige, listOf(eventMultipliers))
+    // Storms are a transient multiplier layer exactly like an active event, so
+    // the production rates the UI shows already have the weather priced in.
+    val storms = stormEffectsOf(state)
+    val effective = computeEffectiveMultipliers(
+        state.techOwned,
+        prestige,
+        listOf(eventMultipliers, storms.asMultiplierContribution()),
+    )
     val activeChallenge = state.challenges.activeId?.let { CHALLENGE_BY_ID[it] }
 
     return DerivedState(
@@ -70,6 +81,7 @@ fun computeDerived(state: GameState, nowMs: Long): DerivedState {
         effective = effective,
         productionRates = computeProductionRates(state.techOwned, effective),
         disabledTechIds = disabledTechIdsForChallenge(activeChallenge),
+        storms = storms,
     )
 }
 
@@ -83,7 +95,18 @@ data class StepEvents(
     val ownershipMilestone: OwnershipMilestone? = null,
     val justCollapsed: Boolean = false,
     val offlineProgress: OfflineProgressResult? = null,
-)
+    /** Storms that formed, intensified or dissipated during the step. */
+    val stormBulletins: List<StormBulletin> = emptyList(),
+) {
+    /**
+     * The one storm development worth interrupting the player for, if any.
+     *
+     * A busy sky produces several bulletins a minute at extreme warming and
+     * most of them are routine; only a major one raises a toast or draws the
+     * camera. See `docs/wiki/Storm-System.md`.
+     */
+    val majorStormBulletin: StormBulletin? get() = stormBulletins.lastOrNull { it.isMajor }
+}
 
 /** A generator crossing an ownership threshold — "Coal Mining ×50, output doubled". */
 data class OwnershipMilestone(val techId: String, val atUnits: Int, val multiplier: Double)
@@ -140,7 +163,8 @@ class GameLoop(private val random: Random = Random.Default) {
             val caughtUp = offline.state.copy(
                 activeEvents = removeExpiredEvents(offline.state.activeEvents, nowMs),
             )
-            val bookkept = applyBookkeeping(state, caughtUp, nowMs)
+            val withStormNews = appendStormNews(caughtUp, offline.stormBulletins, nowMs)
+            val bookkept = applyBookkeeping(state, withStormNews, nowMs)
             // A blink-and-you-missed-it gap is not worth a modal. In practice
             // this only ever suppresses the summary for a player who has turned
             // offline progress off — the gap threshold above is already well
@@ -148,16 +172,34 @@ class GameLoop(private val random: Random = Random.Default) {
             val worthReporting = offline.simulatedSeconds > MIN_REPORTABLE_ABSENCE_SECONDS
             return StepResult(
                 bookkept.state,
-                bookkept.events.copy(offlineProgress = if (worthReporting) offline else null),
+                bookkept.events.copy(
+                    offlineProgress = if (worthReporting) offline else null,
+                    stormBulletins = offline.stormBulletins,
+                ),
             )
         }
 
         val eventMultipliers = computeActiveEventMultipliers(state.activeEvents, nowMs)
-        val stepped = simulateStep(state, dtSeconds, derived.prestige, listOf(eventMultipliers)).state
+        // The storms the tick is charged for are the ones that were already on
+        // the board when it began — the same reading the event multipliers get
+        // one line above, so a storm never bills for time before it existed.
+        val stormMultipliers = stormMultipliers(state)
+        val stepped = simulateStep(
+            state,
+            dtSeconds,
+            derived.prestige,
+            listOf(eventMultipliers, stormMultipliers),
+        ).state
+
+        // ...and only then does the weather move, against the climate this step
+        // just produced.
+        val weather = advanceStormsFor(stepped, dtSeconds)
         var next = stepped.copy(
             lastTickAt = nowMs,
             activeEvents = removeExpiredEvents(stepped.activeEvents, nowMs),
+            storms = weather.field,
         )
+        next = appendStormNews(next, weather.bulletins, nowMs)
 
         var startedEventId: String? = null
         // Random events pause during a challenge and while three are already
@@ -184,7 +226,44 @@ class GameLoop(private val random: Random = Random.Default) {
         }
 
         val bookkept = applyBookkeeping(state, next, nowMs)
-        return StepResult(bookkept.state, bookkept.events.copy(startedEventId = startedEventId))
+        return StepResult(
+            bookkept.state,
+            bookkept.events.copy(
+                startedEventId = startedEventId,
+                stormBulletins = weather.bulletins,
+            ),
+        )
+    }
+
+    /**
+     * Writes the storm headlines worth printing into the world-news feed.
+     *
+     * Only the major ones. An extremely warmed planet produces a bulletin every
+     * few seconds — every formation, every intensification, every dissipation —
+     * and printing all of them would bury the milestone headlines the feed
+     * exists for under a weather ticker.
+     */
+    private fun appendStormNews(
+        state: GameState,
+        bulletins: List<StormBulletin>,
+        nowMs: Long,
+    ): GameState {
+        if (bulletins.isEmpty()) return state
+        val worthPrinting = bulletins.filter { it.isMajor }
+        if (worthPrinting.isEmpty()) return state
+
+        val runSeconds = max(0.0, (nowMs - state.runStartedAt) / 1000.0)
+        val items = worthPrinting.map {
+            NewsItem(
+                milestoneId = it.newsId(),
+                at = nowMs,
+                runSeconds = runSeconds,
+                bulletin = it.toNewsBulletin(),
+            )
+        }
+        return state.copy(
+            newsFeed = (items.reversed() + state.newsFeed).take(NEWS_FEED_LIMIT),
+        )
     }
 
     /**

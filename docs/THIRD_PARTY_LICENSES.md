@@ -16,6 +16,16 @@ what each one's licence actually requires.
 
 ---
 
+> **The 3D globe added no dependency.** The interactive Earth on the Home screen
+> is drawn against `android.opengl` — the platform — and its textures are
+> generated in code from outlines authored in this repository. SceneView and
+> Filament were evaluated and rejected; see
+> [Environmental visualization](wiki/Environmental-Visualization.md#why-opengl-es-directly-and-not-sceneview-or-filament)
+> for the measured figures behind that decision. The module count and the
+> licence set below are unchanged by it.
+
+---
+
 ## The short version
 
 | | |
