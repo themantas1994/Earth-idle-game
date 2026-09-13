@@ -50,7 +50,7 @@ Terms the game and the codebase use, in one place. Game terms first.
 | **Fixture** | A committed JSON file of the reference engine's actual answers. |
 | **The reference / the oracle** | `tools/ts-reference/` — the frozen original engine. |
 | **Step-size independence** | One call with `dt = 8h` equalling 115,200 calls with `dt = 250ms`. The property offline progress rests on. |
-| **The price-stability invariant** | A price never rises except through your own purchases of that exact thing. [Reference](Economy-and-Production.md#the-one-invariant). |
+| **The price-stability invariant** | A price never rises except through your own purchases of that exact thing. [Reference](Economy-and-Production.md#the-one-pricing-invariant). |
 | **`VisualEra`** | The header's temperature-driven background tint. |
 | **Strong skipping** | The Compose compiler behaviour that lets a composable with unstable parameters still skip, comparing by reference identity. |
 

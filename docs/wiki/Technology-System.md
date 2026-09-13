@@ -2,41 +2,52 @@
 
 [← Documentation home](Home.md)
 
-**99 technologies across 11 branches**, defined entirely as data. Adding technology #100 means
+**157 technologies across 16 branches**, defined entirely as data. Adding technology #158 means
 adding one entry to one branch file — no engine change.
 
-## The four kinds
+## The five kinds
 
 | Kind | Count | Behaviour |
 | :-- | --: | :-- |
-| `GENERATOR` | **68** | Repeatably purchasable. Produces gas and/or resources per owned unit. Cost scales with `costGrowth` per unit already owned. `maxOwned = Int.MAX_VALUE`. |
-| `MULTIPLIER` | **16** | One-time. Permanently scales production — globally, per branch, per gas or per resource. |
-| `UNLOCK` | **13** | One-time tree node. Gates later technologies, produces nothing itself (e.g. "Cooking"). |
+| `GENERATOR` | **78** | A **producer**. Repeatably purchasable, takes no input, produces gas and/or resources per owned unit. Cost scales with `costGrowth` per unit already owned. `maxOwned = Int.MAX_VALUE`. |
+| `CONSUMER` | **26** | A **processor**. Repeatably purchasable like a producer, but it consumes a per-unit *flow* of one or more resources and runs at the rate its scarcest input allows. See [Economy and production](Economy-and-Production.md). |
+| `MULTIPLIER` | **28** | One-time. Permanently scales production — globally, per branch, per gas or per resource. |
+| `UNLOCK` | **23** | One-time tree node. Gates later technologies, produces nothing itself (e.g. "Cooking"). |
 | `CHOICE` | **2** | One-time and **mutually exclusive** with its siblings in the same `choiceGroup`. |
 
-Generators sell on the **Production** screen; the other 31 sell on **Technology**. The two lists
-are disjoint by construction (`GENERATOR_TECHNOLOGIES` and `RESEARCH_TECHNOLOGIES`), and
-`TechnologyParityTest` asserts they partition the tree, so neither screen ever shows the other's
-cards.
+Producers and processors sell on the **Production** screen, in separate sections; the other 53 sell
+on **Technology**. The two lists are disjoint by construction (`BUILDING_TECHNOLOGIES` and
+`RESEARCH_TECHNOLOGIES`), and `TechnologyParityTest` asserts they partition the tree, so neither
+screen ever shows the other's cards.
 
-## The 11 branches
+## The 16 branches
+
+The first eleven are the original tree; the last five came with the production-chain economy and
+exist because the chains needed somewhere coherent to live.
 
 | Branch | Id | Techs | Arc |
 | :-- | :-- | --: | :-- |
 | Primitive Civilization | `primitive` | 10 | Natural Fire → Controlled Fire → cooking, kilns |
 | Agriculture | `agriculture` | 10 | Farming, livestock, rice, fertiliser |
 | Industrial Revolution | `industry` | 9 | Steam, coal mining, steel, factories |
-| Electricity | `electricity` | 11 | Dynamos, grids, coal power — and the Coal-vs-Nuclear choice |
-| Fossil Fuels | `fossilFuels` | 8 | Drilling, refining, gas, oil sands |
+| Electricity | `electricity` | 16 | Dynamos, grids, coal power, the coal-fired and fuel-fired stations, wind and solar — and the Coal-vs-Nuclear choice |
+| Fossil Fuels | `fossilFuels` | 12 | Drilling, rotary rigs, fractional distillation, the refinery complex, gas, oil sands |
 | Transportation | `transportation` | 12 | Automobiles, diesel, shipping, aviation |
 | Construction | `construction` | 7 | Cement, urbanisation, megastructures |
-| Chemical Industry | `chemistry` | 7 | Petrochemicals, plastics, CFCs, SF₆ |
+| Chemical Industry | `chemistry` | 13 | Petrochemicals, plastics, CFCs, SF₆, ammonia synthesis, synthetic fuel, catalysis, carbon capture |
 | Globalization | `globalization` | 7 | Trade, logistics, global supply chains |
 | Digital Civilization | `digital` | 7 | Computers, datacentres, crypto, AI |
 | Endgame | `endgame` | 11 | Fusion, orbital industry, Dyson Swarm Prototype, Matrioshka Brain, Stellar Energy |
+| Mining & Extraction | `mining` | 12 | Prospecting, iron and copper, mechanisation, open pits, uranium, rare earths, deep-sea, autonomous fleets |
+| Materials & Metallurgy | `materials` | 10 | Blast furnaces, the steel mill, cement kilns, arc furnaces, alloys, recycling, composites, metamaterials, molecular foundries |
+| Nuclear | `nuclear` | 5 | Fission plants, enrichment, fast breeders, fusion research, the fusion complex |
+| Electronics & Computing | `electronics` | 8 | Semiconductors, integrated circuits, lithography, batteries, supercomputing, nanofabrication, robotics, automation |
+| Space Industry | `space` | 8 | Rocketry, rocket factories, reusable launch, orbital shipyards, asteroid mining, space-based solar, Dyson assembly |
 
 Branch order is the declaration order in `TechBranch`, which is also the order the UI walks.
-`ALL_TECHNOLOGIES` is sorted by **tier**, not by branch. Tiers run from 0 to **38**.
+`ALL_TECHNOLOGIES` is sorted by **tier**, not by branch, with a **stable** sort over a list that
+puts the original eleven branches first — so the reference implementation's 99 technologies keep
+their exact relative order and new content interleaves between them. Tiers run from 0 to **39**.
 
 ## Tier
 
@@ -69,9 +80,14 @@ is not O(tree) per card.
 - every `requires` entry names a technology that exists;
 - **the dependency graph has no cycles**;
 - **every technology is reachable from the starting fire** — so no content is orphaned;
-- every one-time node is genuinely one-time and every generator is genuinely unbounded;
-- all eleven branches are populated;
+- every one-time node is genuinely one-time and every building is genuinely unbounded;
+- every branch is populated;
 - every gas and resource reference resolves.
+
+`EconomyValidationTest` adds the rules that only make sense once processors exist: a processor never
+unlocks before something that can feed it, no technology requires something from a higher tier than
+itself, and every production loop is anchored to something outside itself. See
+[Economy and production](Economy-and-Production.md#validation).
 
 ## The strategic choice
 

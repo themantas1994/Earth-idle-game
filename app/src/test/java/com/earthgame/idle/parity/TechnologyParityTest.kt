@@ -3,11 +3,12 @@ package com.earthgame.idle.parity
 import com.earthgame.idle.domain.model.GasId
 import com.earthgame.idle.domain.model.ResourceId
 import com.earthgame.idle.domain.technologies.ALL_TECHNOLOGIES
+import com.earthgame.idle.domain.technologies.BUILDING_TECHNOLOGIES
+import com.earthgame.idle.domain.technologies.CONSUMER_TECHNOLOGIES
 import com.earthgame.idle.domain.technologies.GENERATOR_TECHNOLOGIES
 import com.earthgame.idle.domain.technologies.RESEARCH_TECHNOLOGIES
 import com.earthgame.idle.domain.technologies.TECH_BY_ID
 import com.earthgame.idle.domain.technologies.TechBranch
-import com.earthgame.idle.domain.technologies.TechKind
 import com.earthgame.idle.domain.technologies.Technology
 import com.earthgame.idle.domain.technologies.gasProduction
 import com.earthgame.idle.domain.technologies.generatorBaseCost
@@ -37,16 +38,53 @@ import org.junit.Test
  * requirement, cost, growth rate and per-unit output is compared with the
  * values the reference engine actually computed. A dropped requirement or a
  * mistyped tier shows up here rather than as a subtly different game.
+ *
+ * ## Parity after the production-chain economy
+ *
+ * The reference implementation has 99 technologies and no processors at all. It
+ * remains the **historical oracle**: every one of those 99 must still exist,
+ * with exactly the fields it always had, in the same relative order. It is not
+ * a ceiling on new content, and the production-chain economy adds branches the
+ * reference never had — see `docs/wiki/Reference-Parity.md`.
+ *
+ * So every assertion here is phrased as *the reference's content is unchanged*
+ * rather than *the tree is identical to the reference*: the 99 are checked
+ * field for field and their ordering is checked as a subsequence, and the extra
+ * technologies are checked against the structural rules in
+ * `EconomyValidationTest` instead.
  */
 class TechnologyParityTest {
 
     private val fixture = Fixtures.obj("technologies")
 
     @Test
-    fun `the tree has the same technologies in the same order`() {
-        assertEquals("technology count", fixture.getInt("count"), ALL_TECHNOLOGIES.size)
+    fun `every technology the reference had is still in the tree`() {
         val expectedOrder = fixture.getValue("order").jsonArray.map { it.jsonPrimitive.content }
-        assertEquals("tier ordering", expectedOrder, ALL_TECHNOLOGIES.map { it.id })
+        assertEquals("the reference had 99 technologies", 99, expectedOrder.size)
+
+        val actual = ALL_TECHNOLOGIES.map { it.id }
+        assertEquals(
+            "technologies dropped since the reference",
+            emptyList<String>(),
+            expectedOrder.filterNot { it in actual.toSet() },
+        )
+        assertTrue(
+            "the tree may only ever grow past the reference's ${expectedOrder.size}",
+            actual.size >= expectedOrder.size,
+        )
+    }
+
+    @Test
+    fun `the reference technologies keep their relative order`() {
+        // New branches are concatenated after the original eleven and the sort
+        // is stable, so the reference's 99 must still appear in exactly their
+        // old sequence — new content interleaves between them by tier but never
+        // reorders them.
+        val expectedOrder = fixture.getValue("order").jsonArray.map { it.jsonPrimitive.content }
+        val referenceIds = expectedOrder.toSet()
+        val actualOrderOfReferenceTechs = ALL_TECHNOLOGIES.map { it.id }.filter { it in referenceIds }
+
+        assertEquals("tier ordering of the reference tree", expectedOrder, actualOrderOfReferenceTechs)
     }
 
     @Test
@@ -230,20 +268,43 @@ class TechnologyParityTest {
         assertEquals(
             "every technology belongs to exactly one screen",
             ALL_TECHNOLOGIES.size,
-            GENERATOR_TECHNOLOGIES.size + RESEARCH_TECHNOLOGIES.size,
+            BUILDING_TECHNOLOGIES.size + RESEARCH_TECHNOLOGIES.size,
+        )
+        assertEquals(
+            "the Production screen sells producers and processors and nothing else",
+            BUILDING_TECHNOLOGIES.size,
+            GENERATOR_TECHNOLOGIES.size + CONSUMER_TECHNOLOGIES.size,
         )
         assertTrue(
-            "the research screen must never sell a generator",
-            RESEARCH_TECHNOLOGIES.none { it.kind == TechKind.GENERATOR },
+            "the research screen must never sell a building",
+            RESEARCH_TECHNOLOGIES.none { it.isBuilding },
         )
-        assertEquals("generator count", 68, GENERATOR_TECHNOLOGIES.size)
-        assertEquals("research node count", 31, RESEARCH_TECHNOLOGIES.size)
+
+        // The reference's own split, checked over the reference's technologies
+        // only. Nothing that was a generator may have become a research node,
+        // or a save's ownership count would land on a one-time purchase.
+        val referenceIds = fixture.getValue("order").jsonArray.map { it.jsonPrimitive.content }.toSet()
+        assertEquals(
+            "the reference's 68 generators are all still generators",
+            68,
+            GENERATOR_TECHNOLOGIES.count { it.id in referenceIds },
+        )
+        assertEquals(
+            "the reference's 31 research nodes are all still research nodes",
+            31,
+            RESEARCH_TECHNOLOGIES.count { it.id in referenceIds },
+        )
+        assertEquals(
+            "the reference had no processors at all",
+            0,
+            CONSUMER_TECHNOLOGIES.count { it.id in referenceIds },
+        )
     }
 
     @Test
-    fun `every one-time node is genuinely one-time and every generator is unbounded`() {
+    fun `every one-time node is genuinely one-time and every building is unbounded`() {
         for (tech in ALL_TECHNOLOGIES) {
-            if (tech.kind == TechKind.GENERATOR) {
+            if (tech.isBuilding) {
                 assertEquals("${tech.id} should be unbounded", Technology.UNLIMITED, tech.maxOwned)
             } else {
                 assertEquals("${tech.id} should be one-time", 1, tech.maxOwned)
@@ -252,7 +313,7 @@ class TechnologyParityTest {
     }
 
     @Test
-    fun `all eleven branches are populated`() {
+    fun `every branch is populated`() {
         val branches = ALL_TECHNOLOGIES.map { it.branch }.toSet()
         assertEquals("every branch has technology", TechBranch.entries.toSet(), branches)
     }

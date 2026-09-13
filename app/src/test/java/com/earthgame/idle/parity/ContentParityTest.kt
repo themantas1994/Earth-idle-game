@@ -78,10 +78,19 @@ class ContentParityTest {
             }
 
             // The computed lockout set, which is what actually gates purchases.
+            //
+            // A challenge's restriction is a *rule* ("no coal", "no fossil
+            // fuels"), not a list, so every technology the production-chain
+            // economy added that matches the rule is locked out too — a
+            // low-carbon run that could still build a coal-fired station would
+            // not be a low-carbon run. The reference's lockouts must therefore
+            // all still be locked; the set is allowed to have grown.
+            val referenceLockouts = o.getValue("disabledTechIds").jsonArray.map { it.jsonPrimitive.content }
+            val actualLockouts = disabledTechIdsForChallenge(challenge)
             assertEquals(
-                "${challenge.id} disabled technologies",
-                o.getValue("disabledTechIds").jsonArray.map { it.jsonPrimitive.content }.sorted(),
-                disabledTechIdsForChallenge(challenge).sorted(),
+                "${challenge.id} stopped locking out technologies it used to",
+                emptyList<String>(),
+                referenceLockouts.filterNot { it in actualLockouts },
             )
         }
     }
@@ -160,9 +169,19 @@ class ContentParityTest {
     }
 
     @Test
-    fun `the resource registry matches the reference`() {
+    fun `the reference resources are unchanged and still come first`() {
+        // The production-chain economy appends new resources; the reference's
+        // six must keep their ids, their text and their *ordinal positions*,
+        // because `ResourceAmounts` is indexed by ordinal and every save ever
+        // written stores balances against those slots. Inserting a resource
+        // among them would silently move a player's Coal into their Oil.
         val expected = fixture.getValue("resources").jsonArray
-        assertEquals("resource count", expected.size, RESOURCE_LIST.size)
+        assertEquals("the reference had six resources", 6, expected.size)
+        assertTrue(
+            "the registry may only ever grow past the reference's ${expected.size}",
+            RESOURCE_LIST.size >= expected.size,
+        )
+
         for ((index, case) in expected.withIndex()) {
             val o = case.jsonObject
             val resource = RESOURCE_LIST[index]

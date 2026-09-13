@@ -29,7 +29,7 @@ stating plainly because the audit went looking for the opposite.
 | **Purity** | `simulateStep(state, dt)` is pure, deterministic, and step-size independent — the last of which is a genuinely strong design decision, not a claim. It is what makes offline progress one calculation and eliminates the need for a background service. |
 | **Abstraction** | Proportionate. Three platform adapters behind interfaces, one repository interface, and no DI framework for three dependencies. Nothing abstract exists without a caller that needs it. |
 | **Presentation/domain separation** | Clean. The session *rules* (absences, event rolls, milestone firing, challenge settlement) live in `domain/engine/GameLoop.kt`; only coroutines, lifecycle and `StateFlow` plumbing are in the ViewModel. That split is why those rules are covered by fast JVM tests. |
-| **Data-driven content** | 99 technologies, 32 achievements, 8 challenges, 13 events and 39 headlines are all data. Adding content needs no engine change. |
+| **Data-driven content** | 157 technologies, 32 achievements, 8 challenges, 13 events and 39 headlines are all data. Adding content needs no engine change. |
 | **Comment quality** | Unusually high, and load-bearing — the maths *is* the product, and most comments explain a decision rather than restating code. Three were stale (see below); the rest were checked against the code and were accurate. |
 
 **No inappropriate dependencies, no presentation logic in domain, no persistence in UI, no platform

@@ -144,7 +144,7 @@ staying under the price of the span that earns it), and those refusals are load-
 | Using `Double` for a player-facing quantity | It becomes `Infinity` late-game and everything downstream turns to `NaN` |
 | Reading `System.currentTimeMillis()` in the engine | Makes the function untestable and breaks the offline guarantee |
 | Changing Kotlin without changing the reference | Fails the parity tests immediately (which is the point) |
-| Adding anything that scales a price by global state | Breaks [the price-stability invariant](Economy-and-Production.md#the-one-invariant), which five tests defend |
+| Adding anything that scales a price by global state | Breaks [the price-stability invariant](Economy-and-Production.md#the-one-pricing-invariant), which five tests defend |
 | Bumping `SAVE_VERSION` for a field that only needs a default | Adds a migration nobody needs and a risk of double-application |
 | Adding an animation without reading `LocalReducedAnimations` | Silently ignores an accessibility setting |
 | Updating a count in code but not in the README | Nothing catches a stale sentence |

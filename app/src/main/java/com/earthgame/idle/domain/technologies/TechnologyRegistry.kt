@@ -13,6 +13,13 @@ import kotlin.math.min
  * The whole technology tree, assembled from the per-branch data files and
  * sorted by tier — the order the UI walks and the order the "what should I buy
  * next" hint scans.
+ *
+ * The sort is **stable**, and the branches added with the production-chain
+ * economy are concatenated after the original eleven. That is deliberate: the
+ * original technologies therefore keep their exact relative order, which is
+ * what `TechnologyParityTest` checks against the reference implementation's
+ * ordering. New content interleaves by tier without ever displacing old
+ * content.
  */
 val ALL_TECHNOLOGIES: List<Technology> = (
     PRIMITIVE_TECHS +
@@ -25,20 +32,39 @@ val ALL_TECHNOLOGIES: List<Technology> = (
         CHEMISTRY_TECHS +
         GLOBALIZATION_TECHS +
         DIGITAL_TECHS +
-        ENDGAME_TECHS
+        ENDGAME_TECHS +
+        MINING_TECHS +
+        MATERIALS_TECHS +
+        REFINING_TECHS +
+        POWER_TECHS +
+        ELECTRONICS_TECHS +
+        SPACE_TECHS
     ).sortedBy { it.tier }
 
 val TECH_BY_ID: Map<String, Technology> = ALL_TECHNOLOGIES.associateBy { it.id }
 
-/** Every generator, in tier order. The Production screen's entire catalogue. */
+/**
+ * Every **producer** — a building that takes no input — in tier order.
+ *
+ * Half of the Production screen. The other half is [CONSUMER_TECHNOLOGIES], and
+ * the two are shown separately because they answer different questions: a
+ * producer only ever asks "can you afford another one?", while a processor also
+ * has to explain what it is waiting for.
+ */
 val GENERATOR_TECHNOLOGIES: List<Technology> = ALL_TECHNOLOGIES.filter { it.kind == TechKind.GENERATOR }
+
+/** Every **processor** — a building that consumes a resource flow — in tier order. */
+val CONSUMER_TECHNOLOGIES: List<Technology> = ALL_TECHNOLOGIES.filter { it.kind == TechKind.CONSUMER }
+
+/** Everything the Production screen sells: producers and processors together. */
+val BUILDING_TECHNOLOGIES: List<Technology> = ALL_TECHNOLOGIES.filter { it.isBuilding }
 
 /**
  * Everything the Technology screen sells: the research tree of one-time
  * unlocks, permanent multipliers and branching choices. Disjoint from
- * [GENERATOR_TECHNOLOGIES], so neither screen ever shows the other's cards.
+ * [BUILDING_TECHNOLOGIES], so neither screen ever shows the other's cards.
  */
-val RESEARCH_TECHNOLOGIES: List<Technology> = ALL_TECHNOLOGIES.filter { it.kind != TechKind.GENERATOR }
+val RESEARCH_TECHNOLOGIES: List<Technology> = ALL_TECHNOLOGIES.filter { !it.isBuilding }
 
 /** Choice-group membership, precomputed so availability checks are not O(tree). */
 private val TECHS_BY_CHOICE_GROUP: Map<String, List<Technology>> =

@@ -151,7 +151,7 @@ Update the relevant page in the same change that touches the code:
 | Ads or the consent flow | [Advertising](Advertising.md), [Privacy](Privacy.md), [Privacy policy](../PRIVACY_POLICY.md) |
 | Anything a player sees or feels | [FAQ](FAQ.md), README |
 
-**A count in prose is a claim.** If you add a technology, the "99 technologies" in the README
+**A count in prose is a claim.** If you add a technology, the "157 technologies" in the README
 and in [Technology system](Technology-System.md) is now wrong. `ContentParityTest` will catch
 the parity fixtures being stale; it will not catch a stale sentence.
 

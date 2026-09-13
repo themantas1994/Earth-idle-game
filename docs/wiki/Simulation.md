@@ -51,15 +51,21 @@ Exact, and load-bearing — several steps read a value the previous one has not 
 1. **Fold multipliers.** `computeEffectiveMultipliers(techOwned, prestige, extra)` walks every
    owned technology and every prestige upgrade once, plus any transient contributions (active
    events, challenge rewards).
-2. **Sum production.** `computeProductionRates(techOwned, multipliers)` walks every owned
-   *generator*, accumulating gross gas, engineered removal and resources into builders.
+2. **Run the production pipeline.** `computeProductionRates(techOwned, multipliers)` walks every
+   owned *building*: producers supply, processors demand, the flow solver settles every
+   processor's utilization against its scarcest input, and gross gas, engineered removal, gross
+   resources, consumption and **net** resources accumulate into builders. Emissions are scaled by
+   utilization, so a starved chain does not burn what it never received. See
+   [Economy and production](Economy-and-Production.md#the-production-pipeline).
 3. **Sink efficiency** from the **current** (pre-step) temperature anomaly.
 4. **Per gas:** convert kg/s to native-unit/s by dividing by `massPerUnit`, then integrate —
    [natural half-life decay](Atmospheric-Half-Life.md), continuous production and engineered
    removal all resolved together in one closed-form step, never as a sequence of passes. H₂O
    substitutes an equilibrium target derived from the previous anomaly instead of a production
    rate. Directly-emitted gases add `gross × dt` to the run and lifetime totals.
-5. **Accumulate resources:** `balance += rate × dt`.
+5. **Accumulate resources:** `balance += netRate × dt`. The rate is net of everything processors
+   consumed, and is non-negative for every resource by construction, so a balance can stop growing
+   but can never fall.
 6. **Recompute climate** from the *new* atmosphere: forcing → temperature → sea level (using the
    mean of the old and new anomaly over the interval) → ocean pH → the five habitability factors.
 7. **Update peaks** (run and lifetime), `totalPlayTimeSeconds`, and the simulated clock —
@@ -104,17 +110,26 @@ Per resource: `perUnit × owned × scale × (perResource ?: 1) × (research if R
 Engineered removal: `perUnit × owned × scale` — **no** gas multiplier, so a
 production-boosting event cannot accidentally boost carbon capture with it.
 
-`computeTechProductionRates(tech, owned, multipliers)` computes this for a single technology, so
-the Production screen can show a building's *own* contribution rather than the global total for
-the gases it happens to emit.
+`computeTechProductionRates(tech, owned, multipliers, utilization)` computes this for a single
+building, so the Production screen can show a building's *own* contribution rather than the global
+total for the gases it happens to emit. `utilization` is 1 for a producer and the solved share for
+a processor, and it scales output, intake and emissions alike.
+
+A processor's **intake** is the one quantity none of these multipliers touch. It scales with the
+building's own size — units owned times the ownership milestones they have earned — and with
+nothing else, so an efficiency bonus cannot cancel itself out across a chain. See
+[size versus efficiency](Economy-and-Production.md#size-versus-efficiency).
 
 ## Performance
 
 `computeProductionRates` is the hottest function in the game — four times a second plus every
 UI refresh — so:
 
-- it iterates `ALL_TECHNOLOGIES` (99 entries) once and `continue`s immediately on anything not
-  owned or not a generator;
+- it iterates `ALL_TECHNOLOGIES` (157 entries) once and `continue`s immediately on anything not
+  owned or not a building;
+- the flow solve is **skipped entirely** when nothing the player owns consumes anything, which is
+  the whole of the early game, and otherwise runs over only the processors actually owned and
+  stops as soon as utilizations settle — two or three rounds in practice;
 - it accumulates into `GasAmounts.Builder` / `ResourceAmounts.Builder` (flat arrays indexed by
   enum ordinal) rather than materialising a per-technology result and folding it in;
 - the containers themselves are arrays, not maps, so a gas lookup is a bounds check rather than

@@ -3,8 +3,9 @@ package com.earthgame.idle.balance
 import com.earthgame.idle.domain.engine.BALANCE
 import com.earthgame.idle.domain.engine.OWNERSHIP_BONUS
 import com.earthgame.idle.domain.engine.PRESTIGE
+import com.earthgame.idle.domain.engine.nextOwnershipMilestone
 import com.earthgame.idle.domain.engine.ownershipMultiplier
-import com.earthgame.idle.domain.technologies.GENERATOR_TECHNOLOGIES
+import com.earthgame.idle.domain.technologies.BUILDING_TECHNOLOGIES
 import com.earthgame.idle.domain.technologies.generatorBaseCost
 import com.earthgame.idle.domain.technologies.generatorCostGrowth
 import com.earthgame.idle.domain.technologies.ladderTier
@@ -58,13 +59,14 @@ class BalanceInvariantsTest {
     }
 
     @Test
-    fun `going deep on one generator never beats broadening into new technology`() {
-        // Across one ownership span a generator's unit price grows by
-        // unitCostGrowth^everyUnits against a single `multiplier` from the
-        // bonus. If the bonus won, the tech tree would stop mattering: the
-        // optimal play would be to buy one building forever.
-        for (tech in GENERATOR_TECHNOLOGIES) {
-            val priceGrowthAcrossSpan = generatorCostGrowth(tech.tier).pow(OWNERSHIP_BONUS.everyUnits)
+    fun `going deep on one building never beats broadening into new technology`() {
+        // Across the *tightest* milestone span a building's unit price grows by
+        // unitCostGrowth^baseStep against a single `multiplier` from the bonus.
+        // If the bonus won, the tech tree would stop mattering: the optimal play
+        // would be to buy one building forever. Later spans are wider, so they
+        // only make the inequality safer — the first block is the hard case.
+        for (tech in BUILDING_TECHNOLOGIES) {
+            val priceGrowthAcrossSpan = generatorCostGrowth(tech.tier).pow(OWNERSHIP_BONUS.baseStep)
 
             assertTrue(
                 "${tech.id}: ownership bonus ×${OWNERSHIP_BONUS.multiplier} must stay under the " +
@@ -75,12 +77,47 @@ class BalanceInvariantsTest {
     }
 
     @Test
+    fun `the milestone ladder only ever spreads out, never contracts`() {
+        // The whole point of the progressive ladder is that rewards get rarer
+        // as a building deepens. A step that shrank would mean a building
+        // suddenly paying out faster the deeper it went.
+        var previousStep = 0
+        var units = 0
+        repeat(60) {
+            val next = nextOwnershipMilestone(units)
+            val step = next - units
+            if (units % OWNERSHIP_BONUS.blockUnits == 0) {
+                assertTrue(
+                    "milestone spacing shrank from $previousStep to $step at $units owned",
+                    step >= previousStep,
+                )
+                previousStep = step
+            }
+            units = next
+        }
+    }
+
+    @Test
+    fun `milestones never become so rare that deep buildings stop rewarding`() {
+        // Sparser is the point; silent is not. Even a building nobody will ever
+        // reach the depth of still owes the player a reward inside one session.
+        for (owned in listOf(0, 500, 1_000, 2_000, 5_000)) {
+            val step = nextOwnershipMilestone(owned) - owned
+            assertTrue(
+                "at $owned owned the next milestone is $step units away, which is too far to feel",
+                step <= 70,
+            )
+        }
+    }
+
+    @Test
     fun `the ownership ladder compounds exactly as advertised`() {
         assertTrue(ownershipMultiplier(0) == 1.0)
-        assertTrue(ownershipMultiplier(OWNERSHIP_BONUS.everyUnits - 1) == 1.0)
-        assertTrue(ownershipMultiplier(OWNERSHIP_BONUS.everyUnits) == OWNERSHIP_BONUS.multiplier)
+        assertTrue(ownershipMultiplier(OWNERSHIP_BONUS.baseStep - 1) == 1.0)
+        assertTrue(ownershipMultiplier(OWNERSHIP_BONUS.baseStep) == OWNERSHIP_BONUS.multiplier)
         assertTrue(
-            ownershipMultiplier(10 * OWNERSHIP_BONUS.everyUnits) == OWNERSHIP_BONUS.multiplier.pow(10),
+            "the first block still pays exactly the old ladder's rate",
+            ownershipMultiplier(10 * OWNERSHIP_BONUS.baseStep) == OWNERSHIP_BONUS.multiplier.pow(10),
         )
         assertTrue("a negative count cannot earn a bonus", ownershipMultiplier(-50) == 1.0)
     }
@@ -106,7 +143,7 @@ class BalanceInvariantsTest {
         // Scaling.kt's contract: keep per-technology `scale` inside roughly
         // 0.3–3 of the curve, or one technology starts pacing the game on its
         // own.
-        for (tech in GENERATOR_TECHNOLOGIES) {
+        for (tech in BUILDING_TECHNOLOGIES) {
             val curve = generatorBaseCost(tech.tier)
             val listed = tech.cost.sumOf { it.baseAmount }
             val ratio = listed / curve

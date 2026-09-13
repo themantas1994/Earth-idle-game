@@ -11,6 +11,14 @@ decides whether the Kotlin port's answers are right.
 > The Kotlin engine and the TypeScript engine must produce the same numbers for the same inputs,
 > within documented floating-point tolerances.
 
+More precisely, since the game has grown past the reference: **everything the reference implements
+must still behave exactly as it does.** The reference is a *historical oracle*, not a ceiling. It
+knows nothing about the production-chain economy — it has no processors, nine fewer resources and
+58 fewer technologies — so parity is asserted as *the reference's content is unchanged*, and new
+content is checked against its own rules instead. The one place this build deliberately changes an
+answer the reference also gives is listed under
+[intentional divergences](#intentional-divergences).
+
 Not "the port looks like a faithful translation" — **the port's answers were compared against the
 reference's actual output.** The reference was executed, its results captured as JSON, and the
 Kotlin suite asserts against those.
@@ -34,7 +42,7 @@ of diffs and reviews.
 | :-- | :-- |
 | `decimal.json` | 24 operands from 1e-400 to 1e1000: every unary op, all 576 binary pairs, 104 `pow` cases, the save-triple round trip |
 | `format.json` | 36 values × 4 notations × 2 precisions, plus durations, simulated ages, temperatures and percentages — compared as **strings** |
-| `technologies.json` | All 99 technologies, every field, plus the tier curves at 45 tiers |
+| `technologies.json` | The reference's 99 technologies, every field, plus the tier curves at 45 tiers. The tree has grown past them — see [intentional divergences](#intentional-divergences) |
 | `economy.json` | Quoted and bulk prices, buy-max affordability including the exact geometric-series boundary, the prestige discount, the ownership ladder |
 | `climate.json` | 3,240 gas integrations across every gas × production rate × removal state × sink efficiency × step size from 250 ms to a day; the half-life law and the simulated clock's constants; forcing, temperature, ocean chemistry, all five habitability factors |
 | `prestige.json` | The upgrade table and cost ladders, nine ownership combinations including everything maxed, the speed term, payouts for gas totals from 0 to 1e120 |
@@ -73,6 +81,36 @@ headline is a **change to both engines**:
 6. Update the affected wiki page
 
 Skipping step 2 fails the parity tests immediately, which is the point.
+
+## Intentional divergences
+
+One, in an answer the reference also gives, kept exact and kept tested on both sides.
+
+**The ownership milestone ladder.** The reference puts a milestone on every tenth unit of a
+building, forever. This build replaces that with a **progressively spaced** ladder — see
+[Economy and production](Economy-and-Production.md#the-progressive-ladder). The two agree exactly
+below **100 owned** and diverge above it:
+
+| Owned | Reference's next milestone | This build's |
+| --: | --: | --: |
+| 0 | 10 | 10 |
+| 96 | 100 | 100 |
+| 100 | 110 | **111** |
+| 200 | 210 | **212** |
+
+`EconomyParityTest` asserts both halves: the shared range against the reference's own fixtures, and
+the divergence against the documented new ladder, so neither can drift unnoticed. The fixtures were
+**not** regenerated for it — the reference still describes the old ladder, which is the point of
+keeping it.
+
+Three parity tests were also **widened** rather than changed, because the tree and the resource
+registry are now supersets of the reference's:
+
+| Test | Was | Is |
+| :-- | :-- | :-- |
+| `TechnologyParityTest` technology ordering | The tree equals the reference's 99 in order | The reference's 99 are all present, field for field, in the same relative order |
+| `ContentParityTest` resource registry | The registry equals the reference's six | The reference's six are unchanged and still occupy ordinals 0–5 |
+| `ContentParityTest` challenge lockouts | A challenge locks exactly the reference's list | A challenge still locks everything the reference's list names — a restriction is a *rule*, so new coal buildings are locked by the no-coal challenge too |
 
 ## Deliberate differences
 

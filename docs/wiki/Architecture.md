@@ -82,8 +82,9 @@ those tests stop being able to run.
 | `engine/` | [`GameDecimal`](GameDecimal.md), [`Constants`](Economy-and-Production.md), [`Simulation`](Simulation.md), `Ownership`, [`Offline`](Offline-Progression.md), [`GameLoop`](Game-Engine.md) |
 | `model/` | [`GameState`](Game-State.md), `Gases`, `Resources`, `Amounts` (the array-backed containers) |
 | `climate/` | [`Climate`](Climate-Model.md) (integration, forcing, temperature), `Habitability` |
-| `technologies/` | 11 branch data files, `Scaling`, `TechnologyRegistry`, `TechnologyTypes` |
-| `economy/` | [Purchasing and the price-stability invariant](Economy-and-Production.md) |
+| `technologies/` | 16 branch data files, `Scaling`, `TechnologyRegistry`, `TechnologyTypes` |
+| `production/` | [The producer/processor models, the resource-flow engine, the graph validator and the economy diagnostics](Economy-and-Production.md) |
+| `economy/` | [Purchasing, the price-stability invariant and the NEXT buy mode](Economy-and-Production.md) |
 | `prestige/` | [Earth Points and the upgrade tree](Prestige-System.md) |
 | `achievements/` `challenges/` `events/` `milestones/` | [Content and its checks](Achievements-and-Challenges.md) |
 | `formatting/` | The four number notations |

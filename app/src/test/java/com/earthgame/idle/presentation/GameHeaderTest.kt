@@ -53,6 +53,22 @@ class GameHeaderTest {
         it.copy(resources = resources, gameAgeSeconds = gameYearsToSeconds(12.0))
     }
 
+    /**
+     * The six resources that existed before the production chains, at the same
+     * magnitudes this test has always used.
+     *
+     * The full registry is fifteen resources wide now, which no sensible screen
+     * fits — and "fifteen balances overflow a phone" is what
+     * [anOverflowingStripShowsTheScrollAffordance] already covers. This case is
+     * about the *other* branch: a strip with room to spare must not draw an
+     * affordance pointing at nothing.
+     */
+    private fun sixFigureSixResourceState(): GameState = createNewGame(now).let { state ->
+        var resources = state.resources
+        for (resource in ResourceId.entries.take(6)) resources = resources.with(resource, gd("1.234e9"))
+        state.copy(resources = resources, gameAgeSeconds = gameYearsToSeconds(12.0))
+    }
+
     private fun setHeader(state: GameState = richState(), widthDp: Int) {
         val derived = computeDerived(state, now)
         compose.setContent {
@@ -82,7 +98,7 @@ class GameHeaderTest {
     @Test
     fun aStripThatFitsShowsNoAffordanceAtAll() {
         // Nothing is out of view, so an affordance would be pointing at nothing.
-        setHeader(widthDp = 4000)
+        setHeader(state = sixFigureSixResourceState(), widthDp = 4000)
         compose.onNodeWithTag(RESOURCE_SCROLL_HINT_TAG).assertDoesNotExist()
         compose.onNodeWithContentDescription("Resource balances").assertExists()
     }

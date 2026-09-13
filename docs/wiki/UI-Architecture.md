@@ -116,8 +116,8 @@ Other recomposition discipline in the codebase:
 | :-- | :-- |
 | 🌍 **Home** | Next objective (and the right tab for it), planetary status, economy, momentum, emitting gases, the news feed, the Reset button |
 | ☁️ **Atmosphere** | Per-gas concentration, production, engineered removal, natural lifetime, heating contribution; total radiative forcing |
-| 🔬 **Technology** | The 31 research nodes, filterable by branch |
-| 🏭 **Production** | The 68 generators, with a ×1/×10/×100/Max selector |
+| 🔬 **Technology** | The 53 research nodes, filterable by branch |
+| 🏭 **Production** | The 78 producers and 26 processors in separate sections, a resource-flow panel, and a ×1/×10/×100/Next/Max selector |
 | ✨ **Prestige** | Earth Points and the 11 permanent upgrades |
 | 🎯 **Challenges** | The active challenge and its goal; the 8 available, with rewards |
 | 🏆 **Achievements** | All 32, locked and unlocked |

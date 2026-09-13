@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.earthgame.idle.data.repository.LoadResult
 import com.earthgame.idle.data.repository.SaveRepository
 import com.earthgame.idle.domain.economy.BUY_MAX_QUANTITY
+import com.earthgame.idle.domain.economy.getUnitsToNextMilestone
 import com.earthgame.idle.domain.engine.CollapseSummary
 import com.earthgame.idle.domain.engine.DerivedState
 import com.earthgame.idle.domain.engine.GameLoop
@@ -54,12 +55,38 @@ data class GameUiState(
     val saveWasCorrupted: Boolean = false,
 )
 
-/** How many units a Buy button asks for. */
-enum class BuyQuantity(val label: String, val amount: Int) {
-    ONE("×1", 1),
-    TEN("×10", 10),
-    HUNDRED("×100", 100),
-    MAX("Max", BUY_MAX_QUANTITY),
+/**
+ * How many units a Buy button asks for.
+ *
+ * Four of the five are a fixed number. [NEXT] is not: it resolves against how
+ * many of *that* building you own, because what it buys is "exactly enough to
+ * reach the next ownership milestone" — see `domain/economy/NextPurchase.kt`.
+ * That is also why it is the one mode that refuses a partial purchase: buying
+ * four units toward a milestone ten away spends the money and delivers none of
+ * the reward the player pressed the button for.
+ */
+enum class BuyQuantity(val label: String) {
+    ONE("×1"),
+    TEN("×10"),
+    HUNDRED("×100"),
+    NEXT("Next"),
+    MAX("Max"),
+    ;
+
+    /** Units this mode asks for, given how many of the building are already owned. */
+    fun resolveQuantity(owned: Int): Int = when (this) {
+        ONE -> 1
+        TEN -> 10
+        HUNDRED -> 100
+        NEXT -> getUnitsToNextMilestone(owned)
+        MAX -> BUY_MAX_QUANTITY
+    }
+
+    /** Whether a smaller-than-requested purchase would be worse than none at all. */
+    val requiresFullQuantity: Boolean get() = this == NEXT
+
+    /** Whether this mode aims at an ownership milestone rather than a count. */
+    val isMilestoneTargeted: Boolean get() = this == NEXT
 }
 
 /**
@@ -297,7 +324,14 @@ class GameViewModel(
 
     fun buyTechnology(techId: String, quantity: BuyQuantity) {
         val outcome = mutate { current ->
-            val result = gameLoop.purchase(current.state, techId, quantity.amount, current.derived)
+            val owned = current.state.techOwned[techId] ?: 0
+            val result = gameLoop.purchase(
+                current.state,
+                techId,
+                quantity.resolveQuantity(owned),
+                current.derived,
+                requireFullQuantity = quantity.requiresFullQuantity,
+            )
             if (result.state === current.state) return@mutate null
 
             Transition(

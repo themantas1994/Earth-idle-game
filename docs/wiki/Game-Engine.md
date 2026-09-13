@@ -113,7 +113,7 @@ Every one takes a state and returns a state. None mutates anything.
 
 | Method | Notes |
 | :-- | :-- |
-| `purchase(state, techId, quantity, derived)` | Delegates to `purchaseTechnology`, counts the purchase, and reports the highest [ownership threshold](Economy-and-Production.md#ownership-bonuses) crossed. Atomic: either the affordable quantity is bought and paid for, or nothing changes. |
+| `purchase(state, techId, quantity, derived, requireFullQuantity)` | Delegates to `purchaseTechnology`, counts the purchase, and reports the highest [ownership milestone](Economy-and-Production.md#ownership-milestones) crossed. Atomic: either the affordable quantity is bought and paid for, or nothing changes. With `requireFullQuantity` — what the [NEXT buy mode](Economy-and-Production.md#next) uses — a partial purchase is a failure rather than a smaller purchase. |
 | `buyPrestigeUpgrade(state, upgradeId)` | Refuses silently past `maxLevel` or below the cost. |
 | `scoreRun(state, nowMs, derived)` | The payout and summary for a finished run, **without** applying the reset. The collapse dialog shows this. |
 | `resetEarth(state, nowMs, derived)` | Requires `state.collapsed`. Banks points, starts a fresh Earth, applies every "starting" prestige bonus, awards reset achievements. |

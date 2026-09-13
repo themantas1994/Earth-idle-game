@@ -21,9 +21,12 @@ import com.earthgame.idle.domain.model.ResourceAmounts
 import com.earthgame.idle.domain.model.ResourceId
 import com.earthgame.idle.domain.model.naturalRemovalRateConstant
 import com.earthgame.idle.domain.prestige.PrestigeMultipliers
+import com.earthgame.idle.domain.production.ConsumerDemand
+import com.earthgame.idle.domain.production.ConsumerFlow
+import com.earthgame.idle.domain.production.accountFlow
+import com.earthgame.idle.domain.production.solveUtilizations
 import com.earthgame.idle.domain.technologies.ALL_TECHNOLOGIES
 import com.earthgame.idle.domain.technologies.TechBranch
-import com.earthgame.idle.domain.technologies.TechKind
 import com.earthgame.idle.domain.technologies.Technology
 import kotlin.math.max
 
@@ -121,30 +124,53 @@ data class ProductionRates(
     val gasGrossKgPerS: GasAmounts,
     /** Engineered removal: carbon capture, reforestation, terraforming engines. */
     val gasRemovalKgPerS: GasAmounts,
+    /**
+     * **Net** resource income: everything produced minus everything processors
+     * consume. This is what the wallet actually gains per second, so it is what
+     * `simulateStep` integrates and what every affordability countdown reads.
+     * Never negative for any resource — see the conservation clamp in
+     * `domain/production/ResourceFlow.kt`.
+     */
     val resourcePerS: ResourceAmounts,
+    /** Gross output, before processors take their share. */
+    val resourceGrossPerS: ResourceAmounts = resourcePerS,
+    /** What processors consume per second. */
+    val resourceConsumedPerS: ResourceAmounts = ResourceAmounts.ZERO,
+    /** One entry per owned processor: utilization, bottleneck, throughput. */
+    val consumerFlows: List<ConsumerFlow> = emptyList(),
 ) {
+    fun consumerFlow(id: String): ConsumerFlow? = consumerFlows.firstOrNull { it.consumerId == id }
+
     companion object {
         val ZERO = ProductionRates(GasAmounts.ZERO, GasAmounts.ZERO, ResourceAmounts.ZERO)
     }
 }
 
 /**
- * What one technology contributes at [owned] units, with every multiplier
+ * What one building contributes at [owned] units, with every multiplier
  * applied. Split out from [computeProductionRates] so the Production screen can
  * show a building's own contribution rather than the global total for the gases
  * it happens to emit.
+ *
+ * [utilization] is how hard the building is running: always 1 for a producer,
+ * and the processor's solved share of its inputs for a consumer. Output *and*
+ * emissions scale with it — a refinery at 40% emits 40% of its rated carbon —
+ * which is what keeps the climate model honest about a starved chain.
  */
 fun computeTechProductionRates(
     tech: Technology,
     owned: Int,
     multipliers: EffectiveMultipliers,
+    utilization: Double = 1.0,
 ): ProductionRates {
-    if (owned <= 0 || tech.kind != TechKind.GENERATOR) return ProductionRates.ZERO
+    if (owned <= 0 || !tech.isBuilding) return ProductionRates.ZERO
 
-    val scale = techScale(tech, owned, multipliers)
+    val running = utilization.coerceIn(0.0, 1.0)
+    val scale = techScale(tech, owned, multipliers) * running
     val gross = GasAmounts.builder()
     val removal = GasAmounts.builder()
     val resources = ResourceAmounts.builder()
+    val consumed = ResourceAmounts.builder()
 
     for ((gasId, perUnit) in tech.effect.gasProductionPerUnit) {
         val gasMultiplier = (multipliers.perGas[gasId] ?: 1.0) * multipliers.allGas
@@ -158,17 +184,35 @@ fun computeTechProductionRates(
         val resourceMultiplier = (multipliers.perResource[resourceId] ?: 1.0) * researchBonus
         resources[resourceId] = gd(perUnit) * owned * scale * resourceMultiplier
     }
+    // Intake is scaled by the building's own size — units owned times the
+    // ownership milestones they have earned — and by how hard it is running,
+    // but never by a production multiplier. See `ResourceFlow.kt`.
+    for ((resourceId, perUnit) in tech.effect.inputsPerUnit) {
+        consumed[resourceId] = gd(perUnit) * owned * ownershipMultiplier(owned) * running
+    }
 
-    return ProductionRates(gross.build(), removal.build(), resources.build())
+    val produced = resources.build()
+    return ProductionRates(
+        gasGrossKgPerS = gross.build(),
+        gasRemovalKgPerS = removal.build(),
+        resourcePerS = produced,
+        resourceGrossPerS = produced,
+        resourceConsumedPerS = consumed.build(),
+    )
 }
 
 /**
- * Sums every owned generator's per-unit output into total production rates.
+ * Runs the whole production pipeline: producer supply, processor demand,
+ * bottleneck allocation, consumption, output and emissions.
  *
  * This is the hottest function in the game — it runs on every tick and on every
- * UI refresh — so it accumulates into mutable builders and walks only the
- * technologies actually owned, rather than materialising a per-technology
- * result and folding it in.
+ * UI refresh — so it walks only the buildings actually owned and accumulates
+ * into mutable builders rather than materialising a per-technology result and
+ * folding it in. The flow solve itself is skipped entirely when nothing the
+ * player owns consumes anything, which is the whole of the early game.
+ *
+ * See `domain/production/ResourceFlow.kt` for the allocation rule and for why
+ * demand is exempt from production multipliers.
  */
 fun computeProductionRates(
     techOwned: Map<String, Int>,
@@ -176,11 +220,20 @@ fun computeProductionRates(
 ): ProductionRates {
     val gross = GasAmounts.builder()
     val removal = GasAmounts.builder()
-    val resources = ResourceAmounts.builder()
+    val producerSupply = Array(ResourceId.entries.size) { GameDecimal.ZERO }
+
+    val ownedConsumers = ArrayList<Technology>()
+    val ownedConsumerCounts = ArrayList<Int>()
 
     for (tech in ALL_TECHNOLOGIES) {
         val owned = techOwned[tech.id] ?: 0
-        if (owned <= 0 || tech.kind != TechKind.GENERATOR) continue
+        if (owned <= 0 || !tech.isBuilding) continue
+
+        if (tech.isConsumer) {
+            ownedConsumers += tech
+            ownedConsumerCounts += owned
+            continue
+        }
 
         val scale = techScale(tech, owned, multipliers)
 
@@ -194,11 +247,91 @@ fun computeProductionRates(
         for ((resourceId, perUnit) in tech.effect.resourceProductionPerUnit) {
             val researchBonus = if (resourceId == ResourceId.RESEARCH) multipliers.research else 1.0
             val resourceMultiplier = (multipliers.perResource[resourceId] ?: 1.0) * researchBonus
-            resources.add(resourceId, gd(perUnit) * owned * scale * resourceMultiplier)
+            producerSupply[resourceId.ordinal] += gd(perUnit) * owned * scale * resourceMultiplier
         }
     }
 
-    return ProductionRates(gross.build(), removal.build(), resources.build())
+    if (ownedConsumers.isEmpty()) {
+        val supply = ResourceAmounts.build { builder ->
+            for (resource in ResourceId.entries) builder[resource] = producerSupply[resource.ordinal]
+        }
+        return ProductionRates(
+            gasGrossKgPerS = gross.build(),
+            gasRemovalKgPerS = removal.build(),
+            resourcePerS = supply,
+            resourceGrossPerS = supply,
+            resourceConsumedPerS = ResourceAmounts.ZERO,
+            consumerFlows = emptyList(),
+        )
+    }
+
+    val demands = ArrayList<ConsumerDemand>(ownedConsumers.size)
+    val outputScale = DoubleArray(ownedConsumers.size)
+    for (index in ownedConsumers.indices) {
+        val tech = ownedConsumers[index]
+        val owned = ownedConsumerCounts[index]
+        val scale = techScale(tech, owned, multipliers)
+        outputScale[index] = scale
+
+        // Intake scales with the building's own size — how many units are
+        // owned, and the ownership milestones those units have earned — and
+        // with nothing else. A milestone makes a processor *bigger*: it pushes
+        // more through and eats more to do it, so a chain that was in balance
+        // stays in balance as both ends of it deepen. Global, branch, event and
+        // prestige multipliers are efficiency, not size, and never touch
+        // demand. See `domain/production/ResourceFlow.kt`.
+        val sizeScale = ownershipMultiplier(owned)
+        val demand = Array(ResourceId.entries.size) { GameDecimal.ZERO }
+        for ((resourceId, perUnit) in tech.effect.inputsPerUnit) {
+            demand[resourceId.ordinal] = gd(perUnit) * owned * sizeScale
+        }
+        // Rated output carries the building's own multipliers, so the solver
+        // sees the real supply a processor adds to the pool downstream.
+        val rated = Array(ResourceId.entries.size) { GameDecimal.ZERO }
+        for ((resourceId, perUnit) in tech.effect.resourceProductionPerUnit) {
+            val researchBonus = if (resourceId == ResourceId.RESEARCH) multipliers.research else 1.0
+            val resourceMultiplier = (multipliers.perResource[resourceId] ?: 1.0) * researchBonus
+            rated[resourceId.ordinal] = gd(perUnit) * owned * scale * resourceMultiplier
+        }
+
+        demands += ConsumerDemand(
+            consumerId = tech.id,
+            owned = owned,
+            demandPerS = demand,
+            ratedOutputPerS = rated,
+            inputResources = tech.effect.inputsPerUnit.keys.sortedBy { it.ordinal },
+        )
+    }
+
+    val allocation = solveUtilizations(producerSupply, demands)
+    val flow = accountFlow(producerSupply, demands, allocation, outputScale)
+
+    // Emissions follow utilization: a processor that cannot get its inputs
+    // does not burn what it never received.
+    for (index in ownedConsumers.indices) {
+        val tech = ownedConsumers[index]
+        val owned = ownedConsumerCounts[index]
+        val running = allocation.utilization[index]
+        if (running <= 0.0) continue
+        val scale = outputScale[index] * running
+
+        for ((gasId, perUnit) in tech.effect.gasProductionPerUnit) {
+            val gasMultiplier = (multipliers.perGas[gasId] ?: 1.0) * multipliers.allGas
+            gross.add(gasId, gd(perUnit) * owned * scale * gasMultiplier)
+        }
+        for ((gasId, perUnit) in tech.effect.gasRemovalPerUnit) {
+            removal.add(gasId, gd(perUnit) * owned * scale)
+        }
+    }
+
+    return ProductionRates(
+        gasGrossKgPerS = gross.build(),
+        gasRemovalKgPerS = removal.build(),
+        resourcePerS = flow.netPerS,
+        resourceGrossPerS = flow.supplyPerS,
+        resourceConsumedPerS = flow.consumptionPerS,
+        consumerFlows = flow.consumers,
+    )
 }
 
 /** Overall civilization progress score: the sum of (tier + 1) across every distinct owned technology. */

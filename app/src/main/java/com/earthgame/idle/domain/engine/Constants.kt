@@ -216,17 +216,65 @@ object BALANCE {
 }
 
 /**
- * Per-generator ownership rewards. See `Ownership.kt` for what these do and why
- * they are spaced the way they are.
+ * The production pipeline's own tuning. See
+ * `domain/production/ResourceFlow.kt` for what these do.
  */
-object OWNERSHIP_BONUS {
-    /** A bonus lands on every multiple of this many units owned of one generator. */
-    const val everyUnits = 10
+object PRODUCTION {
+    /**
+     * The largest share of any resource's gross supply that processors are
+     * allowed to claim.
+     *
+     * Set below 1 deliberately. Resources are both a *flow* that processors eat
+     * and a *stock* the player spends on buildings, and a chain that consumed
+     * 100% of its own feedstock would freeze that stock forever: the player
+     * could never buy the extra derricks that would break the bottleneck. A
+     * tenth of every resource always reaches the wallet, so expanding out of a
+     * shortage is always possible — which is the whole point of a bottleneck
+     * being visible.
+     */
+    const val maxSupplyClaimFraction = 0.9
 
     /**
-     * Output multiplier granted per threshold crossed, compounding. Must stay
-     * below `unitCostGrowth ^ everyUnits` or depth outruns the price that buys
-     * it and the tech tree stops mattering.
+     * Cap on fixed-point rounds in the flow solver. Processors feed processors,
+     * so supply depends on the answer; each round can only lower utilization,
+     * so the sequence converges, and in practice a chain this deep settles in
+     * two or three. The cap bounds the per-tick cost whatever the data does.
+     */
+    const val maxSolverRounds = 12
+
+    /** Utilizations closer than this are treated as settled, ending the loop early. */
+    const val solverConvergenceEpsilon = 1e-9
+}
+
+/**
+ * Per-building ownership rewards. See `Ownership.kt` for what these do and why
+ * they are spaced the way they are.
+ *
+ * The ladder is **progressive**: milestones land every [baseStep] units for the
+ * first [blockUnits] owned, and the spacing widens by [stepGrowthPerBlock] with
+ * every further block. A milestone never steps across a block boundary, so the
+ * round numbers stay round.
+ */
+object OWNERSHIP_BONUS {
+    /** Spacing between milestones over the first [blockUnits] owned. */
+    const val baseStep = 10
+
+    /** Width of one spacing block. Every block boundary is itself a milestone. */
+    const val blockUnits = 100
+
+    /**
+     * How much wider the spacing gets per block. Linear, not exponential: at
+     * the shipped value a building 3,000 units deep still earns a milestone
+     * every 40 units. Set this to 0 to get the old fixed ×10 ladder back.
+     */
+    const val stepGrowthPerBlock = 1
+
+    /**
+     * Output multiplier granted per milestone crossed, compounding. Must stay
+     * below `unitCostGrowth ^ baseStep` or depth outruns the price that buys it
+     * and the tech tree stops mattering. (Later blocks are spaced wider, so the
+     * inequality only gets safer as a building deepens — `baseStep` is the
+     * tightest case.)
      */
     const val multiplier = 2.0
 }

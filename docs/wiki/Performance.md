@@ -45,7 +45,7 @@ per-resource containers are **flat arrays indexed by enum ordinal**, not hash ma
 
 `GameDecimal` is a small immutable object, so arithmetic does allocate. That is the cost of the
 type; the alternative (mutable accumulators) would make the engine's purity — and therefore its
-testability and the offline guarantee — impossible. At 99 technologies × a handful of gases and
+testability and the offline guarantee — impossible. At 157 technologies × a handful of gases and
 resources, a tick is a few hundred short-lived objects, which is nothing to a generational collector.
 
 `checkAchievements` allocates its result list **lazily**: on the overwhelming majority of ticks

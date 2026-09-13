@@ -15,6 +15,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import com.earthgame.idle.presentation.components.SideNavTestTag
 import com.earthgame.idle.domain.engine.DerivedState
@@ -30,6 +31,7 @@ import com.earthgame.idle.domain.storms.Storm
 import com.earthgame.idle.domain.storms.StormField
 import com.earthgame.idle.domain.storms.StormType
 import com.earthgame.idle.presentation.navigation.Destination
+import com.earthgame.idle.presentation.screens.RESOURCE_FLOW_TAG
 import com.earthgame.idle.presentation.theme.EarthTheme
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -262,10 +264,47 @@ class EarthAppScreenTest {
 
         navigateTo(Destination.PRODUCTION)
         compose.onNodeWithText("Natural Fire").assertIsDisplayed()
-        compose.onAllNodesWithText("Buy", substring = true).onFirst().performClick()
+        // The resource-flow panel sits above the first card, so the button has
+        // to be scrolled to before it can be tapped.
+        compose.onAllNodesWithText("Buy", substring = true).onFirst()
+            .performScrollTo()
+            .performClick()
         compose.waitForIdle()
 
         assertTrue("a tap should reach the game", purchases.isNotEmpty())
+    }
+
+    @Test
+    fun productionSeparatesProducersFromProcessors() {
+        setContent()
+        navigateTo(Destination.PRODUCTION)
+
+        // SectionLabel renders its text uppercased. The processors heading is
+        // far down a lazy list, so it has to be scrolled into composition.
+        compose.onNodeWithTag(RESOURCE_FLOW_TAG).assertExists()
+        compose.onNodeWithText("PRODUCERS", substring = true).assertExists()
+        compose.onNodeWithTag(ContentListTestTag)
+            .performScrollToNode(hasText("PROCESSORS", substring = true))
+        compose.onNodeWithText("PROCESSORS", substring = true).assertExists()
+    }
+
+    @Test
+    fun theNextBuyModeNamesItsQuantityAndItsTarget() {
+        val purchases = mutableListOf<Pair<String, BuyQuantity>>()
+        setContent(onBuy = { id, quantity -> purchases += id to quantity })
+
+        navigateTo(Destination.PRODUCTION)
+        compose.onNodeWithText(BuyQuantity.NEXT.label).performClick()
+        compose.waitForIdle()
+
+        // Owning 3 Natural Fires, the next milestone is 10, so the button has
+        // to offer exactly seven and say where they land.
+        compose.onAllNodesWithText("Next ×7 → 10", substring = true).onFirst()
+            .performScrollTo()
+            .performClick()
+        compose.waitForIdle()
+
+        assertTrue("the Next button should buy", purchases.any { it.second == BuyQuantity.NEXT })
     }
 
     @Test
