@@ -3,6 +3,7 @@
 | | |
 | :--- | :--- |
 | Audited repository | `themantas1994/z-30` (public), default branch head **`84033d4531b3`** (merge of PR #34) |
+| Later commits | Up to `0a4d8a9` (at the time of filing), `main` gained only two Dependabot bumps of `actions/upload-artifact` / `actions/download-artifact` in `release.yml`. No audited code changed |
 | Previous audited commit | `224b2fc58a6572adac4686b6858bbba741591339` |
 | Remediation commits examined | `d8983ee` (vNext fixes), `17c3e8e` (legacy separation), `dedd4e0` (oracle test fixes), and the documentation and result commits `5ab1421`, `f98a24a`, `8f16d43`, `a9a64fa` |
 | Audit date | 2026-09-24 |
